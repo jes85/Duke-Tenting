@@ -7,6 +7,7 @@
 //
 
 #import "ScheduleViewController.h"
+#import "Availablities.h"
 
 @interface ScheduleViewController ()
 
@@ -17,6 +18,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Availablities makeMatrix];
 	// Do any additional setup after loading the view, typically from a nib.
 }
 

@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F0294561982BF680016845A /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294551982BF680016845A /* Parse.framework */; };
+		3F0294581982BFCD0016845A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294571982BFCD0016845A /* AudioToolbox.framework */; };
+		3F02945A1982BFD20016845A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294591982BFD20016845A /* CFNetwork.framework */; };
+		3F02945C1982BFDF0016845A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F02945B1982BFDF0016845A /* CoreLocation.framework */; };
+		3F02945E1982BFF70016845A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F02945D1982BFF70016845A /* libz.dylib */; };
+		3F0294601982C0010016845A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F02945F1982C0010016845A /* MobileCoreServices.framework */; };
+		3F0294621982C0080016845A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294611982C0080016845A /* QuartzCore.framework */; };
+		3F0294641982C0120016845A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294631982C0120016845A /* Security.framework */; };
+		3F0294661982C01A0016845A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294651982C01A0016845A /* StoreKit.framework */; };
+		3F0294681982C0200016845A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294671982C0200016845A /* SystemConfiguration.framework */; };
 		3FA6D5081965E7A50043087B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D5071965E7A50043087B /* Foundation.framework */; };
 		3FA6D50A1965E7A50043087B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D5091965E7A50043087B /* CoreGraphics.framework */; };
 		3FA6D50C1965E7A50043087B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D50B1965E7A50043087B /* UIKit.framework */; };
@@ -14,13 +24,17 @@
 		3FA6D5141965E7A50043087B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6D5131965E7A50043087B /* main.m */; };
 		3FA6D5181965E7A50043087B /* ScheduleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6D5171965E7A50043087B /* ScheduleAppDelegate.m */; };
 		3FA6D51B1965E7A50043087B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FA6D5191965E7A50043087B /* Main.storyboard */; };
-		3FA6D51E1965E7A50043087B /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6D51D1965E7A50043087B /* ScheduleViewController.m */; };
 		3FA6D5201965E7A50043087B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FA6D51F1965E7A50043087B /* Images.xcassets */; };
 		3FA6D5271965E7A50043087B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D5261965E7A50043087B /* XCTest.framework */; };
 		3FA6D5281965E7A50043087B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D5071965E7A50043087B /* Foundation.framework */; };
 		3FA6D5291965E7A50043087B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D50B1965E7A50043087B /* UIKit.framework */; };
 		3FA6D5311965E7A50043087B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3FA6D52F1965E7A50043087B /* InfoPlist.strings */; };
 		3FA6D5331965E7A50043087B /* TentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6D5321965E7A50043087B /* TentTests.m */; };
+		3FA6D53E1965E8000043087B /* Availablities.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6D53D1965E8000043087B /* Availablities.m */; };
+		3FDE355A198094C700CE47D8 /* EnterScheduleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */; };
+		3FDE355D19809CC400CE47D8 /* PickPersonTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE355C19809CC400CE47D8 /* PickPersonTableViewController.m */; };
+		3FDE35631980A5DA00CE47D8 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE35621980A5DA00CE47D8 /* Person.m */; };
+		3FDE35661980A6DA00CE47D8 /* Schedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE35651980A6DA00CE47D8 /* Schedule.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +48,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F0294551982BF680016845A /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		3F0294571982BFCD0016845A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		3F0294591982BFD20016845A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		3F02945B1982BFDF0016845A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		3F02945D1982BFF70016845A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		3F02945F1982C0010016845A /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		3F0294611982C0080016845A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		3F0294631982C0120016845A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		3F0294651982C01A0016845A /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		3F0294671982C0200016845A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3FA6D5041965E7A50043087B /* Tent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA6D5071965E7A50043087B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3FA6D5091965E7A50043087B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -45,14 +69,22 @@
 		3FA6D5161965E7A50043087B /* ScheduleAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScheduleAppDelegate.h; sourceTree = "<group>"; };
 		3FA6D5171965E7A50043087B /* ScheduleAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScheduleAppDelegate.m; sourceTree = "<group>"; };
 		3FA6D51A1965E7A50043087B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3FA6D51C1965E7A50043087B /* ScheduleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
-		3FA6D51D1965E7A50043087B /* ScheduleViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
 		3FA6D51F1965E7A50043087B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3FA6D5251965E7A50043087B /* TentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA6D5261965E7A50043087B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		3FA6D52E1965E7A50043087B /* TentTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TentTests-Info.plist"; sourceTree = "<group>"; };
 		3FA6D5301965E7A50043087B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3FA6D5321965E7A50043087B /* TentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TentTests.m; sourceTree = "<group>"; };
+		3FA6D53C1965E8000043087B /* Availablities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Availablities.h; path = Model/Availablities.h; sourceTree = "<group>"; };
+		3FA6D53D1965E8000043087B /* Availablities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Availablities.m; path = Model/Availablities.m; sourceTree = "<group>"; };
+		3FDE3558198094C700CE47D8 /* EnterScheduleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnterScheduleTableViewController.h; sourceTree = "<group>"; };
+		3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterScheduleTableViewController.m; sourceTree = "<group>"; };
+		3FDE355B19809CC400CE47D8 /* PickPersonTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickPersonTableViewController.h; sourceTree = "<group>"; };
+		3FDE355C19809CC400CE47D8 /* PickPersonTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickPersonTableViewController.m; sourceTree = "<group>"; };
+		3FDE35611980A5DA00CE47D8 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Person.h; path = Model/Person.h; sourceTree = "<group>"; };
+		3FDE35621980A5DA00CE47D8 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Person.m; path = Model/Person.m; sourceTree = "<group>"; };
+		3FDE35641980A6DA00CE47D8 /* Schedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Schedule.h; path = Model/Schedule.h; sourceTree = "<group>"; };
+		3FDE35651980A6DA00CE47D8 /* Schedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Schedule.m; path = Model/Schedule.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +92,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F0294681982C0200016845A /* SystemConfiguration.framework in Frameworks */,
+				3F0294661982C01A0016845A /* StoreKit.framework in Frameworks */,
+				3F0294641982C0120016845A /* Security.framework in Frameworks */,
+				3F0294621982C0080016845A /* QuartzCore.framework in Frameworks */,
+				3F0294601982C0010016845A /* MobileCoreServices.framework in Frameworks */,
+				3F02945E1982BFF70016845A /* libz.dylib in Frameworks */,
+				3F02945C1982BFDF0016845A /* CoreLocation.framework in Frameworks */,
 				3FA6D50A1965E7A50043087B /* CoreGraphics.framework in Frameworks */,
+				3F02945A1982BFD20016845A /* CFNetwork.framework in Frameworks */,
+				3F0294581982BFCD0016845A /* AudioToolbox.framework in Frameworks */,
 				3FA6D50C1965E7A50043087B /* UIKit.framework in Frameworks */,
+				3F0294561982BF680016845A /* Parse.framework in Frameworks */,
 				3FA6D5081965E7A50043087B /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,6 +143,16 @@
 		3FA6D5061965E7A50043087B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3F0294671982C0200016845A /* SystemConfiguration.framework */,
+				3F0294651982C01A0016845A /* StoreKit.framework */,
+				3F0294631982C0120016845A /* Security.framework */,
+				3F0294611982C0080016845A /* QuartzCore.framework */,
+				3F02945F1982C0010016845A /* MobileCoreServices.framework */,
+				3F02945D1982BFF70016845A /* libz.dylib */,
+				3F02945B1982BFDF0016845A /* CoreLocation.framework */,
+				3F0294591982BFD20016845A /* CFNetwork.framework */,
+				3F0294571982BFCD0016845A /* AudioToolbox.framework */,
+				3F0294551982BF680016845A /* Parse.framework */,
 				3FA6D5071965E7A50043087B /* Foundation.framework */,
 				3FA6D5091965E7A50043087B /* CoreGraphics.framework */,
 				3FA6D50B1965E7A50043087B /* UIKit.framework */,
@@ -112,13 +164,14 @@
 		3FA6D50D1965E7A50043087B /* Tent */ = {
 			isa = PBXGroup;
 			children = (
-				3FA6D5161965E7A50043087B /* ScheduleAppDelegate.h */,
-				3FA6D5171965E7A50043087B /* ScheduleAppDelegate.m */,
 				3FA6D5191965E7A50043087B /* Main.storyboard */,
-				3FA6D51C1965E7A50043087B /* ScheduleViewController.h */,
-				3FA6D51D1965E7A50043087B /* ScheduleViewController.m */,
+				3FDE3558198094C700CE47D8 /* EnterScheduleTableViewController.h */,
+				3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */,
+				3FDE355B19809CC400CE47D8 /* PickPersonTableViewController.h */,
+				3FDE355C19809CC400CE47D8 /* PickPersonTableViewController.m */,
 				3FA6D51F1965E7A50043087B /* Images.xcassets */,
 				3FA6D50E1965E7A50043087B /* Supporting Files */,
+				3FA6D5401965E8110043087B /* Model */,
 			);
 			path = Tent;
 			sourceTree = "<group>";
@@ -126,6 +179,8 @@
 		3FA6D50E1965E7A50043087B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3FA6D5161965E7A50043087B /* ScheduleAppDelegate.h */,
+				3FA6D5171965E7A50043087B /* ScheduleAppDelegate.m */,
 				3FA6D50F1965E7A50043087B /* Tent-Info.plist */,
 				3FA6D5101965E7A50043087B /* InfoPlist.strings */,
 				3FA6D5131965E7A50043087B /* main.m */,
@@ -150,6 +205,19 @@
 				3FA6D52F1965E7A50043087B /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3FA6D5401965E8110043087B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3FDE35611980A5DA00CE47D8 /* Person.h */,
+				3FDE35621980A5DA00CE47D8 /* Person.m */,
+				3FA6D53C1965E8000043087B /* Availablities.h */,
+				3FA6D53D1965E8000043087B /* Availablities.m */,
+				3FDE35641980A6DA00CE47D8 /* Schedule.h */,
+				3FDE35651980A6DA00CE47D8 /* Schedule.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,9 +318,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FA6D53E1965E8000043087B /* Availablities.m in Sources */,
 				3FA6D5141965E7A50043087B /* main.m in Sources */,
-				3FA6D51E1965E7A50043087B /* ScheduleViewController.m in Sources */,
+				3FDE35661980A6DA00CE47D8 /* Schedule.m in Sources */,
+				3FDE35631980A5DA00CE47D8 /* Person.m in Sources */,
 				3FA6D5181965E7A50043087B /* ScheduleAppDelegate.m in Sources */,
+				3FDE355A198094C700CE47D8 /* EnterScheduleTableViewController.m in Sources */,
+				3FDE355D19809CC400CE47D8 /* PickPersonTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,6 +449,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/jeremy/Downloads,
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tent/Tent-Prefix.pch";
 				INFOPLIST_FILE = "Tent/Tent-Info.plist";
@@ -390,6 +467,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/jeremy/Downloads,
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tent/Tent-Prefix.pch";
 				INFOPLIST_FILE = "Tent/Tent-Info.plist";
@@ -457,6 +539,7 @@
 				3FA6D5381965E7A50043087B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3FA6D5391965E7A50043087B /* Build configuration list for PBXNativeTarget "TentTests" */ = {
 			isa = XCConfigurationList;
@@ -465,6 +548,7 @@
 				3FA6D53B1965E7A50043087B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
