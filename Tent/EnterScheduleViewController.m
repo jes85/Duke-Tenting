@@ -1,22 +1,23 @@
 //
-//  EnterScheduleTableViewController.m
+//  EnterScheduleViewController.m
 //  Tent
 //
-//  Created by Shrek on 7/23/14.
+//  Created by Shrek on 8/2/14.
 //  Copyright (c) 2014 Jeremy. All rights reserved.
 //
 
-#import "EnterScheduleTableViewController.h"
+#import "EnterScheduleViewController.h"
 #import "Schedule.h"
 #import "PickPersonTableViewController.h"
 #import "Person.h"
 #import "IntervalTableViewCell.h"
 
-@interface EnterScheduleTableViewController ()
+@interface EnterScheduleViewController ()
 
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @end
 
-@implementation EnterScheduleTableViewController
+@implementation EnterScheduleViewController
 
 #pragma mark - Accessor Methods
 
@@ -34,9 +35,9 @@
 }
 
 
- -(NSMutableArray *)updatedAvailabilitiesArray
+-(NSMutableArray *)updatedAvailabilitiesArray
 {
-   
+    
     
     if(!_updatedAvailabilitiesArray){ _updatedAvailabilitiesArray = [[NSMutableArray alloc]initWithArray:self.currentPerson.availabilitiesArray];
         
@@ -48,14 +49,6 @@
 
 #pragma mark - ViewControllerLifecycle
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -80,14 +73,14 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     
-
+    
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-
+    
     // Return the number of rows in the section.
     return [self.hourIntervals count];
 }
@@ -96,13 +89,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-   IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Hour Interval Cell" forIndexPath:indexPath];
+    IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Hour Interval Cell" forIndexPath:indexPath];
     
     // Configure the cell...
     
     NSString *hour = self.hourIntervals[indexPath.row];
     cell.textLabel.text = hour;
-   
+    
     if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]) {
         cell.accessoryType =UITableViewCellAccessoryCheckmark;
         NSLog(@"Test %d", indexPath.row);
@@ -112,19 +105,19 @@
     else cell.accessoryType =UITableViewCellAccessoryNone;
     if([self.currentPerson.assignmentsArray count]>0){
         if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
-        
+            
             //[cell setSelected:YES animated:YES];
             //[cell setSelected:YES];
             // cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             //[cell setBackgroundColor:[UIColor colorWithHue:0.4 saturation:1.0 brightness:0.5 alpha:1.0]];
-        
+            
             // cell.assignedOrAvailableLabel.text = @"(Assigned)";
             [cell setBackgroundColor:[UIColor greenColor]];
-       
+            
             [cell setOpaque:NO];
-       
-
-        
+            
+            
+            
             NSLog(@"Test %d", indexPath.row);
         }
     }
@@ -134,48 +127,48 @@
 
 
 /*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
 
 /*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
 
 /*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+ {
+ }
+ */
 
 /*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 
 #pragma mark - Navigation
 
- //In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+//In a storyboard-based application, you will often want to do a little preparation before navigation
+/*- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
@@ -187,14 +180,14 @@
     else{ //doneButton
         
         //change person's availabilities array (andupdate to Parse)
-       self.currentPerson.availabilitiesArray = self.updatedAvailabilitiesArray;
+        self.currentPerson.availabilitiesArray = self.updatedAvailabilitiesArray;
         PFQuery *query = [PFQuery queryWithClassName:@"Person"];
         [query whereKey:@"index" equalTo:[NSNumber numberWithInt:self.currentPerson.indexOfPerson]];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if(!object){
                 NSLog(@"Find failed");
             }else{
-               //the find succeeded
+                //the find succeeded
                 NSLog(@"Find succeeded");
                 object[@"availabilitiesArray"] = self.currentPerson.availabilitiesArray;
                 //object[@"assignmentsArray"] = self.currentPerson.assignmentsArray;
@@ -222,12 +215,9 @@
         
         
         
-        //this part is in unWindToList
-        /*PickPersonTableViewController *destination = [segue destinationViewController];
-        [destination.people insertObject:self.currentPerson atIndex:self.currentPerson.indexOfPerson];
-        [destination.people removeObjectAtIndex:self.currentPerson.indexOfPerson+1];*/
+       
     }
-}
+}*/
 
 
 #pragma mark - Table View Delegate

@@ -10,8 +10,16 @@
 
 @interface Schedule : NSObject
 
-@property(nonatomic) NSUInteger numPeople;
-@property(nonatomic) NSUInteger numIntervals;
+// init
+    -(instancetype)initWithNumPeople:(NSUInteger)numPeople withNumIntervals:(NSUInteger)numIntervals;
+    -(void)setup;
+// Basic Parameters
+    @property(nonatomic) NSUInteger numPeople;
+    @property(nonatomic) NSUInteger numIntervals;
 
-+(NSUInteger)numIntervalsStatic;
+// Schedule (make this private later?)
+    @property (nonatomic) NSMutableArray *availabilitiesSchedule;
+    @property (nonatomic) NSMutableArray *assignmentsSchedule;
+
+
 @end

@@ -27,31 +27,73 @@
 }
 - (NSMutableArray *)people
 {
-    if(!_people) _people = [self createPeopleArray];
+    if(!_people) _people = [self createPeopleArray];//[self getParseScheduleData];
     return _people;
 }
 
+-(NSMutableArray *)getParseScheduleData
+{
+    //PFQuery *query = [PFQuery queryWithClassName:@"Person"];
+    /*NSArray *objects = [query findObjects];
+    if(objects){
+        return [[NSMutableArray alloc]initWithArray:objects];
+    }*/
+    
+    /*__block NSMutableArray *peopleArray;// = [[NSMutableArray alloc]init];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if(!objects){
+            NSLog(@"Find failed");
+            peopleArray = [self createPeopleArray];
+        }else{
+            //the find succeeded
+            NSLog(@"Find succeeded");
+            //for(Person *person in objects){
+              //  [array addObject:person];
+            //}
+             //
+            peopleArray = [[NSMutableArray alloc]initWithArray:objects];
+        }
+    }];*/
+    //NSLog(@"array: %@", peopleArray);
+
+    return [self createPeopleArray];
+}
 -(NSMutableArray *)createPeopleArray
 {
-    Schedule *schedule = [[Schedule alloc]init];
+    //at creation of schedule, have them enter number of people and number of intervals
+    //let there be a button to add/take out people which changes this
+    Schedule *s = [[Schedule alloc]init];
     NSMutableArray *array = [[NSMutableArray alloc]init];
-    for(int p = 0;p<schedule.numPeople;p++){
-        Person *person = [[Person alloc]init];
-        person.indexOfPerson = p;
-        person.name = [NSString stringWithFormat:@"Person %d", p];
-        for(int i = 0; i<schedule.numIntervals;i++){
+    NSMutableArray *arrayOfArrays =[[NSMutableArray alloc]init];
+    for(int p = 0;p<s.numPeople;p++){
+        NSString *name = [NSString stringWithFormat:@"Person %d", p];
+        Person *person = [[Person alloc]initWithName:name index:p availabilitiesArray:nil];
+        //person.indexOfPerson = p;
+        //person.name = [NSString stringWithFormat:@"Person %d", p];
+        for(int i = 0; i<s.numIntervals;i++){
             [person.availabilitiesArray addObject:@0];
              
         }
         
+        //create person's availability array and add to availabilitites schedule
         [array addObject:person];
+        [arrayOfArrays addObject:person.availabilitiesArray];
+        
+        //save person's availabilitity array to Parse
         PFObject *personObject = [PFObject objectWithClassName:@"Person"];
-        NSNumber *index = [NSNumber numberWithInt:person.indexOfPerson];    
+        NSNumber *index = [NSNumber numberWithInt:person.indexOfPerson];
+        personObject[@"name"] = person.name;
         personObject[@"index"] = index;
         personObject[@"availabilitiesArray"] = person.availabilitiesArray;
         [personObject saveInBackground];
     }
     
+    //save availabilities schedule to Parse
+    PFObject *schedule= [PFObject objectWithClassName:@"Schedule"];
+    schedule[@"type"] = @"availabilities";
+    //schedule[@"arrayOfPeople"]= array;
+    schedule[@"availabilitiesSchedule"]= arrayOfArrays;
+    [schedule saveInBackground];
     return array;
 }
 
@@ -87,14 +129,14 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-
+    
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-
+   
     // Return the number of rows in the section.
     return [self.people count];
 }
@@ -106,6 +148,7 @@
     
     // Configure the cell...
     Person *person = self.people[indexPath.row];
+   
     NSString *personName = person.name;
     cell.textLabel.text = personName;
     

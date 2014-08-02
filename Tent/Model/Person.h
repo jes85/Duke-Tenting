@@ -11,7 +11,12 @@
 @interface Person : NSObject
 
 @property (nonatomic) NSMutableArray *availabilitiesArray;
+
+@property (nonatomic) NSMutableArray *assignmentsArray;
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSUInteger indexOfPerson;
+
+
+-(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)array;
 
 @end
