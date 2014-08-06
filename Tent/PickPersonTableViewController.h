@@ -12,6 +12,8 @@
 @interface PickPersonTableViewController : UITableViewController
 
 
-@property (nonatomic)NSMutableArray *people;
+@property (nonatomic) NSMutableArray *people;
+
 -(IBAction)unWindToList:(UIStoryboardSegue *)segue;
+
 @end

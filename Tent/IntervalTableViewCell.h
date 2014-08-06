@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface IntervalTableViewCell : UITableViewCell
+
 @property (weak, nonatomic) IBOutlet UILabel *assignedOrAvailableLabel;
 
 

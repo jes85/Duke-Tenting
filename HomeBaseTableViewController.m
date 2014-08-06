@@ -10,121 +10,194 @@
 #import "PickPersonTableViewController.h"
 #import "Person.h"
 #import "IntervalsTableViewController.h"
-
+#import "Schedule.h"
+#import "Interval.h"
 @interface HomeBaseTableViewController ()
 
-@property (nonatomic)NSMutableArray *people;
-@property (nonatomic) NSMutableArray *intervalArray;
+@property (nonatomic) NSMutableArray *personsArray; //Person[]
+@property (nonatomic) NSMutableArray *intervalArray; //Interval[]
+@property (nonatomic) NSMutableArray *availabilitiesSchedule;
+@property (nonatomic) NSMutableArray *assignmentsSchedule;
 @end
+
+
+
 
 @implementation HomeBaseTableViewController
 
-
-
 #pragma mark - Property setup
--(NSMutableArray *)people{
-    if(!_people)_people = [[NSMutableArray alloc]init];
-    //NSLog(@"Test %@",  _people);
 
-    return _people;
+-(NSMutableArray *)personsArray{
+    if(!_personsArray)_personsArray = [[NSMutableArray alloc]init];
+    return _personsArray;
 }
 -(NSMutableArray *)intervalArray
 {
-    //if(!_intervalArray)_intervalArray = [[NSMutableArray alloc]init];
+    if(!_intervalArray)_intervalArray = [[NSMutableArray alloc]init];
     return _intervalArray;
 }
-
-#pragma mark - init
-- (id)initWithStyle:(UITableViewStyle)style
+-(NSMutableArray *)availabilitiesSchedule
 {
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+    if(!_availabilitiesSchedule)_availabilitiesSchedule = [[NSMutableArray alloc]init];
+    
+    return _availabilitiesSchedule;
 }
 
-- (void)viewDidLoad
+
+-(void)createPeopleArray
+{
+        //at creation of schedule, have them enter number of people and number of intervals
+        //let there be a button to add/take out people which changes this
+        
+        
+        // Declare peopleArray and availabilitiesSchedule
+        NSMutableArray *peopleArray = [[NSMutableArray alloc]init];
+        NSMutableArray *arrayOfAvailabilityArrays =[[NSMutableArray alloc]init];//availabilitiesSchedule
+        NSMutableArray *arrayOfAssignmentArrays =[[NSMutableArray alloc]init];//assignmentsSchedule
+        
+        
+        for(int p = 0;p<[Schedule testNumPeople];p++){
+            NSString *name = [NSString stringWithFormat:@"Person %d", p];
+            Person *person = [[Person alloc]initWithName:name index:p numIntervals:[Schedule testNumIntervals]];
+            
+            //create person's availability array and add to availabilitites schedule
+            [peopleArray addObject:person];
+            [arrayOfAvailabilityArrays addObject:person.availabilitiesArray];
+            [arrayOfAssignmentArrays addObject:person.assignmentsArray];
+            
+            //save person's availabilitity array to Parse
+            PFObject *personObject = [PFObject objectWithClassName:@"Person"];
+            personObject[@"name"] = person.name;
+            personObject[@"index"] = [NSNumber numberWithInt:person.indexOfPerson];
+            personObject[@"availabilitiesArray"] = person.availabilitiesArray;
+            personObject[@"assignmentsArray"] = person.assignmentsArray;
+            [personObject saveInBackground];
+        }
+        
+        //save availabilities schedule to Parse
+        PFObject *schedule= [PFObject objectWithClassName:@"Schedule"];
+        schedule[@"availabilitiesSchedule"]= arrayOfAvailabilityArrays;
+        schedule[@"assignmentsSchedule"]= arrayOfAssignmentArrays;
+        [schedule saveInBackground];
+    
+    
+    self.availabilitiesSchedule = arrayOfAvailabilityArrays;
+    self.assignmentsSchedule = arrayOfAssignmentArrays;
+    self.personsArray = peopleArray;
+    
+}
+-(void)createIntervalArray
+{
+    NSMutableArray *intervalArray = [[NSMutableArray alloc]init];
+    
+    
+    for(int i = 0;i<[Schedule testNumIntervals];i++){
+        Interval *interval = [[Interval alloc]init];
+        [intervalArray addObject:interval];
+    }
+    self.intervalArray = intervalArray;
+}
+#pragma mark - view controller lifecycle
+
+-(void)viewDidLoad
 {
     [super viewDidLoad];
-    PFQuery *query = [PFQuery queryWithClassName:@"Person"];
-    //__block NSMutableArray *peopleArray;// = [[NSMutableArray alloc]init];
-     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-         if(!objects){
-             NSLog(@"Find failed");
-         }else if ([objects count]<1){
-             NSLog(@"No objects in Parse");
-         }
-         else{
-             //the find succeeded
-             NSLog(@"Find succeeded %d", [objects count]);
-             //for(Person *person in objects){
-             //  [array addObject:person];
-             //}
-             //
-             //get schedules and then add it
-             for(PFObject *object in objects){
-                 NSString *name = object[@"name"];
-                 
-                 NSUInteger index = [object[@"index"] intValue];
-                 
-                 NSMutableArray *availableArray = object[@"availabilitiesArray"];
-               
-                 Person *person = [[Person alloc]initWithName:name index:index availabilitiesArray:availableArray];
-                 if(object[@"assignmentsArray"])
-                     person.assignmentsArray = object[@"assignmentsArray"];
-                 //NSLog(@"Assignments Array %@", person.assignmentsArray);
-                 [self.people addObject:person];
-                 
-                 
-                 if(!self.intervalArray){self.intervalArray = [[NSMutableArray alloc] initWithCapacity:[availableArray count]];
-                 for(int i = 0;i<[availableArray count]; i++){
-                     NSMutableArray *tempArray = [[NSMutableArray alloc]init];
-                     [self.intervalArray addObject:tempArray];
-                 }
-                 }
-                 for(int i = 0; i<[availableArray count]; i++){
-                     if([availableArray[i] isEqual:@1]){
-                         //update vc's intervalArray
-                         /*NSMutableArray *a = self.intervalArray[i];
-                         [a addObject:person.name];
-                         [self.intervalArray removeObjectAtIndex:i];
-                         [self.intervalArray insertObject:a atIndex: i];*/
-                         [self.intervalArray[i] addObject:person];//person.name
-                         //NSLog(@"Test: %@", self.intervalArray);
-                     }
-                 }
-                 
-             }
-            // NSLog(@"Test: %@", self.intervalArray);
-             
-             //peopleArray = [[NSMutableArray alloc]initWithArray:objects];
-             
-
-             //self.people = peopleArray;
-             
-
-         }
-    }];
-   
     
+    UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
+    [refresh addTarget:self action:@selector(updateInformation) forControlEvents:UIControlEventValueChanged];
 
+    self.refreshControl = refresh;
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self updateInformation];
+
+
 }
 
-- (void)didReceiveMemoryWarning
+
+
+-(void)viewWillAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewWillAppear:animated];
+    //[self updateInformation]; //move this to first load (viewDidLoad) and refreshes
+   
+
 }
 
+-(void)stopRefresh
+{
+    [self.refreshControl endRefreshing];
+}
 
-
+- (void)updateInformation
+{
+    self.personsArray = nil;
+    self.intervalArray = nil;
+    // Get person objects from Parse
+    PFQuery *query = [PFQuery queryWithClassName:@"Person"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if(!objects){
+            NSLog(@"Find failed");
+        }else if ([objects count]<1){
+            NSLog(@"No objects in Parse");
+            [self createPeopleArray];
+            [self createIntervalArray];
+        }
+        else{
+            NSLog(@"Find succeeded %d", [objects count]);
+            //self.personsArray = [[NSMutableArray alloc]initWithCapacity:[Schedule testNumPeople]]; //take this out later
+           // NSLog(@"personsArray: %@", self.personsArray);
+            [self createIntervalArray];
+            
+            
+            for(PFObject *object in objects){
+                
+                // Update personsArray
+                NSString *name = object[@"name"];
+                NSUInteger index = [object[@"index"] intValue];
+                NSMutableArray *availableArray = object[@"availabilitiesArray"];
+                NSMutableArray *assignmentsArray = object[@"assignmentsArray"];
+                
+                Person *person = [[Person alloc]initWithName:name index:index availabilitiesArray:availableArray assignmentsArray:assignmentsArray];
+                
+                
+                //Fix this to prevent adding duplicates. maybe clear array and readd (but i don't want to do this every time if I don't have to)
+                if(![self.personsArray containsObject:person]){
+                    [self.personsArray addObject:person];
+                }
+                
+                //self.personsArray[person.indexOfPerson] = person;
+                //[self.personsArray removeObjectAtIndex:person.indexOfPerson];
+                //[self.personsArray insertObject:person atIndex:person.indexOfPerson];
+                
+                // Update intervalsArray (change it later to save to Parse?)
+                
+                for(int i = 0; i<[availableArray count]; i++){
+                    if([availableArray[i] isEqual:@1]){
+                        Interval *interval = (Interval *)self.intervalArray[i];
+                        
+                        if(![interval.availablePersons containsObject:person]){
+                            [interval.availablePersons addObject:person];//person.name
+                        }
+                        if([assignmentsArray[i] isEqual:@1]){
+                            if (![interval.assignedPersons containsObject:person])
+                            {
+                                [interval.assignedPersons addObject:person];
+                            }
+                        }
+                    }
+                }
+                
+            }
+            //NSLog(@"Interval Array: %@", self.intervalArray);
+            //NSLog(@"Persons Array: %@", self.personsArray);
+            
+            
+          [self performSelector:@selector(stopRefresh) withObject:nil afterDelay:0];
+        }
+    }];
+}
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -138,64 +211,8 @@
 {
 
     // Return the number of rows in the section.
-    return 2;
+    return 3;
 }
-
-
-/*- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Interval Cell" forIndexPath:indexPath];
-    
-    //Configure the cell...
-    NSString *interval = self.possibleIntervals[indexPath.row];
-    
-    cell.textLabel.text = interval;
-    
-    return cell;
-
-    
-    return cell;
-}*/
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 
 #pragma mark - Navigation
 
@@ -205,19 +222,20 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
-    //UINavigationController *nc = [segue destinationViewController];
-    //PickPersonTableViewController *pptvc = (PickPersonTableViewController *)nc.topViewController;
     
     if([[segue destinationViewController] isKindOfClass:[PickPersonTableViewController class]]){
         
         PickPersonTableViewController *pptvc = [segue destinationViewController];
-        if([self.people count]>0) pptvc.people = self.people;
-        NSLog(@"array: %@", self.people);
+        pptvc.people = self.personsArray;
+        
+        //NSLog(@"array: %@", self.personsArray);
     }
     else if([[segue destinationViewController] isKindOfClass:[IntervalsTableViewController class]]){
+        
         IntervalsTableViewController *itvc = [segue destinationViewController];
         itvc.intervalArray = self.intervalArray;
-        NSLog(@"intervalArray %@", self.intervalArray);
+        
+        //NSLog(@"intervalArray %@", self.intervalArray);
     }
 }
 

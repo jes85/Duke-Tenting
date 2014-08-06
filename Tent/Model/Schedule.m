@@ -33,15 +33,13 @@
 
 @implementation Schedule
 
--(NSUInteger)numPeople
++(NSUInteger)testNumPeople
 {
-    if(!_numPeople) _numPeople = 12; //testing purposes
-    return _numPeople;
+    return 12;
 }
-
--(NSUInteger)numIntervals{
-    if(!_numIntervals) _numIntervals=10; //testing purposes
-    return _numIntervals;
++(NSUInteger)testNumIntervals
+{
+    return 10;
 }
 
 -(NSMutableArray *)availIntervalSums
@@ -92,6 +90,18 @@
     if(self){
         self.numPeople = numPeople;
         self.numIntervals = numIntervals;
+    }
+    return self;
+}
+
+
+-(instancetype)initWithAvailabilitiesSchedule:(NSMutableArray *)availSchedule
+{
+    self = [super init];
+    if(self){
+        self.availabilitiesSchedule = availSchedule;
+        self.numPeople = [availSchedule count];
+        self.numIntervals = [availSchedule[0] count];
     }
     return self;
 }

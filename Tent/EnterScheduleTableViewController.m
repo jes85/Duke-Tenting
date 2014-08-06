@@ -29,7 +29,7 @@
 }
 - (NSArray *)hourIntervals
 {
-    if(!_hourIntervals) _hourIntervals = @[@"8-9", @"9-10",@"10-11", @"11-12", @"12-1", @"1-2", @"2-3", @"3-4", @"4-5", @"5-6"];
+    if(!_hourIntervals) _hourIntervals = @[@"  8am -   9am", @"  9am - 10am",@"10am - 11am", @"11am - 12pm", @"12pm -   1pm", @"  1pm -   2pm", @"  2pm -   3pm", @"  3pm -   4pm", @"  4pm -   5pm", @"  5pm -   6pm"];
     return _hourIntervals;
 }
 
@@ -38,42 +38,12 @@
 {
    
     
-    if(!_updatedAvailabilitiesArray){ _updatedAvailabilitiesArray = [[NSMutableArray alloc]initWithArray:self.currentPerson.availabilitiesArray];
-        
-    }
+    if(!_updatedAvailabilitiesArray)_updatedAvailabilitiesArray = [[NSMutableArray alloc]initWithArray:self.currentPerson.availabilitiesArray];
+    
     
     return _updatedAvailabilitiesArray;
 }
 
-
-#pragma mark - ViewControllerLifecycle
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    
-    // Dispose of any resources that can be recreated.
-}
 
 #pragma mark - Table view data source
 
@@ -92,11 +62,22 @@
     return [self.hourIntervals count];
 }
 
+/*- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
+        [cell.contentView setBackgroundColor:[UIColor greenColor]];
 
+    }
+     if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]) {
+          [cell.contentView setBackgroundColor:[UIColor blueColor]];
+     }
+    
+
+}*/
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-   IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Hour Interval Cell" forIndexPath:indexPath];
+   IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Interval Cell" forIndexPath:indexPath];
     
     // Configure the cell...
     
@@ -105,71 +86,37 @@
    
     if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]) {
         cell.accessoryType =UITableViewCellAccessoryCheckmark;
-        NSLog(@"Test %d", indexPath.row);
         cell.assignedOrAvailableLabel.text = @"(Available)";
+        //[cell.contentView setBackgroundColor:[UIColor blueColor]];
+        //[cell setOpaque:NO];
+
         
     }
-    else cell.accessoryType =UITableViewCellAccessoryNone;
-    if([self.currentPerson.assignmentsArray count]>0){
-        if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
+    else {
+        cell.accessoryType =UITableViewCellAccessoryNone;
+        cell.assignedOrAvailableLabel.text = @"";
+    }
+    
+    
+    
+    if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
         
             //[cell setSelected:YES animated:YES];
             //[cell setSelected:YES];
             // cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             //[cell setBackgroundColor:[UIColor colorWithHue:0.4 saturation:1.0 brightness:0.5 alpha:1.0]];
         
-            // cell.assignedOrAvailableLabel.text = @"(Assigned)";
-            [cell setBackgroundColor:[UIColor greenColor]];
-       
-            [cell setOpaque:NO];
+            cell.assignedOrAvailableLabel.text = @"(Assigned)";
+            
+           //[cell.contentView setBackgroundColor:[UIColor greenColor]];
+           // [cell setOpaque:NO];
        
 
-        
-            NSLog(@"Test %d", indexPath.row);
-        }
     }
-    [cell bringSubviewToFront:cell.assignedOrAvailableLabel];
+   
+    [cell.contentView addSubview:cell.assignedOrAvailableLabel]; //I don't think I should have to do this because I did it in a storyboards. I think I didn't connect the outlets correctly
     return cell;
 }
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 
 #pragma mark - Navigation
@@ -186,7 +133,10 @@
     if(sender!=self.doneButton) return; //cancel button
     else{ //doneButton
         
-        //change person's availabilities array (andupdate to Parse)
+        //if current person's availabilities array was changed, update it and update on Parse
+        if(![self.currentPerson.availabilitiesArray isEqual:self.updatedAvailabilitiesArray]){
+        
+        //update person's availabilities array (and update to Parse)
        self.currentPerson.availabilitiesArray = self.updatedAvailabilitiesArray;
         PFQuery *query = [PFQuery queryWithClassName:@"Person"];
         [query whereKey:@"index" equalTo:[NSNumber numberWithInt:self.currentPerson.indexOfPerson]];
@@ -202,10 +152,9 @@
             }
         }];
         
-        //update availabilities schedule (maybe chance self.currentperson.availabilitiesArray to be an array arrays and save that to Parse
+        //update availabilities schedule (maybe change self.currentperson.availabilitiesArray to be an array arrays and save that to Parse
         
         PFQuery *query2 = [PFQuery queryWithClassName:@"Schedule"];
-        [query2 whereKey:@"type" equalTo:@"availabilities"];
         [query2 getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if(!object){
                 NSLog(@"Find failed");
@@ -219,10 +168,11 @@
                 [object saveInBackground];
             }
         }];
+        }
         
         
         
-        //this part is in unWindToList
+        //this part is in unWindToList (maybe change that)
         /*PickPersonTableViewController *destination = [segue destinationViewController];
         [destination.people insertObject:self.currentPerson atIndex:self.currentPerson.indexOfPerson];
         [destination.people removeObjectAtIndex:self.currentPerson.indexOfPerson+1];*/
@@ -234,6 +184,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //[tableView deselectRowAtIndexPath:indexPath animated:NO];
     IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     
     if(cell.accessoryType!=UITableViewCellAccessoryCheckmark){
@@ -241,19 +192,30 @@
         //Save data in updatedAvailabilities array (will save/ignore this in Done/Cancel button action later)
         cell.accessoryType =UITableViewCellAccessoryCheckmark;
         cell.assignedOrAvailableLabel.text = @"(Available)";
+        //[cell.contentView setBackgroundColor:[UIColor blueColor]];
+        //[cell setOpaque:NO];
+
+        
+        
+        
+        
         self.updatedAvailabilitiesArray[indexPath.row] = @1;
         
         
         
-        NSLog(@"Person: %d array: %@ updateArray: %@", self.currentPerson.indexOfPerson, self.currentPerson.availabilitiesArray, self.updatedAvailabilitiesArray);
+        //NSLog(@"Person: %d array: %@ updateArray: %@", self.currentPerson.indexOfPerson, self.currentPerson.availabilitiesArray, self.updatedAvailabilitiesArray);
         
     }
     else {
         cell.accessoryType = UITableViewCellAccessoryNone;
         self.updatedAvailabilitiesArray[indexPath.row] = @0;
         cell.assignedOrAvailableLabel.text = @"";
+        //[cell.contentView setBackgroundColor:[UIColor whiteColor]];
+        //[cell setOpaque:NO];
     }
     
+   [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
     
 }
 

@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GenerateScheduleViewController : UIViewController
+@interface GenerateScheduleViewController : UIViewController <UIAlertViewDelegate>
 
+// I might not need these since I'm saving to Parse
 @property(nonatomic, strong) NSMutableArray *availabilitiesSchedule;
 @property(nonatomic, strong) NSMutableArray *assignmentsSchedule;
+
 @end

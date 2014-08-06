@@ -17,7 +17,8 @@
 		3F0294641982C0120016845A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294631982C0120016845A /* Security.framework */; };
 		3F0294661982C01A0016845A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294651982C01A0016845A /* StoreKit.framework */; };
 		3F0294681982C0200016845A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294671982C0200016845A /* SystemConfiguration.framework */; };
-		3F2FA03D198B3FC7008A4D5C /* PersonsInIntervalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F2FA03C198B3FC7008A4D5C /* PersonsInIntervalViewController.m */; };
+		3F1107E419903FDB0063ED9B /* Interval.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1107E319903FDB0063ED9B /* Interval.m */; };
+		3F296DB4199131A20059E19E /* PersonsInIntervalTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */; };
 		3F439672198364CF00C27E6D /* GenerateScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */; };
 		3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F616050198DA61E006EF048 /* IntervalTableViewCell.m */; };
 		3F616054198DAFD5006EF048 /* EnterScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F616053198DAFD5006EF048 /* EnterScheduleViewController.m */; };
@@ -35,7 +36,6 @@
 		3FA6D5291965E7A50043087B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D50B1965E7A50043087B /* UIKit.framework */; };
 		3FA6D5311965E7A50043087B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3FA6D52F1965E7A50043087B /* InfoPlist.strings */; };
 		3FA6D5331965E7A50043087B /* TentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6D5321965E7A50043087B /* TentTests.m */; };
-		3FA6D53E1965E8000043087B /* Availablities.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6D53D1965E8000043087B /* Availablities.m */; };
 		3FDE355A198094C700CE47D8 /* EnterScheduleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */; };
 		3FDE355D19809CC400CE47D8 /* PickPersonTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE355C19809CC400CE47D8 /* PickPersonTableViewController.m */; };
 		3FDE35631980A5DA00CE47D8 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE35621980A5DA00CE47D8 /* Person.m */; };
@@ -64,8 +64,10 @@
 		3F0294631982C0120016845A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		3F0294651982C01A0016845A /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		3F0294671982C0200016845A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		3F2FA03B198B3FC7008A4D5C /* PersonsInIntervalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonsInIntervalViewController.h; sourceTree = "<group>"; };
-		3F2FA03C198B3FC7008A4D5C /* PersonsInIntervalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonsInIntervalViewController.m; sourceTree = "<group>"; };
+		3F1107E219903FDB0063ED9B /* Interval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Interval.h; path = Model/Interval.h; sourceTree = "<group>"; };
+		3F1107E319903FDB0063ED9B /* Interval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Interval.m; path = Model/Interval.m; sourceTree = "<group>"; };
+		3F296DB2199131A20059E19E /* PersonsInIntervalTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonsInIntervalTableViewController.h; sourceTree = "<group>"; };
+		3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonsInIntervalTableViewController.m; sourceTree = "<group>"; };
 		3F439670198364CF00C27E6D /* GenerateScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenerateScheduleViewController.h; sourceTree = "<group>"; };
 		3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenerateScheduleViewController.m; sourceTree = "<group>"; };
 		3F61604F198DA61E006EF048 /* IntervalTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntervalTableViewCell.h; sourceTree = "<group>"; };
@@ -91,8 +93,6 @@
 		3FA6D52E1965E7A50043087B /* TentTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TentTests-Info.plist"; sourceTree = "<group>"; };
 		3FA6D5301965E7A50043087B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3FA6D5321965E7A50043087B /* TentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TentTests.m; sourceTree = "<group>"; };
-		3FA6D53C1965E8000043087B /* Availablities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Availablities.h; path = Model/Availablities.h; sourceTree = "<group>"; };
-		3FA6D53D1965E8000043087B /* Availablities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Availablities.m; path = Model/Availablities.m; sourceTree = "<group>"; };
 		3FDE3558198094C700CE47D8 /* EnterScheduleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnterScheduleTableViewController.h; sourceTree = "<group>"; };
 		3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterScheduleTableViewController.m; sourceTree = "<group>"; };
 		3FDE355B19809CC400CE47D8 /* PickPersonTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickPersonTableViewController.h; sourceTree = "<group>"; };
@@ -183,20 +183,18 @@
 			isa = PBXGroup;
 			children = (
 				3FA6D5191965E7A50043087B /* Main.storyboard */,
-				3F616052198DAFD5006EF048 /* EnterScheduleViewController.h */,
-				3F616053198DAFD5006EF048 /* EnterScheduleViewController.m */,
 				3FEAEB131989B07D00E3218F /* HomeBaseTableViewController.h */,
 				3FEAEB141989B07D00E3218F /* HomeBaseTableViewController.m */,
-				3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */,
-				3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */,
-				3F439670198364CF00C27E6D /* GenerateScheduleViewController.h */,
-				3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */,
-				3FDE3558198094C700CE47D8 /* EnterScheduleTableViewController.h */,
-				3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */,
 				3FDE355B19809CC400CE47D8 /* PickPersonTableViewController.h */,
 				3FDE355C19809CC400CE47D8 /* PickPersonTableViewController.m */,
-				3F2FA03B198B3FC7008A4D5C /* PersonsInIntervalViewController.h */,
-				3F2FA03C198B3FC7008A4D5C /* PersonsInIntervalViewController.m */,
+				3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */,
+				3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */,
+				3FDE3558198094C700CE47D8 /* EnterScheduleTableViewController.h */,
+				3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */,
+				3F296DB2199131A20059E19E /* PersonsInIntervalTableViewController.h */,
+				3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */,
+				3F439670198364CF00C27E6D /* GenerateScheduleViewController.h */,
+				3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */,
 				3FA6D51F1965E7A50043087B /* Images.xcassets */,
 				3FA6D50E1965E7A50043087B /* Supporting Files */,
 				3FA6D5401965E8110043087B /* Model */,
@@ -209,6 +207,8 @@
 		3FA6D50E1965E7A50043087B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3F616052198DAFD5006EF048 /* EnterScheduleViewController.h */,
+				3F616053198DAFD5006EF048 /* EnterScheduleViewController.m */,
 				3FA6D5161965E7A50043087B /* ScheduleAppDelegate.h */,
 				3FA6D5171965E7A50043087B /* ScheduleAppDelegate.m */,
 				3FA6D50F1965E7A50043087B /* Tent-Info.plist */,
@@ -240,10 +240,10 @@
 		3FA6D5401965E8110043087B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3F1107E219903FDB0063ED9B /* Interval.h */,
+				3F1107E319903FDB0063ED9B /* Interval.m */,
 				3FDE35611980A5DA00CE47D8 /* Person.h */,
 				3FDE35621980A5DA00CE47D8 /* Person.m */,
-				3FA6D53C1965E8000043087B /* Availablities.h */,
-				3FA6D53D1965E8000043087B /* Availablities.m */,
 				3FDE35641980A6DA00CE47D8 /* Schedule.h */,
 				3FDE35651980A6DA00CE47D8 /* Schedule.m */,
 			);
@@ -349,14 +349,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FEAEB151989B07D00E3218F /* HomeBaseTableViewController.m in Sources */,
-				3FA6D53E1965E8000043087B /* Availablities.m in Sources */,
 				3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */,
 				3FA6D5141965E7A50043087B /* main.m in Sources */,
 				3FDE35661980A6DA00CE47D8 /* Schedule.m in Sources */,
 				3F9B3E081989DEAA0041EFCC /* IntervalsTableViewController.m in Sources */,
 				3FDE35631980A5DA00CE47D8 /* Person.m in Sources */,
+				3F296DB4199131A20059E19E /* PersonsInIntervalTableViewController.m in Sources */,
+				3F1107E419903FDB0063ED9B /* Interval.m in Sources */,
 				3F439672198364CF00C27E6D /* GenerateScheduleViewController.m in Sources */,
-				3F2FA03D198B3FC7008A4D5C /* PersonsInIntervalViewController.m in Sources */,
 				3FA6D5181965E7A50043087B /* ScheduleAppDelegate.m in Sources */,
 				3FDE355A198094C700CE47D8 /* EnterScheduleTableViewController.m in Sources */,
 				3F616054198DAFD5006EF048 /* EnterScheduleViewController.m in Sources */,
@@ -426,7 +426,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jeremy Schreck (WE8935L77H)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jeremy Schreck (WE8935L77H)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -442,8 +443,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "C943E99D-1D37-45B0-9D7A-7B249EA2CF0E";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -464,7 +466,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jeremy Schreck (WE8935L77H)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jeremy Schreck (WE8935L77H)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -474,7 +477,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PROVISIONING_PROFILE = "C943E99D-1D37-45B0-9D7A-7B249EA2CF0E";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -485,6 +489,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jeremy Schreck (WE8935L77H)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/jeremy/Downloads,

@@ -7,7 +7,8 @@
 //
 
 #import "IntervalsTableViewController.h"
-#import "PersonsInIntervalViewController.h"
+#import "PersonsInIntervalTableViewController.h"
+#import "Interval.h"
 
 @interface IntervalsTableViewController ()
 @property (nonatomic)NSArray *hourIntervals;
@@ -132,11 +133,16 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
-    if([[segue destinationViewController] isKindOfClass:[PersonsInIntervalViewController class]]){
-        PersonsInIntervalViewController *piivc = [segue destinationViewController];
+    if([[segue destinationViewController] isKindOfClass:[PersonsInIntervalTableViewController class]]){
+        PersonsInIntervalTableViewController *piitvc = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        piivc.people = self.intervalArray[indexPath.row];
-        NSLog(@"People: %@", self.intervalArray);
+        Interval *interval = self.intervalArray[indexPath.row];
+        piitvc.availablePersonsArray = interval.availablePersons;
+        piitvc.assignedPersonsArray = interval.assignedPersons;
+        
+        //NSLog(@"AvailablePersons: %@", interval.availablePersons);
+        //NSLog(@"AssignedPersons: %@", interval.assignedPersons);
+
     }
 }
 
