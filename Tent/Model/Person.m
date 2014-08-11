@@ -7,6 +7,10 @@
 //
 
 #import "Person.h"
+@interface Person()
+
+@property (nonatomic) NSUInteger numIntervals;
+@end
 
 @implementation Person
 
@@ -20,6 +24,9 @@
     if(!_assignmentsArray)_assignmentsArray = [[NSMutableArray alloc]init];
     return _assignmentsArray;
 }
+
+
+
 -(instancetype)initWithName: (NSString *)name index:(NSUInteger)index  numIntervals:(NSUInteger)numIntervals
 {
     self = [super init];

@@ -36,11 +36,15 @@
 		3FA6D5291965E7A50043087B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D50B1965E7A50043087B /* UIKit.framework */; };
 		3FA6D5311965E7A50043087B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3FA6D52F1965E7A50043087B /* InfoPlist.strings */; };
 		3FA6D5331965E7A50043087B /* TentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6D5321965E7A50043087B /* TentTests.m */; };
+		3FC68EAC19970E1900C9DD95 /* AddScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC68EAB19970E1900C9DD95 /* AddScheduleViewController.m */; };
+		3FD6963C1996A7DB00D9C5C4 /* AddPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6963B1996A7DB00D9C5C4 /* AddPersonViewController.m */; };
 		3FDE355A198094C700CE47D8 /* EnterScheduleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */; };
 		3FDE355D19809CC400CE47D8 /* PickPersonTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE355C19809CC400CE47D8 /* PickPersonTableViewController.m */; };
 		3FDE35631980A5DA00CE47D8 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE35621980A5DA00CE47D8 /* Person.m */; };
 		3FDE35661980A6DA00CE47D8 /* Schedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE35651980A6DA00CE47D8 /* Schedule.m */; };
 		3FEAEB151989B07D00E3218F /* HomeBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FEAEB141989B07D00E3218F /* HomeBaseTableViewController.m */; };
+		3FF75E9119985BBB005D7857 /* MySchedulesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */; };
+		3FF75E9419985DF2005D7857 /* AddSchedulesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF75E9319985DF2005D7857 /* AddSchedulesTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +97,10 @@
 		3FA6D52E1965E7A50043087B /* TentTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TentTests-Info.plist"; sourceTree = "<group>"; };
 		3FA6D5301965E7A50043087B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3FA6D5321965E7A50043087B /* TentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TentTests.m; sourceTree = "<group>"; };
+		3FC68EAA19970E1900C9DD95 /* AddScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddScheduleViewController.h; sourceTree = "<group>"; };
+		3FC68EAB19970E1900C9DD95 /* AddScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddScheduleViewController.m; sourceTree = "<group>"; };
+		3FD6963A1996A7DB00D9C5C4 /* AddPersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPersonViewController.h; sourceTree = "<group>"; };
+		3FD6963B1996A7DB00D9C5C4 /* AddPersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPersonViewController.m; sourceTree = "<group>"; };
 		3FDE3558198094C700CE47D8 /* EnterScheduleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnterScheduleTableViewController.h; sourceTree = "<group>"; };
 		3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterScheduleTableViewController.m; sourceTree = "<group>"; };
 		3FDE355B19809CC400CE47D8 /* PickPersonTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickPersonTableViewController.h; sourceTree = "<group>"; };
@@ -103,6 +111,10 @@
 		3FDE35651980A6DA00CE47D8 /* Schedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Schedule.m; path = Model/Schedule.m; sourceTree = "<group>"; };
 		3FEAEB131989B07D00E3218F /* HomeBaseTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeBaseTableViewController.h; path = ../HomeBaseTableViewController.h; sourceTree = "<group>"; };
 		3FEAEB141989B07D00E3218F /* HomeBaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeBaseTableViewController.m; path = ../HomeBaseTableViewController.m; sourceTree = "<group>"; };
+		3FF75E8F19985BBB005D7857 /* MySchedulesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySchedulesTableViewController.h; sourceTree = "<group>"; };
+		3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySchedulesTableViewController.m; sourceTree = "<group>"; };
+		3FF75E9219985DF2005D7857 /* AddSchedulesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSchedulesTableViewController.h; sourceTree = "<group>"; };
+		3FF75E9319985DF2005D7857 /* AddSchedulesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSchedulesTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,15 +194,25 @@
 		3FA6D50D1965E7A50043087B /* Tent */ = {
 			isa = PBXGroup;
 			children = (
+				3FF75E8F19985BBB005D7857 /* MySchedulesTableViewController.h */,
+				3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */,
 				3FA6D5191965E7A50043087B /* Main.storyboard */,
+				3FF75E9219985DF2005D7857 /* AddSchedulesTableViewController.h */,
+				3FF75E9319985DF2005D7857 /* AddSchedulesTableViewController.m */,
+				3FC68EAA19970E1900C9DD95 /* AddScheduleViewController.h */,
+				3FC68EAB19970E1900C9DD95 /* AddScheduleViewController.m */,
 				3FEAEB131989B07D00E3218F /* HomeBaseTableViewController.h */,
 				3FEAEB141989B07D00E3218F /* HomeBaseTableViewController.m */,
 				3FDE355B19809CC400CE47D8 /* PickPersonTableViewController.h */,
 				3FDE355C19809CC400CE47D8 /* PickPersonTableViewController.m */,
-				3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */,
-				3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */,
+				3FD6963A1996A7DB00D9C5C4 /* AddPersonViewController.h */,
+				3FD6963B1996A7DB00D9C5C4 /* AddPersonViewController.m */,
 				3FDE3558198094C700CE47D8 /* EnterScheduleTableViewController.h */,
 				3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */,
+				3F61604F198DA61E006EF048 /* IntervalTableViewCell.h */,
+				3F616050198DA61E006EF048 /* IntervalTableViewCell.m */,
+				3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */,
+				3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */,
 				3F296DB2199131A20059E19E /* PersonsInIntervalTableViewController.h */,
 				3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */,
 				3F439670198364CF00C27E6D /* GenerateScheduleViewController.h */,
@@ -198,8 +220,6 @@
 				3FA6D51F1965E7A50043087B /* Images.xcassets */,
 				3FA6D50E1965E7A50043087B /* Supporting Files */,
 				3FA6D5401965E8110043087B /* Model */,
-				3F61604F198DA61E006EF048 /* IntervalTableViewCell.h */,
-				3F616050198DA61E006EF048 /* IntervalTableViewCell.m */,
 			);
 			path = Tent;
 			sourceTree = "<group>";
@@ -348,6 +368,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FF75E9119985BBB005D7857 /* MySchedulesTableViewController.m in Sources */,
 				3FEAEB151989B07D00E3218F /* HomeBaseTableViewController.m in Sources */,
 				3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */,
 				3FA6D5141965E7A50043087B /* main.m in Sources */,
@@ -358,9 +379,12 @@
 				3F1107E419903FDB0063ED9B /* Interval.m in Sources */,
 				3F439672198364CF00C27E6D /* GenerateScheduleViewController.m in Sources */,
 				3FA6D5181965E7A50043087B /* ScheduleAppDelegate.m in Sources */,
+				3FC68EAC19970E1900C9DD95 /* AddScheduleViewController.m in Sources */,
 				3FDE355A198094C700CE47D8 /* EnterScheduleTableViewController.m in Sources */,
 				3F616054198DAFD5006EF048 /* EnterScheduleViewController.m in Sources */,
 				3FDE355D19809CC400CE47D8 /* PickPersonTableViewController.m in Sources */,
+				3FF75E9419985DF2005D7857 /* AddSchedulesTableViewController.m in Sources */,
+				3FD6963C1996A7DB00D9C5C4 /* AddPersonViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +513,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jeremy Schreck (WE8935L77H)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -498,7 +523,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tent/Tent-Prefix.pch";
 				INFOPLIST_FILE = "Tent/Tent-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tent/Tent-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -508,6 +536,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/jeremy/Downloads,
@@ -516,7 +545,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tent/Tent-Prefix.pch";
 				INFOPLIST_FILE = "Tent/Tent-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tent/Tent-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

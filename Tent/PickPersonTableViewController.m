@@ -10,6 +10,8 @@
 #import "EnterScheduleTableViewController.h"
 #import "Person.h"
 #import "Schedule.h"
+#import <Parse/Parse.h>
+#import "HomeBaseTableViewController.h"
 
 
 @interface PickPersonTableViewController ()
@@ -45,7 +47,7 @@
 {
    
     // Return the number of rows in the section.
-    NSLog(@"Self.people: %d",[self.people count]);
+    NSLog(@"Self.people: %lu",(unsigned long)[self.people count]);
     return [self.people count];
 }
 
@@ -73,7 +75,7 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
-    
+
     //Check id using introspection
     if([sender isKindOfClass:[UITableViewCell class]]){
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
@@ -87,7 +89,8 @@
                     Person *person = self.people[indexPath.row];
                    
                     EnterScheduleTableViewController *estvc = [segue destinationViewController];
-                    estvc.currentPerson = person;
+                    estvc.currentPerson = person; //does it violate MVC for them to be connected like this?
+                    estvc.hourIntervalsDisplayArray = self.hourIntervalsDisplayArray;
             
                 }
             }
@@ -97,8 +100,7 @@
     }
 }
 
-- (IBAction)addPersonButtonClicked:(id)sender {
-}
+
 
 
 
@@ -131,6 +133,55 @@
 
  */
 }
+
+-(IBAction)addPerson:(UIStoryboardSegue *)segue
+{
+    Person *newPerson = [[Person alloc]initWithName:self.addPersonName index:[self.people count] numIntervals:self.numIntervals];
+    
+    [self.people addObject:newPerson];
+    
+    self.addPersonName = nil;
+    
+    [self.tableView reloadData];
+    
+    PFObject *personObject = [PFObject objectWithClassName:@"Person"];
+    personObject[@"name"] = newPerson.name;
+    personObject[@"index"] = [NSNumber numberWithInteger:newPerson.indexOfPerson];
+    personObject[@"availabilitiesArray"] = newPerson.availabilitiesArray;
+    personObject[@"assignmentsArray"] = newPerson.assignmentsArray;
+    
+    personObject[@"scheduleName"] = self.schedule.name;
+    [personObject saveInBackground];
+    
+    //query for schedule and update
+    PFQuery *query = [PFQuery queryWithClassName:@"Schedule"];
+    
+    [query whereKey:@"name" equalTo:self.schedule.name];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *parseSchedule, NSError *error) {
+        if(!parseSchedule){
+            NSLog(@"Error retrieving schedule from Parse");
+        }else {
+            NSMutableArray *availabilitiesSchedule =  parseSchedule[@"availabilitiesSchedule"];
+            [availabilitiesSchedule addObject:newPerson.availabilitiesArray];
+            parseSchedule[@"availabilitiesSchedule"]= availabilitiesSchedule;
+            NSMutableArray *assignmentsSchedule = parseSchedule[@"assignmentsSchedule"];
+            [assignmentsSchedule addObject:newPerson.assignmentsArray];
+            parseSchedule[@"availabilitiesSchedule"]= assignmentsSchedule;
+            
+            [parseSchedule saveInBackground];
+            
+        }
+    }];
+
+}
+-(IBAction)cancelAddPerson:(UIStoryboardSegue *)segue
+{
+    
+}
+
+
+
+
 
 
 @end

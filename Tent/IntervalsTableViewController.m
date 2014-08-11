@@ -11,7 +11,7 @@
 #import "Interval.h"
 
 @interface IntervalsTableViewController ()
-@property (nonatomic)NSArray *hourIntervals;
+
 @end
 
 @implementation IntervalsTableViewController
@@ -22,10 +22,11 @@
     return _intervalArray;
 }
 
-- (NSArray *)hourIntervals
+- (NSArray *)hourIntervalsDisplayArray //make this a class method
 {
-    if(!_hourIntervals) _hourIntervals = @[@"8-9", @"9-10",@"10-11", @"11-12", @"12-1", @"1-2", @"2-3", @"3-4", @"4-5", @"5-6"];
-    return _hourIntervals;
+   // if(!_hourIntervals) _hourIntervals = @[@"  7am -   8am", @"  8am -   9am", @"  9am - 10am",@"10am - 11am", @"11am - 12pm", @"12pm -   1pm", @"  1pm -   2pm", @"  2pm -   3pm", @"  3pm -   4pm", @"  4pm -   5pm", @"  5pm -   6pm", @"  6pm -   7pm", @"  7pm -   8pm",@"  8pm -   9pm", @"  9pm - 10pm", @"10pm - 11pm", @"11pm - 12am"];
+    if(!_hourIntervalsDisplayArray)_hourIntervalsDisplayArray = [[NSArray alloc]init];
+    return _hourIntervalsDisplayArray;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -68,6 +69,7 @@
 
     // Return the number of rows in the section.
     return [self.intervalArray count];
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -75,7 +77,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Interval Cell" forIndexPath:indexPath];
     
     //Configure the cell...
-    NSString *interval = self.hourIntervals[indexPath.row];
+    NSString *interval = self.hourIntervalsDisplayArray[indexPath.row];
     
     cell.textLabel.text = interval;
     

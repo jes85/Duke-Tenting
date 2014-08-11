@@ -98,7 +98,6 @@
     
     if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]) {
         cell.accessoryType =UITableViewCellAccessoryCheckmark;
-        NSLog(@"Test %d", indexPath.row);
         cell.assignedOrAvailableLabel.text = @"(Available)";
         
     }
@@ -118,7 +117,7 @@
             
             
             
-            NSLog(@"Test %d", indexPath.row);
+            
         }
     }
     [cell bringSubviewToFront:cell.assignedOrAvailableLabel];
@@ -235,8 +234,7 @@
         
         
         
-        NSLog(@"Person: %d array: %@ updateArray: %@", self.currentPerson.indexOfPerson, self.currentPerson.availabilitiesArray, self.updatedAvailabilitiesArray);
-        
+                
     }
     else {
         cell.accessoryType = UITableViewCellAccessoryNone;

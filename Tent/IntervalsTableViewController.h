@@ -11,4 +11,5 @@
 @interface IntervalsTableViewController : UITableViewController
 
 @property (nonatomic) NSMutableArray *intervalArray;
+@property (nonatomic)NSArray *hourIntervalsDisplayArray;
 @end

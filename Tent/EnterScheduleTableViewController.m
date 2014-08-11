@@ -27,10 +27,18 @@
     _hourIntervals = hourIntervals;
     [self.tableView reloadData];
 }
+
+
 - (NSArray *)hourIntervals
 {
     if(!_hourIntervals) _hourIntervals = @[@"  8am -   9am", @"  9am - 10am",@"10am - 11am", @"11am - 12pm", @"12pm -   1pm", @"  1pm -   2pm", @"  2pm -   3pm", @"  3pm -   4pm", @"  4pm -   5pm", @"  5pm -   6pm"];
     return _hourIntervals;
+}
+
+- (NSArray *)hourIntervalsDisplayArray //make this a class method
+{
+    if(!_hourIntervalsDisplayArray)_hourIntervalsDisplayArray = [[NSArray alloc]init];
+    return _hourIntervalsDisplayArray;
 }
 
 
@@ -59,7 +67,13 @@
 {
 
     // Return the number of rows in the section.
-    return [self.hourIntervals count];
+   
+    return [self.hourIntervalsDisplayArray count];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    
+    return @"     Time                                          Status "; //fix for autolayout
 }
 
 /*- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -81,9 +95,13 @@
     
     // Configure the cell...
     
-    NSString *hour = self.hourIntervals[indexPath.row];
-    cell.textLabel.text = hour;
    
+    NSString *interval = self.hourIntervalsDisplayArray[indexPath.row];
+    cell.textLabel.text = interval;
+         //cell.imageView.image =[UIImage imageNamed:@"Image1"];
+//cell.imageView addConstraint:<#(NSLayoutConstraint *)#>
+    
+    NSLog(@"self.currentPerson.availabilitiesArray: %@ index path row %d", self.currentPerson.availabilitiesArray, indexPath.row);
     if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]) {
         cell.accessoryType =UITableViewCellAccessoryCheckmark;
         cell.assignedOrAvailableLabel.text = @"(Available)";
@@ -115,6 +133,7 @@
     }
    
     [cell.contentView addSubview:cell.assignedOrAvailableLabel]; //I don't think I should have to do this because I did it in a storyboards. I think I didn't connect the outlets correctly
+    
     return cell;
 }
 
@@ -139,7 +158,7 @@
         //update person's availabilities array (and update to Parse)
        self.currentPerson.availabilitiesArray = self.updatedAvailabilitiesArray;
         PFQuery *query = [PFQuery queryWithClassName:@"Person"];
-        [query whereKey:@"index" equalTo:[NSNumber numberWithInt:self.currentPerson.indexOfPerson]];
+        [query whereKey:@"index" equalTo:[NSNumber numberWithInteger:self.currentPerson.indexOfPerson]];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if(!object){
                 NSLog(@"Find failed");
@@ -218,5 +237,8 @@
 
     
 }
+
+
+
 
 @end

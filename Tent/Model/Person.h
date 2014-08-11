@@ -16,6 +16,8 @@
 @property (nonatomic) NSUInteger indexOfPerson;
 
 
+//Clear these inits up and designate one
+
 -(instancetype)initWithName: (NSString *)name index:(NSUInteger)index numIntervals:(NSUInteger)numIntervals;
 -(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray;
 -(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray assignmentsArray:(NSMutableArray *)assignArray;

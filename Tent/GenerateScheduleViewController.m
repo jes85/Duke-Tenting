@@ -21,6 +21,7 @@
     if(buttonIndex == 0) return;
     else if (buttonIndex==1){
         [self generateSchedule];
+        [self.delegate generateScheduleViewControllerDidGenerateSchedule:self]; //do i have to switch views first?
     }
 }
 - (IBAction)generateScheduleButton:(UIButton *)sender {

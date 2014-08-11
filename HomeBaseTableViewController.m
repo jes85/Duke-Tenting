@@ -12,12 +12,16 @@
 #import "IntervalsTableViewController.h"
 #import "Schedule.h"
 #import "Interval.h"
-@interface HomeBaseTableViewController ()
+#import "GenerateScheduleViewController.h"
+@interface HomeBaseTableViewController () <GenerateScheduleViewControllerDelegate>
 
+//maybe change these to properties of schedule
 @property (nonatomic) NSMutableArray *personsArray; //Person[]
 @property (nonatomic) NSMutableArray *intervalArray; //Interval[]
 @property (nonatomic) NSMutableArray *availabilitiesSchedule;
 @property (nonatomic) NSMutableArray *assignmentsSchedule;
+
+@property (nonatomic) NSMutableArray *hourIntervalsDisplayArray;
 @end
 
 
@@ -43,6 +47,11 @@
     return _availabilitiesSchedule;
 }
 
+-(NSMutableArray *)hourIntervalsDisplayArray
+{
+    if(!_hourIntervalsDisplayArray)_hourIntervalsDisplayArray = [[NSMutableArray alloc]init];
+    return _hourIntervalsDisplayArray;
+}
 
 -(void)createPeopleArray
 {
@@ -56,7 +65,7 @@
         NSMutableArray *arrayOfAssignmentArrays =[[NSMutableArray alloc]init];//assignmentsSchedule
         
         
-        for(int p = 0;p<[Schedule testNumPeople];p++){
+        for(int p = 0;p<self.schedule.numPeople;p++){
             NSString *name = [NSString stringWithFormat:@"Person %d", p];
             Person *person = [[Person alloc]initWithName:name index:p numIntervals:[Schedule testNumIntervals]];
             
@@ -68,7 +77,7 @@
             //save person's availabilitity array to Parse
             PFObject *personObject = [PFObject objectWithClassName:@"Person"];
             personObject[@"name"] = person.name;
-            personObject[@"index"] = [NSNumber numberWithInt:person.indexOfPerson];
+            personObject[@"index"] = [NSNumber numberWithInteger:person.indexOfPerson];
             personObject[@"availabilitiesArray"] = person.availabilitiesArray;
             personObject[@"assignmentsArray"] = person.assignmentsArray;
             [personObject saveInBackground];
@@ -89,22 +98,46 @@
 -(void)createIntervalArray
 {
     NSMutableArray *intervalArray = [[NSMutableArray alloc]init];
-    
-    
-    for(int i = 0;i<[Schedule testNumIntervals];i++){
+    NSLog(@"%lu", (unsigned long)self.schedule.numHourIntervals);
+    for(int i = 0;i<self.schedule.numHourIntervals;i++){
         Interval *interval = [[Interval alloc]init];
         [intervalArray addObject:interval];
     }
     self.intervalArray = intervalArray;
 }
+
+-(void)createIntervalDisplayArray
+{
+    NSDate *beginningHourDate = [self.schedule.startDate copy];
+    NSDate *endHourDate = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:beginningHourDate];
+    
+    
+    
+    for(int i = 0; i<self.schedule.numHourIntervals;i++){
+       // NSLog(@"Test %d", self.schedule.numHourIntervals);
+        NSString *beginningHourString = [NSDateFormatter localizedStringFromDate:beginningHourDate dateStyle:0 timeStyle:NSDateFormatterShortStyle];
+         NSString *endHourString = [NSDateFormatter localizedStringFromDate:endHourDate dateStyle:0 timeStyle:NSDateFormatterShortStyle];
+        NSString *hourInterval = [NSString stringWithFormat:@"%@ - %@", beginningHourString, endHourString];
+        [self.hourIntervalsDisplayArray addObject:hourInterval];
+        beginningHourDate = endHourDate;
+        endHourDate = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:beginningHourDate];
+        //NSLog(@"%@", hourInterval);
+       
+    }
+    
+
+    NSLog(@"%@", self.hourIntervalsDisplayArray);
+
+}
 #pragma mark - view controller lifecycle
 
 -(void)viewDidLoad
 {
+    
     [super viewDidLoad];
     
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
-    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Reload Data"];
     [refresh addTarget:self action:@selector(updateInformation) forControlEvents:UIControlEventValueChanged];
 
     self.refreshControl = refresh;
@@ -118,11 +151,16 @@
 
 
 -(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    //[self updateInformation]; //move this to first load (viewDidLoad) and refreshes
-   
 
+{
+    
+    [super viewWillAppear:animated];
+    //[self updateInformation]; //moved this to first load (viewDidLoad) and refreshes
+    
+    //testing
+    if(!_hourIntervalsDisplayArray)[self createIntervalDisplayArray];
+    if(!_intervalArray)[self createIntervalArray];
+    
 }
 
 -(void)stopRefresh
@@ -136,16 +174,17 @@
     self.intervalArray = nil;
     // Get person objects from Parse
     PFQuery *query = [PFQuery queryWithClassName:@"Person"];
+    [query whereKey:@"scheduleName" equalTo:self.schedule.name];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if(!objects){
             NSLog(@"Find failed");
         }else if ([objects count]<1){
             NSLog(@"No objects in Parse");
-            [self createPeopleArray];
-            [self createIntervalArray];
+            //[self createPeopleArray];
+            //[self createIntervalArray];
         }
         else{
-            NSLog(@"Find succeeded %d", [objects count]);
+            NSLog(@"Find succeeded %lu", (unsigned long)[objects count]);
             //self.personsArray = [[NSMutableArray alloc]initWithCapacity:[Schedule testNumPeople]]; //take this out later
            // NSLog(@"personsArray: %@", self.personsArray);
             [self createIntervalArray];
@@ -204,6 +243,7 @@
 {
 
     // Return the number of sections.
+    
     return 1;
 }
 
@@ -211,7 +251,8 @@
 {
 
     // Return the number of rows in the section.
-    return 3;
+   
+    return 4;
 }
 
 #pragma mark - Navigation
@@ -226,18 +267,34 @@
     if([[segue destinationViewController] isKindOfClass:[PickPersonTableViewController class]]){
         
         PickPersonTableViewController *pptvc = [segue destinationViewController];
+        //maybe only communicate schedule data
         pptvc.people = self.personsArray;
-        
+        pptvc.numIntervals = self.schedule.numHourIntervals;
+        pptvc.hourIntervalsDisplayArray = self.hourIntervalsDisplayArray;
+        pptvc.schedule = self.schedule;
         //NSLog(@"array: %@", self.personsArray);
     }
     else if([[segue destinationViewController] isKindOfClass:[IntervalsTableViewController class]]){
         
         IntervalsTableViewController *itvc = [segue destinationViewController];
         itvc.intervalArray = self.intervalArray;
+        itvc.hourIntervalsDisplayArray = self.hourIntervalsDisplayArray;
         
         //NSLog(@"intervalArray %@", self.intervalArray);
     }
+    else if([[segue destinationViewController] isKindOfClass:[GenerateScheduleViewController class]]){
+        
+       GenerateScheduleViewController *gsvc = [segue destinationViewController];
+        gsvc.delegate = self;
+        
+        //NSLog(@"intervalArray %@", self.intervalArray);
+    }
+
 }
 
+-(void)generateScheduleViewControllerDidGenerateSchedule:(GenerateScheduleViewController *)controller{
+    NSLog(@"didGenerateSchedule");
+    [self updateInformation];
+}
 
 @end

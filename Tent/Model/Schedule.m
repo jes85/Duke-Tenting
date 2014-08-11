@@ -11,6 +11,8 @@
 
 @interface Schedule()
 
+
+
 // Basic parameters
     @property (nonatomic) NSUInteger requiredPersonsPerInterval;
 
@@ -67,10 +69,16 @@
     return _idealSlotsArray;
 }
 
-
+-(NSMutableArray *) availabilitiesSchedule
+{
+    if(!_availabilitiesSchedule){
+        _availabilitiesSchedule = [[NSMutableArray alloc]init];
+    }
+    return _availabilitiesSchedule;
+}
 -(NSMutableArray *) assignmentsSchedule
 {
-    if(!_assignmentsSchedule){
+    /*if(!_assignmentsSchedule){
         _assignmentsSchedule = [[NSMutableArray alloc]initWithCapacity:self.numPeople];
         for(int p = 0; p<self.numPeople;p++){
             NSMutableArray *peopleAssignInterval = [[NSMutableArray alloc]initWithCapacity:self.numIntervals];
@@ -79,11 +87,25 @@
             }
             [_assignmentsSchedule addObject:peopleAssignInterval];
         }
-    }
+    }*/
+    if(!_assignmentsSchedule) _assignmentsSchedule = [[NSMutableArray alloc]init];
     return _assignmentsSchedule;
 }
 #pragma mark - init
 
+-(instancetype)initWithNumPeople:(NSUInteger)numPeople numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate
+{
+    self = [super init];
+    if(self){
+        self.numPeople = numPeople;
+        self.numHourIntervals = numHourIntervals; //get rid of one of these
+        self.numIntervals = numHourIntervals;
+        self.startDate = startDate;
+        self.endDate = endDate;
+        
+    }
+    return self;
+}
 -(instancetype)initWithNumPeople:(NSUInteger)numPeople withNumIntervals:(NSUInteger)numIntervals
 {
     self = [super init];
@@ -106,6 +128,23 @@
     return self;
 }
 
+-(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate{
+    self = [super init];
+    if(self){
+        self.numPeople = [self.availabilitiesSchedule count];
+        self.numHourIntervals = numHourIntervals; //get rid of one of these
+        self.numIntervals = numHourIntervals;
+        self.startDate = startDate;
+        self.endDate = endDate;
+        
+        self.availabilitiesSchedule = availabilitiesSchedule;
+        self.assignmentsSchedule = assignmentsSchedule;
+        
+        self.name = name;
+        
+    }
+    return self;
+}
 -(void)setup
 {
     
@@ -188,7 +227,7 @@
 #pragma mark - Generate Schedule
 -(void)generateSchedule
 {
-    NSLog(@"numPeople: %d numIntervals: %d", self.numPeople, self.numIntervals);
+    NSLog(@"numPeople: %lu numIntervals: %lu", (unsigned long)self.numPeople, (unsigned long)self.numIntervals);
     
     NSLog(@"Assignments Schedule: %@", self.assignmentsSchedule);
 

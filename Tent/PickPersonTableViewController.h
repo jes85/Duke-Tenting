@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import "Schedule.h"
 
 @interface PickPersonTableViewController : UITableViewController
 
@@ -16,4 +17,13 @@
 
 -(IBAction)unWindToList:(UIStoryboardSegue *)segue;
 
+-(IBAction)addPerson:(UIStoryboardSegue *)segue;
+-(IBAction)cancelAddPerson:(UIStoryboardSegue *)segue;
+
+@property (nonatomic) NSString *addPersonName;
+@property (nonatomic) NSUInteger numIntervals;//try to figure out away to have this information in one place (NSNotification center?)
+@property (nonatomic)NSArray *hourIntervalsDisplayArray;
+
+
+@property (nonatomic) Schedule *schedule;
 @end
