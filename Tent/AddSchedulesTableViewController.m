@@ -10,12 +10,24 @@
 
 #define kDatePickerTag              99     // view tag identifiying the date picker view
 
+#define kTitleKey       @"title"   // key for obtaining the data source item's title
 #define kDateKey        @"date"    // key for obtaining the data source item's date value
 
 
+static NSString *kDateCellID = @"dateCell";     // the cells with the start or end date
+static NSString *kDatePickerID = @"datePicker"; // the cell containing the date picker
+
 @interface AddSchedulesTableViewController ()
+
+@property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+
 // keep track which indexPath points to the cell with UIDatePicker
 @property (nonatomic, strong) NSIndexPath *datePickerIndexPath;
+
+@property (assign) NSInteger pickerCellRowHeight;
+
+
 @end
 
 @implementation AddSchedulesTableViewController
@@ -34,13 +46,22 @@
     
     
     // setup our data source
-    NSMutableDictionary *itemOne = [@{ kTitleKey : @"Tap a cell to change its date:" } mutableCopy];
+    NSMutableDictionary *itemOne = [@{ kTitleKey : @"Tap a cell to change its date:" } mutableCopy]; //change this to enter Schedule's name
     NSMutableDictionary *itemTwo = [@{ kTitleKey : @"Start Date",
                                        kDateKey : [NSDate date] } mutableCopy];
     NSMutableDictionary *itemThree = [@{ kTitleKey : @"End Date",
                                          kDateKey : [NSDate date] } mutableCopy];
     
      self.dataArray = @[itemOne, itemTwo, itemThree];
+    
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];    // show short-style date format
+    [self.dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+
+    
+    // obtain the picker view cell's height, works because the cell was pre-defined in our storyboard
+    UITableViewCell *pickerViewCellToCheck = [self.tableView dequeueReusableCellWithIdentifier:kDatePickerID];
+    self.pickerCellRowHeight = CGRectGetHeight(pickerViewCellToCheck.frame);
 }
 
 
