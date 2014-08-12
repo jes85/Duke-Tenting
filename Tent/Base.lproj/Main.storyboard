@@ -25,7 +25,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wo6-Ni-xdg">
-                                <rect key="frame" x="112" y="112" width="97" height="30"/>
+                                <rect key="frame" x="112" y="112" width="147" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -53,7 +53,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nm2-5a-Gb4" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="dcN-nk-ly1" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2600" y="-2083"/>
+            <point key="canvasLocation" x="3126" y="-2083"/>
         </scene>
         <!--Pick Person Table View Controller - People List-->
         <scene sceneID="rFr-vt-8ge">
@@ -93,7 +93,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e8s-86-dMs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1362" y="-1809"/>
+            <point key="canvasLocation" x="1888" y="-1809"/>
         </scene>
         <!--Intervals Table View Controller - Time Intervals List-->
         <scene sceneID="kwK-Xi-z99">
@@ -215,7 +215,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Qn-f3-mit" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="pel-Dg-iJU" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2090" y="-1351"/>
+            <point key="canvasLocation" x="2594" y="-1351"/>
         </scene>
         <!--Enter Schedule View Controller-->
         <scene sceneID="L26-Z1-SAQ">
@@ -252,7 +252,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CKo-Kj-mHA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2600" y="-1325"/>
+            <point key="canvasLocation" x="3200" y="-1351"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Cv5-Sn-LDU">
@@ -267,19 +267,19 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuE-NY-ewj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1109" y="-128"/>
+            <point key="canvasLocation" x="-1017" y="-260"/>
         </scene>
-        <!--Add Schedules Table View Controller-->
+        <!--Add Schedules Table View Controller - Create Schedule-->
         <scene sceneID="rqv-ou-ep7">
             <objects>
                 <tableViewController id="rsk-Jd-lrE" customClass="AddSchedulesTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="qoz-kX-r3z">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="qoz-kX-r3z">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Rl6-oA-kop">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="nameCell" id="Rl6-oA-kop" customClass="NameOfScheduleTableViewCell">
+                                <rect key="frame" x="0.0" y="119" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Rl6-oA-kop" id="MGe-Qh-d9P">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -300,9 +300,13 @@
                                         </textField>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="nameOfScheduleLabel" destination="DTb-Cv-m3Z" id="fHI-Ob-0of"/>
+                                    <outlet property="nameOfScheduleTextField" destination="RUf-kY-bbJ" id="QGD-W4-pCt"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="dateCell" textLabel="8Ma-Il-EW6" detailTextLabel="5ir-Cv-GzS" style="IBUITableViewCellStyleValue1" id="G4O-lW-SZs">
-                                <rect key="frame" x="0.0" y="66" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="163" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="G4O-lW-SZs" id="djg-M8-pTA">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -326,17 +330,17 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="datePicker" rowHeight="216" id="Hcb-Ac-uzz">
-                                <rect key="frame" x="0.0" y="110" width="320" height="216"/>
+                                <rect key="frame" x="0.0" y="207" width="320" height="216"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Hcb-Ac-uzz" id="Can-gY-o0v">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="215"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="15" translatesAutoresizingMaskIntoConstraints="NO" id="Jsh-Nd-h5z">
-                                            <rect key="frame" x="0.0" y="-59" width="320" height="162"/>
+                                        <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="15" translatesAutoresizingMaskIntoConstraints="NO" id="Jzt-eT-Awn">
+                                            <rect key="frame" x="0.0" y="20" width="320" height="162"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                            <date key="date" timeIntervalSinceReferenceDate="429419751.03171301">
-                                                <!--2014-08-11 03:15:51 +0000-->
+                                            <date key="date" timeIntervalSinceReferenceDate="429563326.67443597">
+                                                <!--2014-08-12 19:08:46 +0000-->
                                             </date>
                                             <timeZone key="timeZone" name="America/Los_Angeles">
                                                 <mutableData key="data">
@@ -359,6 +363,9 @@ AQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEA
 AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
 </mutableData>
                                             </timeZone>
+                                            <connections>
+                                                <action selector="dateAction:" destination="rsk-Jd-lrE" eventType="valueChanged" id="GMD-YU-DkM"/>
+                                            </connections>
                                         </datePicker>
                                     </subviews>
                                 </tableViewCellContentView>
@@ -369,10 +376,58 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                             <outlet property="delegate" destination="rsk-Jd-lrE" id="mcM-WA-eC9"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Create Schedule" id="Pma-4b-fKW">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="BvK-fm-FU5">
+                            <connections>
+                                <segue destination="lZP-Cq-EiS" kind="unwind" unwindAction="cancelAddSchedule:" id="cLa-ZT-f5e"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="4fB-8Y-Ese">
+                            <connections>
+                                <segue destination="lZP-Cq-EiS" kind="unwind" unwindAction="addSchedule:" id="KD6-Mf-jk0"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="datePickerView" destination="dcQ-3X-fPF" id="XVJ-54-PJW"/>
+                        <outlet property="doneButton" destination="4fB-8Y-Ese" id="dDe-bb-23z"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wvr-k7-i7A" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="lZP-Cq-EiS" userLabel="Exit" sceneMemberID="exit"/>
+                <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="dcQ-3X-fPF">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <date key="date" timeIntervalSinceReferenceDate="429563143.26362199">
+                        <!--2014-08-12 19:05:43 +0000-->
+                    </date>
+                    <timeZone key="timeZone" name="America/Los_Angeles">
+                        <mutableData key="data">
+VFppZgAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAC5AAAABAAAABCepkign7sVkKCGKqChmveQ
+y4kaoNIj9HDSYSYQ1v50INiArZDa/tGg28CQENzes6DdqayQ3r6VoN+JjpDgnneg4WlwkOJ+WaDjSVKQ
+5F47oOUpNJDmR1gg5xJREOgnOiDo8jMQ6gccIOrSFRDr5v4g7LH3EO3G4CDukdkQ76/8oPBxuxDxj96g
+8n/BkPNvwKD0X6OQ9U+ioPY/hZD3L4Sg+CiiEPkPZqD6CIQQ+viDIPvoZhD82GUg/chIEP64RyD/qCoQ
+AJgpIAGIDBACeAsgA3EokARhJ6AFUQqQBkEJoAcw7JAHjUOgCRDOkAmtvyAK8LCQC+CvoAzZzRANwJGg
+DrmvEA+priAQmZEQEYmQIBJ5cxATaXIgFFlVEBVJVCAWOTcQFyk2IBgiU5AZCRggGgI1kBryNKAb4heQ
+HNIWoB3B+ZAesfigH6HbkCB2KyAhgb2QIlYNICNq2hAkNe8gJUq8ECYV0SAnKp4QJ/7toCkKgBAp3s+g
+KupiECu+saAs036QLZ6ToC6zYJAvfnWgMJNCkDFnkiAycySQM0d0IDRTBpA1J1YgNjLokDcHOCA4HAUQ
+OOcaIDn75xA6xvwgO9vJEDywGKA9u6sQPo/6oD+bjRBAb9ygQYSpkEJPvqBDZIuQRC+goEVEbZBF89Mg
+Ry2KEEfTtSBJDWwQSbOXIErtThBLnLOgTNZqkE18laBOtkyQT1x3oFCWLpBRPFmgUnYQkFMcO6BUVfKQ
+VPwdoFY11JBW5TogWB7xEFjFHCBZ/tMQWqT+IFvetRBchOAgXb6XEF5kwiBfnnkQYE3eoGGHlZBiLcCg
+Y2d3kGQNoqBlR1mQZe2EoGcnO5BnzWagaQcdkGmtSKBq5v+Qa5ZlIGzQHBBtdkcgbq/+EG9WKSBwj+AQ
+cTYLIHJvwhBzFe0gdE+kEHT/CaB2OMCQdt7roHgYopB4vs2gefiEkHqer6B72GaQfH6RoH24SJB+XnOg
+f5gqkAABAAECAwEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEA
+AQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEA
+AQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEA
+AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
+</mutableData>
+                    </timeZone>
+                    <connections>
+                        <action selector="dateAction:" destination="rsk-Jd-lrE" eventType="valueChanged" id="NmN-Zl-RPV"/>
+                    </connections>
+                </datePicker>
             </objects>
-            <point key="canvasLocation" x="712" y="-2101"/>
+            <point key="canvasLocation" x="1238" y="-2101"/>
         </scene>
         <!--Add Schedule View Controller - New Schedule-->
         <scene sceneID="Zm9-hO-4rn">
@@ -487,7 +542,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="60b-63-InC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1362" y="286"/>
+            <point key="canvasLocation" x="1902" y="230"/>
         </scene>
         <!--Home Base Table View Controller - Home-->
         <scene sceneID="Qny-hy-u7l">
@@ -654,7 +709,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Create " id="ytZ-35-wR7">
                             <connections>
-                                <segue destination="CYG-85-ZJ2" kind="modal" identifier="Create Schedule" id="Miq-hM-p5J"/>
+                                <segue destination="NDB-GU-Nan" kind="modal" identifier="Create Schedule" id="8Td-jT-WHc"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -679,7 +734,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XDQ-X9-pTR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2078" y="-2091"/>
+            <point key="canvasLocation" x="2604" y="-2091"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="d9H-hM-til">
@@ -698,6 +753,24 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qQc-4m-ENW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-400" y="-548"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="7av-CM-jRT">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="NDB-GU-Nan" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="QEi-wX-ZoZ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="rsk-Jd-lrE" kind="relationship" relationship="rootViewController" id="o1K-j1-Urw"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ncU-dA-dcb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="712" y="-2101"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

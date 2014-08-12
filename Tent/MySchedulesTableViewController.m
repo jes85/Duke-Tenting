@@ -9,7 +9,10 @@
 #import "MySchedulesTableViewController.h"
 #import "Schedule.h"
 #import <Parse/Parse.h>
+#import "AddSchedulesTableViewController.h"
+#import "NameOfScheduleTableViewCell.h"
 #import "HomeBaseTableViewController.h"
+
 
 @implementation MySchedulesTableViewController
 
@@ -18,18 +21,9 @@
     return _schedules;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    [self updateSchedules];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
 
+/*! Find schedules in Parse, update self.schedules propery and reload table view controller to show data
+ */
 -(void)updateSchedules
 {
     PFQuery *query = [PFQuery queryWithClassName:@"Schedule"];
@@ -60,6 +54,18 @@
 
 
 }
+#pragma mark - View Controller Lifecycle
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self updateSchedules];
+    
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -89,46 +95,6 @@
  return cell;
  }
 
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- } else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
-
  #pragma mark - Navigation
  
  // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -148,5 +114,35 @@
          }
      }
  }
+
+
+-(IBAction)addSchedule:(UIStoryboardSegue *)segue
+{
+    //Schedule should implement copy protocol
+    //Schedule *newSchedule = [self.scheduleToAdd copy];
+    //[self.schedules addObject:newSchedule];
+    //self.scheduleToAdd = nil;
+    
+    Schedule *newSchedule = self.scheduleToAdd;
+    [self.schedules addObject:newSchedule];
+    
+    [self.tableView reloadData];
+    
+    PFObject *scheduleObject = [PFObject objectWithClassName:@"Schedule"];
+    scheduleObject[@"name"] = newSchedule.name;
+    scheduleObject[@"startDate"] = newSchedule.startDate;
+    scheduleObject[@"endDate"] = newSchedule.endDate;
+    scheduleObject[@"availabilitiesSchedule"] = newSchedule.availabilitiesSchedule;
+    scheduleObject[@"assignmentsSchedule"] = newSchedule.assignmentsSchedule;
+    scheduleObject[@"numHourIntervals"] = [NSNumber numberWithInteger:newSchedule.numHourIntervals];
+    
+    [scheduleObject saveInBackground];
+    
+    
+}
+-(IBAction)cancelAddSchedule:(UIStoryboardSegue *)segue
+{
+    
+}
 
 @end

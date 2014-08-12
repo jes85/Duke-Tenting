@@ -145,6 +145,54 @@
     }
     return self;
 }
+-(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule startDate:(NSDate *)startDate endDate:(NSDate *)endDate
+{
+    self = [super init];
+    if(self){
+        
+        self.name = name;
+
+        
+        self.startDate = startDate;
+        self.endDate = endDate;
+        
+        double time = [endDate timeIntervalSinceDate:startDate];
+        NSUInteger numHourIntervals = (NSUInteger)time/3600;
+        self.numHourIntervals = numHourIntervals;
+        
+        self.numPeople = [self.availabilitiesSchedule count];
+
+        
+        
+        self.availabilitiesSchedule = availabilitiesSchedule;
+        self.assignmentsSchedule = assignmentsSchedule;
+        
+        
+    }
+    return self;
+
+}
+-(instancetype)initWithName:(NSString *)name startDate:(NSDate *)startDate endDate:(NSDate *)endDate
+{
+    self = [super init];
+    if(self){
+        
+        self.startDate = startDate;
+        self.endDate = endDate;
+        
+        double time = [endDate timeIntervalSinceDate:startDate];
+        NSUInteger numHourIntervals = (NSUInteger)time/3600;
+        self.numHourIntervals = numHourIntervals;
+
+        
+        
+        
+        self.name = name;
+        
+    }
+    return self;
+
+}
 -(void)setup
 {
     

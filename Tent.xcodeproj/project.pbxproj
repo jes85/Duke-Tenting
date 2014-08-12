@@ -22,6 +22,7 @@
 		3F439672198364CF00C27E6D /* GenerateScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */; };
 		3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F616050198DA61E006EF048 /* IntervalTableViewCell.m */; };
 		3F616054198DAFD5006EF048 /* EnterScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F616053198DAFD5006EF048 /* EnterScheduleViewController.m */; };
+		3F94B853199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */; };
 		3F9B3E081989DEAA0041EFCC /* IntervalsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */; };
 		3FA6D5081965E7A50043087B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D5071965E7A50043087B /* Foundation.framework */; };
 		3FA6D50A1965E7A50043087B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D5091965E7A50043087B /* CoreGraphics.framework */; };
@@ -78,6 +79,8 @@
 		3F616050198DA61E006EF048 /* IntervalTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntervalTableViewCell.m; sourceTree = "<group>"; };
 		3F616052198DAFD5006EF048 /* EnterScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnterScheduleViewController.h; sourceTree = "<group>"; };
 		3F616053198DAFD5006EF048 /* EnterScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterScheduleViewController.m; sourceTree = "<group>"; };
+		3F94B851199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameOfScheduleTableViewCell.h; sourceTree = "<group>"; };
+		3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameOfScheduleTableViewCell.m; sourceTree = "<group>"; };
 		3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntervalsTableViewController.h; sourceTree = "<group>"; };
 		3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntervalsTableViewController.m; sourceTree = "<group>"; };
 		3FA6D5041965E7A50043087B /* Tent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tent.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -151,6 +154,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F94B854199AA9DA00A2DCF1 /* Previously used classes */ = {
+			isa = PBXGroup;
+			children = (
+				3F616052198DAFD5006EF048 /* EnterScheduleViewController.h */,
+				3F616053198DAFD5006EF048 /* EnterScheduleViewController.m */,
+				3FC68EAA19970E1900C9DD95 /* AddScheduleViewController.h */,
+				3FC68EAB19970E1900C9DD95 /* AddScheduleViewController.m */,
+			);
+			name = "Previously used classes";
+			sourceTree = "<group>";
+		};
 		3FA6D4FB1965E7A50043087B = {
 			isa = PBXGroup;
 			children = (
@@ -194,13 +208,13 @@
 		3FA6D50D1965E7A50043087B /* Tent */ = {
 			isa = PBXGroup;
 			children = (
+				3FA6D5191965E7A50043087B /* Main.storyboard */,
 				3FF75E8F19985BBB005D7857 /* MySchedulesTableViewController.h */,
 				3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */,
-				3FA6D5191965E7A50043087B /* Main.storyboard */,
 				3FF75E9219985DF2005D7857 /* AddSchedulesTableViewController.h */,
 				3FF75E9319985DF2005D7857 /* AddSchedulesTableViewController.m */,
-				3FC68EAA19970E1900C9DD95 /* AddScheduleViewController.h */,
-				3FC68EAB19970E1900C9DD95 /* AddScheduleViewController.m */,
+				3F94B851199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.h */,
+				3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */,
 				3FEAEB131989B07D00E3218F /* HomeBaseTableViewController.h */,
 				3FEAEB141989B07D00E3218F /* HomeBaseTableViewController.m */,
 				3FDE355B19809CC400CE47D8 /* PickPersonTableViewController.h */,
@@ -227,14 +241,13 @@
 		3FA6D50E1965E7A50043087B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				3F616052198DAFD5006EF048 /* EnterScheduleViewController.h */,
-				3F616053198DAFD5006EF048 /* EnterScheduleViewController.m */,
 				3FA6D5161965E7A50043087B /* ScheduleAppDelegate.h */,
 				3FA6D5171965E7A50043087B /* ScheduleAppDelegate.m */,
 				3FA6D50F1965E7A50043087B /* Tent-Info.plist */,
 				3FA6D5101965E7A50043087B /* InfoPlist.strings */,
 				3FA6D5131965E7A50043087B /* main.m */,
 				3FA6D5151965E7A50043087B /* Tent-Prefix.pch */,
+				3F94B854199AA9DA00A2DCF1 /* Previously used classes */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -374,6 +387,7 @@
 				3FA6D5141965E7A50043087B /* main.m in Sources */,
 				3FDE35661980A6DA00CE47D8 /* Schedule.m in Sources */,
 				3F9B3E081989DEAA0041EFCC /* IntervalsTableViewController.m in Sources */,
+				3F94B853199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m in Sources */,
 				3FDE35631980A5DA00CE47D8 /* Person.m in Sources */,
 				3F296DB4199131A20059E19E /* PersonsInIntervalTableViewController.m in Sources */,
 				3F1107E419903FDB0063ED9B /* Interval.m in Sources */,

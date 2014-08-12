@@ -26,6 +26,10 @@
     self.doneButton.enabled = NO;
 }
 
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:self.enterNameTextField];
+}
 -(BOOL)shouldEnableDoneButton
 {
     BOOL enableDoneButton = NO;
