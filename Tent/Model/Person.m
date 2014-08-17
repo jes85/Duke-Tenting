@@ -27,7 +27,7 @@
 
 
 
--(instancetype)initWithName: (NSString *)name index:(NSUInteger)index  numIntervals:(NSUInteger)numIntervals
+-(instancetype)initWithName: (NSString *)name index:(NSUInteger)index  numIntervals:(NSUInteger)numIntervals scheduleName:(NSString *)scheduleName
 {
     self = [super init];
     if(self){
@@ -35,11 +35,12 @@
         self.indexOfPerson = index;
         self.availabilitiesArray = [self createZerosArrayWithNumIntervals:numIntervals];
         self.assignmentsArray = [self createZerosArrayWithNumIntervals:numIntervals];
+        self.scheduleName=scheduleName;
     }
     return self;
 }
 
--(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray
+-(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray scheduleName:(NSString *)scheduleName
 {
     self = [super init];
     if(self){
@@ -47,11 +48,12 @@
         self.indexOfPerson = index;
         self.availabilitiesArray = availArray;
         self.assignmentsArray = [self createZerosArray];
+        self.scheduleName=scheduleName;
     }
     return self;
 }
 
--(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray assignmentsArray:(NSMutableArray *)assignArray
+-(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray assignmentsArray:(NSMutableArray *)assignArray scheduleName:(NSString *)scheduleName
 {
     self = [super init];
     if(self){
@@ -59,6 +61,7 @@
         self.indexOfPerson = index;
         self.availabilitiesArray = availArray;
         self.assignmentsArray = assignArray;
+        self.scheduleName=scheduleName;
     }
     return self;
 }

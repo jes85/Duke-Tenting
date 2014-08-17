@@ -26,4 +26,6 @@
 
 
 @property (nonatomic) Schedule *schedule;
+@property (nonatomic) NSMutableArray *intervalArray; //Interval[]
+
 @end

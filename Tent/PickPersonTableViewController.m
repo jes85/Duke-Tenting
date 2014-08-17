@@ -11,7 +11,8 @@
 #import "Person.h"
 #import "Schedule.h"
 #import <Parse/Parse.h>
-#import "HomeBaseTableViewController.h"
+
+#import "Interval.h"
 
 
 @interface PickPersonTableViewController ()
@@ -32,7 +33,11 @@
     if(!_people)_people = [[NSMutableArray alloc]init];
     return _people;
 }
-
+-(NSMutableArray *)intervalArray
+{
+    if(!_intervalArray)_intervalArray = [[NSMutableArray alloc]init];
+    return _intervalArray;
+}
 
 #pragma mark - Table view data source
 
@@ -91,12 +96,13 @@
                     EnterScheduleTableViewController *estvc = [segue destinationViewController];
                     estvc.currentPerson = person; //does it violate MVC for them to be connected like this?
                     estvc.hourIntervalsDisplayArray = self.hourIntervalsDisplayArray;
+                    estvc.intervalArray = self.intervalArray;
             
                 }
             }
         }
     }else{
-        NSLog(@"Error");
+        NSLog(@"Bar button add");
     }
 }
 
@@ -136,7 +142,7 @@
 
 -(IBAction)addPerson:(UIStoryboardSegue *)segue
 {
-    Person *newPerson = [[Person alloc]initWithName:self.addPersonName index:[self.people count] numIntervals:self.numIntervals];
+    Person *newPerson = [[Person alloc]initWithName:self.addPersonName index:[self.people count] numIntervals:self.numIntervals scheduleName:self.schedule.name];
     
     [self.people addObject:newPerson];
     
@@ -144,6 +150,7 @@
     
     [self.tableView reloadData];
     
+        
     PFObject *personObject = [PFObject objectWithClassName:@"Person"];
     personObject[@"name"] = newPerson.name;
     personObject[@"index"] = [NSNumber numberWithInteger:newPerson.indexOfPerson];
@@ -161,17 +168,26 @@
         if(!parseSchedule){
             NSLog(@"Error retrieving schedule from Parse");
         }else {
+            NSLog(@"Find succeeded to add new person to schedule's 2d arrays");
             NSMutableArray *availabilitiesSchedule =  parseSchedule[@"availabilitiesSchedule"];
             [availabilitiesSchedule addObject:newPerson.availabilitiesArray];
+          
             parseSchedule[@"availabilitiesSchedule"]= availabilitiesSchedule;
+           
+            
             NSMutableArray *assignmentsSchedule = parseSchedule[@"assignmentsSchedule"];
             [assignmentsSchedule addObject:newPerson.assignmentsArray];
-            parseSchedule[@"availabilitiesSchedule"]= assignmentsSchedule;
+            parseSchedule[@"assignmentsSchedule"]= assignmentsSchedule;
             
             [parseSchedule saveInBackground];
+           
             
         }
     }];
+    
+   
+    
+    
 
 }
 -(IBAction)cancelAddPerson:(UIStoryboardSegue *)segue

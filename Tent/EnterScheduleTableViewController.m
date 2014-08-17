@@ -11,6 +11,7 @@
 #import "PickPersonTableViewController.h"
 #import "Person.h"
 #import "IntervalTableViewCell.h"
+#import "Interval.h"
 
 @interface EnterScheduleTableViewController ()
 
@@ -40,7 +41,11 @@
     if(!_hourIntervalsDisplayArray)_hourIntervalsDisplayArray = [[NSArray alloc]init];
     return _hourIntervalsDisplayArray;
 }
-
+-(NSMutableArray *)intervalArray
+{
+    if(!_intervalArray)_intervalArray = [[NSMutableArray alloc]init];
+    return _intervalArray;
+}
 
  -(NSMutableArray *)updatedAvailabilitiesArray
 {
@@ -101,7 +106,7 @@
          //cell.imageView.image =[UIImage imageNamed:@"Image1"];
 //cell.imageView addConstraint:<#(NSLayoutConstraint *)#>
     
-    NSLog(@"self.currentPerson.availabilitiesArray: %@ index path row %d", self.currentPerson.availabilitiesArray, indexPath.row);
+    
     if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]) {
         cell.accessoryType =UITableViewCellAccessoryCheckmark;
         cell.assignedOrAvailableLabel.text = @"(Available)";
@@ -158,6 +163,7 @@
         //update person's availabilities array (and update to Parse)
        self.currentPerson.availabilitiesArray = self.updatedAvailabilitiesArray;
         PFQuery *query = [PFQuery queryWithClassName:@"Person"];
+        [query whereKey:@"scheduleName" equalTo:self.currentPerson.scheduleName];
         [query whereKey:@"index" equalTo:[NSNumber numberWithInteger:self.currentPerson.indexOfPerson]];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if(!object){
@@ -174,6 +180,7 @@
         //update availabilities schedule (maybe change self.currentperson.availabilitiesArray to be an array arrays and save that to Parse
         
         PFQuery *query2 = [PFQuery queryWithClassName:@"Schedule"];
+        [query2 whereKey:@"name" equalTo:self.currentPerson.scheduleName];
         [query2 getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if(!object){
                 NSLog(@"Find failed");
@@ -189,8 +196,17 @@
         }];
         }
         
-        
-        
+        //update intervlas
+        for(int i = 0; i<[self.currentPerson.availabilitiesArray count]; i++){
+            Interval *interval = (Interval *)self.intervalArray[i];
+            if([self.currentPerson.availabilitiesArray[i] isEqual:@1]) {
+                [interval.availablePersons addObject: self.currentPerson];
+            }
+            if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
+                [interval.assignedPersons addObject:self.currentPerson];
+            }
+        }
+
         //this part is in unWindToList (maybe change that)
         /*PickPersonTableViewController *destination = [segue destinationViewController];
         [destination.people insertObject:self.currentPerson atIndex:self.currentPerson.indexOfPerson];

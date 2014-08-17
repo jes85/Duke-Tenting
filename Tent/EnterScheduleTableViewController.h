@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) NSArray *hourIntervals; //for one day 8am-5 pm
 @property (nonatomic)NSArray *hourIntervalsDisplayArray;
+@property (nonatomic) NSMutableArray *intervalArray; //Interval[]
 
 @property(nonatomic, strong) NSMutableArray *updatedAvailabilitiesArray;
 @property(nonatomic, weak) Person *currentPerson;

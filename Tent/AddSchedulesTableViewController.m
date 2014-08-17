@@ -73,9 +73,12 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
      self.dataArray = @[itemOne, itemTwo, itemThree];
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
-    [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];    // show short-style date format
-    [self.dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+    [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];    // show short-style date format
+    [self.dateFormatter setTimeStyle:NSDateFormatterShortStyle];
 
+    
+    
+    
     
     // obtain the picker view cell's height, works because the cell was pre-defined in our storyboard
     UITableViewCell *datePickerViewCellToCheck = [self.tableView dequeueReusableCellWithIdentifier:kDatePickerID];
@@ -83,6 +86,9 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.nameOfScheduleTextField];
     self.doneButton.enabled = NO;
+    
+   
+  
 }
 
 -(void)dealloc
@@ -215,6 +221,10 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
      {
          NameOfScheduleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kNameCellID forIndexPath:indexPath];
          self.nameOfScheduleTextField = cell.nameOfScheduleTextField;
+         [self.nameOfScheduleTextField becomeFirstResponder];
+         
+         //self.nameOfScheduleTextField.borderStyle = UITextBorderStyleNone;
+         
          return cell;
      }
     UITableViewCell *cell = nil;
@@ -339,6 +349,9 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if(cell.reuseIdentifier != kNameCellID){
+        [self.nameOfScheduleTextField resignFirstResponder];
+    }
     if (cell.reuseIdentifier == kDateCellID)
     {
        
@@ -391,7 +404,18 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
         self.endDate = targetedDatePicker.date;
     }
 }
+- (IBAction)textFieldDoneEditing:(id)sender {
+    if([self.nameOfScheduleTextField isFirstResponder]){
+        [self.nameOfScheduleTextField resignFirstResponder];
+    }
+}
 
+
+- (IBAction)touchOutsideOfTableView:(id)sender {
+    if([self.nameOfScheduleTextField isFirstResponder]){
+        [self.nameOfScheduleTextField resignFirstResponder];
+    }
+}
 
 /*
 // Override to support conditional editing of the table view.

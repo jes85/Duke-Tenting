@@ -67,7 +67,7 @@
         
         for(int p = 0;p<self.schedule.numPeople;p++){
             NSString *name = [NSString stringWithFormat:@"Person %d", p];
-            Person *person = [[Person alloc]initWithName:name index:p numIntervals:[Schedule testNumIntervals]];
+            Person *person = [[Person alloc]initWithName:name index:p numIntervals:[Schedule testNumIntervals] scheduleName:self.schedule.name];
             
             //create person's availability array and add to availabilitites schedule
             [peopleArray addObject:person];
@@ -195,10 +195,10 @@
                 // Update personsArray
                 NSString *name = object[@"name"];
                 NSUInteger index = [object[@"index"] intValue];
-                NSMutableArray *availableArray = object[@"availabilitiesArray"];
+                NSMutableArray *availabilitiesArray = object[@"availabilitiesArray"];
                 NSMutableArray *assignmentsArray = object[@"assignmentsArray"];
                 
-                Person *person = [[Person alloc]initWithName:name index:index availabilitiesArray:availableArray assignmentsArray:assignmentsArray];
+                Person *person = [[Person alloc]initWithName:name index:index availabilitiesArray:availabilitiesArray assignmentsArray:assignmentsArray scheduleName:self.schedule.name];
                 
                 
                 //Fix this to prevent adding duplicates. maybe clear array and readd (but i don't want to do this every time if I don't have to)
@@ -212,12 +212,12 @@
                 
                 // Update intervalsArray (change it later to save to Parse?)
                 
-                for(int i = 0; i<[availableArray count]; i++){
-                    if([availableArray[i] isEqual:@1]){
+                for(int i = 0; i<[availabilitiesArray count]; i++){
+                    if([availabilitiesArray[i] isEqual:@1]){
                         Interval *interval = (Interval *)self.intervalArray[i];
                         
                         if(![interval.availablePersons containsObject:person]){
-                            [interval.availablePersons addObject:person];//person.name
+                            [interval.availablePersons addObject:person];//or change to person.name
                         }
                         if([assignmentsArray[i] isEqual:@1]){
                             if (![interval.assignedPersons containsObject:person])
@@ -272,6 +272,7 @@
         pptvc.numIntervals = self.schedule.numHourIntervals;
         pptvc.hourIntervalsDisplayArray = self.hourIntervalsDisplayArray;
         pptvc.schedule = self.schedule;
+        pptvc.intervalArray = self.intervalArray;
         //NSLog(@"array: %@", self.personsArray);
     }
     else if([[segue destinationViewController] isKindOfClass:[IntervalsTableViewController class]]){

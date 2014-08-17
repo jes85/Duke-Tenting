@@ -22,6 +22,7 @@
 		3F439672198364CF00C27E6D /* GenerateScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */; };
 		3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F616050198DA61E006EF048 /* IntervalTableViewCell.m */; };
 		3F616054198DAFD5006EF048 /* EnterScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F616053198DAFD5006EF048 /* EnterScheduleViewController.m */; };
+		3F71811F199D117200737662 /* DefaultSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F71811E199D117200737662 /* DefaultSettingsViewController.m */; };
 		3F94B853199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */; };
 		3F9B3E081989DEAA0041EFCC /* IntervalsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */; };
 		3FA6D5081965E7A50043087B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D5071965E7A50043087B /* Foundation.framework */; };
@@ -37,6 +38,10 @@
 		3FA6D5291965E7A50043087B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D50B1965E7A50043087B /* UIKit.framework */; };
 		3FA6D5311965E7A50043087B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3FA6D52F1965E7A50043087B /* InfoPlist.strings */; };
 		3FA6D5331965E7A50043087B /* TentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6D5321965E7A50043087B /* TentTests.m */; };
+		3FC432B319A0565100B560F1 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC432B219A0565100B560F1 /* Social.framework */; };
+		3FC432B519A056DD00B560F1 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC432B419A056DD00B560F1 /* Accounts.framework */; };
+		3FC432B919A0581A00B560F1 /* MyPFLogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC432B819A0581A00B560F1 /* MyPFLogInViewController.m */; };
+		3FC432BC19A0583700B560F1 /* MyPFSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC432BB19A0583700B560F1 /* MyPFSignUpViewController.m */; };
 		3FC68EAC19970E1900C9DD95 /* AddScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC68EAB19970E1900C9DD95 /* AddScheduleViewController.m */; };
 		3FD6963C1996A7DB00D9C5C4 /* AddPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6963B1996A7DB00D9C5C4 /* AddPersonViewController.m */; };
 		3FDE355A198094C700CE47D8 /* EnterScheduleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */; };
@@ -79,6 +84,8 @@
 		3F616050198DA61E006EF048 /* IntervalTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntervalTableViewCell.m; sourceTree = "<group>"; };
 		3F616052198DAFD5006EF048 /* EnterScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnterScheduleViewController.h; sourceTree = "<group>"; };
 		3F616053198DAFD5006EF048 /* EnterScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterScheduleViewController.m; sourceTree = "<group>"; };
+		3F71811D199D117200737662 /* DefaultSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DefaultSettingsViewController.h; path = ../DefaultSettingsViewController.h; sourceTree = "<group>"; };
+		3F71811E199D117200737662 /* DefaultSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DefaultSettingsViewController.m; path = ../DefaultSettingsViewController.m; sourceTree = "<group>"; };
 		3F94B851199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameOfScheduleTableViewCell.h; sourceTree = "<group>"; };
 		3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameOfScheduleTableViewCell.m; sourceTree = "<group>"; };
 		3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntervalsTableViewController.h; sourceTree = "<group>"; };
@@ -100,6 +107,12 @@
 		3FA6D52E1965E7A50043087B /* TentTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TentTests-Info.plist"; sourceTree = "<group>"; };
 		3FA6D5301965E7A50043087B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3FA6D5321965E7A50043087B /* TentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TentTests.m; sourceTree = "<group>"; };
+		3FC432B219A0565100B560F1 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		3FC432B419A056DD00B560F1 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		3FC432B719A0581A00B560F1 /* MyPFLogInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPFLogInViewController.h; sourceTree = "<group>"; };
+		3FC432B819A0581A00B560F1 /* MyPFLogInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPFLogInViewController.m; sourceTree = "<group>"; };
+		3FC432BA19A0583700B560F1 /* MyPFSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPFSignUpViewController.h; sourceTree = "<group>"; };
+		3FC432BB19A0583700B560F1 /* MyPFSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPFSignUpViewController.m; sourceTree = "<group>"; };
 		3FC68EAA19970E1900C9DD95 /* AddScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddScheduleViewController.h; sourceTree = "<group>"; };
 		3FC68EAB19970E1900C9DD95 /* AddScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddScheduleViewController.m; sourceTree = "<group>"; };
 		3FD6963A1996A7DB00D9C5C4 /* AddPersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPersonViewController.h; sourceTree = "<group>"; };
@@ -125,6 +138,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FC432B519A056DD00B560F1 /* Accounts.framework in Frameworks */,
+				3FC432B319A0565100B560F1 /* Social.framework in Frameworks */,
 				3F0294681982C0200016845A /* SystemConfiguration.framework in Frameworks */,
 				3F0294661982C01A0016845A /* StoreKit.framework in Frameworks */,
 				3F0294641982C0120016845A /* Security.framework in Frameworks */,
@@ -187,6 +202,8 @@
 		3FA6D5061965E7A50043087B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3FC432B419A056DD00B560F1 /* Accounts.framework */,
+				3FC432B219A0565100B560F1 /* Social.framework */,
 				3F0294671982C0200016845A /* SystemConfiguration.framework */,
 				3F0294651982C01A0016845A /* StoreKit.framework */,
 				3F0294631982C0120016845A /* Security.framework */,
@@ -209,6 +226,7 @@
 			isa = PBXGroup;
 			children = (
 				3FA6D5191965E7A50043087B /* Main.storyboard */,
+				3FC432B619A0579600B560F1 /* Login */,
 				3FF75E8F19985BBB005D7857 /* MySchedulesTableViewController.h */,
 				3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */,
 				3FF75E9219985DF2005D7857 /* AddSchedulesTableViewController.h */,
@@ -281,6 +299,19 @@
 				3FDE35651980A6DA00CE47D8 /* Schedule.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		3FC432B619A0579600B560F1 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				3F71811D199D117200737662 /* DefaultSettingsViewController.h */,
+				3F71811E199D117200737662 /* DefaultSettingsViewController.m */,
+				3FC432B719A0581A00B560F1 /* MyPFLogInViewController.h */,
+				3FC432B819A0581A00B560F1 /* MyPFLogInViewController.m */,
+				3FC432BA19A0583700B560F1 /* MyPFSignUpViewController.h */,
+				3FC432BB19A0583700B560F1 /* MyPFSignUpViewController.m */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -381,9 +412,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FC432BC19A0583700B560F1 /* MyPFSignUpViewController.m in Sources */,
 				3FF75E9119985BBB005D7857 /* MySchedulesTableViewController.m in Sources */,
 				3FEAEB151989B07D00E3218F /* HomeBaseTableViewController.m in Sources */,
+				3F71811F199D117200737662 /* DefaultSettingsViewController.m in Sources */,
 				3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */,
+				3FC432B919A0581A00B560F1 /* MyPFLogInViewController.m in Sources */,
 				3FA6D5141965E7A50043087B /* main.m in Sources */,
 				3FDE35661980A6DA00CE47D8 /* Schedule.m in Sources */,
 				3F9B3E081989DEAA0041EFCC /* IntervalsTableViewController.m in Sources */,

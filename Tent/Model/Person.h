@@ -8,18 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
+
+
 @interface Person : NSObject
 
 @property (nonatomic) NSMutableArray *availabilitiesArray;
 @property (nonatomic) NSMutableArray *assignmentsArray;
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSUInteger indexOfPerson;
+@property (nonatomic) NSString *scheduleName;
 
 
 //Clear these inits up and designate one
 
--(instancetype)initWithName: (NSString *)name index:(NSUInteger)index numIntervals:(NSUInteger)numIntervals;
--(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray;
--(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray assignmentsArray:(NSMutableArray *)assignArray;
+-(instancetype)initWithName: (NSString *)name index:(NSUInteger)index numIntervals:(NSUInteger)numIntervals scheduleName:(NSString *)scheduleName;
+-(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray scheduleName:(NSString *)scheduleName;
+-(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray assignmentsArray:(NSMutableArray *)assignArray scheduleName:(NSString *)scheduleName;
 
 @end

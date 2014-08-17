@@ -24,6 +24,7 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.enterNameTextField];
     self.doneButton.enabled = NO;
+    [self.enterNameTextField becomeFirstResponder];
 }
 
 -(void)dealloc
@@ -51,4 +52,11 @@
         pptvc.addPersonName = self.enterNameTextField.text;
     }
 }
+- (IBAction)textFieldDoneEditing:(id)sender{
+    if([self.enterNameTextField isFirstResponder]){
+        [self.enterNameTextField resignFirstResponder];
+    }
+}
+
+
 @end
