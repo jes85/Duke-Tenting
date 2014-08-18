@@ -58,7 +58,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self updateSchedules];
+    PFUser *currentUser = [PFUser currentUser];
+    //NSLog(@"Username: %@ Password %@", currentUser.username, currentUser.password);
+    //[self updateSchedules];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -136,9 +138,17 @@
     scheduleObject[@"assignmentsSchedule"] = newSchedule.assignmentsSchedule;
     scheduleObject[@"numHourIntervals"] = [NSNumber numberWithInteger:newSchedule.numHourIntervals];
     
+    
+    
+    
+    NSArray *PFSchedules = [[PFUser currentUser]objectForKey:@"schedulesList"];
+    NSMutableArray *temp = [[NSMutableArray alloc]initWithArray:PFSchedules];
+    [temp addObject:scheduleObject];
+    [[PFUser currentUser] setObject:temp forKey:@"schedulesList"];
     [scheduleObject saveInBackground];
+    [[PFUser currentUser] saveInBackground];
     
-    
+    // NSArray *PFSchedules2 = [[PFUser currentUser]objectForKey:@"schedulesList"];
 }
 -(IBAction)cancelAddSchedule:(UIStoryboardSegue *)segue
 {
