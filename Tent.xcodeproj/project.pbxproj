@@ -23,6 +23,7 @@
 		3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F616050198DA61E006EF048 /* IntervalTableViewCell.m */; };
 		3F616054198DAFD5006EF048 /* EnterScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F616053198DAFD5006EF048 /* EnterScheduleViewController.m */; };
 		3F71811F199D117200737662 /* DefaultSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F71811E199D117200737662 /* DefaultSettingsViewController.m */; };
+		3F87220E19A2627A005F12DD /* AlgorithmTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F87220D19A2627A005F12DD /* AlgorithmTest.m */; };
 		3F94B853199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */; };
 		3F9B3E081989DEAA0041EFCC /* IntervalsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */; };
 		3FA6D5081965E7A50043087B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D5071965E7A50043087B /* Foundation.framework */; };
@@ -86,6 +87,8 @@
 		3F616053198DAFD5006EF048 /* EnterScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterScheduleViewController.m; sourceTree = "<group>"; };
 		3F71811D199D117200737662 /* DefaultSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DefaultSettingsViewController.h; path = ../DefaultSettingsViewController.h; sourceTree = "<group>"; };
 		3F71811E199D117200737662 /* DefaultSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DefaultSettingsViewController.m; path = ../DefaultSettingsViewController.m; sourceTree = "<group>"; };
+		3F87220C19A2627A005F12DD /* AlgorithmTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmTest.h; sourceTree = "<group>"; };
+		3F87220D19A2627A005F12DD /* AlgorithmTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlgorithmTest.m; sourceTree = "<group>"; };
 		3F94B851199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameOfScheduleTableViewCell.h; sourceTree = "<group>"; };
 		3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameOfScheduleTableViewCell.m; sourceTree = "<group>"; };
 		3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntervalsTableViewController.h; sourceTree = "<group>"; };
@@ -297,6 +300,8 @@
 				3FDE35621980A5DA00CE47D8 /* Person.m */,
 				3FDE35641980A6DA00CE47D8 /* Schedule.h */,
 				3FDE35651980A6DA00CE47D8 /* Schedule.m */,
+				3F87220C19A2627A005F12DD /* AlgorithmTest.h */,
+				3F87220D19A2627A005F12DD /* AlgorithmTest.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -431,6 +436,7 @@
 				3FDE355A198094C700CE47D8 /* EnterScheduleTableViewController.m in Sources */,
 				3F616054198DAFD5006EF048 /* EnterScheduleViewController.m in Sources */,
 				3FDE355D19809CC400CE47D8 /* PickPersonTableViewController.m in Sources */,
+				3F87220E19A2627A005F12DD /* AlgorithmTest.m in Sources */,
 				3FF75E9419985DF2005D7857 /* AddSchedulesTableViewController.m in Sources */,
 				3FD6963C1996A7DB00D9C5C4 /* AddPersonViewController.m in Sources */,
 			);

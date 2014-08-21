@@ -70,76 +70,7 @@
     return cell;
 }
 
-#pragma mark - Navigation
-
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    
-
-    //Check id using introspection
-    if([sender isKindOfClass:[UITableViewCell class]]){
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        
-        if(indexPath){
-            //More checking
-            if([segue.identifier isEqualToString:@"Person To Hour Interval"]){
-                
-                if([segue.destinationViewController  isKindOfClass:[EnterScheduleTableViewController class]]){
-                    
-                    Person *person = self.people[indexPath.row];
-                   
-                    EnterScheduleTableViewController *estvc = [segue destinationViewController];
-                    estvc.currentPerson = person; //does it violate MVC for them to be connected like this?
-                    estvc.hourIntervalsDisplayArray = self.hourIntervalsDisplayArray;
-                    estvc.intervalArray = self.intervalArray;
-            
-                }
-            }
-        }
-    }else{
-        NSLog(@"Bar button add");
-    }
-}
-
-
-
-
-
-//Save data
--(IBAction)unWindToList:(UIStoryboardSegue *)segue
-{
-    
-    //was going to update self.people, but found out that self.people[source.currentPerson.indexOfPerson] was pointing to the same object as source.currentPerson, so there is no need to update (self.people is updated when source.currentPerson is updated)
-    
-    //need to check how pointers work more to understand when it will point to the same object and when it will create a new space in memory with the same value as the other object
-   /*
-    EnterScheduleTableViewController *source = [segue sourceViewController];
-    Person *person = source.currentPerson;
-    if(![[self.people objectAtIndex:person.indexOfPerson] isEqual: person]){
-        NSLog(@"Test Equality1");
-        [self.people removeObjectAtIndex:person.indexOfPerson];
-        [self.people insertObject:person atIndex:person.indexOfPerson];
-    }else{
-        NSLog(@"Test Equality2");
-    }
-
-
-//test
-    NSLog(@"Source's person: %@", person);
-    NSLog(@"My person: %@", person);
-    [self.people removeObjectAtIndex:person.indexOfPerson];
-    [self.people insertObject:person atIndex:person.indexOfPerson];
-    NSLog(@"Source's person: %@", person);
-    NSLog(@"My person: %@", person);
-
- */
-}
-
+#pragma mark - Add Person
 -(IBAction)addPerson:(UIStoryboardSegue *)segue
 {
     Person *newPerson = [[Person alloc]initWithName:self.addPersonName index:[self.people count] numIntervals:self.numIntervals scheduleName:self.schedule.name];
@@ -195,6 +126,76 @@
     
 }
 
+#pragma mark - Navigation
+
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    
+    
+    //Check id using introspection
+    if([sender isKindOfClass:[UITableViewCell class]]){
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        
+        if(indexPath){
+            //More checking
+            if([segue.identifier isEqualToString:@"Person To Hour Interval"]){
+                
+                if([segue.destinationViewController  isKindOfClass:[EnterScheduleTableViewController class]]){
+                    
+                    Person *person = self.people[indexPath.row];
+                    
+                    EnterScheduleTableViewController *estvc = [segue destinationViewController];
+                    estvc.currentPerson = person; //does it violate MVC for them to be connected like this?
+                    estvc.hourIntervalsDisplayArray = self.hourIntervalsDisplayArray;
+                    estvc.intervalArray = self.intervalArray;
+                    
+                    estvc.navigationItem.title = person.name;
+                }
+            }
+        }
+    }else{
+        NSLog(@"Bar button add");
+    }
+}
+
+
+
+
+
+//Save data
+-(IBAction)unWindToList:(UIStoryboardSegue *)segue
+{
+    
+    //was going to update self.people, but found out that self.people[source.currentPerson.indexOfPerson] was pointing to the same object as source.currentPerson, so there is no need to update (self.people is updated when source.currentPerson is updated)
+    
+    //need to check how pointers work more to understand when it will point to the same object and when it will create a new space in memory with the same value as the other object
+    /*
+     EnterScheduleTableViewController *source = [segue sourceViewController];
+     Person *person = source.currentPerson;
+     if(![[self.people objectAtIndex:person.indexOfPerson] isEqual: person]){
+     NSLog(@"Test Equality1");
+     [self.people removeObjectAtIndex:person.indexOfPerson];
+     [self.people insertObject:person atIndex:person.indexOfPerson];
+     }else{
+     NSLog(@"Test Equality2");
+     }
+     
+     
+     //test
+     NSLog(@"Source's person: %@", person);
+     NSLog(@"My person: %@", person);
+     [self.people removeObjectAtIndex:person.indexOfPerson];
+     [self.people insertObject:person atIndex:person.indexOfPerson];
+     NSLog(@"Source's person: %@", person);
+     NSLog(@"My person: %@", person);
+     
+     */
+}
 
 
 

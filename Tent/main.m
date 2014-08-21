@@ -10,10 +10,15 @@
 #import <UIKit/UIKit.h>
 
 #import "ScheduleAppDelegate.h"
+#import "AlgorithmTest.h"
 
 int main(int argc, char * argv[])
 {
     @autoreleasepool {
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([ScheduleAppDelegate class]));
+        //AlgorithmTest *test = [[AlgorithmTest alloc]init];
+        //[test setup];
+        
+        return 0;
     }
 }

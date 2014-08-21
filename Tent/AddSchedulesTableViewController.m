@@ -13,12 +13,18 @@
 
 #define kDatePickerTag              99     // view tag identifiying the date picker view
 
-#define kTitleKey       @"title"   // key for obtaining the data source item's title
-#define kDateKey        @"date"    // key for obtaining the data source item's date value
+#define kTitleKey       @"title"            // key for obtaining the data source item's title
+#define kDateKey        @"date"             // key for obtaining the data source item's date value
+#define kMinimumDateKey @"minimumDate"      // key for obtaining the data source item's minimumDate value
 
 // keep track of which rows have date cells
 #define kDateStartRow   1
 #define kDateEndRow     2
+
+
+// Time Interval Length
+#define kTimeIntervalLengthInSeconds     3600  // one hour for now
+
 
 static NSString *kDateCellID = @"dateCell";     // the cells with the start or end date
 static NSString *kDatePickerID = @"datePicker"; // the cell containing the date picker
@@ -42,6 +48,8 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
 //@property (nonatomic) NSString *nameOfSchedule;
 @property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *endDate;
+@property (nonatomic) NSDate *roundedStartDateAtViewDidLoad;
+@property (nonatomic) NSDate *roundedEndDateAtViewDidLoad;
 @property (nonatomic, weak) UITextField *nameOfScheduleTextField;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;
 
@@ -62,18 +70,37 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    NSDate *currentDate = [NSDate date];
     
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *currentDateComponents = [calendar components:(NSHourCalendarUnit | NSMinuteCalendarUnit |NSSecondCalendarUnit) fromDate:currentDate];
+    NSInteger currentDateSecond = [currentDateComponents second];
+    NSInteger currentDateMinute = [currentDateComponents minute];
+    
+    NSInteger secondsTo15min = (15 - (currentDateMinute%15))*60 - currentDateSecond;
+    NSDate *roundedDate = [NSDate dateWithTimeInterval:secondsTo15min sinceDate:currentDate];
+    
+    self.roundedStartDateAtViewDidLoad = roundedDate;
+    self.roundedEndDateAtViewDidLoad = [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:roundedDate];
+    
+    // maybe incorporate these into the model somehow (if I get rid of mutableCopy do I no longer have to update the model if I update startdate and enddate?)
+    self.startDate = roundedDate;
+    self.endDate =[NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:roundedDate];
+
+   
     // setup our data source
     NSMutableDictionary *itemOne = [@{ kTitleKey : @"Tap a cell to change its date:" } mutableCopy]; //delete this later or change it to Name label
     NSMutableDictionary *itemTwo = [@{ kTitleKey : @"Start Date",
-                                       kDateKey : [NSDate date] } mutableCopy];
+                                       kDateKey : self.startDate,
+                                       kMinimumDateKey:self.roundedStartDateAtViewDidLoad} mutableCopy];
     NSMutableDictionary *itemThree = [@{ kTitleKey : @"End Date",
-                                         kDateKey : [NSDate date] } mutableCopy];
+                                         kDateKey : self.endDate,
+                                         kMinimumDateKey:self.roundedEndDateAtViewDidLoad} mutableCopy];
     
      self.dataArray = @[itemOne, itemTwo, itemThree];
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
-    [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];    // show short-style date format
+    [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];    // picker date-style formats
     [self.dateFormatter setTimeStyle:NSDateFormatterShortStyle];
 
     
@@ -145,6 +172,7 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
             // we found a UIDatePicker in this cell, so update it's date value
             //
             NSDictionary *itemData = self.dataArray[self.datePickerIndexPath.row - 1];
+            [targetedDatePicker setMinimumDate:[itemData valueForKey:kMinimumDateKey]];
             [targetedDatePicker setDate:[itemData valueForKey:kDateKey] animated:NO];
         }
     }
@@ -389,7 +417,7 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:targetedCellIndexPath];
     UIDatePicker *targetedDatePicker = sender;
     
-    // update our data model
+    // update our data model (unncessary since I'm using self.startDate and self.endDate as model?)
     NSMutableDictionary *itemData = self.dataArray[targetedCellIndexPath.row];
     [itemData setValue:targetedDatePicker.date forKey:kDateKey];
     
@@ -397,11 +425,45 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
     cell.detailTextLabel.text = [self.dateFormatter stringFromDate:targetedDatePicker.date];
     
     //update start or end date (hardcoded for now, can change that later)
-    if(targetedCellIndexPath.row ==1){
+    if(targetedCellIndexPath.row ==kDateStartRow){
         self.startDate = targetedDatePicker.date;
+       
+        // update end date to be one interval after startDate
+        NSDate *endDate =[NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate];
+        if(self.endDate <endDate){
+            
+            self.endDate = endDate;
+        
+        
+            // update model
+            NSMutableDictionary *endDateData = self.dataArray[kDateEndRow];
+            [endDateData setValue:self.endDate forKey:kDateKey];
+            
+            // update the end's cell's date string
+            NSIndexPath *endDateIndexPath = [NSIndexPath indexPathForRow:kDateEndRow+1 inSection:0];//+1 because startdatepickerview is shown
+            UITableViewCell *endDateCell = [self.tableView cellForRowAtIndexPath:endDateIndexPath];
+            endDateCell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.endDate];
+            
+        }
     }
-    else if (targetedCellIndexPath.row==2){
+    else if (targetedCellIndexPath.row==kDateEndRow){
         self.endDate = targetedDatePicker.date;
+        
+        // if start date is now within a timeInterval (hour) of end date, change start date to an hour before
+        if(self.endDate < [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate]){
+            self.startDate = [NSDate dateWithTimeInterval:-kTimeIntervalLengthInSeconds sinceDate:self.endDate];
+            
+            // update model
+            NSMutableDictionary *startDateData = self.dataArray[kDateStartRow];
+            [startDateData setValue:self.startDate forKey:kDateKey];
+            
+            // update the start cell's date string
+            NSIndexPath *startDateIndexPath = [NSIndexPath indexPathForRow:kDateStartRow inSection:0];
+            UITableViewCell *startDateCell = [self.tableView cellForRowAtIndexPath:startDateIndexPath];
+            
+            startDateCell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.startDate];
+
+        }
     }
 }
 - (IBAction)textFieldDoneEditing:(id)sender {

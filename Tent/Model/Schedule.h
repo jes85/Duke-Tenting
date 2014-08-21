@@ -11,33 +11,32 @@
 @interface Schedule : NSObject
 
 // init (clean this up later)
-    -(instancetype)initWithNumPeople:(NSUInteger)numPeople numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
-    -(instancetype)initWithNumPeople:(NSUInteger)numPeople withNumIntervals:(NSUInteger)numIntervals;
-    -(instancetype)initWithAvailabilitiesSchedule:(NSMutableArray *)availSchedule;
+-(instancetype)initWithNumPeople:(NSUInteger)numPeople numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
+-(instancetype)initWithNumPeople:(NSUInteger)numPeople withNumIntervals:(NSUInteger)numIntervals;
+
 -(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 -(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 -(instancetype)initWithName:(NSString *)name startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 
 
-    -(void)setup;
+-(void)setup;
 
 // Basic Parameters
-    @property(nonatomic) NSUInteger numPeople;
-    @property(nonatomic) NSUInteger numIntervals;
-    @property(nonatomic) NSUInteger numHourIntervals;
-    @property (nonatomic, ) NSDate *startDate;
-    @property (nonatomic) NSDate *endDate;
+@property(nonatomic) NSUInteger numPeople;
+@property(nonatomic) NSUInteger numIntervals;
+@property(nonatomic) NSUInteger numHourIntervals;
+@property (nonatomic, ) NSDate *startDate;
+@property (nonatomic) NSDate *endDate;
 @property (nonatomic) NSString *name; //for parse
 
-// Schedule (make this private later?)
+
+// Matrix Schedules (make these private later?)
     @property (nonatomic) NSMutableArray *availabilitiesSchedule;
     @property (nonatomic) NSMutableArray *assignmentsSchedule;
 
 
 
-//Testing
-+(NSUInteger)testNumPeople;
-+(NSUInteger)testNumIntervals;
+
 
 
 @end

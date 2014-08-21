@@ -67,7 +67,7 @@
         
         for(int p = 0;p<self.schedule.numPeople;p++){
             NSString *name = [NSString stringWithFormat:@"Person %d", p];
-            Person *person = [[Person alloc]initWithName:name index:p numIntervals:[Schedule testNumIntervals] scheduleName:self.schedule.name];
+            Person *person = [[Person alloc]initWithName:name index:p numIntervals:self.schedule.numHourIntervals scheduleName:self.schedule.name];
             
             //create person's availability array and add to availabilitites schedule
             [peopleArray addObject:person];
@@ -286,6 +286,7 @@
     else if([[segue destinationViewController] isKindOfClass:[GenerateScheduleViewController class]]){
         
        GenerateScheduleViewController *gsvc = [segue destinationViewController];
+        gsvc.schedule = self.schedule;
         gsvc.delegate = self;
         
         //NSLog(@"intervalArray %@", self.intervalArray);
@@ -295,7 +296,7 @@
 
 -(void)generateScheduleViewControllerDidGenerateSchedule:(GenerateScheduleViewController *)controller{
     NSLog(@"didGenerateSchedule");
-    [self updateInformation];
+    //[self updateInformation];
 }
 
 @end

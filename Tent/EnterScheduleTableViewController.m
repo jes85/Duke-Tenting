@@ -106,9 +106,23 @@
          //cell.imageView.image =[UIImage imageNamed:@"Image1"];
 //cell.imageView addConstraint:<#(NSLayoutConstraint *)#>
     
-    
-    if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]) {
+    if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
+        
+        //[cell setSelected:YES animated:YES];
+        //[cell setSelected:YES];
+        // cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+        //[cell setBackgroundColor:[UIColor colorWithHue:0.4 saturation:1.0 brightness:0.5 alpha:1.0]];
         cell.accessoryType =UITableViewCellAccessoryCheckmark;
+        cell.assignedOrAvailableLabel.text = @"(Assigned)";
+        
+        //[cell.contentView setBackgroundColor:[UIColor greenColor]];
+        // [cell setOpaque:NO];
+        
+        
+    }
+
+    else if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]) {
+        cell.accessoryType =UITableViewCellAccessoryNone;
         cell.assignedOrAvailableLabel.text = @"(Available)";
         //[cell.contentView setBackgroundColor:[UIColor blueColor]];
         //[cell setOpaque:NO];
@@ -122,21 +136,7 @@
     
     
     
-    if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
-        
-            //[cell setSelected:YES animated:YES];
-            //[cell setSelected:YES];
-            // cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-            //[cell setBackgroundColor:[UIColor colorWithHue:0.4 saturation:1.0 brightness:0.5 alpha:1.0]];
-        
-            cell.assignedOrAvailableLabel.text = @"(Assigned)";
-            
-           //[cell.contentView setBackgroundColor:[UIColor greenColor]];
-           // [cell setOpaque:NO];
-       
-
-    }
-   
+    
     [cell.contentView addSubview:cell.assignedOrAvailableLabel]; //I don't think I should have to do this because I did it in a storyboards. I think I didn't connect the outlets correctly
     
     return cell;
@@ -222,10 +222,10 @@
     //[tableView deselectRowAtIndexPath:indexPath animated:NO];
     IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     
-    if(cell.accessoryType!=UITableViewCellAccessoryCheckmark){
+    if([cell.assignedOrAvailableLabel.text isEqual:@""]){
         //Change checkmark
         //Save data in updatedAvailabilities array (will save/ignore this in Done/Cancel button action later)
-        cell.accessoryType =UITableViewCellAccessoryCheckmark;
+        //cell.accessoryType =UITableViewCellAccessoryCheckmark;
         cell.assignedOrAvailableLabel.text = @"(Available)";
         //[cell.contentView setBackgroundColor:[UIColor blueColor]];
         //[cell setOpaque:NO];

@@ -142,6 +142,8 @@
         piitvc.availablePersonsArray = interval.availablePersons;
         piitvc.assignedPersonsArray = interval.assignedPersons;
         
+        
+        piitvc.navigationItem.title = self.hourIntervalsDisplayArray[indexPath.row];
         //NSLog(@"AvailablePersons: %@", interval.availablePersons);
         //NSLog(@"AssignedPersons: %@", interval.assignedPersons);
 

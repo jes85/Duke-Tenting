@@ -9,6 +9,7 @@
 #import "GenerateScheduleViewController.h"
 #import <Parse/Parse.h>
 #import "Schedule.h"
+#import "HomeBaseTableViewController.h"
 
 @interface GenerateScheduleViewController ()
 
@@ -41,32 +42,25 @@
 -(void)generateSchedule
 {
     NSLog(@"Generating Schedule");
+    [self.schedule setup];
+        
     PFQuery *query = [PFQuery queryWithClassName:@"Schedule"];
+    [query whereKey:@"name" equalTo:self.schedule.name];//change to schedule ID later
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        self.availabilitiesSchedule = object[@"availabilitiesSchedule"];
-        //Schedule *schedule = [[Schedule alloc]initWithNumPeople:[self.availabilitiesSchedule count] withNumIntervals:[self.availabilitiesSchedule[0] count]];
-        Schedule *schedule = [[Schedule alloc]initWithAvailabilitiesSchedule:self.availabilitiesSchedule];
-        schedule.availabilitiesSchedule = self.availabilitiesSchedule;
-        
-        
-        [schedule setup];
-        
-        
-        object[@"assignmentsSchedule"] = schedule.assignmentsSchedule;
-        self.assignmentsSchedule = schedule.assignmentsSchedule;
-        
-        
+  
+        object[@"assignmentsSchedule"] = self.schedule.assignmentsSchedule;
         [object saveInBackground];
         
     }];
     
     // Create and same assignmentsArray for each person
     PFQuery *query2 = [PFQuery queryWithClassName:@"Person"];
+    [query2 whereKey:@"scheduleName" equalTo:self.schedule.name];
     [query2 findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         
         for(PFObject *object in objects){
             NSNumber *index = object[@"index"];
-            object[@"assignmentsArray"] = self.assignmentsSchedule[[index intValue]];
+            object[@"assignmentsArray"] = self.schedule.assignmentsSchedule[[index intValue]];
             [object saveInBackground];
         }
         
@@ -75,6 +69,14 @@
     
     
 }
-
+/*
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    
+    if([[segue destinationViewController] isKindOfClass:[HomeBaseTableViewController class]]){
+        HomeBaseTableViewController *homeBase = [segue destinationViewController];
+        homeBase.schedule = self.schedule; //unnecessary since the point to the same place
+    }
+}*/
 
 @end

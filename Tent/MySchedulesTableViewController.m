@@ -95,27 +95,8 @@
  return cell;
  }
 
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
- {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
-     
-     
-     if([[segue destinationViewController] isKindOfClass:[HomeBaseTableViewController class]]){
-         HomeBaseTableViewController *hbtvc = [segue destinationViewController];
-         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-         
-         if(indexPath){
 
-             hbtvc.schedule = self.schedules[indexPath.row];
-         }
-     }
- }
-
-
+#pragma mark - CallBacks
 -(IBAction)addSchedule:(UIStoryboardSegue *)segue
 {
     //Schedule should implement copy protocol
@@ -144,5 +125,26 @@
 {
     
 }
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    
+    
+    if([[segue destinationViewController] isKindOfClass:[HomeBaseTableViewController class]]){
+        HomeBaseTableViewController *hbtvc = [segue destinationViewController];
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        
+        if(indexPath){
+            
+            hbtvc.schedule = self.schedules[indexPath.row];
+            hbtvc.navigationItem.title = hbtvc.schedule.name;
+        }
+    }
+}
+
 
 @end

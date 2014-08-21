@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class Schedule;
 @class GenerateScheduleViewController;
 
 @protocol GenerateScheduleViewControllerDelegate <NSObject>
@@ -20,10 +21,7 @@
 
 @property(nonatomic, assign) id<GenerateScheduleViewControllerDelegate> delegate;
 
-
-// I might not need these since I'm saving to Parse
-@property(nonatomic, strong) NSMutableArray *availabilitiesSchedule;
-@property(nonatomic, strong) NSMutableArray *assignmentsSchedule;
+@property(nonatomic, strong) Schedule *schedule;
 
 
 @end
