@@ -7,7 +7,7 @@
 //
 
 #import "Schedule.h"
-
+#import "Interval.h"
 static const int kES = 1;
 static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 
@@ -109,8 +109,53 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     }
     return assignments;
 }
-#pragma mark - init
 
+-(NSMutableArray *)intervalArray
+{
+    if(!_intervalArray)_intervalArray = [[NSMutableArray alloc]init];
+    return _intervalArray;
+}
+-(NSArray *)hourIntervalsDisplayArray
+{
+    if(!_hourIntervalsDisplayArray)_hourIntervalsDisplayArray = [[NSArray alloc]init];
+    return _hourIntervalsDisplayArray;
+}
+-(void)createIntervalArray
+{
+    NSMutableArray *intervalArray = [[NSMutableArray alloc]init];
+    //NSLog(@"%lu", (unsigned long)self.numHourIntervals);
+    for(int i = 0;i<self.numHourIntervals;i++){
+        Interval *interval = [[Interval alloc]init];
+        [intervalArray addObject:interval];
+    }
+    self.intervalArray = intervalArray;
+}
+-(void)createIntervalDisplayArray
+{
+    NSDate *beginningHourDate = [self.startDate copy];
+    NSDate *endHourDate = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:beginningHourDate];
+    
+    NSMutableArray *array = [[NSMutableArray alloc]init];
+    
+    for(int i = 0; i<self.numHourIntervals;i++){
+        // NSLog(@"Test %d", self.schedule.numHourIntervals);
+        NSString *beginningHourString = [NSDateFormatter localizedStringFromDate:beginningHourDate dateStyle:0 timeStyle:NSDateFormatterShortStyle];
+        NSString *endHourString = [NSDateFormatter localizedStringFromDate:endHourDate dateStyle:0 timeStyle:NSDateFormatterShortStyle];
+        NSString *hourInterval = [NSString stringWithFormat:@"%@ - %@", beginningHourString, endHourString];
+        [array addObject:hourInterval];
+        beginningHourDate = endHourDate;
+        endHourDate = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:beginningHourDate];
+        //NSLog(@"%@", hourInterval);
+        
+    }
+    
+    self.hourIntervalsDisplayArray = array;
+    //NSLog(@"%@", self.hourIntervalsDisplayArray);
+    
+}
+
+#pragma mark - init
+//get rid of this?
 -(instancetype)initWithNumPeople:(NSUInteger)numPeople numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate
 {
     self = [super init];
@@ -121,9 +166,13 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         self.startDate = startDate;
         self.endDate = endDate;
         
+        // call designated initializer
+        self = [self initWithName:nil availabilitiesSchedule:[[NSMutableArray alloc] initWithCapacity: numPeople] assignmentsSchedule:[[NSMutableArray alloc] initWithCapacity: numPeople] numHourIntervals:numHourIntervals startDate:startDate endDate:endDate];
+        
     }
     return self;
 }
+//get rid of this?
 -(instancetype)initWithNumPeople:(NSUInteger)numPeople withNumIntervals:(NSUInteger)numIntervals
 {
     self = [super init];
@@ -134,7 +183,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return self;
 }
 
-
+//designated initializer (add a numPeople parameter)
 -(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate{
     self = [super init];
     if(self){
@@ -152,6 +201,10 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         }
         self.name = name;
         
+        //intervalArray/hourIntervalDisplayArray
+        [self createIntervalDisplayArray];
+        [self createIntervalArray];
+        
     }
     return self;
 }
@@ -160,22 +213,11 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     self = [super init];
     if(self){
         
-        self.name = name;
-
-        
-        self.startDate = startDate;
-        self.endDate = endDate;
-        
         double time = [endDate timeIntervalSinceDate:startDate];
         NSUInteger numHourIntervals = (NSUInteger)time/3600;
-        self.numHourIntervals = numHourIntervals;
-        
-        self.numPeople = [self.availabilitiesSchedule count];
-
-        
-        
-        self.availabilitiesSchedule = availabilitiesSchedule;
-        self.assignmentsSchedule = assignmentsSchedule;
+       
+        // call designated initializer
+         self = [self initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate];
         
         
     }
@@ -187,17 +229,17 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     self = [super init];
     if(self){
         
-        self.startDate = startDate;
-        self.endDate = endDate;
         
         double time = [endDate timeIntervalSinceDate:startDate];
         NSUInteger numHourIntervals = (NSUInteger)time/3600;
-        self.numHourIntervals = numHourIntervals;
 
+         //call designated initializer
+        self = [self initWithName:name availabilitiesSchedule:[[NSMutableArray alloc]init] assignmentsSchedule:[[NSMutableArray alloc]init] numHourIntervals:numHourIntervals startDate:startDate endDate:endDate];
         
         
         
-        self.name = name;
+        
+       
         
     }
     return self;

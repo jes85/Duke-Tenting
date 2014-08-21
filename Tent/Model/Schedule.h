@@ -28,7 +28,8 @@
 @property (nonatomic, ) NSDate *startDate;
 @property (nonatomic) NSDate *endDate;
 @property (nonatomic) NSString *name; //for parse
-
+@property (nonatomic) NSMutableArray *intervalArray; //Interval[]
+@property (nonatomic)NSArray *hourIntervalsDisplayArray;
 
 // Matrix Schedules (make these private later?)
     @property (nonatomic) NSMutableArray *availabilitiesSchedule;
