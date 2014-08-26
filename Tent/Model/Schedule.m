@@ -120,7 +120,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     if(!_hourIntervalsDisplayArray)_hourIntervalsDisplayArray = [[NSArray alloc]init];
     return _hourIntervalsDisplayArray;
 }
--(void)createIntervalArray
+-(NSMutableArray *)createZeroedIntervalArray
 {
     NSMutableArray *intervalArray = [[NSMutableArray alloc]init];
     //NSLog(@"%lu", (unsigned long)self.numHourIntervals);
@@ -128,7 +128,8 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         Interval *interval = [[Interval alloc]init];
         [intervalArray addObject:interval];
     }
-    self.intervalArray = intervalArray;
+   
+    return intervalArray;
 }
 -(void)createIntervalDisplayArray
 {
@@ -149,7 +150,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         
     }
     
-    self.hourIntervalsDisplayArray = array;
+    self.hourIntervalsDisplayArray = [array copy];
     //NSLog(@"%@", self.hourIntervalsDisplayArray);
     
 }
@@ -195,7 +196,9 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         self.endDate = endDate;
         
         
-        if(assignmentsSchedule)self.assignmentsSchedule = assignmentsSchedule;
+        if(assignmentsSchedule){
+            self.assignmentsSchedule = assignmentsSchedule;
+        }
         else{
             self.assignmentsSchedule = [self createZeroesAssignmentsSchedule];
         }
@@ -203,7 +206,8 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         
         //intervalArray/hourIntervalDisplayArray
         [self createIntervalDisplayArray];
-        [self createIntervalArray];
+        self.intervalArray = [self createZeroedIntervalArray];
+        //maybe create actual interval array
         
     }
     return self;
@@ -234,7 +238,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         NSUInteger numHourIntervals = (NSUInteger)time/3600;
 
          //call designated initializer
-        self = [self initWithName:name availabilitiesSchedule:[[NSMutableArray alloc]init] assignmentsSchedule:[[NSMutableArray alloc]init] numHourIntervals:numHourIntervals startDate:startDate endDate:endDate];
+        self = [self initWithName:name availabilitiesSchedule:[[NSMutableArray alloc]init] assignmentsSchedule:nil numHourIntervals:numHourIntervals startDate:startDate endDate:endDate];
         
         
         
@@ -502,8 +506,8 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     }
     
     
-    for(int p = 0; p<[self.assignmentsSchedule count]; p++){
-        for(int i = 0; i<[self.assignmentsSchedule[0] count];i++){
+    for(int p = 0; p<self.numPeople; p++){
+        for(int i = 0; i<self.numIntervals;i++){
             assignmentScheduleIntervalView[i][p] = self.assignmentsSchedule[p][i];
         }
     }
@@ -519,7 +523,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 -(void) calculateAvailPeopleSums
 {
     
-    for(int r = 0;r<[self.availabilitiesSchedule count];r++){
+    for(int r = 0;r<self.numPeople;r++){
         NSUInteger sum = [self sumColumnsForRow:r ofSchedule:self.availabilitiesSchedule];
         self.availPeopleSums[r] = [NSNumber numberWithInteger:sum];
     }
@@ -528,7 +532,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 -(void) calculateAssignPeopleSums
 {
     
-    for(int r = 0;r<[self.assignmentsSchedule count];r++){
+    for(int r = 0;r<self.numPeople;r++){
         NSUInteger sum = [self sumColumnsForRow:r ofSchedule:self.assignmentsSchedule];
         self.assignPeopleSums[r] = [NSNumber numberWithInteger:sum];
     }
@@ -539,7 +543,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 {
     int sum=0;
     NSMutableArray* personArray = [schedule objectAtIndex:r];
-    for(int c = 0; c<[schedule[0] count];c++){
+    for(int c = 0; c<self.numIntervals;c++){
         sum+=[[personArray objectAtIndex:c]intValue];
     }
     return sum;
@@ -549,7 +553,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 {
     
     
-    for(int c = 0; c<[self.availabilitiesSchedule[0] count];c++){
+    for(int c = 0; c<self.numIntervals;c++){
         NSUInteger sum = [self sumRowsForColumn:c ofSchedule:self.availabilitiesSchedule];
         self.availIntervalSums[c] = [NSNumber numberWithInteger:sum];
     }
@@ -560,7 +564,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 {
     
     
-    for(int c = 0; c<[self.assignmentsSchedule[0] count];c++){
+    for(int c = 0; c<self.numIntervals;c++){
         NSUInteger sum = [self sumRowsForColumn:c ofSchedule:self.assignmentsSchedule];
         self.assignIntervalSums[c] = [NSNumber numberWithInteger:sum];
     }
@@ -571,7 +575,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 {
     
     int sum=0;
-    for(int r = 0; r<[schedule count];r++){
+    for(int r = 0; r<self.numPeople;r++){
         NSMutableArray* personArray = [schedule objectAtIndex:r];
         sum+=[[personArray objectAtIndex:c]intValue];
     }

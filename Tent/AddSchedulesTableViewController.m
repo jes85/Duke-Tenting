@@ -34,6 +34,8 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
 #pragma mark -
 @interface AddSchedulesTableViewController ()
 
+@property (nonatomic) BOOL endDateChanged;
+
 @property (nonatomic, strong) NSArray *dataArray;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
@@ -123,12 +125,17 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:self.nameOfScheduleTextField];
     
 }
-
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.endDateChanged = NO;
+}
 -(BOOL)shouldEnableDoneButton
 {
     BOOL enableDoneButton = NO;
-    if(self.nameOfScheduleTextField.text!=nil && self.nameOfScheduleTextField.text.length>0)
+    if(self.nameOfScheduleTextField.text!=nil && self.nameOfScheduleTextField.text.length>0 && self.endDate >= [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate])
     {
+        
         enableDoneButton = YES;
     }
     return enableDoneButton;
@@ -427,10 +434,20 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
     //update start or end date (hardcoded for now, can change that later)
     if(targetedCellIndexPath.row ==kDateStartRow){
         self.startDate = targetedDatePicker.date;
-       
+        
+        // enable done button when appropriate
+        if(self.doneButton.enabled == NO) {
+            self.doneButton.enabled = [self shouldEnableDoneButton];
+        }
+        
+        
         // update end date to be one interval after startDate
         NSDate *endDate =[NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate];
-        if(self.endDate <endDate){
+        
+        NSIndexPath *endDateIndexPath = [NSIndexPath indexPathForRow:kDateEndRow+1 inSection:0];//+1 because startdatepickerview is shown
+        UITableViewCell *endDateCell = [self.tableView cellForRowAtIndexPath:endDateIndexPath];
+        
+        if(self.endDateChanged == NO){//&& self.endDate <endDate){
             
             self.endDate = endDate;
         
@@ -440,15 +457,26 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
             [endDateData setValue:self.endDate forKey:kDateKey];
             
             // update the end's cell's date string
-            NSIndexPath *endDateIndexPath = [NSIndexPath indexPathForRow:kDateEndRow+1 inSection:0];//+1 because startdatepickerview is shown
-            UITableViewCell *endDateCell = [self.tableView cellForRowAtIndexPath:endDateIndexPath];
-            endDateCell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.endDate];
             
+            endDateCell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.endDate];
         }
+        if(self.endDate < [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate]){
+            endDateCell.detailTextLabel.textColor = [UIColor redColor];
+            self.doneButton.enabled = NO;
+            
+        }else{
+            endDateCell.detailTextLabel.textColor = [UIColor blackColor];
+        }
+
+        
+
     }
     else if (targetedCellIndexPath.row==kDateEndRow){
         self.endDate = targetedDatePicker.date;
-        
+        self.endDateChanged = YES;
+        if(self.doneButton.enabled == NO) {
+            self.doneButton.enabled = [self shouldEnableDoneButton];
+        }        /*
         // if start date is now within a timeInterval (hour) of end date, change start date to an hour before
         if(self.endDate < [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate]){
             self.startDate = [NSDate dateWithTimeInterval:-kTimeIntervalLengthInSeconds sinceDate:self.endDate];
@@ -462,8 +490,25 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
             UITableViewCell *startDateCell = [self.tableView cellForRowAtIndexPath:startDateIndexPath];
             
             startDateCell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.startDate];
+            
 
+        }*/
+        
+        NSIndexPath *endDateIndexPath = [NSIndexPath indexPathForRow:kDateEndRow inSection:0];//+1 because startdatepickerview is shown
+        UITableViewCell *endDateCell = [self.tableView cellForRowAtIndexPath:endDateIndexPath];
+        //if end date is now less than an hour after start date, make end date red and disable done buttton
+        if(self.endDate < [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate]){
+            
+            endDateCell.detailTextLabel.textColor = [UIColor redColor];
+            //endDateCell.detailTextLabel.text = @"Choose later date";
+            self.doneButton.enabled = NO;
+            
+            NSLog(@"Test");
+        }else{
+            endDateCell.detailTextLabel.textColor = [UIColor blackColor];
         }
+        
+        
     }
 }
 - (IBAction)textFieldDoneEditing:(id)sender {

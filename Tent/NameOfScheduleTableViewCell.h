@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface NameOfScheduleTableViewCell : UITableViewCell
+
 @property (weak, nonatomic) IBOutlet UILabel *nameOfScheduleLabel;
 @property (weak, nonatomic) IBOutlet UITextField *nameOfScheduleTextField;
 

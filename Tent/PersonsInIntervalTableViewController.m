@@ -26,13 +26,14 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
+    
     if(section==0){
-        if([self.availablePersonsArray count]<1) return 1;
-        return [self.availablePersonsArray count];
-    }
-    if(section==1){
         if([self.assignedPersonsArray count]<1) return 1;
         return [self.assignedPersonsArray count];
+    }
+    if(section==1){
+        if([self.availablePersonsArray count]<1) return 1;
+        return [self.availablePersonsArray count];
     }
     
     return 0;
@@ -41,9 +42,9 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
     if(section == 0)
-        return @"Persons Available";
-    if(section == 1)
         return @"Persons Assigned";
+    if(section == 1)
+        return @"Persons Available";
     return @"";
 }
 
@@ -55,24 +56,9 @@
     
     // Configure the cell...
    
-    // Available Persons
-    if(indexPath.section == 0){
-        
-        // Display NONE if no one is available
-        if([self.availablePersonsArray count]<1) {
-            cell.textLabel.text = @"None";
-            return cell;
-        }
-        
-        // Display person's name
-        Person *person = self.availablePersonsArray[indexPath.row];
-        
-        NSString *personName = person.name;
-        cell.textLabel.text = personName;
-    }
     
     //Assigned Persons
-    if(indexPath.section == 1){
+    if(indexPath.section == 0){
         
         // Display NONE if no one is assigned
         if([self.assignedPersonsArray count]<1) {
@@ -86,7 +72,24 @@
         NSString *personName = person.name;
         cell.textLabel.text = personName;
     }
-    return cell;
+  
+    
+    // Available Persons
+    if(indexPath.section == 1){
+        
+        // Display NONE if no one is available
+        if([self.availablePersonsArray count]<1) {
+            cell.textLabel.text = @"None";
+            return cell;
+        }
+        
+        // Display person's name
+        Person *person = self.availablePersonsArray[indexPath.row];
+        
+        NSString *personName = person.name;
+        cell.textLabel.text = personName;
+    }
+      return cell;
 }
 
 

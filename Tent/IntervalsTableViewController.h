@@ -12,4 +12,5 @@
 
 @property (nonatomic) NSMutableArray *intervalArray;
 @property (nonatomic)NSArray *hourIntervalsDisplayArray;
+
 @end

@@ -14,27 +14,13 @@
 #import "Interval.h"
 
 @interface EnterScheduleTableViewController ()
-
+@property(nonatomic, strong) NSMutableArray *updatedAvailabilitiesArray;
 @end
 
 @implementation EnterScheduleTableViewController
 
 #pragma mark - Accessor Methods
 
-@synthesize hourIntervals = _hourIntervals;
-
-- (void)setHourIntervals:(NSArray *)hourIntervals
-{
-    _hourIntervals = hourIntervals;
-    [self.tableView reloadData];
-}
-
-
-- (NSArray *)hourIntervals
-{
-    if(!_hourIntervals) _hourIntervals = @[@"  8am -   9am", @"  9am - 10am",@"10am - 11am", @"11am - 12pm", @"12pm -   1pm", @"  1pm -   2pm", @"  2pm -   3pm", @"  3pm -   4pm", @"  4pm -   5pm", @"  5pm -   6pm"];
-    return _hourIntervals;
-}
 
 - (NSArray *)hourIntervalsDisplayArray //make this a class method
 {
@@ -162,6 +148,10 @@
         
         //update person's availabilities array (and update to Parse)
        self.currentPerson.availabilitiesArray = self.updatedAvailabilitiesArray;
+#warning Fix this
+            //update schedule offline
+            PickPersonTableViewController *pptvc = [segue destinationViewController];
+            pptvc.schedule.availabilitiesSchedule[self.currentPerson.indexOfPerson] = self.currentPerson.availabilitiesArray;
         PFQuery *query = [PFQuery queryWithClassName:@"Person"];
         [query whereKey:@"scheduleName" equalTo:self.currentPerson.scheduleName];
         [query whereKey:@"index" equalTo:[NSNumber numberWithInteger:self.currentPerson.indexOfPerson]];

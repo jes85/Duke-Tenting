@@ -31,28 +31,25 @@
 {
     self = [super init];
     if(self){
-        self.name = name;
-        self.indexOfPerson = index;
-        self.availabilitiesArray = [self createZerosArrayWithNumIntervals:numIntervals];
-        self.assignmentsArray = [self createZerosArrayWithNumIntervals:numIntervals];
-        self.scheduleName=scheduleName;
+       
+        NSMutableArray *availArray = [self createZerosArrayWithNumIntervals:numIntervals];
+        NSMutableArray *assignArray = [self createZerosArrayWithNumIntervals:numIntervals];
+        
+        self = [self initWithName:name index:index availabilitiesArray:availArray assignmentsArray:assignArray scheduleName:scheduleName];
     }
     return self;
 }
-
+//do i use this?
 -(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray scheduleName:(NSString *)scheduleName
 {
     self = [super init];
     if(self){
-        self.name = name;
-        self.indexOfPerson = index;
-        self.availabilitiesArray = availArray;
-        self.assignmentsArray = [self createZerosArray];
-        self.scheduleName=scheduleName;
+        NSMutableArray *assignArray = [self createZerosArray];
+         self = [self initWithName:name index:index availabilitiesArray:availArray assignmentsArray:assignArray scheduleName:scheduleName];
     }
     return self;
 }
-
+//designated initializer
 -(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray assignmentsArray:(NSMutableArray *)assignArray scheduleName:(NSString *)scheduleName
 {
     self = [super init];

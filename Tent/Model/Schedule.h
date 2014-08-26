@@ -24,7 +24,7 @@
 // Basic Parameters
 @property(nonatomic) NSUInteger numPeople;
 @property(nonatomic) NSUInteger numIntervals;
-@property(nonatomic) NSUInteger numHourIntervals;
+@property(nonatomic) NSUInteger numHourIntervals;//convert to numIntervals and add property that specifies interval range (hour)
 @property (nonatomic, ) NSDate *startDate;
 @property (nonatomic) NSDate *endDate;
 @property (nonatomic) NSString *name; //for parse
@@ -37,7 +37,7 @@
 
 
 
-
+-(NSMutableArray *)createZeroedIntervalArray;
 
 
 @end

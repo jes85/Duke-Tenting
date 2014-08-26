@@ -33,11 +33,7 @@
     if(!_people)_people = [[NSMutableArray alloc]init];
     return _people;
 }
--(NSMutableArray *)intervalArray
-{
-    if(!_intervalArray)_intervalArray = [[NSMutableArray alloc]init];
-    return _intervalArray;
-}
+
 
 #pragma mark - Table view data source
 
@@ -73,15 +69,19 @@
 #pragma mark - Add Person
 -(IBAction)addPerson:(UIStoryboardSegue *)segue
 {
-    Person *newPerson = [[Person alloc]initWithName:self.addPersonName index:[self.people count] numIntervals:self.numIntervals scheduleName:self.schedule.name];
+    // Update person and schedule on current iphone (offline)
+    Person *newPerson = [[Person alloc]initWithName:self.addPersonName index:[self.people count] numIntervals:self.schedule.numHourIntervals scheduleName:self.schedule.name];
     
     [self.people addObject:newPerson];
     
     self.addPersonName = nil;
     
+    [self.schedule.availabilitiesSchedule addObject:newPerson.availabilitiesArray];
+    [self.schedule.assignmentsSchedule addObject:newPerson.assignmentsArray];
+    self.schedule.numPeople++;
     [self.tableView reloadData];
     
-        
+    // Update person and schedule online
     PFObject *personObject = [PFObject objectWithClassName:@"Person"];
     personObject[@"name"] = newPerson.name;
     personObject[@"index"] = [NSNumber numberWithInteger:newPerson.indexOfPerson];
@@ -151,8 +151,8 @@
                     
                     EnterScheduleTableViewController *estvc = [segue destinationViewController];
                     estvc.currentPerson = person; //does it violate MVC for them to be connected like this?
-                    estvc.hourIntervalsDisplayArray = self.hourIntervalsDisplayArray;
-                    estvc.intervalArray = self.intervalArray;
+                    estvc.hourIntervalsDisplayArray = self.schedule.hourIntervalsDisplayArray;
+                    estvc.intervalArray = self.schedule.intervalArray;
                     
                     estvc.navigationItem.title = person.name;
                 }

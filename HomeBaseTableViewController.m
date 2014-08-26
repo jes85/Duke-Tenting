@@ -17,11 +17,11 @@
 
 //maybe change these to properties of schedule
 @property (nonatomic) NSMutableArray *personsArray; //Person[]
-@property (nonatomic) NSMutableArray *intervalArray; //Interval[]
+
 @property (nonatomic) NSMutableArray *availabilitiesSchedule;
 @property (nonatomic) NSMutableArray *assignmentsSchedule;
 
-@property (nonatomic) NSMutableArray *hourIntervalsDisplayArray;
+
 @end
 
 
@@ -35,11 +35,7 @@
     if(!_personsArray)_personsArray = [[NSMutableArray alloc]init];
     return _personsArray;
 }
--(NSMutableArray *)intervalArray
-{
-    if(!_intervalArray)_intervalArray = [[NSMutableArray alloc]init];
-    return _intervalArray;
-}
+
 -(NSMutableArray *)availabilitiesSchedule
 {
     if(!_availabilitiesSchedule)_availabilitiesSchedule = [[NSMutableArray alloc]init];
@@ -47,11 +43,7 @@
     return _availabilitiesSchedule;
 }
 
--(NSMutableArray *)hourIntervalsDisplayArray
-{
-    if(!_hourIntervalsDisplayArray)_hourIntervalsDisplayArray = [[NSMutableArray alloc]init];
-    return _hourIntervalsDisplayArray;
-}
+
 
 -(void)createPeopleArray
 {
@@ -95,40 +87,9 @@
     self.personsArray = peopleArray;
     
 }
--(void)createIntervalArray
-{
-    NSMutableArray *intervalArray = [[NSMutableArray alloc]init];
-    NSLog(@"%lu", (unsigned long)self.schedule.numHourIntervals);
-    for(int i = 0;i<self.schedule.numHourIntervals;i++){
-        Interval *interval = [[Interval alloc]init];
-        [intervalArray addObject:interval];
-    }
-    self.intervalArray = intervalArray;
-}
 
--(void)createIntervalDisplayArray
-{
-    NSDate *beginningHourDate = [self.schedule.startDate copy];
-    NSDate *endHourDate = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:beginningHourDate];
-    
-    
-    
-    for(int i = 0; i<self.schedule.numHourIntervals;i++){
-       // NSLog(@"Test %d", self.schedule.numHourIntervals);
-        NSString *beginningHourString = [NSDateFormatter localizedStringFromDate:beginningHourDate dateStyle:0 timeStyle:NSDateFormatterShortStyle];
-         NSString *endHourString = [NSDateFormatter localizedStringFromDate:endHourDate dateStyle:0 timeStyle:NSDateFormatterShortStyle];
-        NSString *hourInterval = [NSString stringWithFormat:@"%@ - %@", beginningHourString, endHourString];
-        [self.hourIntervalsDisplayArray addObject:hourInterval];
-        beginningHourDate = endHourDate;
-        endHourDate = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:beginningHourDate];
-        //NSLog(@"%@", hourInterval);
-       
-    }
-    
 
-    NSLog(@"%@", self.hourIntervalsDisplayArray);
 
-}
 #pragma mark - view controller lifecycle
 
 -(void)viewDidLoad
@@ -138,12 +99,12 @@
     
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Reload Data"];
-    [refresh addTarget:self action:@selector(updateInformation) forControlEvents:UIControlEventValueChanged];
+    [refresh addTarget:self action:@selector(updateAllInformation) forControlEvents:UIControlEventValueChanged];
 
     self.refreshControl = refresh;
     
     
-    [self updateInformation];
+    [self updatePersonsForSchedule];
 
 
 }
@@ -157,9 +118,6 @@
     [super viewWillAppear:animated];
     //[self updateInformation]; //moved this to first load (viewDidLoad) and refreshes
     
-    //testing
-    if(!_hourIntervalsDisplayArray)[self createIntervalDisplayArray];
-    if(!_intervalArray)[self createIntervalArray];
     
 }
 
@@ -168,10 +126,11 @@
     [self.refreshControl endRefreshing];
 }
 
-- (void)updateInformation
+-(void)updatePersonsForSchedule
 {
-    self.personsArray = nil;
-    self.intervalArray = nil;
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    self.personsArray = nil; //maybe change personsArray to be property of schedule too?
+    self.schedule.intervalArray = [self.schedule createZeroedIntervalArray]; //get rid of this and just reload schedule from parse
     // Get person objects from Parse
     PFQuery *query = [PFQuery queryWithClassName:@"Person"];
     [query whereKey:@"scheduleName" equalTo:self.schedule.name];
@@ -179,15 +138,15 @@
         if(!objects){
             NSLog(@"Find failed");
         }else if ([objects count]<1){
-            NSLog(@"No objects in Parse");
+            NSLog(@"No persons for schedule %@ in Parse", self.schedule.name);
             //[self createPeopleArray];
             //[self createIntervalArray];
         }
         else{
-            NSLog(@"Find succeeded %lu", (unsigned long)[objects count]);
+            NSLog(@"Find persons for Schedule %@ succeeded %lu", self.schedule.name,(unsigned long)[objects count]);
             //self.personsArray = [[NSMutableArray alloc]initWithCapacity:[Schedule testNumPeople]]; //take this out later
-           // NSLog(@"personsArray: %@", self.personsArray);
-            [self createIntervalArray];
+            // NSLog(@"personsArray: %@", self.personsArray);
+            //[self.schedule createIntervalArray];
             
             
             for(PFObject *object in objects){
@@ -211,32 +170,79 @@
                 //[self.personsArray insertObject:person atIndex:person.indexOfPerson];
                 
                 // Update intervalsArray (change it later to save to Parse?)
+                //maybe move this to schedule.m
                 
-                for(int i = 0; i<[availabilitiesArray count]; i++){
-                    if([availabilitiesArray[i] isEqual:@1]){
-                        Interval *interval = (Interval *)self.intervalArray[i];
-                        
-                        if(![interval.availablePersons containsObject:person]){
-                            [interval.availablePersons addObject:person];//or change to person.name
-                        }
-                        if([assignmentsArray[i] isEqual:@1]){
-                            if (![interval.assignedPersons containsObject:person])
-                            {
-                                [interval.assignedPersons addObject:person];
-                            }
-                        }
+                 for(int i = 0; i<[availabilitiesArray count]; i++){
+                     if([availabilitiesArray[i] isEqual:@1]){
+                         Interval *interval = (Interval *)self.schedule.intervalArray[i];
+                         if([assignmentsArray[i] isEqual:@1]){
+                             if (![interval.assignedPersons containsObject:person])
+                             {
+                                 [interval.assignedPersons addObject:person];
+                                 //minor optimization:
+                                 //[interval.availablePersons addObject:person];
+                                 //then make next if an else if
+                             }
+                         }
+
+                         if(![interval.availablePersons containsObject:person]){
+                             [interval.availablePersons addObject:person];//or change to person.name
+                         }
                     }
                 }
+                
+                
+                
                 
             }
             //NSLog(@"Interval Array: %@", self.intervalArray);
             //NSLog(@"Persons Array: %@", self.personsArray);
             
             
-          [self performSelector:@selector(stopRefresh) withObject:nil afterDelay:0];
+            
         }
     }];
+
 }
+-(void)updateSchedule
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+
+    
+     PFQuery *query = [PFQuery queryWithClassName:@"Schedule"];
+     [query whereKey:@"name" equalTo:self.schedule.name];
+     [query getFirstObjectInBackgroundWithBlock:^(PFObject *schedule, NSError *error) {
+     if(!schedule){
+     NSLog(@"Find failed");
+     }else{
+     NSLog(@"Find schedule for update succeeded");
+     
+     NSString *name = schedule[@"name"];
+     NSMutableArray *availabilitiesSchedule = schedule[@"availabilitiesSchedule"];
+     NSMutableArray *assignmentsSchedule = schedule[@"assignmentsSchedule"];
+     NSDate *startDate = schedule[@"startDate"];
+     NSDate *endDate = schedule[@"endDate"];
+     NSUInteger numHourIntervals = [schedule[@"numHourIntervals"] integerValue];
+     
+     Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate] ;
+     
+     self.schedule=schedule;
+     
+     
+     }
+     }];
+    
+
+}
+
+- (void)updateAllInformation
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self updateSchedule];
+    [self updatePersonsForSchedule];
+    
+    [self performSelector:@selector(stopRefresh) withObject:nil afterDelay:0];
+   }
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -267,19 +273,16 @@
     if([[segue destinationViewController] isKindOfClass:[PickPersonTableViewController class]]){
         
         PickPersonTableViewController *pptvc = [segue destinationViewController];
-        //maybe only communicate schedule data
+        //maybe make personsArray a property of schedule.m? - probably not
         pptvc.people = self.personsArray;
-        pptvc.numIntervals = self.schedule.numHourIntervals;
-        pptvc.hourIntervalsDisplayArray = self.hourIntervalsDisplayArray;
+        
         pptvc.schedule = self.schedule;
-        pptvc.intervalArray = self.intervalArray;
-        //NSLog(@"array: %@", self.personsArray);
-    }
+           }
     else if([[segue destinationViewController] isKindOfClass:[IntervalsTableViewController class]]){
         
         IntervalsTableViewController *itvc = [segue destinationViewController];
-        itvc.intervalArray = self.intervalArray;
-        itvc.hourIntervalsDisplayArray = self.hourIntervalsDisplayArray;
+        itvc.intervalArray = self.schedule.intervalArray;
+        itvc.hourIntervalsDisplayArray = self.schedule.hourIntervalsDisplayArray;
         
         //NSLog(@"intervalArray %@", self.intervalArray);
     }
@@ -293,9 +296,17 @@
     }
 
 }
+-(void)updatePersonsArrayOffline
+{
+    for(Person *person in self.personsArray){
+        person.assignmentsArray = self.schedule.assignmentsSchedule[person.indexOfPerson];
+    }
+}
 
 -(void)generateScheduleViewControllerDidGenerateSchedule:(GenerateScheduleViewController *)controller{
     NSLog(@"didGenerateSchedule");
+    [self updatePersonsArrayOffline];
+    //[self updatePersonsForSchedule];//update interval array without accessing internet
     //[self updateInformation];
 }
 
