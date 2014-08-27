@@ -8,37 +8,111 @@
 
 #import "DefaultSettingsViewController.h"
 #import "MyPFLogInViewController.h"
+#import "MyPFSignUpViewController.h"
+#import "MySchedulesTableViewController.h"
+#import "Schedule.h"
 
 @interface DefaultSettingsViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *label;
+@property (weak, nonatomic) IBOutlet UIButton *continueButton;
+@property(nonatomic) NSArray *PFSchedules;
+@property(nonatomic)NSMutableArray *schedules;
+
 
 @end
 
 @implementation DefaultSettingsViewController
 
-
+-(NSArray *)PFSchedules
+{
+    if(!_PFSchedules)_PFSchedules = [[NSArray alloc]init];
+    return _PFSchedules;
+}
+-(NSMutableArray *)schedules
+{
+    if(!_schedules)_schedules = [[NSMutableArray alloc]init];
+    return _schedules;
+}
 #pragma mark - View Controller Lifecycle
+
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    if(![PFUser currentUser]){ //No user logged in
-        // Create the log in view controller
-        MyPFLogInViewController *logInViewController = [[MyPFLogInViewController alloc]init];
-        [logInViewController setDelegate:self]; //set this class as the logInViewController's delegate
+    PFUser *currentUser = [PFUser currentUser];
+    if(currentUser){
+        self.label.text = [NSString stringWithFormat:@"Currently logged in as %@.",currentUser.username];
+        /*NSArray *schedules = [currentUser objectForKey:@"schedulesList"];
+        if(schedules){
+            self.PFSchedules = schedules;
+            [self convertPFSchedulesToSchedules];
+        }*/
+        PFRelation *relation = [[PFUser currentUser] relationForKey:@"schedulesList"];
+        PFQuery *query = [relation query];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *schedulesForThisUser, NSError *error) {
+            self.schedules = nil;
+            if(!error){
+            for(PFObject *schedule in schedulesForThisUser){
+                NSString *name = schedule[@"name"];
+                NSMutableArray *availabilitiesSchedule = schedule[@"availabilitiesSchedule"];
+                NSMutableArray *assignmentsSchedule = schedule[@"assignmentsSchedule"];
+                NSDate *startDate = schedule[@"startDate"];
+                NSDate *endDate = schedule[@"endDate"];
+                NSUInteger numHourIntervals = [schedule[@"numHourIntervals"] integerValue];
                 
-        // Create the sign up view controller
-        PFSignUpViewController *signUpViewController = [[PFSignUpViewController alloc]init];
-        [signUpViewController setDelegate:self]; //set this class as the signUpViewController's delegate
-       
-        // Assign our sign up controller to be displayed from the login controller
-        [logInViewController setSignUpController:signUpViewController];
+                Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate] ;
+                
+                [self.schedules addObject:schedule];
+            }
+            }
+            else{
+                NSLog(@"error retrieving user's schedules from parse");
+            }
+
+        }];
         
-        //present the log in view controller
-        [self presentViewController:logInViewController animated:YES completion:NULL];
         
+
+    }
+    else{ //No user logged in
+        [self displayLoginAndSignUpViews];
     }
 }
+-(void)convertPFSchedulesToSchedules
+{
+    self.schedules = nil;
+    for(PFObject *schedule in self.PFSchedules){
+        NSString *name = schedule[@"name"];
+        NSMutableArray *availabilitiesSchedule = schedule[@"availabilitiesSchedule"];
+        NSMutableArray *assignmentsSchedule = schedule[@"assignmentsSchedule"];
+        NSDate *startDate = schedule[@"startDate"];
+        NSDate *endDate = schedule[@"endDate"];
+        NSUInteger numHourIntervals = [schedule[@"numHourIntervals"] integerValue];
+        
+        Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate] ;
+        
+        [self.schedules addObject:schedule];
+    }
 
+    
+}
+-(void)displayLoginAndSignUpViews
+{
+    // Create the log in view controller
+    MyPFLogInViewController *logInViewController = [[MyPFLogInViewController alloc]init];
+    [logInViewController setDelegate:self]; //set this class as the logInViewController's delegate
+    
+    // Create the sign up view controller
+    MyPFSignUpViewController *signUpViewController = [[MyPFSignUpViewController alloc]init];
+    signUpViewController.fields = PFSignUpFieldsUsernameAndPassword;
+    [signUpViewController setDelegate:self]; //set this class as the signUpViewController's delegate
+    
+    // Assign our sign up controller to be displayed from the login controller
+    [logInViewController setSignUpController:signUpViewController];
+    
+    //present the log in view controller
+    [self presentViewController:logInViewController animated:YES completion:NULL];
+
+}
 #pragma mark - Log In View Controller Delegate
 // Sent to the delegate to determine whether the log in request should be submitted to the server.
 - (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password {
@@ -60,11 +134,19 @@
 // (customize this later)
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
     [self dismissViewControllerAnimated:YES completion:NULL];
+    
+    
 }
 
 // Sent to the delegate when the log in attempt fails.
 - (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error {
     NSLog(@"Failed to log in...");
+    [[[UIAlertView alloc] initWithTitle:@"Login unsuccessful"
+                                message:@"Please re-enter your information"
+                               delegate:nil
+                      cancelButtonTitle:@"ok"
+                      otherButtonTitles:nil] show];
+    //maybe clear password
 }
 
 // Sent to the delegate when the log in screen is dismissed.
@@ -101,7 +183,11 @@
 
 // Sent to the delegate when a PFUser is signed up.
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user {
-    //[self dismissModalViewControllerAnimated:YES]; // Dismiss the PFSignUpViewController
+    [self dismissViewControllerAnimated:YES completion:NULL]; // Dismiss the PFSignUpViewController
+    
+    
+    
+    
 }
 
 // Sent to the delegate when the sign up attempt fails.
@@ -113,7 +199,12 @@
 - (void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController {
     NSLog(@"User dismissed the signUpViewController");
 }
-/*
+
+- (IBAction)logoutButton:(id)sender {
+    [PFUser logOut];
+    [self displayLoginAndSignUpViews];
+}
+
  #pragma mark - Navigation
  
  // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -121,7 +212,17 @@
  {
  // Get the new view controller using [segue destinationViewController].
  // Pass the selected object to the new view controller.
+     
+     if(sender==self.continueButton){
+         if([segue.identifier isEqualToString:@"Continue As Current User"]){
+             if([[segue destinationViewController] isKindOfClass:[MySchedulesTableViewController class]]){
+                 MySchedulesTableViewController *mstvc = [segue destinationViewController];
+                 //setup
+                 mstvc.schedules = self.schedules;
+             }
+         }
+     }
  }
- */
+
 
 @end

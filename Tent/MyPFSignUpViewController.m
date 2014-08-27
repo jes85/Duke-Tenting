@@ -27,6 +27,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.signUpView.passwordField.placeholder = @"Password";
 }
 
 - (void)didReceiveMemoryWarning
