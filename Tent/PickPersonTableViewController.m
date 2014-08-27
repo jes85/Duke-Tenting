@@ -160,6 +160,14 @@
     personObject[@"scheduleName"] = self.schedule.name;
     [personObject saveInBackground];
     
+    /*[personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+    //PFRelation
+            PFRelation *relation = [[PFUser currentUser] relationForKey:@"personsList"];
+            [relation addObject:personObject];
+            [[PFUser currentUser] saveInBackground];
+        
+    }];*/
+    
     //query for schedule and update
     PFQuery *query = [PFQuery queryWithClassName:@"Schedule"];
     
@@ -178,6 +186,10 @@
             NSMutableArray *assignmentsSchedule = parseSchedule[@"assignmentsSchedule"];
             [assignmentsSchedule addObject:newPerson.assignmentsArray];
             parseSchedule[@"assignmentsSchedule"]= assignmentsSchedule;
+            
+            
+            PFRelation *relation = [parseSchedule relationForKey:@"personsList"];
+            [relation addObject:personObject];
             
             [parseSchedule saveInBackground];
            

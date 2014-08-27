@@ -662,35 +662,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="1914" y="-660"/>
         </scene>
-        <!--Table View Controller - Join Schedule-->
-        <scene sceneID="yJ9-Dn-7zC">
-            <objects>
-                <tableViewController id="iIb-Gg-UC0" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="HXA-CB-tl6">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Join Schedule Cell" id="4wk-Zy-f2R">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4wk-Zy-f2R" id="TKl-T7-PIU">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="iIb-Gg-UC0" id="nVX-uf-5Ge"/>
-                            <outlet property="delegate" destination="iIb-Gg-UC0" id="hE6-1c-IzL"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Join Schedule" id="obx-CQ-Tj9"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ebG-nM-QbQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="672" y="561"/>
-        </scene>
         <!--My Schedules Table View Controller - My Schedules-->
         <scene sceneID="Iar-1d-Bgh">
             <objects>
@@ -718,11 +689,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="My Schedules" id="gBz-Nf-avG">
-                        <barButtonItem key="leftBarButtonItem" title="Join" id="HJ7-3A-TsD">
-                            <connections>
-                                <segue destination="iIb-Gg-UC0" kind="push" id="nW6-4l-gCT"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Create " id="ytZ-35-wR7">
                             <connections>
                                 <segue destination="NDB-GU-Nan" kind="modal" identifier="Create Schedule" id="8Td-jT-WHc"/>

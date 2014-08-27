@@ -34,32 +34,52 @@
     return _schedules;
 }
 #pragma mark - View Controller Lifecycle
--(void)viewDidLoad
-{
-    PFUser *currentUser = [PFUser currentUser];
-    if(currentUser){
-        self.label.text = [NSString stringWithFormat:@"Currently logged in as %@.",currentUser.username];
 
-    }
-}
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     PFUser *currentUser = [PFUser currentUser];
-    //[PFUser logOut];
-    if(!currentUser){ //No user logged in
-        [self displayLoginAndSignUpViews];
-    }else{
-        NSArray *schedules = [currentUser objectForKey:@"schedulesList"];
-        self.PFSchedules = schedules;
-        //[self convertPFSchedulesToSchedules];
-        //go to my schedules
-        //MySchedulesTableViewController *mySchedulesTVC = [[]
+    if(currentUser){
+        self.label.text = [NSString stringWithFormat:@"Currently logged in as %@.",currentUser.username];
+        /*NSArray *schedules = [currentUser objectForKey:@"schedulesList"];
+        if(schedules){
+            self.PFSchedules = schedules;
+            [self convertPFSchedulesToSchedules];
+        }*/
+        PFRelation *relation = [[PFUser currentUser] relationForKey:@"schedulesList"];
+        PFQuery *query = [relation query];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *schedulesForThisUser, NSError *error) {
+            self.schedules = nil;
+            if(!error){
+            for(PFObject *schedule in schedulesForThisUser){
+                NSString *name = schedule[@"name"];
+                NSMutableArray *availabilitiesSchedule = schedule[@"availabilitiesSchedule"];
+                NSMutableArray *assignmentsSchedule = schedule[@"assignmentsSchedule"];
+                NSDate *startDate = schedule[@"startDate"];
+                NSDate *endDate = schedule[@"endDate"];
+                NSUInteger numHourIntervals = [schedule[@"numHourIntervals"] integerValue];
+                
+                Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate] ;
+                
+                [self.schedules addObject:schedule];
+            }
+            }
+            else{
+                NSLog(@"error retrieving user's schedules from parse");
+            }
+
+        }];
         
+        
+
+    }
+    else{ //No user logged in
+        [self displayLoginAndSignUpViews];
     }
 }
 -(void)convertPFSchedulesToSchedules
 {
+    self.schedules = nil;
     for(PFObject *schedule in self.PFSchedules){
         NSString *name = schedule[@"name"];
         NSMutableArray *availabilitiesSchedule = schedule[@"availabilitiesSchedule"];
