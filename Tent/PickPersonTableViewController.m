@@ -89,7 +89,9 @@
     personObject[@"assignmentsArray"] = newPerson.assignmentsArray;
     
     personObject[@"scheduleName"] = self.schedule.name;
-    [personObject saveInBackground];
+    [personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        
+    
     
     /*[personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
     //PFRelation
@@ -126,6 +128,7 @@
            
             
         }
+    }];
     }];
     
    

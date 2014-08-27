@@ -582,4 +582,32 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return sum;
     
 }
+
+#pragma mark - Equality
+- (BOOL)isEqual:(id)other {
+    if (other == self)
+        return YES;
+    if (!other || ![other isKindOfClass:[self class]])
+        return NO;
+    //NSLog(@"IS Equal");
+    return [self isEqualToSchedule:other];
+}
+
+- (BOOL)isEqualToSchedule:(Schedule *)aSchedule {
+    if (self == aSchedule)
+        return YES;
+    if (![(id)[self name] isEqual:[aSchedule name]])
+        return NO;
+    if (!([self startDate] == [aSchedule startDate]))
+        return NO;
+    if (![(id)[self endDate] isEqual:[aSchedule endDate]])
+        return NO;
+    //add more
+    // NSLog(@"Test equality");
+    return YES;
+}
+
+
+
+
 @end
