@@ -13,6 +13,27 @@
 #import "Schedule.h"
 #import "Interval.h"
 #import "GenerateScheduleViewController.h"
+
+
+#define kPersonClassName    @"Person"
+#define kScheduleClassName  @"Schedule"
+
+#define kSchedulePropertyName                   @"name"
+#define kSchedulePropertyStartDate              @"startDate"
+#define kSchedulePropertyEndDate                @"endDate"
+#define kSchedulePropertyAvailabilitiesSchedule @"availabilitiesSchedule"
+#define kSchedulePropertyAssignmentsSchedule    @"assignmentsSchedule"
+#define kSchedulePropertyNumHourIntervals       @"numHourIntervals"
+#define kSchedulePropertyPrivacy                @"privacy"
+#define kSchedulePropertyPassword               @"password"
+#define kSchedulePropertyHomeGameIndex          @"homeGameIndex"
+
+
+#define kPrivacyValuePrivate                    @"private"
+#define kPrivacyValuePublic                     @"public"
+
+#define kUserPropertySchedulesList              @"schedulesList"
+
 @interface HomeBaseTableViewController () <GenerateScheduleViewControllerDelegate>
 
 //maybe change these to properties of schedule
@@ -217,16 +238,19 @@
      }else{
      NSLog(@"Find schedule for update succeeded");
      
-     NSString *name = schedule[@"name"];
-     NSMutableArray *availabilitiesSchedule = schedule[@"availabilitiesSchedule"];
-     NSMutableArray *assignmentsSchedule = schedule[@"assignmentsSchedule"];
-     NSDate *startDate = schedule[@"startDate"];
-     NSDate *endDate = schedule[@"endDate"];
-     NSUInteger numHourIntervals = [schedule[@"numHourIntervals"] integerValue];
+         NSString *name = schedule[kSchedulePropertyName];
+         NSMutableArray *availabilitiesSchedule = schedule[kSchedulePropertyAvailabilitiesSchedule];
+         NSMutableArray *assignmentsSchedule = schedule[kSchedulePropertyAssignmentsSchedule];
+         NSDate *startDate = schedule[kSchedulePropertyStartDate];
+         NSDate *endDate = schedule[kSchedulePropertyEndDate];
+         NSUInteger numHourIntervals = [schedule[kSchedulePropertyNumHourIntervals ] integerValue];
+         NSString *privacy = schedule[kSchedulePropertyPrivacy];
+         NSString *password = schedule[kSchedulePropertyPassword];
+         NSUInteger homeGameIndex = [schedule[kSchedulePropertyHomeGameIndex] integerValue];
+         
+         Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex] ;
      
-     Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate] ;
-     
-     self.schedule=schedule;
+         self.schedule=schedule;
      
      
      }

@@ -12,7 +12,11 @@
 
 @property (nonatomic) NSMutableArray *schedules;
 @property (nonatomic) Schedule *scheduleToAdd;
+@property (nonatomic) Schedule *scheduleToJoin;
 
 -(IBAction)addSchedule:(UIStoryboardSegue *)segue;
 -(IBAction)cancelAddSchedule:(UIStoryboardSegue *)segue;
+
+
+-(IBAction)joinedSchedule:(UIStoryboardSegue *)segue;
 @end

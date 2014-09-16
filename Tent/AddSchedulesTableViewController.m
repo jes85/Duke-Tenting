@@ -8,6 +8,8 @@
 
 #import "AddSchedulesTableViewController.h"
 #import "NameOfScheduleTableViewCell.h"
+#import "PrivacyTableViewCell.h"
+#import "PasswordTableViewCell.h"
 #import "MySchedulesTableViewController.h"
 #import "Schedule.h"
 
@@ -15,6 +17,7 @@
 
 #define kTitleKey       @"title"            // key for obtaining the data source item's title
 #define kDateKey        @"date"             // key for obtaining the data source item's date value
+#define kStatusKey      @"status"           //key for obtaining privacy setting
 #define kMinimumDateKey @"minimumDate"      // key for obtaining the data source item's minimumDate value
 
 // keep track of which rows have date cells
@@ -28,8 +31,13 @@
 
 static NSString *kDateCellID = @"dateCell";     // the cells with the start or end date
 static NSString *kDatePickerID = @"datePicker"; // the cell containing the date picker
-static NSString *kNameCellID = @"nameCell";     // the remaining cells at the end
+static NSString *kNameCellID = @"nameCell";     // the name of schedule cell
+static NSString *kPrivacyCellID = @"privacyCell"; // the privacy cell
+static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 
+
+#define kPrivacyValuePrivate                    @"private"
+#define kPrivacyValuePublic                     @"public"
 
 #pragma mark -
 @interface AddSchedulesTableViewController ()
@@ -53,8 +61,11 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
 @property (nonatomic) NSDate *roundedStartDateAtViewDidLoad;
 @property (nonatomic) NSDate *roundedEndDateAtViewDidLoad;
 @property (nonatomic, weak) UITextField *nameOfScheduleTextField;
+@property (nonatomic, weak) UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;
 
+@property (nonatomic) BOOL private;
+@property (nonatomic) NSString *password;
 
 @end
 
@@ -98,8 +109,10 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
     NSMutableDictionary *itemThree = [@{ kTitleKey : @"End Date",
                                          kDateKey : self.endDate,
                                          kMinimumDateKey:self.roundedEndDateAtViewDidLoad} mutableCopy];
+    NSMutableDictionary *itemFour = [@{ kTitleKey : @"Privacy", kStatusKey: @"Private"} mutableCopy];
+    NSMutableDictionary *itemFive = [@{ kTitleKey : @"Password"} mutableCopy];
     
-     self.dataArray = @[itemOne, itemTwo, itemThree];
+     self.dataArray = @[itemOne, itemTwo, itemThree, itemFour, itemFive];
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
     [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];    // picker date-style formats
@@ -114,6 +127,7 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
     self.datePickerCellRowHeight = CGRectGetHeight(datePickerViewCellToCheck.frame);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.nameOfScheduleTextField];
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.passwordTextField];
     self.doneButton.enabled = NO;
     
    
@@ -123,17 +137,19 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:self.nameOfScheduleTextField];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:self.passwordTextField];
     
 }
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     self.endDateChanged = NO;
+    self.private = YES;
 }
 -(BOOL)shouldEnableDoneButton
 {
     BOOL enableDoneButton = NO;
-    if(self.nameOfScheduleTextField.text!=nil && self.nameOfScheduleTextField.text.length>0 && self.endDate >= [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate])
+    if(self.nameOfScheduleTextField.text!=nil &&  self.nameOfScheduleTextField.text.length>0 && self.passwordTextField.text!= nil && self.passwordTextField.text.length > 0 && self.endDate >= [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate])
     {
         
         enableDoneButton = YES;
@@ -251,6 +267,8 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
+    NSUInteger numCells = [self.dataArray count];
+    if([self hasInlineDatePicker]) numCells++;
     
     if (indexPath.row == 0)
      {
@@ -262,6 +280,24 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
          
          return cell;
      }
+    
+    
+    //EDIT: change password cell to go away if they pick public
+    else if(indexPath.row == numCells-2){ // 2nd last row (privacy)
+        PrivacyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kPrivacyCellID forIndexPath:indexPath];
+        NSDictionary *itemData = self.dataArray[numCells-2];
+
+        cell.statusLabel.text = [itemData valueForKey:kStatusKey];
+        return cell;
+        
+    }
+    else if (indexPath.row == numCells-1){ //last row (password)
+        //password cell is same form as name of schedule cell (change name to be more general)
+        PasswordTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kPasswordCellID forIndexPath:indexPath];
+        cell.passwordLabel.text = @"Password: ";
+        self.passwordTextField = cell.passwordTextField;
+        return cell;
+    }
     UITableViewCell *cell = nil;
     
     NSString *cellID = kDateCellID;
@@ -524,43 +560,29 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
     }
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+- (IBAction)privacyChanged:(id)sender {
+    UISwitch *s = (UISwitch *)sender;
+    NSUInteger row = [self hasInlineDatePicker] ? self.dataArray.count-1: self.dataArray.count-2;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+    PrivacyTableViewCell *cell = (PrivacyTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
+    NSMutableDictionary *itemData = self.dataArray[4];
+    
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+    if(s.on == YES){
+        self.private = YES;
+        [itemData setValue:@"Private" forKey:kStatusKey];//unnecessary
+        cell.statusLabel.text = @"Private";
+        
+    }
+    else{
+        self.private = NO;
+        [itemData setValue:@"Public" forKey:kStatusKey];//unnecessary
+        cell.statusLabel.text = @"Public";
+    }
+    
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
 }
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 
 #pragma mark - Navigation
@@ -572,10 +594,14 @@ static NSString *kNameCellID = @"nameCell";     // the remaining cells at the en
     // Pass the selected object to the new view controller.
     
     
-    
-    Schedule *scheduleToAdd = [[Schedule alloc]initWithName:self.nameOfScheduleTextField.text startDate:self.startDate endDate:self.endDate];
-    MySchedulesTableViewController *mstvc = [segue destinationViewController];
-    mstvc.scheduleToAdd = scheduleToAdd;
+    if(sender == self.doneButton){
+        Schedule *scheduleToAdd = [[Schedule alloc]initWithName:self.nameOfScheduleTextField.text startDate:self.startDate endDate:self.endDate];
+        scheduleToAdd.privacy = self.private ? kPrivacyValuePrivate: kPrivacyValuePublic; ;
+        if(self.private) scheduleToAdd.password = self.passwordTextField.text; //add this to init
+        scheduleToAdd.homeGameIndex = self.homeGameIndex;
+        MySchedulesTableViewController *mstvc = [segue destinationViewController];
+        mstvc.scheduleToAdd = scheduleToAdd;
+    }
     
 
 }

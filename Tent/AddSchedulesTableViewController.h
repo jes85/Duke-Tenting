@@ -10,4 +10,5 @@
 
 @interface AddSchedulesTableViewController : UITableViewController
 
+@property (nonatomic) NSUInteger homeGameIndex;
 @end

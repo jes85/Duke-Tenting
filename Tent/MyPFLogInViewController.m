@@ -28,7 +28,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+
     //[self.logInView setBackgroundColor:[UIColor blueColor]];
     [self.logInView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"DukeBlueBG"]]];
     [self.logInView setLogo: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Krzyzewskiville"]]];
@@ -53,7 +53,7 @@
     [self.logInView.logo setFrame:CGRectMake(66.5f, 70.0f, 187.0f, 78.5f)];
     [self.logInView.usernameField setFrame:CGRectMake(35.0f, 185.0f, 250.0f, 50.0f)];
     [self.logInView.passwordField setFrame:CGRectMake(35.0f, 235.0f, 250.0f, 50.0f)];
-     [self.fieldsBackground setFrame:CGRectMake(35.0f, 185.0f, 250.0f, 100.0f)];
+    [self.fieldsBackground setFrame:CGRectMake(35.0f, 185.0f, 250.0f, 100.0f)];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -61,6 +61,9 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
 /*
 #pragma mark - Navigation
 

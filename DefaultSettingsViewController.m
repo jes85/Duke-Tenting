@@ -12,6 +12,25 @@
 #import "MySchedulesTableViewController.h"
 #import "Schedule.h"
 
+
+#define kPersonClassName    @"Person"
+#define kScheduleClassName  @"Schedule"
+
+#define kSchedulePropertyName                   @"name"
+#define kSchedulePropertyStartDate              @"startDate"
+#define kSchedulePropertyEndDate                @"endDate"
+#define kSchedulePropertyAvailabilitiesSchedule @"availabilitiesSchedule"
+#define kSchedulePropertyAssignmentsSchedule    @"assignmentsSchedule"
+#define kSchedulePropertyNumHourIntervals       @"numHourIntervals"
+#define kSchedulePropertyPrivacy                @"privacy"
+#define kSchedulePropertyPassword               @"password"
+#define kSchedulePropertyHomeGameIndex          @"homeGameIndex"
+
+
+#define kPrivacyValuePrivate                    @"private"
+#define kPrivacyValuePublic                     @"public"
+
+#define kUserPropertySchedulesList              @"schedulesList"
 @interface DefaultSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *label;
 @property (weak, nonatomic) IBOutlet UIButton *continueButton;
@@ -46,20 +65,23 @@
             self.PFSchedules = schedules;
             [self convertPFSchedulesToSchedules];
         }*/
-        PFRelation *relation = [[PFUser currentUser] relationForKey:@"schedulesList"];
+        PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertySchedulesList];
         PFQuery *query = [relation query];
         [query findObjectsInBackgroundWithBlock:^(NSArray *schedulesForThisUser, NSError *error) {
             self.schedules = nil;
             if(!error){
             for(PFObject *schedule in schedulesForThisUser){
-                NSString *name = schedule[@"name"];
-                NSMutableArray *availabilitiesSchedule = schedule[@"availabilitiesSchedule"];
-                NSMutableArray *assignmentsSchedule = schedule[@"assignmentsSchedule"];
-                NSDate *startDate = schedule[@"startDate"];
-                NSDate *endDate = schedule[@"endDate"];
-                NSUInteger numHourIntervals = [schedule[@"numHourIntervals"] integerValue];
+                NSString *name = schedule[kSchedulePropertyName];
+                NSMutableArray *availabilitiesSchedule = schedule[kSchedulePropertyAvailabilitiesSchedule];
+                NSMutableArray *assignmentsSchedule = schedule[kSchedulePropertyAssignmentsSchedule];
+                NSDate *startDate = schedule[kSchedulePropertyStartDate];
+                NSDate *endDate = schedule[kSchedulePropertyEndDate];
+                NSUInteger numHourIntervals = [schedule[kSchedulePropertyNumHourIntervals ] integerValue];
+                NSString *privacy = schedule[kSchedulePropertyPrivacy];
+                NSString *password = schedule[kSchedulePropertyPassword];
+                NSUInteger homeGameIndex = [schedule[kSchedulePropertyHomeGameIndex] integerValue];
                 
-                Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate] ;
+                Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex] ;
                 
                 [self.schedules addObject:schedule];
             }
@@ -81,14 +103,18 @@
 {
     self.schedules = nil;
     for(PFObject *schedule in self.PFSchedules){
-        NSString *name = schedule[@"name"];
-        NSMutableArray *availabilitiesSchedule = schedule[@"availabilitiesSchedule"];
-        NSMutableArray *assignmentsSchedule = schedule[@"assignmentsSchedule"];
-        NSDate *startDate = schedule[@"startDate"];
-        NSDate *endDate = schedule[@"endDate"];
-        NSUInteger numHourIntervals = [schedule[@"numHourIntervals"] integerValue];
+        NSString *name = schedule[kSchedulePropertyName];
+        NSMutableArray *availabilitiesSchedule = schedule[kSchedulePropertyAvailabilitiesSchedule];
+        NSMutableArray *assignmentsSchedule = schedule[kSchedulePropertyAssignmentsSchedule];
+        NSDate *startDate = schedule[kSchedulePropertyStartDate];
+        NSDate *endDate = schedule[kSchedulePropertyEndDate];
+        NSUInteger numHourIntervals = [schedule[kSchedulePropertyNumHourIntervals ] integerValue];
+        NSString *privacy = schedule[kSchedulePropertyPrivacy];
+        NSString *password = schedule[kSchedulePropertyPassword];
+        NSUInteger homeGameIndex = [schedule[kSchedulePropertyHomeGameIndex] integerValue];
+
         
-        Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate] ;
+        Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex] ;
         
         [self.schedules addObject:schedule];
     }
@@ -99,11 +125,13 @@
 {
     // Create the log in view controller
     MyPFLogInViewController *logInViewController = [[MyPFLogInViewController alloc]init];
+    logInViewController.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsSignUpButton | PFLogInFieldsPasswordForgotten;
+
     [logInViewController setDelegate:self]; //set this class as the logInViewController's delegate
     
     // Create the sign up view controller
     MyPFSignUpViewController *signUpViewController = [[MyPFSignUpViewController alloc]init];
-    signUpViewController.fields = PFSignUpFieldsUsernameAndPassword;
+    signUpViewController.fields = PFSignUpFieldsDefault | PFSignUpFieldsAdditional;//can you do more than 1 additional?
     [signUpViewController setDelegate:self]; //set this class as the signUpViewController's delegate
     
     // Assign our sign up controller to be displayed from the login controller
@@ -205,6 +233,9 @@
     [self displayLoginAndSignUpViews];
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
  #pragma mark - Navigation
  
  // In a storyboard-based application, you will often want to do a little preparation before navigation

@@ -14,6 +14,32 @@
 
 #import "Interval.h"
 
+#define kPersonClassName                    @"Person"
+
+#define kPersonPropertyName                 @"name"
+#define kPersonPropertyIndex                @"index"
+#define kPersonPropertyAvailabilitiesArray  @"availabilitiesArray"
+#define kPersonPropertyAssignmentsArray     @"assignmentsArray"
+#define kPersonPropertyAssociatedSchedule   @"associatedSchedule"
+
+#define kScheduleClassName  @"Schedule"
+
+#define kSchedulePropertyName                   @"name"
+#define kSchedulePropertyStartDate              @"startDate"
+#define kSchedulePropertyEndDate                @"endDate"
+#define kSchedulePropertyAvailabilitiesSchedule @"availabilitiesSchedule"
+#define kSchedulePropertyAssignmentsSchedule    @"assignmentsSchedule"
+#define kSchedulePropertyNumHourIntervals       @"numHourIntervals"
+#define kSchedulePropertyPrivacy                @"privacy"
+#define kSchedulePropertyPassword               @"password"
+#define kSchedulePropertyHomeGameIndex          @"homeGameIndex"
+#define kSchedulePropertyCreatedBy              @"createdBy" //be careful of strong reference cycle
+#define kSchedulePropertyPersonsList            @"personsList"
+
+#define kPrivacyValuePrivate                    @"private"
+#define kPrivacyValuePublic                     @"public"
+
+#define kUserPropertySchedulesList              @"schedulesList"
 
 @interface PickPersonTableViewController ()
 
@@ -82,11 +108,11 @@
     [self.tableView reloadData];
     
     // Update person and schedule online
-    PFObject *personObject = [PFObject objectWithClassName:@"Person"];
-    personObject[@"name"] = newPerson.name;
-    personObject[@"index"] = [NSNumber numberWithInteger:newPerson.indexOfPerson];
-    personObject[@"availabilitiesArray"] = newPerson.availabilitiesArray;
-    personObject[@"assignmentsArray"] = newPerson.assignmentsArray;
+    PFObject *personObject = [PFObject objectWithClassName:kPersonClassName];
+    personObject[kPersonPropertyName] = newPerson.name;
+    personObject[kPersonPropertyIndex] = [NSNumber numberWithInteger:newPerson.indexOfPerson];
+    personObject[kPersonPropertyAvailabilitiesArray] = newPerson.availabilitiesArray;
+    personObject[kPersonPropertyAssignmentsArray] = newPerson.assignmentsArray;
     
     personObject[@"scheduleName"] = self.schedule.name;
     [personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -102,26 +128,26 @@
     }];*/
     
     //query for schedule and update
-    PFQuery *query = [PFQuery queryWithClassName:@"Schedule"];
+    PFQuery *query = [PFQuery queryWithClassName:kScheduleClassName];
     
-    [query whereKey:@"name" equalTo:self.schedule.name];
+    [query whereKey:kPersonPropertyName equalTo:self.schedule.name];
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *parseSchedule, NSError *error) {
         if(!parseSchedule){
             NSLog(@"Error retrieving schedule from Parse");
         }else {
             NSLog(@"Find succeeded to add new person to schedule's 2d arrays");
-            NSMutableArray *availabilitiesSchedule =  parseSchedule[@"availabilitiesSchedule"];
+            NSMutableArray *availabilitiesSchedule =  parseSchedule[kSchedulePropertyAvailabilitiesSchedule];
             [availabilitiesSchedule addObject:newPerson.availabilitiesArray];
           
-            parseSchedule[@"availabilitiesSchedule"]= availabilitiesSchedule;
+            parseSchedule[kSchedulePropertyAvailabilitiesSchedule]= availabilitiesSchedule;
            
             
-            NSMutableArray *assignmentsSchedule = parseSchedule[@"assignmentsSchedule"];
+            NSMutableArray *assignmentsSchedule = parseSchedule[kSchedulePropertyAssignmentsSchedule];
             [assignmentsSchedule addObject:newPerson.assignmentsArray];
-            parseSchedule[@"assignmentsSchedule"]= assignmentsSchedule;
+            parseSchedule[kSchedulePropertyAssignmentsSchedule]= assignmentsSchedule;
             
             
-            PFRelation *relation = [parseSchedule relationForKey:@"personsList"];
+            PFRelation *relation = [parseSchedule relationForKey:kSchedulePropertyPersonsList];
             [relation addObject:personObject];
             
             [parseSchedule saveInBackground];

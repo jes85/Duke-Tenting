@@ -11,6 +11,7 @@
 @interface IntervalTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *assignedOrAvailableLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
 
 
 @end

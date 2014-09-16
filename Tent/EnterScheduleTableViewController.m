@@ -89,7 +89,8 @@
    
     NSString *interval = self.hourIntervalsDisplayArray[indexPath.row];
     cell.textLabel.text = interval;
-         //cell.imageView.image =[UIImage imageNamed:@"Image1"];
+   
+    
 //cell.imageView addConstraint:<#(NSLayoutConstraint *)#>
     
     if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
@@ -98,9 +99,11 @@
         //[cell setSelected:YES];
         // cell.selectionStyle = UITableViewCellSelectionStyleBlue;
         //[cell setBackgroundColor:[UIColor colorWithHue:0.4 saturation:1.0 brightness:0.5 alpha:1.0]];
-        cell.accessoryType =UITableViewCellAccessoryCheckmark;
+        //cell.accessoryType =UITableViewCellAccessoryCheckmark;
         cell.assignedOrAvailableLabel.text = @"(Assigned)";
-        
+        cell.iconImageView.image =[UIImage imageNamed:@"GreenCircle"];
+        cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:0 green:.3 blue:0 alpha:1.0];
+       // cell.assignedOrAvailableLabel.textColor = [UIColor greenColor];
         //[cell.contentView setBackgroundColor:[UIColor greenColor]];
         // [cell setOpaque:NO];
         
@@ -108,22 +111,30 @@
     }
 
     else if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]) {
-        cell.accessoryType =UITableViewCellAccessoryNone;
+        //cell.accessoryType =UITableViewCellAccessoryNone;
         cell.assignedOrAvailableLabel.text = @"(Available)";
+        cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
+        cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
+        //cell.assignedOrAvailableLabel.textColor = [UIColor yellowColor];
         //[cell.contentView setBackgroundColor:[UIColor blueColor]];
         //[cell setOpaque:NO];
 
         
     }
     else {
-        cell.accessoryType =UITableViewCellAccessoryNone;
+        //cell.accessoryType =UITableViewCellAccessoryNone;
+        
+        
         cell.assignedOrAvailableLabel.text = @"";
+        cell.iconImageView.image =[UIImage imageNamed:@"RedX"];
+        cell.assignedOrAvailableLabel.textColor = [UIColor redColor];
     }
     
     
     
     
     [cell.contentView addSubview:cell.assignedOrAvailableLabel]; //I don't think I should have to do this because I did it in a storyboards. I think I didn't connect the outlets correctly
+    [cell.contentView addSubview:cell.iconImageView];
     
     return cell;
 }
@@ -215,8 +226,16 @@
     if([cell.assignedOrAvailableLabel.text isEqual:@""]){
         //Change checkmark
         //Save data in updatedAvailabilities array (will save/ignore this in Done/Cancel button action later)
-        //cell.accessoryType =UITableViewCellAccessoryCheckmark;
+        
+        self.updatedAvailabilitiesArray[indexPath.row] = @1;
+        
         cell.assignedOrAvailableLabel.text = @"(Available)";
+        cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
+        cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
+        
+        
+        //old stuff
+        //cell.accessoryType =UITableViewCellAccessoryCheckmark;
         //[cell.contentView setBackgroundColor:[UIColor blueColor]];
         //[cell setOpaque:NO];
 
@@ -224,7 +243,7 @@
         
         
         
-        self.updatedAvailabilitiesArray[indexPath.row] = @1;
+        
         
         
         
@@ -232,9 +251,15 @@
         
     }
     else {
-        cell.accessoryType = UITableViewCellAccessoryNone;
         self.updatedAvailabilitiesArray[indexPath.row] = @0;
+        
         cell.assignedOrAvailableLabel.text = @"";
+        cell.iconImageView.image =[UIImage imageNamed:@"RedX"];
+        cell.assignedOrAvailableLabel.textColor = [UIColor redColor];
+        
+        
+        //old stuff
+        //cell.accessoryType = UITableViewCellAccessoryNone;
         //[cell.contentView setBackgroundColor:[UIColor whiteColor]];
         //[cell setOpaque:NO];
     }
