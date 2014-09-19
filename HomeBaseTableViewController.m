@@ -13,26 +13,7 @@
 #import "Schedule.h"
 #import "Interval.h"
 #import "GenerateScheduleViewController.h"
-
-
-#define kPersonClassName    @"Person"
-#define kScheduleClassName  @"Schedule"
-
-#define kSchedulePropertyName                   @"name"
-#define kSchedulePropertyStartDate              @"startDate"
-#define kSchedulePropertyEndDate                @"endDate"
-#define kSchedulePropertyAvailabilitiesSchedule @"availabilitiesSchedule"
-#define kSchedulePropertyAssignmentsSchedule    @"assignmentsSchedule"
-#define kSchedulePropertyNumHourIntervals       @"numHourIntervals"
-#define kSchedulePropertyPrivacy                @"privacy"
-#define kSchedulePropertyPassword               @"password"
-#define kSchedulePropertyHomeGameIndex          @"homeGameIndex"
-
-
-#define kPrivacyValuePrivate                    @"private"
-#define kPrivacyValuePublic                     @"public"
-
-#define kUserPropertySchedulesList              @"schedulesList"
+#import "Constants.h"
 
 @interface HomeBaseTableViewController () <GenerateScheduleViewControllerDelegate>
 

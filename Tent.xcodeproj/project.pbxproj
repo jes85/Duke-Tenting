@@ -58,7 +58,7 @@
 		3FEAEB151989B07D00E3218F /* HomeBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FEAEB141989B07D00E3218F /* HomeBaseTableViewController.m */; };
 		3FF4D30F19B4F24500D09EC6 /* ScheduleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF4D30E19B4F24500D09EC6 /* ScheduleTableViewCell.m */; };
 		3FF75E9119985BBB005D7857 /* MySchedulesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */; };
-		3FF75E9419985DF2005D7857 /* AddSchedulesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF75E9319985DF2005D7857 /* AddSchedulesTableViewController.m */; };
+		3FF75E9419985DF2005D7857 /* CreateScheduleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF75E9319985DF2005D7857 /* CreateScheduleTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -156,8 +156,8 @@
 		3FF4D30E19B4F24500D09EC6 /* ScheduleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScheduleTableViewCell.m; path = ../ScheduleTableViewCell.m; sourceTree = "<group>"; };
 		3FF75E8F19985BBB005D7857 /* MySchedulesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySchedulesTableViewController.h; sourceTree = "<group>"; };
 		3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySchedulesTableViewController.m; sourceTree = "<group>"; };
-		3FF75E9219985DF2005D7857 /* AddSchedulesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSchedulesTableViewController.h; sourceTree = "<group>"; };
-		3FF75E9319985DF2005D7857 /* AddSchedulesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSchedulesTableViewController.m; sourceTree = "<group>"; };
+		3FF75E9219985DF2005D7857 /* CreateScheduleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateScheduleTableViewController.h; sourceTree = "<group>"; };
+		3FF75E9319985DF2005D7857 /* CreateScheduleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateScheduleTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +195,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F26ABB019CCE97F00B74859 /* Current Schedule View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				3FEAEB131989B07D00E3218F /* HomeBaseTableViewController.h */,
+				3FEAEB141989B07D00E3218F /* HomeBaseTableViewController.m */,
+				3FDE355B19809CC400CE47D8 /* PickPersonTableViewController.h */,
+				3FDE355C19809CC400CE47D8 /* PickPersonTableViewController.m */,
+				3FD6963A1996A7DB00D9C5C4 /* AddPersonViewController.h */,
+				3FD6963B1996A7DB00D9C5C4 /* AddPersonViewController.m */,
+				3FDE3558198094C700CE47D8 /* EnterScheduleTableViewController.h */,
+				3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */,
+				3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */,
+				3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */,
+				3F296DB2199131A20059E19E /* PersonsInIntervalTableViewController.h */,
+				3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */,
+				3F439670198364CF00C27E6D /* GenerateScheduleViewController.h */,
+				3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */,
+			);
+			name = "Current Schedule View Controllers";
+			sourceTree = "<group>";
+		};
+		3F44CE6019CCE7E200271D3E /* Adding Schedules */ = {
+			isa = PBXGroup;
+			children = (
+				3FF75E8F19985BBB005D7857 /* MySchedulesTableViewController.h */,
+				3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */,
+				3FCB16C219AE5BAF004E1BF3 /* NewScheduleTableViewController.h */,
+				3FCB16C319AE5BAF004E1BF3 /* NewScheduleTableViewController.m */,
+				3F738C2719B401880089878F /* JoinScheduleTableViewController.h */,
+				3F738C2819B401880089878F /* JoinScheduleTableViewController.m */,
+				3FF75E9219985DF2005D7857 /* CreateScheduleTableViewController.h */,
+				3FF75E9319985DF2005D7857 /* CreateScheduleTableViewController.m */,
+			);
+			name = "Adding Schedules";
+			sourceTree = "<group>";
+		};
 		3F94B854199AA9DA00A2DCF1 /* Previously used classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -253,32 +289,10 @@
 			isa = PBXGroup;
 			children = (
 				3FA6D5191965E7A50043087B /* Main.storyboard */,
-				3FCB16C219AE5BAF004E1BF3 /* NewScheduleTableViewController.h */,
-				3FCB16C319AE5BAF004E1BF3 /* NewScheduleTableViewController.m */,
-				3F738C2719B401880089878F /* JoinScheduleTableViewController.h */,
-				3F738C2819B401880089878F /* JoinScheduleTableViewController.m */,
 				3FC432B619A0579600B560F1 /* Login */,
-				3FF75E8F19985BBB005D7857 /* MySchedulesTableViewController.h */,
-				3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */,
-				3F44CE5D19CCE6A500271D3E /* Constants.h */,
-				3F44CE5E19CCE6A500271D3E /* Constants.m */,
-				3FF75E9219985DF2005D7857 /* AddSchedulesTableViewController.h */,
-				3FF75E9319985DF2005D7857 /* AddSchedulesTableViewController.m */,
+				3F44CE6019CCE7E200271D3E /* Adding Schedules */,
 				3FB42F4D19B2A5220079EDE1 /* Custom Table View Cells */,
-				3FEAEB131989B07D00E3218F /* HomeBaseTableViewController.h */,
-				3FEAEB141989B07D00E3218F /* HomeBaseTableViewController.m */,
-				3FDE355B19809CC400CE47D8 /* PickPersonTableViewController.h */,
-				3FDE355C19809CC400CE47D8 /* PickPersonTableViewController.m */,
-				3FD6963A1996A7DB00D9C5C4 /* AddPersonViewController.h */,
-				3FD6963B1996A7DB00D9C5C4 /* AddPersonViewController.m */,
-				3FDE3558198094C700CE47D8 /* EnterScheduleTableViewController.h */,
-				3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */,
-				3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */,
-				3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */,
-				3F296DB2199131A20059E19E /* PersonsInIntervalTableViewController.h */,
-				3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */,
-				3F439670198364CF00C27E6D /* GenerateScheduleViewController.h */,
-				3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */,
+				3F26ABB019CCE97F00B74859 /* Current Schedule View Controllers */,
 				3FA6D51F1965E7A50043087B /* Images.xcassets */,
 				3FA6D50E1965E7A50043087B /* Supporting Files */,
 				3FA6D5401965E8110043087B /* Model */,
@@ -289,6 +303,8 @@
 		3FA6D50E1965E7A50043087B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3F44CE5D19CCE6A500271D3E /* Constants.h */,
+				3F44CE5E19CCE6A500271D3E /* Constants.m */,
 				3FA6D5161965E7A50043087B /* ScheduleAppDelegate.h */,
 				3FA6D5171965E7A50043087B /* ScheduleAppDelegate.m */,
 				3FA6D50F1965E7A50043087B /* Tent-Info.plist */,
@@ -491,7 +507,7 @@
 				3F616054198DAFD5006EF048 /* EnterScheduleViewController.m in Sources */,
 				3FDE355D19809CC400CE47D8 /* PickPersonTableViewController.m in Sources */,
 				3F87220E19A2627A005F12DD /* AlgorithmTest.m in Sources */,
-				3FF75E9419985DF2005D7857 /* AddSchedulesTableViewController.m in Sources */,
+				3FF75E9419985DF2005D7857 /* CreateScheduleTableViewController.m in Sources */,
 				3FE8449119AFB05000BAFB78 /* HomeGamesTableViewCell.m in Sources */,
 				3F4CA9BB19B2ABD500EA5BDE /* PasswordTableViewCell.m in Sources */,
 				3FD6963C1996A7DB00D9C5C4 /* AddPersonViewController.m in Sources */,

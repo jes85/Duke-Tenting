@@ -11,27 +11,10 @@
 #import "HomeGame.h"
 #import "HomeGamesTableViewCell.h"
 #import "JoinScheduleTableViewController.h"
-#import "AddSchedulesTableViewController.h"
+#import "CreateScheduleTableViewController.h"
 #import <Parse/Parse.h>
+#import "Constants.h"
 
-
-#define kPersonClassName    @"Person"
-#define kScheduleClassName  @"Schedule"
-
-#define kSchedulePropertyName                   @"name"
-#define kSchedulePropertyStartDate              @"startDate"
-#define kSchedulePropertyEndDate                @"endDate"
-#define kSchedulePropertyAvailabilitiesSchedule @"availabilitiesSchedule"
-#define kSchedulePropertyAssignmentsSchedule    @"assignmentsSchedule"
-#define kSchedulePropertyNumHourIntervals       @"numHourIntervals"
-#define kSchedulePropertyPrivacy                @"privacy"
-#define kSchedulePropertyPassword               @"password"
-#define kSchedulePropertyHomeGameIndex          @"homeGameIndex"
-
-#define kPrivacyValuePrivate                    @"private"
-#define kPrivacyValuePublic                     @"public"
-
-#define kUserPropertySchedulesList              @"schedulesList"
 
 static const NSUInteger numHomeGames = 20;
 
@@ -518,7 +501,7 @@ static const NSUInteger numHomeGames = 20;
     }*/
     if([[segue destinationViewController] isKindOfClass:[UINavigationController class]]){
         UINavigationController *nc = [segue destinationViewController];
-        AddSchedulesTableViewController *astvc = nc.childViewControllers[0];
+        CreateScheduleTableViewController *astvc = nc.childViewControllers[0];
         astvc.homeGameIndex = homeGameIndex;
     }
     

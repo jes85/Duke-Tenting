@@ -16,6 +16,7 @@ static NSString *kGenerateScheduleID = @"Generate Schedule";
 static NSString *kClearAssignmentsID = @"Clear Assignments";
 static NSString *kClearAllID = @"Clear All";
 static NSString *kGenerateScheduleFinishedID = @"Success!";
+
 @interface GenerateScheduleViewController ()
 
 @end

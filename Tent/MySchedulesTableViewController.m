@@ -9,39 +9,12 @@
 #import "MySchedulesTableViewController.h"
 #import "Schedule.h"
 #import <Parse/Parse.h>
-#import "AddSchedulesTableViewController.h"
+#import "CreateScheduleTableViewController.h"
 #import "NameOfScheduleTableViewCell.h"
 #import "HomeBaseTableViewController.h"
 #import "NewScheduleTableViewController.h"
+#import "Constants.h"
 
-
-#define kPersonClassName    @"Person"
-
-#define kPersonPropertyName                 @"name"
-#define kPersonPropertyIndex                @"index"
-#define kPersonPropertyAvailabilitiesArray  @"availabilitiesArray"
-#define kPersonPropertyAssignmentsArray     @"assignmentsArray"
-#define kPersonPropertyAssociatedSchedule   @"associatedSchedule"
-
-
-#define kScheduleClassName  @"Schedule"
-
-#define kSchedulePropertyName                   @"name"
-#define kSchedulePropertyStartDate              @"startDate"
-#define kSchedulePropertyEndDate                @"endDate"
-#define kSchedulePropertyAvailabilitiesSchedule @"availabilitiesSchedule"
-#define kSchedulePropertyAssignmentsSchedule    @"assignmentsSchedule"
-#define kSchedulePropertyNumHourIntervals       @"numHourIntervals"
-#define kSchedulePropertyPrivacy                @"privacy"
-#define kSchedulePropertyPassword               @"password"
-#define kSchedulePropertyHomeGameIndex          @"homeGameIndex"
-#define kSchedulePropertyCreatedBy              @"createdBy" //be careful of strong reference cycle
-#define kSchedulePropertyPersonsList            @"personsList"
-
-#define kPrivacyValuePrivate                    @"private"
-#define kPrivacyValuePublic                     @"public"
-
-#define kUserPropertySchedulesList              @"schedulesList"
 @interface MySchedulesTableViewController ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addScheduleButton;
 

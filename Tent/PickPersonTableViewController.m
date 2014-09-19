@@ -11,35 +11,8 @@
 #import "Person.h"
 #import "Schedule.h"
 #import <Parse/Parse.h>
-
 #import "Interval.h"
-
-#define kPersonClassName                    @"Person"
-
-#define kPersonPropertyName                 @"name"
-#define kPersonPropertyIndex                @"index"
-#define kPersonPropertyAvailabilitiesArray  @"availabilitiesArray"
-#define kPersonPropertyAssignmentsArray     @"assignmentsArray"
-#define kPersonPropertyAssociatedSchedule   @"associatedSchedule"
-
-#define kScheduleClassName  @"Schedule"
-
-#define kSchedulePropertyName                   @"name"
-#define kSchedulePropertyStartDate              @"startDate"
-#define kSchedulePropertyEndDate                @"endDate"
-#define kSchedulePropertyAvailabilitiesSchedule @"availabilitiesSchedule"
-#define kSchedulePropertyAssignmentsSchedule    @"assignmentsSchedule"
-#define kSchedulePropertyNumHourIntervals       @"numHourIntervals"
-#define kSchedulePropertyPrivacy                @"privacy"
-#define kSchedulePropertyPassword               @"password"
-#define kSchedulePropertyHomeGameIndex          @"homeGameIndex"
-#define kSchedulePropertyCreatedBy              @"createdBy" //be careful of strong reference cycle
-#define kSchedulePropertyPersonsList            @"personsList"
-
-#define kPrivacyValuePrivate                    @"private"
-#define kPrivacyValuePublic                     @"public"
-
-#define kUserPropertySchedulesList              @"schedulesList"
+#import "Constants.h"
 
 @interface PickPersonTableViewController ()
 

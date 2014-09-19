@@ -1,5 +1,5 @@
 //
-//  AddSchedulesTableViewController.h
+//  CreateScheduleTableViewController.h
 //  Tent
 //
 //  Created by Shrek on 8/10/14.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AddSchedulesTableViewController : UITableViewController
+@interface CreateScheduleTableViewController : UITableViewController
 
 @property (nonatomic) NSUInteger homeGameIndex;
 @end

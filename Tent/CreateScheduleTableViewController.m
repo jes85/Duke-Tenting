@@ -1,12 +1,12 @@
 //
-//  AddSchedulesTableViewController.m
+//  CreateScheduleTableViewController.m
 //  Tent
 //
 //  Created by Shrek on 8/10/14.
 //  Copyright (c) 2014 Jeremy. All rights reserved.
 //
 
-#import "AddSchedulesTableViewController.h"
+#import "CreateScheduleTableViewController.h"
 #import "NameOfScheduleTableViewCell.h"
 #import "PrivacyTableViewCell.h"
 #import "PasswordTableViewCell.h"
@@ -40,7 +40,7 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 #define kPrivacyValuePublic                     @"public"
 
 #pragma mark -
-@interface AddSchedulesTableViewController ()
+@interface CreateScheduleTableViewController ()
 
 @property (nonatomic) BOOL endDateChanged;
 
@@ -69,7 +69,7 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 
 @end
 
-@implementation AddSchedulesTableViewController
+@implementation CreateScheduleTableViewController
 
 
 
