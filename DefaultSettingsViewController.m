@@ -10,48 +10,17 @@
 #import "MyPFLogInViewController.h"
 #import "MyPFSignUpViewController.h"
 #import "MySchedulesTableViewController.h"
-#import "Schedule.h"
 
 
-#define kPersonClassName    @"Person"
-#define kScheduleClassName  @"Schedule"
-
-#define kSchedulePropertyName                   @"name"
-#define kSchedulePropertyStartDate              @"startDate"
-#define kSchedulePropertyEndDate                @"endDate"
-#define kSchedulePropertyAvailabilitiesSchedule @"availabilitiesSchedule"
-#define kSchedulePropertyAssignmentsSchedule    @"assignmentsSchedule"
-#define kSchedulePropertyNumHourIntervals       @"numHourIntervals"
-#define kSchedulePropertyPrivacy                @"privacy"
-#define kSchedulePropertyPassword               @"password"
-#define kSchedulePropertyHomeGameIndex          @"homeGameIndex"
-
-
-#define kPrivacyValuePrivate                    @"private"
-#define kPrivacyValuePublic                     @"public"
-
-#define kUserPropertySchedulesList              @"schedulesList"
 @interface DefaultSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *label;
 @property (weak, nonatomic) IBOutlet UIButton *continueButton;
-@property(nonatomic) NSArray *PFSchedules;
-@property(nonatomic)NSMutableArray *schedules;
-
 
 @end
 
 @implementation DefaultSettingsViewController
 
--(NSArray *)PFSchedules
-{
-    if(!_PFSchedules)_PFSchedules = [[NSArray alloc]init];
-    return _PFSchedules;
-}
--(NSMutableArray *)schedules
-{
-    if(!_schedules)_schedules = [[NSMutableArray alloc]init];
-    return _schedules;
-}
+
 #pragma mark - View Controller Lifecycle
 
 -(void)viewDidAppear:(BOOL)animated
@@ -60,67 +29,12 @@
     PFUser *currentUser = [PFUser currentUser];
     if(currentUser){
         self.label.text = [NSString stringWithFormat:@"Currently logged in as %@.",currentUser.username];
-        /*NSArray *schedules = [currentUser objectForKey:@"schedulesList"];
-        if(schedules){
-            self.PFSchedules = schedules;
-            [self convertPFSchedulesToSchedules];
-        }*/
-        PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertySchedulesList];
-        PFQuery *query = [relation query];
-        [query findObjectsInBackgroundWithBlock:^(NSArray *schedulesForThisUser, NSError *error) {
-            self.schedules = nil;
-            if(!error){
-            for(PFObject *schedule in schedulesForThisUser){
-                NSString *name = schedule[kSchedulePropertyName];
-                NSMutableArray *availabilitiesSchedule = schedule[kSchedulePropertyAvailabilitiesSchedule];
-                NSMutableArray *assignmentsSchedule = schedule[kSchedulePropertyAssignmentsSchedule];
-                NSDate *startDate = schedule[kSchedulePropertyStartDate];
-                NSDate *endDate = schedule[kSchedulePropertyEndDate];
-                NSUInteger numHourIntervals = [schedule[kSchedulePropertyNumHourIntervals ] integerValue];
-                NSString *privacy = schedule[kSchedulePropertyPrivacy];
-                NSString *password = schedule[kSchedulePropertyPassword];
-                NSUInteger homeGameIndex = [schedule[kSchedulePropertyHomeGameIndex] integerValue];
-                
-                Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex] ;
-                
-                [self.schedules addObject:schedule];
-            }
-            }
-            else{
-                NSLog(@"error retrieving user's schedules from parse");
-            }
-
-        }];
-        
-        
-
     }
     else{ //No user logged in
         [self displayLoginAndSignUpViews];
     }
 }
--(void)convertPFSchedulesToSchedules
-{
-    self.schedules = nil;
-    for(PFObject *schedule in self.PFSchedules){
-        NSString *name = schedule[kSchedulePropertyName];
-        NSMutableArray *availabilitiesSchedule = schedule[kSchedulePropertyAvailabilitiesSchedule];
-        NSMutableArray *assignmentsSchedule = schedule[kSchedulePropertyAssignmentsSchedule];
-        NSDate *startDate = schedule[kSchedulePropertyStartDate];
-        NSDate *endDate = schedule[kSchedulePropertyEndDate];
-        NSUInteger numHourIntervals = [schedule[kSchedulePropertyNumHourIntervals ] integerValue];
-        NSString *privacy = schedule[kSchedulePropertyPrivacy];
-        NSString *password = schedule[kSchedulePropertyPassword];
-        NSUInteger homeGameIndex = [schedule[kSchedulePropertyHomeGameIndex] integerValue];
 
-        
-        Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex] ;
-        
-        [self.schedules addObject:schedule];
-    }
-
-    
-}
 -(void)displayLoginAndSignUpViews
 {
     // Create the log in view controller
@@ -236,24 +150,7 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
- #pragma mark - Navigation
  
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
- {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
-     
-     if(sender==self.continueButton){
-         if([segue.identifier isEqualToString:@"Continue As Current User"]){
-             if([[segue destinationViewController] isKindOfClass:[MySchedulesTableViewController class]]){
-                 MySchedulesTableViewController *mstvc = [segue destinationViewController];
-                 //setup
-                 mstvc.schedules = self.schedules;
-             }
-         }
-     }
- }
 
 
 @end

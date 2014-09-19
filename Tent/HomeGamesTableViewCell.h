@@ -22,13 +22,14 @@
 
 @property (nonatomic, weak) id<HomeGameTableViewCellDelegate> delegate;
 
-
 - (IBAction)joinButtonPressed:(id)sender;
 - (IBAction)createButtonPressed:(id)sender;
+
 @end
 
 
 @protocol HomeGameTableViewCellDelegate <NSObject>
 
 -(void)buttonPressed:(UITableViewCell *)cell;
+
 @end

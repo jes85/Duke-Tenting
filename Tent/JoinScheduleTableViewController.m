@@ -20,15 +20,29 @@
 
 #define kWrongPasswordAlertViewTitle            @"Password Incorrect!"
 #define kWrongPasswordAlertViewMessage          @"Please enter the password again."
+
 @interface JoinScheduleTableViewController ()
+
 @property (nonatomic) Schedule *scheduleToJoin;
+
 @end
 
 @implementation JoinScheduleTableViewController
 
+#pragma mark - View Controller Lifecycle
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self getSchedulesAssociatedWithHomeGameIndex];
+
+    
+}
+
+/*!
+ * Query Parse to get all the schedules that have been created for the selected home game
+ */
+-(void)getSchedulesAssociatedWithHomeGameIndex
+{
     
     PFQuery *query = [PFQuery queryWithClassName:kScheduleClassName];
     [query whereKey:kSchedulePropertyHomeGameIndex equalTo:[NSNumber numberWithInteger:self.homeGameIndex ]];
@@ -58,14 +72,11 @@
                 [array addObject:schedule];
                 self.schedulesAssociatedWithThisHomeGame = array;
                 [self.tableView reloadData];
-
+                
             }
         }
     }];
-
-    
 }
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -93,56 +104,31 @@
     cell.nameLabel.text = schedule.name;
     //cell.creatorLabel.text = schedule.creatorName;
     
+    /* If I've already joined one of the schedules, display this one first, distinguish it with a checkmark, and disable the join button on the other schedules
+     
+        if([self.mySchedules containsObject:schedule]) {
+        cell.detailTextLabel.text = @"Joined";
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+     */
+    
     cell.delegate = self;
     
     return cell;
 }
 
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
+/*!
+ * Called when user taps Join button.
+ * Asks user to enter the password if the schedule to join is private
+ */
+#warning - should this be joinButtonPressed?
 -(void)buttonPressed:(UITableViewCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.scheduleToJoin = self.schedulesAssociatedWithThisHomeGame[indexPath.row];
     
     if([self.scheduleToJoin.privacy isEqualToString: @"private"]){
+        
         //UIAlertView for password
         UIAlertView *enterPasswordAlertView = [[UIAlertView alloc]initWithTitle:kEnterPasswordAlertViewTitle message:nil delegate:self cancelButtonTitle:kCancelButtonTitle otherButtonTitles: kEnterButtonTitle, nil];
         
@@ -161,6 +147,7 @@
             NSLog(@"Valid Password!");
             alertView.title = @"Success";
             
+            #warning - Did i not save to parse yet? 
             //save to Parse
             
             //segue

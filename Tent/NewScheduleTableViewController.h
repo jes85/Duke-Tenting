@@ -14,5 +14,8 @@
 
 @property (nonatomic) NSMutableArray *publicSchedules;
 @property (nonatomic) NSMutableArray *mySchedules;
+
+-(IBAction)cancelCreateSchedule:(UIStoryboardSegue *)segue;
+
 @end
 

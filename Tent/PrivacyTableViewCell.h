@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface PrivacyTableViewCell : UITableViewCell
+
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *privacySwitch;

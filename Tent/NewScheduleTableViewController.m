@@ -31,6 +31,17 @@ static const NSUInteger numHomeGames = 20;
 {
     [super viewDidLoad];
     
+    [self loadHomeGameScheduleData];
+    
+    
+}
+
+/*!
+ *  Load Duke Basketball's home game schedule into self.homeGames
+ */
+-(void)loadHomeGameScheduleData
+{
+    
     NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:numHomeGames];
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [[NSDateComponents alloc]init];
@@ -76,7 +87,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame2 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame2 ];
-
+    
     //Davidson Friday Nov. 8, 7pm
     [components setMonth: 11];
     [components setDay:8];
@@ -89,7 +100,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame3 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame3 ];
-
+    
     //Florida Atlantic Friday Nov.15,7 pm
     [components setMonth: 11];
     [components setDay:15];
@@ -102,7 +113,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame4 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame4 ];
-
+    
     //UNC Asheville Monday Nov. 18 7pm
     [components setMonth: 11];
     [components setDay:18];
@@ -115,7 +126,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame5 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame5 ];
-
+    
     //East Carolina/Norfolk State Tuesday Nov. 19 6pm
     [components setMonth: 11];
     [components setDay:19];
@@ -128,7 +139,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame6 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame6 ];
-
+    
     //Vermont Sunday Nov. 24 6:30 pm
     [components setMonth: 11];
     [components setDay:24];
@@ -142,7 +153,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame7 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame7 ];
-
+    
     //Michigan Tuesday Dec. 3 9:15 pm
     [components setMonth: 12];
     [components setDay:3];
@@ -156,7 +167,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame8 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame8 ];
-
+    
     //Gardner-Webb Monday Dec. 16 7 pm
     [components setMonth: 12];
     [components setDay:16];
@@ -169,7 +180,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame9 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame9 ];
-
+    
     //Eastern Michigan Saturday Dec 28 2pm
     [components setMonth: 12];
     [components setDay:28];
@@ -182,7 +193,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame10 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame10 ];
-
+    
     //Georgia Tech Tuesday Jan. 7, 7 pm
     [components setMonth: 1];
     [components setDay:7];
@@ -196,7 +207,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame11 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame11 ];
-
+    
     //Virginia Monday Jan. 13, 7 pm
     [components setMonth: 1];
     [components setDay:13];
@@ -210,7 +221,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame12 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame12 ];
-
+    
     //NC State Saturday Jan 18, 2pm
     [components setMonth: 1];
     [components setDay:18];
@@ -224,7 +235,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame13 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame13 ];
-
+    
     //FLorida State Saturday Jan 25, 12 pm
     [components setMonth: 1];
     [components setDay:25];
@@ -238,7 +249,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame14 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame14 ];
-
+    
     // Wake Forest Tuesday Feb. 4, 9 pm
     [components setMonth: 2];
     [components setDay:4];
@@ -252,7 +263,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame15 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame15 ];
-
+    
     //Maryland Saturday Feb 15, 6 pm
     [components setMonth: 2];
     [components setDay:15];
@@ -267,7 +278,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame16 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame16 ];
-
+    
     //Syracuse Saturday Feb. 22, 7pm
     [components setMonth: 2];
     [components setDay:22];
@@ -281,7 +292,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame17 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame17 ];
-
+    
     //Virginia Tech Tuesday Feb. 25, 7pm
     [components setMonth: 2];
     [components setDay:25];
@@ -295,7 +306,7 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame18 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame18 ];
-
+    
     //North Carolina Saturday Mar. 8, 9pm
     [components setMonth: 3];
     [components setDay:8];
@@ -309,10 +320,9 @@ static const NSUInteger numHomeGames = 20;
     
     HomeGame *homeGame19 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame19 ];
-
+    
     
     self.homeGames = [homeGamesTemp copy];
-    
 }
 #pragma mark - Table view data source
 
@@ -326,7 +336,6 @@ static const NSUInteger numHomeGames = 20;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    //return [self.publicSchedules count];
     return [self.homeGames count];
 }
 
@@ -336,7 +345,6 @@ static const NSUInteger numHomeGames = 20;
    HomeGamesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"New Schedule" forIndexPath:indexPath];
     
     // Configure the cell...
-    
     HomeGame *homeGame = self.homeGames[indexPath.row];
     
     
@@ -367,16 +375,6 @@ static const NSUInteger numHomeGames = 20;
     
     
     
-    /*next view controller
-    Schedule *schedule = self.publicSchedules[indexPath.row];
-    
-    cell.textLabel.text = schedule.name;
-    
-    if([self.mySchedules containsObject:schedule]) {
-        cell.detailTextLabel.text = @"Joined";
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    }
-    */
     
     //configure join button
     cell.delegate = self;
@@ -384,45 +382,11 @@ static const NSUInteger numHomeGames = 20;
     return cell;
 }
 
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
+/*!
+ * Either the create or join schedule button was pressed. 
+ * Save the indexPath.row of the cell that was pressed in self.selectedIndexPathRow.
+ * Will determine if user pressed "Create" or "Join" in prepareForSegue
+ */
 -(void)buttonPressed:(UITableViewCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -430,40 +394,11 @@ static const NSUInteger numHomeGames = 20;
     
 }
 
--(NSArray *)getSchedulesAssociatedWithHomeGameIndex:(NSUInteger)homeGameIndex
-{
-    __block NSMutableArray *schedulesAssociatedWithThisHomeGame = [[NSMutableArray alloc]init];
-    PFQuery *query = [PFQuery queryWithClassName:kScheduleClassName];
-    [query whereKey:kSchedulePropertyHomeGameIndex equalTo:[NSNumber numberWithInteger:homeGameIndex ]];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *schedules, NSError *error) {
-        if(!schedules){
-            NSLog(@"Find failed");
-        }else if ([schedules count]<1){
-            NSLog(@"No schedules associated with home game index %lu in Parse", (unsigned long)homeGameIndex);
-        }else{
-            NSLog(@"Find schedules associated with home game index %lu succeeded", (unsigned long)homeGameIndex);
-            for(PFObject *schedule in schedules){
-                NSString *name = schedule[kSchedulePropertyName];
-                NSMutableArray *availabilitiesSchedule = schedule[kSchedulePropertyAvailabilitiesSchedule];
-                NSMutableArray *assignmentsSchedule = schedule[kSchedulePropertyAssignmentsSchedule];
-                NSDate *startDate = schedule[kSchedulePropertyStartDate];
-                NSDate *endDate = schedule[kSchedulePropertyEndDate];
-                NSUInteger numHourIntervals = [schedule[kSchedulePropertyNumHourIntervals ] integerValue];
-                NSString *privacy = schedule[kSchedulePropertyPrivacy];
-                NSString *password = schedule[kSchedulePropertyPassword];
-                NSUInteger homeGameIndex = [schedule[kSchedulePropertyHomeGameIndex] integerValue];
-                
-                Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex] ;
-                
-                [schedulesAssociatedWithThisHomeGame addObject:schedule];
-            }
-            
-        }
-    }];
-    
-    return schedulesAssociatedWithThisHomeGame;
-}
 
+-(IBAction)cancelCreateSchedule:(UIStoryboardSegue *)segue
+{
+    
+}
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -472,33 +407,18 @@ static const NSUInteger numHomeGames = 20;
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
-     //NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-    
-    
     NSUInteger homeGameIndex = self.selectedIndexPathRow;
-    HomeGame *homeGame = self.homeGames[homeGameIndex];
+    HomeGame *homeGame = self.homeGames[self.selectedIndexPathRow];
 
     if([[segue destinationViewController] isKindOfClass:[JoinScheduleTableViewController class]]){
         JoinScheduleTableViewController *jstvc = [segue destinationViewController];
         
         
             jstvc.navigationItem.title = homeGame.opponentName;
-            
-            /*
-            NSArray *schedulesAssociatedWithThisHomeGame = [self getSchedulesAssociatedWithHomeGameIndex:homeGameIndex];
-            jstvc.schedulesAssociatedWithThisHomeGame = schedulesAssociatedWithThisHomeGame;*/
-        
-        jstvc.homeGameIndex = homeGameIndex;
+            jstvc.homeGameIndex = homeGameIndex;
         
     }
 
-    //this doesn't work because it's a modal segue and the destination view controller is a navigation controller and not addschedules
-    /*if([[segue destinationViewController] isKindOfClass:[AddSchedulesTableViewController class]]){
-        AddSchedulesTableViewController *astvc = [segue destinationViewController];
-        
-            astvc.homeGameIndex = homeGameIndex;
-        
-    }*/
     if([[segue destinationViewController] isKindOfClass:[UINavigationController class]]){
         UINavigationController *nc = [segue destinationViewController];
         CreateScheduleTableViewController *astvc = nc.childViewControllers[0];

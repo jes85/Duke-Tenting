@@ -2,7 +2,7 @@
 //  CreateScheduleTableViewController.m
 //  Tent
 //
-//  Created by Shrek on 8/10/14.
+//  Created by Jeremy on 8/10/14.
 //  Copyright (c) 2014 Jeremy. All rights reserved.
 //
 

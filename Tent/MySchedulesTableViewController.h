@@ -2,11 +2,13 @@
 //  MySchedulesTableViewController.h
 //  Tent
 //
-//  Created by Shrek on 8/10/14.
+//  Created by Jeremy on 8/10/14.
 //  Copyright (c) 2014 Jeremy. All rights reserved.
 //
-@class Schedule;
+
 #import <UIKit/UIKit.h>
+
+@class Schedule;
 
 @interface MySchedulesTableViewController : UITableViewController
 
@@ -14,9 +16,9 @@
 @property (nonatomic) Schedule *scheduleToAdd;
 @property (nonatomic) Schedule *scheduleToJoin;
 
--(IBAction)addSchedule:(UIStoryboardSegue *)segue;
--(IBAction)cancelAddSchedule:(UIStoryboardSegue *)segue;
 
-
+// Unwind Segues
+-(IBAction)createSchedule:(UIStoryboardSegue *)segue;
 -(IBAction)joinedSchedule:(UIStoryboardSegue *)segue;
+
 @end

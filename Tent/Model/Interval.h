@@ -2,7 +2,7 @@
 //  Interval.h
 //  Tent
 //
-//  Created by Shrek on 8/4/14.
+//  Created by Jeremy on 8/4/14.
 //  Copyright (c) 2014 Jeremy. All rights reserved.
 //
 

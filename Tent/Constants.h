@@ -16,7 +16,7 @@
 #define kPersonPropertyIndex                @"index"
 #define kPersonPropertyAvailabilitiesArray  @"availabilitiesArray"
 #define kPersonPropertyAssignmentsArray     @"assignmentsArray"
-#define kPersonPropertyAssociatedSchedule   @"associatedSchedule"
+#define kPersonPropertyAssociatedSchedule   @"associatedSchedule" //or schedule name?
 
 
 #define kScheduleClassName  @"Schedule"
@@ -37,5 +37,7 @@
 #define kPrivacyValuePublic                     @"public"
 
 #define kUserPropertySchedulesList              @"schedulesList"
+
+#define kUserPropertyFullName                   @"additional"
 
 @end
