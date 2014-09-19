@@ -283,10 +283,10 @@
             </objects>
             <point key="canvasLocation" x="-1577" y="-632"/>
         </scene>
-        <!--Add Schedules Table View Controller - Create Schedule-->
+        <!--Create Schedule Table View Controller - Create Schedule-->
         <scene sceneID="rqv-ou-ep7">
             <objects>
-                <tableViewController id="rsk-Jd-lrE" customClass="AddSchedulesTableViewController" sceneMemberID="viewController">
+                <tableViewController id="rsk-Jd-lrE" customClass="CreateScheduleTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="qoz-kX-r3z">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
