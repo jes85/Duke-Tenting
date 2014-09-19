@@ -20,6 +20,7 @@
 		3F28B37019C7A214006E9C97 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F28B36F19C7A214006E9C97 /* Parse.framework */; };
 		3F296DB4199131A20059E19E /* PersonsInIntervalTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */; };
 		3F439672198364CF00C27E6D /* GenerateScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */; };
+		3F44CE5F19CCE6A500271D3E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F44CE5E19CCE6A500271D3E /* Constants.m */; };
 		3F4CA9BB19B2ABD500EA5BDE /* PasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4CA9BA19B2ABD500EA5BDE /* PasswordTableViewCell.m */; };
 		3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F616050198DA61E006EF048 /* IntervalTableViewCell.m */; };
 		3F616054198DAFD5006EF048 /* EnterScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F616053198DAFD5006EF048 /* EnterScheduleViewController.m */; };
@@ -88,6 +89,8 @@
 		3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonsInIntervalTableViewController.m; sourceTree = "<group>"; };
 		3F439670198364CF00C27E6D /* GenerateScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenerateScheduleViewController.h; sourceTree = "<group>"; };
 		3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenerateScheduleViewController.m; sourceTree = "<group>"; };
+		3F44CE5D19CCE6A500271D3E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		3F44CE5E19CCE6A500271D3E /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		3F4CA9B919B2ABD500EA5BDE /* PasswordTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasswordTableViewCell.h; sourceTree = "<group>"; };
 		3F4CA9BA19B2ABD500EA5BDE /* PasswordTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordTableViewCell.m; sourceTree = "<group>"; };
 		3F61604F198DA61E006EF048 /* IntervalTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntervalTableViewCell.h; sourceTree = "<group>"; };
@@ -257,6 +260,8 @@
 				3FC432B619A0579600B560F1 /* Login */,
 				3FF75E8F19985BBB005D7857 /* MySchedulesTableViewController.h */,
 				3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */,
+				3F44CE5D19CCE6A500271D3E /* Constants.h */,
+				3F44CE5E19CCE6A500271D3E /* Constants.m */,
 				3FF75E9219985DF2005D7857 /* AddSchedulesTableViewController.h */,
 				3FF75E9319985DF2005D7857 /* AddSchedulesTableViewController.m */,
 				3FB42F4D19B2A5220079EDE1 /* Custom Table View Cells */,
@@ -465,6 +470,7 @@
 				3FEAEB151989B07D00E3218F /* HomeBaseTableViewController.m in Sources */,
 				3F71811F199D117200737662 /* DefaultSettingsViewController.m in Sources */,
 				3F738C2919B401880089878F /* JoinScheduleTableViewController.m in Sources */,
+				3F44CE5F19CCE6A500271D3E /* Constants.m in Sources */,
 				3FB42F5019B2A54B0079EDE1 /* PrivacyTableViewCell.m in Sources */,
 				3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */,
 				3FC432B919A0581A00B560F1 /* MyPFLogInViewController.m in Sources */,

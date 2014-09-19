@@ -255,7 +255,7 @@
             
             
             PFObject *personObject = [PFObject objectWithClassName:kPersonClassName];
-            personObject[kPersonPropertyName] = [PFUser currentUser].username;//change to first name
+            personObject[kPersonPropertyName] = [[PFUser currentUser] objectForKey:@"additional"];//change to first name
             personObject[kPersonPropertyIndex] = [NSNumber numberWithInteger:[availabilitiesSchedule count]];
             personObject[kPersonPropertyAvailabilitiesArray] = zeroesArray;
             personObject[kPersonPropertyAssignmentsArray] = zeroesArray;
