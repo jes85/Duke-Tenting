@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Schedule.h"
+
 @interface HomeBaseTableViewController : UITableViewController
 
 @property (nonatomic) Schedule *schedule;

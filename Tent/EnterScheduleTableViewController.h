@@ -13,7 +13,7 @@
 
 
 @property (nonatomic)NSArray *hourIntervalsDisplayArray;
-@property (nonatomic) NSMutableArray *intervalArray; //Interval[]
+@property (nonatomic) NSMutableArray *intervalArray; //array of custom object Interval
 @property(nonatomic, weak) Person *currentPerson;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;

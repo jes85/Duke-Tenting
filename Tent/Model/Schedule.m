@@ -83,16 +83,6 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 }
 -(NSMutableArray *) assignmentsSchedule
 {
-    /*if(!_assignmentsSchedule){
-        _assignmentsSchedule = [[NSMutableArray alloc]initWithCapacity:self.numPeople];
-        for(int p = 0; p<self.numPeople;p++){
-            NSMutableArray *peopleAssignInterval = [[NSMutableArray alloc]initWithCapacity:self.numIntervals];
-            for(int i = 0; i <self.numIntervals;i++){
-                [peopleAssignInterval addObject:@0];
-            }
-            [_assignmentsSchedule addObject:peopleAssignInterval];
-        }
-    }*/
     if(!_assignmentsSchedule) _assignmentsSchedule = [[NSMutableArray alloc]init];
     return _assignmentsSchedule;
 }
@@ -123,7 +113,6 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 -(NSMutableArray *)createZeroedIntervalArray
 {
     NSMutableArray *intervalArray = [[NSMutableArray alloc]init];
-    //NSLog(@"%lu", (unsigned long)self.numHourIntervals);
     for(int i = 0;i<self.numHourIntervals;i++){
         Interval *interval = [[Interval alloc]init];
         [intervalArray addObject:interval];
@@ -131,6 +120,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
    
     return intervalArray;
 }
+
 -(void)createIntervalDisplayArray
 {
     NSDate *beginningHourDate = [self.startDate copy];
@@ -139,19 +129,16 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     NSMutableArray *array = [[NSMutableArray alloc]init];
     
     for(int i = 0; i<self.numHourIntervals;i++){
-        // NSLog(@"Test %d", self.schedule.numHourIntervals);
         NSString *beginningHourString = [NSDateFormatter localizedStringFromDate:beginningHourDate dateStyle:0 timeStyle:NSDateFormatterShortStyle];
         NSString *endHourString = [NSDateFormatter localizedStringFromDate:endHourDate dateStyle:0 timeStyle:NSDateFormatterShortStyle];
         NSString *hourInterval = [NSString stringWithFormat:@"%@ - %@", beginningHourString, endHourString];
         [array addObject:hourInterval];
         beginningHourDate = endHourDate;
         endHourDate = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:beginningHourDate];
-        //NSLog(@"%@", hourInterval);
         
     }
     
     self.hourIntervalsDisplayArray = [array copy];
-    //NSLog(@"%@", self.hourIntervalsDisplayArray);
     
 }
 
@@ -161,14 +148,8 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 {
     self = [super init];
     if(self){
-        self.numPeople = numPeople;
-        self.numHourIntervals = numHourIntervals; //get rid of one of these
-        self.numIntervals = numHourIntervals;
-        self.startDate = startDate;
-        self.endDate = endDate;
-        
         // call designated initializer
-        self = [self initWithName:nil availabilitiesSchedule:[[NSMutableArray alloc] initWithCapacity: numPeople] assignmentsSchedule:[[NSMutableArray alloc] initWithCapacity: numPeople] numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:nil  password:nil homeGameIndex:-1];
+        self = [self initWithName:nil availabilitiesSchedule:[[NSMutableArray alloc] initWithCapacity: numPeople] assignmentsSchedule:[[NSMutableArray alloc] initWithCapacity: numPeople] numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:nil  password:nil homeGameIndex:-1 parseObjectID:nil];
         
     }
     return self;
@@ -184,37 +165,20 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return self;
 }
 
-//designated initializer (add a numPeople parameter)
+
 -(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex:(NSUInteger)homeGameIndex{
     self = [super init];
     if(self){
-        self.availabilitiesSchedule = availabilitiesSchedule;
-        self.numPeople = [self.availabilitiesSchedule count];
-        self.numHourIntervals = numHourIntervals; //get rid of one of these
-        self.numIntervals = numHourIntervals;
-        self.startDate = startDate;
-        self.endDate = endDate;
+       
         
-        self.privacy = privacy;
-        self.password = password;
         
-        if(assignmentsSchedule){
-            self.assignmentsSchedule = assignmentsSchedule;
-        }
-        else{
-            self.assignmentsSchedule = [self createZeroesAssignmentsSchedule];
-        }
-        self.name = name;
+        self = [self initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex parseObjectID:nil];
         
-        //intervalArray/hourIntervalDisplayArray
-        [self createIntervalDisplayArray];
-        self.intervalArray = [self createZeroedIntervalArray];
-        //maybe create actual interval array
         
     }
     return self;
 }
-//make this the designated initializer
+//make this the designated initializer (maybe add a numPeople parameter)
 -(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex parseObjectID: (NSString *)parseObjectID
 {
     self = [super init];
@@ -229,6 +193,9 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         self.privacy = privacy;
         self.password = password;
         
+        self.parseObjectID = parseObjectID;
+
+        
         if(assignmentsSchedule){
             self.assignmentsSchedule = assignmentsSchedule;
         }
@@ -240,10 +207,13 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         //intervalArray/hourIntervalDisplayArray
         [self createIntervalDisplayArray];
         self.intervalArray = [self createZeroedIntervalArray];
-        //maybe create actual interval array
+        
+        //maybe create actual interval array: 2 options
+        //1. make personsArray a property of Schedule (that way we can eliminate the need for a "Person" object in Parse
+        //2. add 2 properties to Interval: arrays of available/assigned person INDICES. then when loading the people, add their names to array of available/assigned person NAMES if their index is in available/assigned person INDICES for that interval
+        //(this one doesn't make much sense to do because it's not more efficient than just creating the array of NAMES for each interval  when querying for Persons
         
         
-        self.parseObjectID = parseObjectID;
         
         
     }
@@ -258,7 +228,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         NSUInteger numHourIntervals = (NSUInteger)time/3600;
        
         // call designated initializer
-         self = [self initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:nil password:nil homeGameIndex:-1];
+         self = [self initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:nil password:nil homeGameIndex:-1 parseObjectID:nil];
         
         
     }
@@ -275,7 +245,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         NSUInteger numHourIntervals = (NSUInteger)time/3600;
 
          //call designated initializer
-        self = [self initWithName:name availabilitiesSchedule:[[NSMutableArray alloc]init] assignmentsSchedule:nil numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:nil password:nil homeGameIndex:-1];
+        self = [self initWithName:name availabilitiesSchedule:[[NSMutableArray alloc]init] assignmentsSchedule:nil numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:nil password:nil homeGameIndex:-1 parseObjectID:nil];
         
         
         

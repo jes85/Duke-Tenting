@@ -12,6 +12,6 @@
 @interface JoinScheduleTableViewController : UITableViewController <ScheduleTableViewCellDelegate, UIAlertViewDelegate>
 
 @property (nonatomic) NSArray *schedulesAssociatedWithThisHomeGame;
-
 @property (nonatomic) NSUInteger homeGameIndex;
+
 @end

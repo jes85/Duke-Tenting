@@ -98,6 +98,7 @@ static NSString *kGenerateScheduleFinishedID = @"Success!";
 
 }
 -(void)clearAssignments{
+    //EDIT: write method to clear all assignments
     
 }
 - (IBAction)clearAvailabilititesAndAssignments:(id)sender {
@@ -109,16 +110,7 @@ static NSString *kGenerateScheduleFinishedID = @"Success!";
 
 -(void)clearAvailabilities
 {
-    
+    //EDIT: write method to clear all availabilities
 }
-/*
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    
-    if([[segue destinationViewController] isKindOfClass:[HomeBaseTableViewController class]]){
-        HomeBaseTableViewController *homeBase = [segue destinationViewController];
-        homeBase.schedule = self.schedule; //unnecessary since the point to the same place
-    }
-}*/
 
 @end

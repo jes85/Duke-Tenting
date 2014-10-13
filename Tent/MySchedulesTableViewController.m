@@ -72,6 +72,7 @@
                 Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex] ;
                 
                 [self.schedules addObject:schedule];
+                [self.tableView reloadData];
             }
         }
         else{

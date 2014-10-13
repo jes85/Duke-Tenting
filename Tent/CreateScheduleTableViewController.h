@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CreateScheduleTableViewController : UITableViewController
+@interface CreateScheduleTableViewController : UITableViewController <UITextFieldDelegate>
 
 @property (nonatomic) NSUInteger homeGameIndex;
 

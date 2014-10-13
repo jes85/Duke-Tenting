@@ -20,6 +20,7 @@
 
 @implementation AddPersonViewController
 
+#pragma mark - View Controller Lifecycle
 -(void)viewDidLoad
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.enterNameTextField];
@@ -31,6 +32,8 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:self.enterNameTextField];
 }
+
+#pragma mark - Done Button and Text Field
 -(BOOL)shouldEnableDoneButton
 {
     BOOL enableDoneButton = NO;
@@ -45,16 +48,19 @@
 {
     self.doneButton.enabled = [self shouldEnableDoneButton];
 }
+
+- (IBAction)textFieldDoneEditing:(id)sender{
+    if([self.enterNameTextField isFirstResponder]){
+        [self.enterNameTextField resignFirstResponder];
+    }
+}
+
+#pragma mark - Navigation
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if(sender==self.doneButton){
         PickPersonTableViewController *pptvc = [segue destinationViewController];
         pptvc.addPersonName = self.enterNameTextField.text;
-    }
-}
-- (IBAction)textFieldDoneEditing:(id)sender{
-    if([self.enterNameTextField isFirstResponder]){
-        [self.enterNameTextField resignFirstResponder];
     }
 }
 

@@ -9,9 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @interface HomeGame : NSObject
+
 @property (nonatomic) NSString *opponentName;
 @property (nonatomic) NSDate *gameTime;
 @property (nonatomic) BOOL isExhibition;
 
 -(instancetype)initWithOpponentName:(NSString *)name gameTime:(NSDate *)date isExhibition:(BOOL)isExhibition;
+
 @end

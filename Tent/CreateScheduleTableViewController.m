@@ -17,7 +17,7 @@
 
 #define kTitleKey       @"title"            // key for obtaining the data source item's title
 #define kDateKey        @"date"             // key for obtaining the data source item's date value
-#define kStatusKey      @"status"           //key for obtaining privacy setting
+#define kStatusKey      @"status"           // key for obtaining privacy setting
 #define kMinimumDateKey @"minimumDate"      // key for obtaining the data source item's minimumDate value
 
 // keep track of which rows have date cells
@@ -26,7 +26,7 @@
 
 
 // Time Interval Length
-#define kTimeIntervalLengthInSeconds     3600  // one hour for now
+#define kTimeIntervalLengthInSeconds     3600  // one hour for now (later make this a property that changes based on user setting
 
 
 static NSString *kDateCellID = @"dateCell";     // the cells with the start or end date
@@ -43,7 +43,7 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 @interface CreateScheduleTableViewController ()
 
 @property (nonatomic) BOOL endDateChanged;
-
+@property (nonatomic) BOOL datesValid;
 @property (nonatomic, strong) NSArray *dataArray;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
@@ -55,7 +55,6 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 @property (strong, nonatomic) IBOutlet UIDatePicker *datePickerView;
 
 
-//@property (nonatomic) NSString *nameOfSchedule;
 @property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *endDate;
 @property (nonatomic) NSDate *roundedStartDateAtViewDidLoad;
@@ -76,12 +75,6 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     NSDate *currentDate = [NSDate date];
     
@@ -128,7 +121,10 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.nameOfScheduleTextField];
      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.passwordTextField];
+    self.datesValid = YES;
     self.doneButton.enabled = NO;
+    self.endDateChanged = NO;
+    self.private = YES;
     
    
   
@@ -140,17 +136,13 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:self.passwordTextField];
     
 }
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    self.endDateChanged = NO;
-    self.private = YES;
-}
+
 -(BOOL)shouldEnableDoneButton
 {
     BOOL enableDoneButton = NO;
-    if(self.nameOfScheduleTextField.text!=nil &&  self.nameOfScheduleTextField.text.length>0 && self.passwordTextField.text!= nil && self.passwordTextField.text.length > 0 && self.endDate >= [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate])
+    if(self.nameOfScheduleTextField.text!=nil &&  self.nameOfScheduleTextField.text.length>0 && self.passwordTextField.text!= nil && self.passwordTextField.text.length > 0 && self.datesValid == YES)
     {
+
         
         enableDoneButton = YES;
     }
@@ -195,7 +187,9 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
             // we found a UIDatePicker in this cell, so update it's date value
             //
             NSDictionary *itemData = self.dataArray[self.datePickerIndexPath.row - 1];
-            [targetedDatePicker setMinimumDate:[itemData valueForKey:kMinimumDateKey]];
+            if([[itemData valueForKey:kTitleKey ] isEqual:@"Start Date"]){
+                [targetedDatePicker setMinimumDate:[itemData valueForKey:kMinimumDateKey]];
+            }
             [targetedDatePicker setDate:[itemData valueForKey:kDateKey] animated:NO];
         }
     }
@@ -275,7 +269,7 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
          NameOfScheduleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kNameCellID forIndexPath:indexPath];
          self.nameOfScheduleTextField = cell.nameOfScheduleTextField;
          [self.nameOfScheduleTextField becomeFirstResponder];
-         
+         self.nameOfScheduleTextField.delegate = self;
          //self.nameOfScheduleTextField.borderStyle = UITextBorderStyleNone;
          
          return cell;
@@ -296,6 +290,7 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
         PasswordTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kPasswordCellID forIndexPath:indexPath];
         cell.passwordLabel.text = @"Password: ";
         self.passwordTextField = cell.passwordTextField;
+        self.passwordTextField.delegate = self;
         return cell;
     }
     UITableViewCell *cell = nil;
@@ -389,12 +384,7 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
     BOOL sameCellClicked = (self.datePickerIndexPath.row - 1 == indexPath.row);
     
     // remove any date picker cell if it exists
-    if ([self hasInlineDatePicker])
-    {
-        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.datePickerIndexPath.row inSection:0]]
-                              withRowAnimation:UITableViewRowAnimationFade];
-        self.datePickerIndexPath = nil;
-    }
+    [self hideInLineDatePickerIfShown];
     
     if (!sameCellClicked)
     {
@@ -419,23 +409,36 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    if(cell.reuseIdentifier != kNameCellID){
+    if([self.nameOfScheduleTextField isFirstResponder] && cell.reuseIdentifier != kNameCellID){
         [self.nameOfScheduleTextField resignFirstResponder];
+    }
+    else if([self.passwordTextField isFirstResponder] && cell.reuseIdentifier != kPasswordCellID){
+        [self.passwordTextField resignFirstResponder];
     }
     if (cell.reuseIdentifier == kDateCellID)
     {
-       
         [self displayInlineDatePickerForRowAtIndexPath:indexPath];
-       
     }
     else
     {
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self hideInLineDatePickerIfShown];
     }
 }
 
-
+-(void)hideInLineDatePickerIfShown
+{
+    if([self hasInlineDatePicker]){
+        [self.tableView beginUpdates];
+        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.datePickerIndexPath.row inSection:0]]
+                              withRowAnimation:UITableViewRowAnimationFade];
+        self.datePickerIndexPath = nil;
+        [self.tableView endUpdates];
+    }
+    
+}
 #pragma mark - Actions
 /*! User chose to change the date by changing the values inside the UIDatePicker.
  
@@ -496,8 +499,15 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
             
             endDateCell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.endDate];
         }
-        if(self.endDate < [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate]){
+        if([self.endDate compare:[NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate]]<0){
             endDateCell.detailTextLabel.textColor = [UIColor redColor];
+            NSDictionary* attributes = @{
+                                         NSStrikethroughStyleAttributeName: [NSNumber numberWithInt:NSUnderlineStyleSingle]
+                                         };
+            
+            NSAttributedString* attrText = [[NSAttributedString alloc] initWithString:endDateCell.textLabel.text attributes:attributes];
+            endDateCell.detailTextLabel.attributedText = attrText;
+            self.datesValid = NO;
             self.doneButton.enabled = NO;
             
         }else{
@@ -533,15 +543,28 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
         NSIndexPath *endDateIndexPath = [NSIndexPath indexPathForRow:kDateEndRow inSection:0];//+1 because startdatepickerview is shown
         UITableViewCell *endDateCell = [self.tableView cellForRowAtIndexPath:endDateIndexPath];
         //if end date is now less than an hour after start date, make end date red and disable done buttton
-        if(self.endDate < [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate]){
+        if([self.endDate compare:[NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate]] < 0){
             
             endDateCell.detailTextLabel.textColor = [UIColor redColor];
+            NSDictionary* attributes = @{
+                                         NSStrikethroughStyleAttributeName: [NSNumber numberWithInt:NSUnderlineStyleSingle]
+                                         };
+            
+            NSAttributedString* attrText = [[NSAttributedString alloc] initWithString:endDateCell.detailTextLabel.text attributes:attributes];
+            endDateCell.detailTextLabel.attributedText = attrText;
+            self.datesValid = NO;
             //endDateCell.detailTextLabel.text = @"Choose later date";
             self.doneButton.enabled = NO;
             
-            NSLog(@"Test");
+            
         }else{
             endDateCell.detailTextLabel.textColor = [UIColor blackColor];
+            NSDictionary* attributes = @{
+                                         NSStrikethroughStyleAttributeName: [NSNumber numberWithInt:NSUnderlineStyleNone]
+                                         };
+            
+            NSAttributedString* attrText = [[NSAttributedString alloc] initWithString:endDateCell.detailTextLabel.text attributes:attributes];
+            endDateCell.detailTextLabel.attributedText = attrText;
         }
         
         
@@ -550,6 +573,8 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 - (IBAction)textFieldDoneEditing:(id)sender {
     if([self.nameOfScheduleTextField isFirstResponder]){
         [self.nameOfScheduleTextField resignFirstResponder];
+    }else if([self.passwordTextField isFirstResponder]){
+        [self.passwordTextField resignFirstResponder];
     }
 }
 
@@ -557,6 +582,8 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 - (IBAction)touchOutsideOfTableView:(id)sender {
     if([self.nameOfScheduleTextField isFirstResponder]){
         [self.nameOfScheduleTextField resignFirstResponder];
+    }else if([self.passwordTextField isFirstResponder]){
+        [self.passwordTextField resignFirstResponder];
     }
 }
 
@@ -583,6 +610,11 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 
 }
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    [self hideInLineDatePickerIfShown];
+    return YES;
+}
 
 
 #pragma mark - Navigation

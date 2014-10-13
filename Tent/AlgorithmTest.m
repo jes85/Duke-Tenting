@@ -67,6 +67,14 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return _assignPeopleSums;
 }
 
+
+/*!
+ Array containing the ideal number of intervals each person should wait.
+ pth element is the total slots that person p should be assignment in an ideal schedule (one that optimizes equality)
+ If everybody is free for more than enough slots, each number in this array will be the same (each person should ideally wait the same number of intervals)
+ If there are 200 slots to fill and 10 people, and each person is available for at least 20 slots, then ideally everybody should be assigned 20 slots
+ If there are 200 slots to fill and 10 people, but person p is only available for 11 slots, then ideally person p should wait 11 slots and everybody else should split the rest of the slots equally and each wait (200 - 11)/9 = 21 slots
+ */
 -(NSMutableArray *)idealSlotsArray
 {
     if(!_idealSlotsArray){
@@ -80,6 +88,9 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return _idealSlotsArray;
 }
 
+/*!
+ * 2D array containing the availabilties schedule
+ */
 -(NSMutableArray *) availabilitiesSchedule
 {
     if(!_availabilitiesSchedule)_availabilitiesSchedule = [[NSMutableArray alloc]init];
@@ -108,6 +119,10 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
              @[@1, @1, @1, @1, @0, @0, @0, @1, @1, @0]];*/
 }
 
+/*!
+ * (debugging purposes only)
+ * Generates a random availabilities schedule to test the algorithm to generate assignments
+ */
 -(NSArray *)generateRandomAvailabilitiesSchedule
 {
     int maxConsec = 5;
@@ -465,13 +480,18 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 
 
 
+/*!
+ * Method to swap the remaining solo intervals in the assignments schedule. A solo interval is an interval in whcih a 
+ */
 
 -(void)swapSolos
 {
     
 }
 
-
+/*!
+ * Returns maximum float value in an array
+ */
 -(float)maximumValueInArray:(NSArray *)array
 {
     float maxValue = [array[0] floatValue];
@@ -483,6 +503,9 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return maxValue;
 }
 
+/*!
+ * Returns minimum float value in an array
+ */
 -(float)minimumValueInArray:(NSArray *)array
 {
     float minValue = [array[0] floatValue];
@@ -493,7 +516,9 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return minValue;
 }
 
-
+/*!
+ * (Debugging purposes only). Prints the people assigned to each interval
+ */
 -(void)printAssignmentScheduleIntervalView
 {
     NSMutableArray *assignmentScheduleIntervalView = [[NSMutableArray alloc]initWithCapacity:self.numIntervals];

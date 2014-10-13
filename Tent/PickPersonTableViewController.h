@@ -12,12 +12,13 @@
 
 @interface PickPersonTableViewController : UITableViewController
 
-@property (nonatomic) NSMutableArray *people;
+@property (nonatomic) NSMutableArray *personsArray; //change to personsArray
 @property (nonatomic) NSString *addPersonName;
 @property (nonatomic) Schedule *schedule;
 
--(IBAction)unWindToList:(UIStoryboardSegue *)segue;
+
 -(IBAction)addPerson:(UIStoryboardSegue *)segue;
 -(IBAction)cancelAddPerson:(UIStoryboardSegue *)segue;
 
+-(IBAction)editAvailabilitiesReturn:(UIStoryboardSegue *)segue;
 @end

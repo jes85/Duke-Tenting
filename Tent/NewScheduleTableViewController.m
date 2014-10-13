@@ -16,7 +16,7 @@
 #import "Constants.h"
 
 
-static const NSUInteger numHomeGames = 20;
+static const NSUInteger numHomeGames = 18;
 
 @interface NewScheduleTableViewController ()
 @property (nonatomic) NSArray *homeGames;
@@ -48,11 +48,11 @@ static const NSUInteger numHomeGames = 20;
     [components setYear:2014];
     
     
-    //Countdown To Craziness Friday Oct. 18 8 pm
+    //Countdown To Craziness Saturday Oct. 25 8 pm
     [components setMonth: 10];
-    [components setDay:18];
+    [components setDay:25];
     [components setHour:20];
-    [components setWeekday:6];
+    [components setWeekday:7];
     NSDate *gameTime = [calendar dateFromComponents:components];
     
     NSString *opponent = @"Countdown To Craziness";
@@ -61,229 +61,222 @@ static const NSUInteger numHomeGames = 20;
     HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame ];
     
-    //Bowie State (Exhibition) Saturday Oct. 26 1 pm
-    [components setMonth: 10];
-    [components setDay:26];
-    [components setHour:13];
-    [components setWeekday:7];
+    //Livingstone (Exhibition) Tuesday Nov. 4, 7 pm
+    [components setMonth: 11];
+    [components setDay:4];
+    [components setHour:19];
+    [components setWeekday:3];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Bowie State";
+    opponent = @"Livingstone";
     isExhibition = YES;
     
     HomeGame *homeGame1 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame1 ];
     
     
-    //Drury (Exhibition) Saturday Nov. 2, 1 pm
+    //Central Missouri (Exhibition) Saturday Nov. 8, 1 pm
     [components setMonth: 11];
-    [components setDay:2];
+    [components setDay:8];
     [components setHour:13];
     [components setWeekday:7];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Drury";
+    opponent = @"C. Missouri";
     isExhibition = YES;
     
     HomeGame *homeGame2 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame2 ];
     
-    //Davidson Friday Nov. 8, 7pm
+    //Presbyterian Friday Nov. 14, 6 pm
     [components setMonth: 11];
-    [components setDay:8];
-    [components setHour:19];
+    [components setDay:14];
+    [components setHour:18];
     [components setWeekday:6];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Davidson";
+    opponent = @"Presbyterian";
     isExhibition = NO;
     
     HomeGame *homeGame3 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame3 ];
     
-    //Florida Atlantic Friday Nov.15,7 pm
+    //Fairfield Saturday Nov.15, 8 pm
     [components setMonth: 11];
     [components setDay:15];
-    [components setHour:19];
-    [components setWeekday:6];
+    [components setHour:20];
+    [components setWeekday:7];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Florida Atlantic";
+    opponent = @"Fairfield";
     isExhibition = NO;
     
     HomeGame *homeGame4 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame4 ];
     
-    //UNC Asheville Monday Nov. 18 7pm
+    //Furman Wednesday Nov. 26, 5 pm
     [components setMonth: 11];
-    [components setDay:18];
-    [components setHour:19];
-    [components setWeekday:2];
+    [components setDay:26];
+    [components setHour:17];
+    [components setWeekday:4];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"UNC Asheville";
+    opponent = @"Furman";
     isExhibition = NO;
     
     HomeGame *homeGame5 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame5 ];
     
-    //East Carolina/Norfolk State Tuesday Nov. 19 6pm
+    //Army Sunday Nov. 30, 12pm
     [components setMonth: 11];
-    [components setDay:19];
-    [components setHour:18];
-    [components setWeekday:3];
+    [components setDay:30];
+    [components setHour:12];
+    [components setWeekday:1];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"East Carolina/Norfolk State";
+    opponent = @"Army";
     isExhibition = NO;
     
     HomeGame *homeGame6 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame6 ];
     
-    //Vermont Sunday Nov. 24 6:30 pm
-    [components setMonth: 11];
-    [components setDay:24];
-    [components setHour:18];
-    [components setMinute:30];
-    [components setWeekday:1];
+    //Elon Monday Dec. 15, 7 pm
+    [components setMonth: 12];
+    [components setDay:15];
+    [components setHour:19];
+    [components setWeekday:2];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Vermont";
+    opponent = @"Elon";
     isExhibition = NO;
     
     HomeGame *homeGame7 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame7 ];
     
-    //Michigan Tuesday Dec. 3 9:15 pm
+    //Toledo Monday Dec. 29, 7 pm
     [components setMonth: 12];
-    [components setDay:3];
-    [components setHour:21];
-    [components setMinute:15];
-    [components setWeekday:3];
+    [components setDay:29];
+    [components setHour:19];
+    [components setWeekday:2];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Michigan";
+    opponent = @"Toledo";
     isExhibition = NO;
     
     HomeGame *homeGame8 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame8 ];
     
-    //Gardner-Webb Monday Dec. 16 7 pm
+    //Wofford Wednesday Dec. 31, 3 pm
     [components setMonth: 12];
-    [components setDay:16];
-    [components setHour:19];
-    [components setWeekday:1];
+    [components setDay:31];
+    [components setHour:15];
+    [components setWeekday:4];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Gardner-Webb";
+    opponent = @"Wofford";
     isExhibition = NO;
     
     HomeGame *homeGame9 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame9 ];
     
-    //Eastern Michigan Saturday Dec 28 2pm
-    [components setMonth: 12];
-    [components setDay:28];
-    [components setHour:14];
+    //Boston College Saturday Jan. 3, 4 pm
+    [components setMonth: 1];
+    [components setDay:3];
+    [components setHour:16];
     [components setWeekday:7];
+    [components setYear:2015];
+
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Eastern Michigan";
+    opponent = @"Boston College";
     isExhibition = NO;
     
     HomeGame *homeGame10 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame10 ];
     
-    //Georgia Tech Tuesday Jan. 7, 7 pm
+    //Miami Tuesday Jan. 13, 9 pm
     [components setMonth: 1];
-    [components setDay:7];
-    [components setHour:19];
-    [components setYear:2015];
+    [components setDay:13];
+    [components setHour:21];
     [components setWeekday:3];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Georgia Tech";
+    opponent = @"Miami";
     isExhibition = NO;
     
     HomeGame *homeGame11 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame11 ];
     
-    //Virginia Monday Jan. 13, 7 pm
+    //Pittsburgh Monday Jan. 19, 7 pm
     [components setMonth: 1];
-    [components setDay:13];
+    [components setDay:19];
     [components setHour:19];
-    [components setYear:2015];
-    [components setWeekday:1];
+    [components setWeekday:2];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Virginia";
+    opponent = @"Pittsburgh";
     isExhibition = NO;
     
     HomeGame *homeGame12 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame12 ];
     
-    //NC State Saturday Jan 18, 2pm
-    [components setMonth: 1];
-    [components setDay:18];
-    [components setHour:14];
-    [components setYear:2015];
-    [components setWeekday:7];
+    //Georgia Tech Wednesday Feb 04, 7pm
+    [components setMonth: 2];
+    [components setDay:4];
+    [components setHour:19];
+    [components setWeekday:4];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"NC State";
+    opponent = @"Georgia Tech";
     isExhibition = NO;
     
     HomeGame *homeGame13 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame13 ];
     
-    //FLorida State Saturday Jan 25, 12 pm
-    [components setMonth: 1];
-    [components setDay:25];
-    [components setHour:12];
-    [components setYear:2015];
+    //Notre Dame Saturday Feb 07, 1 pm
+    [components setMonth: 2];
+    [components setDay:7];
+    [components setHour:13];
     [components setWeekday:7];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Florida State";
+    opponent = @"Notre Dame";
     isExhibition = NO;
     
     HomeGame *homeGame14 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame14 ];
     
-    // Wake Forest Tuesday Feb. 4, 9 pm
+    // UNC Wednesday Feb. 18, 9 pm
     [components setMonth: 2];
-    [components setDay:4];
+    [components setDay:18];
     [components setHour:21];
-    [components setYear:2015];
-    [components setWeekday:3];
+    [components setWeekday:4];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Wake Forest";
+    opponent = @"UNC";
     isExhibition = NO;
     
     HomeGame *homeGame15 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame15 ];
     
-    //Maryland Saturday Feb 15, 6 pm
+    //Clemson Saturday Feb 21, 4 pm
     [components setMonth: 2];
-    [components setDay:15];
-    [components setHour:18];
-    [components setYear:2015];
+    [components setDay:21];
+    [components setHour:16];
     [components setWeekday:7];
     
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Maryland";
+    opponent = @"Clemson";
     isExhibition = NO;
     
     HomeGame *homeGame16 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame16 ];
     
-    //Syracuse Saturday Feb. 22, 7pm
+    //Syracuse Saturday Feb. 28, Time TBA
     [components setMonth: 2];
-    [components setDay:22];
+    [components setDay:28];
     [components setHour:19];
-    [components setYear:2015];
     [components setWeekday:7];
     gameTime = [calendar dateFromComponents:components];
     
@@ -293,33 +286,18 @@ static const NSUInteger numHomeGames = 20;
     HomeGame *homeGame17 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame17 ];
     
-    //Virginia Tech Tuesday Feb. 25, 7pm
-    [components setMonth: 2];
-    [components setDay:25];
-    [components setHour:19];
-    [components setYear:2015];
-    [components setWeekday:3];
+    //Wake Forest Wednesday March 04, 8pm
+    [components setMonth: 3];
+    [components setDay:4];
+    [components setHour:20];
+    [components setWeekday:4];
     gameTime = [calendar dateFromComponents:components];
     
-    opponent = @"Virginia Tech";
+    opponent = @"Wake Forest";
     isExhibition = NO;
     
     HomeGame *homeGame18 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame18 ];
-    
-    //North Carolina Saturday Mar. 8, 9pm
-    [components setMonth: 3];
-    [components setDay:8];
-    [components setHour:21];
-    [components setYear:2015];
-    [components setWeekday:7];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"North Carolina";
-    isExhibition = NO;
-    
-    HomeGame *homeGame19 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame19 ];
     
     
     self.homeGames = [homeGamesTemp copy];
@@ -339,7 +317,6 @@ static const NSUInteger numHomeGames = 20;
     return [self.homeGames count];
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
    HomeGamesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"New Schedule" forIndexPath:indexPath];
@@ -351,15 +328,20 @@ static const NSUInteger numHomeGames = 20;
     // Opponent name
     NSString *opponentNameLabelText = homeGame.opponentName;
     BOOL isExhibition = homeGame.isExhibition;
-    if(isExhibition) opponentNameLabelText = [opponentNameLabelText stringByAppendingString:@" (Exhibition)"];
+    if(isExhibition) opponentNameLabelText = [opponentNameLabelText stringByAppendingString:@" (Ex.)"];//(Exhibition)
    
 
     // Weekday and calendar date
     NSDate *date = homeGame.gameTime;
+    
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
-    NSString *weekday = [[dateFormatter shortWeekdaySymbols][0] stringByAppendingString:@" "];
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *comps = [calendar components:NSWeekdayCalendarUnit fromDate:date];
+    NSUInteger weekdayNum = [comps weekday];
+    NSString *weekday = [[dateFormatter shortWeekdaySymbols][weekdayNum-1] stringByAppendingString:@". "];
     NSString *dateLabelText = [weekday stringByAppendingString:[dateFormatter stringFromDate:date]];
     
     // Time
@@ -371,7 +353,7 @@ static const NSUInteger numHomeGames = 20;
     // Set text of labels
     cell.opponentNameLabel.text = opponentNameLabelText;
     cell.dateLabel.text = dateLabelText;
-    cell.weekdayAndTimeLabel.text = timeLabelText;
+    cell.timeLabel.text = timeLabelText;
     
     
     

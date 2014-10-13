@@ -16,7 +16,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *creatorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *numPeopleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *openClosedLabel;
 @property (weak, nonatomic) IBOutlet UILabel *privacyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *startDate;
 

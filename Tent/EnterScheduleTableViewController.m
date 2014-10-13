@@ -36,10 +36,8 @@
  -(NSMutableArray *)updatedAvailabilitiesArray
 {
    
-    
-    if(!_updatedAvailabilitiesArray)_updatedAvailabilitiesArray = [[NSMutableArray alloc]initWithArray:self.currentPerson.availabilitiesArray];
-    
-    
+    if(!_updatedAvailabilitiesArray)
+        _updatedAvailabilitiesArray = [[NSMutableArray alloc]initWithArray:self.currentPerson.availabilitiesArray];
     return _updatedAvailabilitiesArray;
 }
 
@@ -67,18 +65,7 @@
     return @"     Time                                          Status "; //fix for autolayout
 }
 
-/*- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
-        [cell.contentView setBackgroundColor:[UIColor greenColor]];
 
-    }
-     if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]) {
-          [cell.contentView setBackgroundColor:[UIColor blueColor]];
-     }
-    
-
-}*/
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -91,49 +78,27 @@
     cell.textLabel.text = interval;
    
     
-//cell.imageView addConstraint:<#(NSLayoutConstraint *)#>
-    
-    if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
-        
-        //[cell setSelected:YES animated:YES];
-        //[cell setSelected:YES];
-        // cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-        //[cell setBackgroundColor:[UIColor colorWithHue:0.4 saturation:1.0 brightness:0.5 alpha:1.0]];
-        //cell.accessoryType =UITableViewCellAccessoryCheckmark;
+    if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]){
         cell.assignedOrAvailableLabel.text = @"(Assigned)";
         cell.iconImageView.image =[UIImage imageNamed:@"GreenCircle"];
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:0 green:.3 blue:0 alpha:1.0];
-       // cell.assignedOrAvailableLabel.textColor = [UIColor greenColor];
-        //[cell.contentView setBackgroundColor:[UIColor greenColor]];
-        // [cell setOpaque:NO];
-        
-        
     }
-
-    else if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]) {
-        //cell.accessoryType =UITableViewCellAccessoryNone;
+    
+    else if([self.updatedAvailabilitiesArray[indexPath.row] isEqual:@1]) { //self.updatedAvailabilitiesArray instead of currentPerson.availabilitiesArray because the screen should show the updates as the user is making them. If they then hit cancel, those updates are not saved. UpdatedAvailabilitiesArray is reinitialized to currentPerson.availabilitiesArray every time the view loads
         cell.assignedOrAvailableLabel.text = @"(Available)";
         cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
-        //cell.assignedOrAvailableLabel.textColor = [UIColor yellowColor];
-        //[cell.contentView setBackgroundColor:[UIColor blueColor]];
-        //[cell setOpaque:NO];
-
         
     }
     else {
-        //cell.accessoryType =UITableViewCellAccessoryNone;
-        
-        
         cell.assignedOrAvailableLabel.text = @"";
         cell.iconImageView.image =[UIImage imageNamed:@"RedX"];
         cell.assignedOrAvailableLabel.textColor = [UIColor redColor];
     }
     
     
-    
-    
-    [cell.contentView addSubview:cell.assignedOrAvailableLabel]; //I don't think I should have to do this because I did it in a storyboards. I think I didn't connect the outlets correctly
+    //I don't think I should have to do this because I did it in a storyboards. There must be a way to add the images to the cell's content view in the storyboard
+    [cell.contentView addSubview:cell.assignedOrAvailableLabel];
     [cell.contentView addSubview:cell.iconImageView];
     
     return cell;
@@ -148,70 +113,74 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
-    //NSLog(@"Sender class: %@", [sender class]);
     
-    
-    if(sender!=self.doneButton) return; //cancel button
-    else{ //doneButton
+    if(sender!=self.doneButton) return; //if user presses cancel button, don't do anything
+    else{ //user pressed doneButton
         
-        //if current person's availabilities array was changed, update it and update on Parse
+        //if current person's availabilities array was changed, update Person and Schedule on current iPhone and on Parse
         if(![self.currentPerson.availabilitiesArray isEqual:self.updatedAvailabilitiesArray]){
         
-        //update person's availabilities array (and update to Parse)
-       self.currentPerson.availabilitiesArray = self.updatedAvailabilitiesArray;
-#warning Fix this
-            //update schedule offline
+            //update Person's availabilities array on local iPhone
+            self.currentPerson.availabilitiesArray = self.updatedAvailabilitiesArray;
+        
+            //update schedule on local iPhone
             PickPersonTableViewController *pptvc = [segue destinationViewController];
             pptvc.schedule.availabilitiesSchedule[self.currentPerson.indexOfPerson] = self.currentPerson.availabilitiesArray;
-        PFQuery *query = [PFQuery queryWithClassName:@"Person"];
-        [query whereKey:@"scheduleName" equalTo:self.currentPerson.scheduleName];
-        [query whereKey:@"index" equalTo:[NSNumber numberWithInteger:self.currentPerson.indexOfPerson]];
-        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            if(!object){
-                NSLog(@"Find failed");
-            }else{
-               //the find succeeded
-                NSLog(@"Find succeeded");
-                object[@"availabilitiesArray"] = self.currentPerson.availabilitiesArray;
-                //object[@"assignmentsArray"] = self.currentPerson.assignmentsArray;
-                [object saveInBackground];
-            }
-        }];
+            
+            
+            
+            //Update Person on Parse
+            PFQuery *query = [PFQuery queryWithClassName:@"Person"];
+            [query whereKey:@"scheduleName" equalTo:self.currentPerson.scheduleName];
+            [query whereKey:@"index" equalTo:[NSNumber numberWithInteger:self.currentPerson.indexOfPerson]];
+            [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                if(!object){
+                    NSLog(@"Find failed");
+                }else{
+                    //the find succeeded
+                    NSLog(@"Find succeeded");
+                    object[@"availabilitiesArray"] = self.currentPerson.availabilitiesArray;
+                    //object[@"assignmentsArray"] = self.currentPerson.assignmentsArray;
+                    [object saveInBackground];
+                }
+            }];
         
-        //update availabilities schedule (maybe change self.currentperson.availabilitiesArray to be an array arrays and save that to Parse
+            //update Schedule on Parse
         
-        PFQuery *query2 = [PFQuery queryWithClassName:@"Schedule"];
-        [query2 whereKey:@"name" equalTo:self.currentPerson.scheduleName];
-        [query2 getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            if(!object){
-                NSLog(@"Find failed");
-            }else{
-                //the find succeeded
-                NSLog(@"Find succeeded");
-                NSMutableArray *array = object[@"availabilitiesSchedule"] ;
-                array[self.currentPerson.indexOfPerson]= self.currentPerson.availabilitiesArray;
-                object[@"availabilitiesSchedule"] =array;
+            PFQuery *query2 = [PFQuery queryWithClassName:@"Schedule"];
+            [query2 whereKey:@"name" equalTo:self.currentPerson.scheduleName];
+            [query2 getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                if(!object){
+                    NSLog(@"Find failed");
+                }else{
+                    //the find succeeded
+                    NSLog(@"Find succeeded");
+                    NSMutableArray *array = object[@"availabilitiesSchedule"] ;
+                    array[self.currentPerson.indexOfPerson]= self.currentPerson.availabilitiesArray;
+                    object[@"availabilitiesSchedule"] =array;
                 
-                [object saveInBackground];
-            }
-        }];
-        }
+                    [object saveInBackground];
+                }
+            }];
         
-        //update intervlas
-        for(int i = 0; i<[self.currentPerson.availabilitiesArray count]; i++){
-            Interval *interval = (Interval *)self.intervalArray[i];
-            if([self.currentPerson.availabilitiesArray[i] isEqual:@1]) {
-                [interval.availablePersons addObject: self.currentPerson];
-            }
-            if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
-                [interval.assignedPersons addObject:self.currentPerson];
+        
+            //update Intervals offline
+            for(int i = 0; i<[self.currentPerson.availabilitiesArray count]; i++){
+                Interval *interval = (Interval *)self.intervalArray[i];
+                if([self.currentPerson.availabilitiesArray[i] isEqual:@1]) {
+                    if(![interval.availablePersons containsObject:self.currentPerson.name]){
+                        [interval.availablePersons addObject: self.currentPerson.name];
+                    }
+                }
+                if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
+                    if(![interval.assignedPersons containsObject:self.currentPerson.name]){
+                        [interval.assignedPersons addObject:self.currentPerson.name];
+                    }
+                }
             }
         }
 
-        //this part is in unWindToList (maybe change that)
-        /*PickPersonTableViewController *destination = [segue destinationViewController];
-        [destination.people insertObject:self.currentPerson atIndex:self.currentPerson.indexOfPerson];
-        [destination.people removeObjectAtIndex:self.currentPerson.indexOfPerson+1];*/
+       
     }
 }
 
@@ -220,11 +189,11 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //[tableView deselectRowAtIndexPath:indexPath animated:NO];
+
     IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     
     if([cell.assignedOrAvailableLabel.text isEqual:@""]){
-        //Change checkmark
+        
         //Save data in updatedAvailabilities array (will save/ignore this in Done/Cancel button action later)
         
         self.updatedAvailabilitiesArray[indexPath.row] = @1;
@@ -233,23 +202,7 @@
         cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
         
-        
-        //old stuff
-        //cell.accessoryType =UITableViewCellAccessoryCheckmark;
-        //[cell.contentView setBackgroundColor:[UIColor blueColor]];
-        //[cell setOpaque:NO];
-
-        
-        
-        
-        
-        
-        
-        
-        
-        //NSLog(@"Person: %d array: %@ updateArray: %@", self.currentPerson.indexOfPerson, self.currentPerson.availabilitiesArray, self.updatedAvailabilitiesArray);
-        
-    }
+        }
     else {
         self.updatedAvailabilitiesArray[indexPath.row] = @0;
         
@@ -257,11 +210,6 @@
         cell.iconImageView.image =[UIImage imageNamed:@"RedX"];
         cell.assignedOrAvailableLabel.textColor = [UIColor redColor];
         
-        
-        //old stuff
-        //cell.accessoryType = UITableViewCellAccessoryNone;
-        //[cell.contentView setBackgroundColor:[UIColor whiteColor]];
-        //[cell setOpaque:NO];
     }
     
    [tableView deselectRowAtIndexPath:indexPath animated:YES];

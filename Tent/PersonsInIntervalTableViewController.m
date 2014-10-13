@@ -66,10 +66,9 @@
             return cell;
         }
         
-        // Display person's name
-        Person *person = self.assignedPersonsArray[indexPath.row];
         
-        NSString *personName = person.name;
+        // Display person's name
+        NSString *personName = self.assignedPersonsArray[indexPath.row];
         cell.textLabel.text = personName;
     }
   
@@ -84,9 +83,7 @@
         }
         
         // Display person's name
-        Person *person = self.availablePersonsArray[indexPath.row];
-        
-        NSString *personName = person.name;
+        NSString *personName = self.availablePersonsArray[indexPath.row];
         cell.textLabel.text = personName;
     }
       return cell;

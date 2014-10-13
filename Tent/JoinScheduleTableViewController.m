@@ -121,7 +121,6 @@
  * Called when user taps Join button.
  * Asks user to enter the password if the schedule to join is private
  */
-#warning - should this be joinButtonPressed?
 -(void)buttonPressed:(UITableViewCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -146,9 +145,6 @@
         if([passwordAttempt isEqualToString:self.scheduleToJoin.password]){
             NSLog(@"Valid Password!");
             alertView.title = @"Success";
-            
-            #warning - Did i not save to parse yet? 
-            //save to Parse
             
             //segue
             [self performSegueWithIdentifier:@"joinedSchedule" sender:self];

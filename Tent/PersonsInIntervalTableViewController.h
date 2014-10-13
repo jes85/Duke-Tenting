@@ -12,4 +12,5 @@
 
 @property (nonatomic) NSArray *availablePersonsArray;
 @property (nonatomic) NSArray *assignedPersonsArray;
+
 @end

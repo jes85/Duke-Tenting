@@ -17,80 +17,22 @@
 
 @interface HomeBaseTableViewController () <GenerateScheduleViewControllerDelegate>
 
-//maybe change these to properties of schedule
-@property (nonatomic) NSMutableArray *personsArray; //Person[]
+@property (nonatomic) NSMutableArray *personsArray; //array of custom class Person
 
-@property (nonatomic) NSMutableArray *availabilitiesSchedule;
-@property (nonatomic) NSMutableArray *assignmentsSchedule;
 
 
 @end
 
 
-
-
 @implementation HomeBaseTableViewController
 
-#pragma mark - Property setup
+#pragma mark - Properties - Lazy Instantiation
 
--(NSMutableArray *)personsArray{
+-(NSMutableArray *)personsArray
+{
     if(!_personsArray)_personsArray = [[NSMutableArray alloc]init];
     return _personsArray;
 }
-
--(NSMutableArray *)availabilitiesSchedule
-{
-    if(!_availabilitiesSchedule)_availabilitiesSchedule = [[NSMutableArray alloc]init];
-    
-    return _availabilitiesSchedule;
-}
-
-
-
--(void)createPeopleArray
-{
-        //at creation of schedule, have them enter number of people and number of intervals
-        //let there be a button to add/take out people which changes this
-        
-        
-        // Declare peopleArray and availabilitiesSchedule
-        NSMutableArray *peopleArray = [[NSMutableArray alloc]init];
-        NSMutableArray *arrayOfAvailabilityArrays =[[NSMutableArray alloc]init];//availabilitiesSchedule
-        NSMutableArray *arrayOfAssignmentArrays =[[NSMutableArray alloc]init];//assignmentsSchedule
-        
-        
-        for(int p = 0;p<self.schedule.numPeople;p++){
-            NSString *name = [NSString stringWithFormat:@"Person %d", p];
-            Person *person = [[Person alloc]initWithName:name index:p numIntervals:self.schedule.numHourIntervals scheduleName:self.schedule.name];
-            
-            //create person's availability array and add to availabilitites schedule
-            [peopleArray addObject:person];
-            [arrayOfAvailabilityArrays addObject:person.availabilitiesArray];
-            [arrayOfAssignmentArrays addObject:person.assignmentsArray];
-            
-            //save person's availabilitity array to Parse
-            PFObject *personObject = [PFObject objectWithClassName:@"Person"];
-            personObject[@"name"] = person.name;
-            personObject[@"index"] = [NSNumber numberWithInteger:person.indexOfPerson];
-            personObject[@"availabilitiesArray"] = person.availabilitiesArray;
-            personObject[@"assignmentsArray"] = person.assignmentsArray;
-            [personObject saveInBackground];
-        }
-        
-        //save availabilities schedule to Parse
-        PFObject *schedule= [PFObject objectWithClassName:@"Schedule"];
-        schedule[@"availabilitiesSchedule"]= arrayOfAvailabilityArrays;
-        schedule[@"assignmentsSchedule"]= arrayOfAssignmentArrays;
-        [schedule saveInBackground];
-    
-    
-    self.availabilitiesSchedule = arrayOfAvailabilityArrays;
-    self.assignmentsSchedule = arrayOfAssignmentArrays;
-    self.personsArray = peopleArray;
-    
-}
-
-
 
 #pragma mark - view controller lifecycle
 
@@ -107,7 +49,7 @@
     
     
     [self updatePersonsForSchedule];
-
+    
 
 }
 
@@ -131,8 +73,10 @@
 -(void)updatePersonsForSchedule
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
+    
     self.personsArray = nil; //maybe change personsArray to be property of schedule too?
     self.schedule.intervalArray = [self.schedule createZeroedIntervalArray]; //get rid of this and just reload schedule from parse
+   
     // Get person objects from Parse
     PFQuery *query = [PFQuery queryWithClassName:@"Person"];
     [query whereKey:@"scheduleName" equalTo:self.schedule.name];
@@ -141,8 +85,6 @@
             NSLog(@"Find failed");
         }else if ([objects count]<1){
             NSLog(@"No persons for schedule %@ in Parse", self.schedule.name);
-            //[self createPeopleArray];
-            //[self createIntervalArray];
         }
         else{
             NSLog(@"Find persons for Schedule %@ succeeded %lu", self.schedule.name,(unsigned long)[objects count]);
@@ -162,7 +104,7 @@
                 Person *person = [[Person alloc]initWithName:name index:index availabilitiesArray:availabilitiesArray assignmentsArray:assignmentsArray scheduleName:self.schedule.name];
                 
                 
-                //Fix this to prevent adding duplicates. maybe clear array and readd (but i don't want to do this every time if I don't have to)
+                //Fix this to prevent adding duplicates. maybe clear array and re-add (but i don't want to do this every time if I don't have to)
                 if(![self.personsArray containsObject:person]){
                     [self.personsArray addObject:person];
                 }
@@ -178,17 +120,17 @@
                      if([availabilitiesArray[i] isEqual:@1]){
                          Interval *interval = (Interval *)self.schedule.intervalArray[i];
                          if([assignmentsArray[i] isEqual:@1]){
-                             if (![interval.assignedPersons containsObject:person])
+                             if (![interval.assignedPersons containsObject:person.name])
                              {
-                                 [interval.assignedPersons addObject:person];
+                                 [interval.assignedPersons addObject:person.name];
                                  //minor optimization:
                                  //[interval.availablePersons addObject:person];
                                  //then make next if an else if
                              }
                          }
 
-                         if(![interval.availablePersons containsObject:person]){
-                             [interval.availablePersons addObject:person];//or change to person.name
+                         if(![interval.availablePersons containsObject:person.name]){
+                             [interval.availablePersons addObject:person.name];
                          }
                     }
                 }
@@ -197,11 +139,7 @@
                 
                 
             }
-            //NSLog(@"Interval Array: %@", self.intervalArray);
-            //NSLog(@"Persons Array: %@", self.personsArray);
-            
-            
-            
+         
         }
     }];
 
@@ -247,7 +185,7 @@
     [self updatePersonsForSchedule];
     
     [self performSelector:@selector(stopRefresh) withObject:nil afterDelay:0];
-   }
+}
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -279,17 +217,18 @@
         
         PickPersonTableViewController *pptvc = [segue destinationViewController];
         //maybe make personsArray a property of schedule.m? - probably not
-        pptvc.people = self.personsArray;
+       
+        pptvc.personsArray = self.personsArray;
         
         pptvc.schedule = self.schedule;
-           }
+        
+    }
     else if([[segue destinationViewController] isKindOfClass:[IntervalsTableViewController class]]){
         
         IntervalsTableViewController *itvc = [segue destinationViewController];
         itvc.intervalArray = self.schedule.intervalArray;
         itvc.hourIntervalsDisplayArray = self.schedule.hourIntervalsDisplayArray;
         
-        //NSLog(@"intervalArray %@", self.intervalArray);
     }
     else if([[segue destinationViewController] isKindOfClass:[GenerateScheduleViewController class]]){
         
@@ -297,7 +236,6 @@
         gsvc.schedule = self.schedule;
         gsvc.delegate = self;
         
-        //NSLog(@"intervalArray %@", self.intervalArray);
     }
 
 }
@@ -311,8 +249,6 @@
 -(void)generateScheduleViewControllerDidGenerateSchedule:(GenerateScheduleViewController *)controller{
     NSLog(@"didGenerateSchedule");
     [self updatePersonsArrayOffline];
-    //[self updatePersonsForSchedule];//update interval array without accessing internet
-    //[self updateInformation];
 }
 
 @end
