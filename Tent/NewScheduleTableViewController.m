@@ -403,8 +403,9 @@ static const NSUInteger numHomeGames = 18;
 
     if([[segue destinationViewController] isKindOfClass:[UINavigationController class]]){
         UINavigationController *nc = [segue destinationViewController];
-        CreateScheduleTableViewController *astvc = nc.childViewControllers[0];
-        astvc.homeGameIndex = homeGameIndex;
+        CreateScheduleTableViewController *cstvc = nc.childViewControllers[0];
+        cstvc.homeGameIndex = homeGameIndex;
+        cstvc.gameTime = homeGame.gameTime;
     }
     
 }

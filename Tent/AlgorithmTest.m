@@ -451,7 +451,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 -(void)swapFromEndIfPossibleAssignIntervalTo:(NSUInteger)personGainingInterval takeAwayFrom:(NSUInteger)personLosingInterval
 {
     //change to allow ends to be swapped
-    for(int i = self.numIntervals-1; i>0;i--){
+    for(NSUInteger i = self.numIntervals-1; i>0;i--){
         if([self.assignPeopleSums[personGainingInterval] integerValue] >= [self.idealSlotsArray[personGainingInterval ] floatValue] || [self.assignPeopleSums[personLosingInterval] integerValue] <= [self.idealSlotsArray[personLosingInterval] floatValue]){
             return;
         }

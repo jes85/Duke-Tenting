@@ -18,7 +18,6 @@
 #define kTitleKey       @"title"            // key for obtaining the data source item's title
 #define kDateKey        @"date"             // key for obtaining the data source item's date value
 #define kStatusKey      @"status"           // key for obtaining privacy setting
-#define kMinimumDateKey @"minimumDate"      // key for obtaining the data source item's minimumDate value
 
 // keep track of which rows have date cells
 #define kDateStartRow   1
@@ -42,7 +41,6 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 #pragma mark -
 @interface CreateScheduleTableViewController ()
 
-@property (nonatomic) BOOL endDateChanged;
 @property (nonatomic) BOOL datesValid;
 @property (nonatomic, strong) NSArray *dataArray;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -66,6 +64,8 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 @property (nonatomic) BOOL private;
 @property (nonatomic) NSString *password;
 
+@property (nonatomic) NSUInteger intervalLengthInMinutes; //use this later
+
 @end
 
 @implementation CreateScheduleTableViewController
@@ -83,25 +83,26 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
     NSInteger currentDateSecond = [currentDateComponents second];
     NSInteger currentDateMinute = [currentDateComponents minute];
     
-    NSInteger secondsTo15min = (15 - (currentDateMinute%15))*60 - currentDateSecond;
-    NSDate *roundedDate = [NSDate dateWithTimeInterval:secondsTo15min sinceDate:currentDate];
-    
+    //NSInteger secondsTo15min = (15 - (currentDateMinute%15))*60 - currentDateSecond;
+    //NSDate *roundedDate = [NSDate dateWithTimeInterval:secondsTo15min sinceDate:currentDate];
+
+    self.intervalLengthInMinutes = 60; //later this will be set depending on the desired interval length
+    NSInteger secondsToRoundedDate = (self.intervalLengthInMinutes - (currentDateMinute%self.intervalLengthInMinutes))*60 - currentDateSecond;
+    NSDate *roundedDate = [NSDate dateWithTimeInterval:secondsToRoundedDate sinceDate:currentDate];
+
     self.roundedStartDateAtViewDidLoad = roundedDate;
-    self.roundedEndDateAtViewDidLoad = [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:roundedDate];
+    //self.roundedEndDateAtViewDidLoad = [self.gameTime copy];
     
     // maybe incorporate these into the model somehow (if I get rid of mutableCopy do I no longer have to update the model if I update startdate and enddate?)
     self.startDate = roundedDate;
-    self.endDate =[NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:roundedDate];
-
+    self.endDate = self.gameTime; //maybe change to 1.5 hours earlier
    
     // setup our data source
     NSMutableDictionary *itemOne = [@{ kTitleKey : @"Tap a cell to change its date:" } mutableCopy]; //delete this later or change it to Name label
     NSMutableDictionary *itemTwo = [@{ kTitleKey : @"Start Date",
-                                       kDateKey : self.startDate,
-                                       kMinimumDateKey:self.roundedStartDateAtViewDidLoad} mutableCopy];
+                                       kDateKey : self.startDate} mutableCopy];
     NSMutableDictionary *itemThree = [@{ kTitleKey : @"End Date",
-                                         kDateKey : self.endDate,
-                                         kMinimumDateKey:self.roundedEndDateAtViewDidLoad} mutableCopy];
+                                         kDateKey : self.endDate} mutableCopy];
     NSMutableDictionary *itemFour = [@{ kTitleKey : @"Privacy", kStatusKey: @"Private"} mutableCopy];
     NSMutableDictionary *itemFive = [@{ kTitleKey : @"Password"} mutableCopy];
     
@@ -123,7 +124,6 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.passwordTextField];
     self.datesValid = YES;
     self.doneButton.enabled = NO;
-    self.endDateChanged = NO;
     self.private = YES;
     
    
@@ -185,12 +185,18 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
         if (targetedDatePicker != nil)
         {
             // we found a UIDatePicker in this cell, so update it's date value
-            //
             NSDictionary *itemData = self.dataArray[self.datePickerIndexPath.row - 1];
-            if([[itemData valueForKey:kTitleKey ] isEqual:@"Start Date"]){
-                [targetedDatePicker setMinimumDate:[itemData valueForKey:kMinimumDateKey]];
-            }
             [targetedDatePicker setDate:[itemData valueForKey:kDateKey] animated:NO];
+            
+            // also update maximum/minimum date depending on which one it is (have to do this since we're sharing the same date picker
+            if([[itemData valueForKey:kTitleKey ] isEqual:@"Start Date"]){
+                [targetedDatePicker setMinimumDate:self.roundedStartDateAtViewDidLoad];
+            }
+            /* had a maximum end date, but decided to get rid of it
+            else if([[itemData valueForKey:kTitleKey ] isEqual:@"End Date"]){
+                [targetedDatePicker setMaximumDate:self.roundedEndDateAtViewDidLoad];
+            }
+            */
         }
     }
 }
@@ -330,6 +336,7 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
         //
         cell.textLabel.text = [itemData valueForKey:kTitleKey];
         cell.detailTextLabel.text = [self.dateFormatter stringFromDate:[itemData valueForKey:kDateKey]];
+        cell.detailTextLabel.textColor = [UIColor blackColor];
     }
     
     
@@ -463,112 +470,58 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:targetedCellIndexPath];
     UIDatePicker *targetedDatePicker = sender;
     
+    NSLog(@"Minimum date %@", targetedDatePicker.minimumDate);
+    // If targeted date is less than minimum date, return (first check if it has a minimum date
+    if(targetedDatePicker.minimumDate && [targetedDatePicker.date compare:targetedDatePicker.minimumDate] < 0) return;
+    
     // update our data model (unncessary since I'm using self.startDate and self.endDate as model?)
     NSMutableDictionary *itemData = self.dataArray[targetedCellIndexPath.row];
     [itemData setValue:targetedDatePicker.date forKey:kDateKey];
     
+    // update model's start or end data
+    if(targetedCellIndexPath.row ==kDateStartRow) self.startDate = targetedDatePicker.date;
+    else if(targetedCellIndexPath.row == kDateEndRow) self.endDate = targetedDatePicker.date;
+
     // update the cell's date string
     cell.detailTextLabel.text = [self.dateFormatter stringFromDate:targetedDatePicker.date];
     
-    //update start or end date (hardcoded for now, can change that later)
-    if(targetedCellIndexPath.row ==kDateStartRow){
-        self.startDate = targetedDatePicker.date;
+    // make sure the dates are valid. if not, display red strikethrough and disable done button
+    if(![self checkIfValidDates]){
+        [self displayInvalidDateForCell:cell];
+    }else{
+        [self displayValidDateForCell:cell];
         
-        // enable done button when appropriate
-        if(self.doneButton.enabled == NO) {
-            self.doneButton.enabled = [self shouldEnableDoneButton];
-        }
-        
-        
-        // update end date to be one interval after startDate
-        NSDate *endDate =[NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate];
-        
-        NSIndexPath *endDateIndexPath = [NSIndexPath indexPathForRow:kDateEndRow+1 inSection:0];//+1 because startdatepickerview is shown
-        UITableViewCell *endDateCell = [self.tableView cellForRowAtIndexPath:endDateIndexPath];
-        
-        if(self.endDateChanged == NO){//&& self.endDate <endDate){
-            
-            self.endDate = endDate;
-        
-        
-            // update model
-            NSMutableDictionary *endDateData = self.dataArray[kDateEndRow];
-            [endDateData setValue:self.endDate forKey:kDateKey];
-            
-            // update the end's cell's date string
-            
-            endDateCell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.endDate];
-        }
-        if([self.endDate compare:[NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate]]<0){
-            endDateCell.detailTextLabel.textColor = [UIColor redColor];
-            NSDictionary* attributes = @{
-                                         NSStrikethroughStyleAttributeName: [NSNumber numberWithInt:NSUnderlineStyleSingle]
-                                         };
-            
-            NSAttributedString* attrText = [[NSAttributedString alloc] initWithString:endDateCell.textLabel.text attributes:attributes];
-            endDateCell.detailTextLabel.attributedText = attrText;
-            self.datesValid = NO;
-            self.doneButton.enabled = NO;
-            
-        }else{
-            endDateCell.detailTextLabel.textColor = [UIColor blackColor];
-        }
+        NSIndexPath *otherDateCellIndexPath = [NSIndexPath indexPathForRow:(targetedCellIndexPath.row == kDateStartRow) ? targetedCellIndexPath.row + 2 : targetedCellIndexPath.row - 1 inSection:0];
+        UITableViewCell *otherDateCell = [self.tableView cellForRowAtIndexPath:otherDateCellIndexPath];
+        [self displayValidDateForCell:otherDateCell];
 
-        
-
-    }
-    else if (targetedCellIndexPath.row==kDateEndRow){
-        self.endDate = targetedDatePicker.date;
-        self.endDateChanged = YES;
-        if(self.doneButton.enabled == NO) {
-            self.doneButton.enabled = [self shouldEnableDoneButton];
-        }        /*
-        // if start date is now within a timeInterval (hour) of end date, change start date to an hour before
-        if(self.endDate < [NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate]){
-            self.startDate = [NSDate dateWithTimeInterval:-kTimeIntervalLengthInSeconds sinceDate:self.endDate];
-            
-            // update model
-            NSMutableDictionary *startDateData = self.dataArray[kDateStartRow];
-            [startDateData setValue:self.startDate forKey:kDateKey];
-            
-            // update the start cell's date string
-            NSIndexPath *startDateIndexPath = [NSIndexPath indexPathForRow:kDateStartRow inSection:0];
-            UITableViewCell *startDateCell = [self.tableView cellForRowAtIndexPath:startDateIndexPath];
-            
-            startDateCell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.startDate];
-            
-
-        }*/
-        
-        NSIndexPath *endDateIndexPath = [NSIndexPath indexPathForRow:kDateEndRow inSection:0];//+1 because startdatepickerview is shown
-        UITableViewCell *endDateCell = [self.tableView cellForRowAtIndexPath:endDateIndexPath];
-        //if end date is now less than an hour after start date, make end date red and disable done buttton
-        if([self.endDate compare:[NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate]] < 0){
-            
-            endDateCell.detailTextLabel.textColor = [UIColor redColor];
-            NSDictionary* attributes = @{
-                                         NSStrikethroughStyleAttributeName: [NSNumber numberWithInt:NSUnderlineStyleSingle]
-                                         };
-            
-            NSAttributedString* attrText = [[NSAttributedString alloc] initWithString:endDateCell.detailTextLabel.text attributes:attributes];
-            endDateCell.detailTextLabel.attributedText = attrText;
-            self.datesValid = NO;
-            //endDateCell.detailTextLabel.text = @"Choose later date";
-            self.doneButton.enabled = NO;
-            
-            
-        }else{
-            endDateCell.detailTextLabel.textColor = [UIColor blackColor];
-            NSDictionary* attributes = @{
-                                         NSStrikethroughStyleAttributeName: [NSNumber numberWithInt:NSUnderlineStyleNone]
-                                         };
-            
-            NSAttributedString* attrText = [[NSAttributedString alloc] initWithString:endDateCell.detailTextLabel.text attributes:attributes];
-            endDateCell.detailTextLabel.attributedText = attrText;
-        }
-        
         
     }
+    self.doneButton.enabled = [self shouldEnableDoneButton];
+   }
+
+-(BOOL)checkIfValidDates
+{
+    return [self.endDate compare:[NSDate dateWithTimeInterval:kTimeIntervalLengthInSeconds sinceDate:self.startDate]] >= 0;
+}
+-(void)displayInvalidDateForCell:(UITableViewCell *)cell
+{
+    cell.detailTextLabel.textColor = [UIColor redColor];
+    NSDictionary* attributes = @{ NSStrikethroughStyleAttributeName: [NSNumber numberWithInt:NSUnderlineStyleSingle] };
+    NSAttributedString* attrText = [[NSAttributedString alloc] initWithString:cell.detailTextLabel.text attributes:attributes];
+    cell.detailTextLabel.attributedText = attrText;
+    self.datesValid = NO;
+}
+-(void)displayValidDateForCell:(UITableViewCell *)cell
+{
+    if(cell.detailTextLabel.textColor != [UIColor blackColor]){//if it's already valid, no need to change it
+        cell.detailTextLabel.textColor = [UIColor blackColor];
+        NSDictionary* attributes = @{ NSStrikethroughStyleAttributeName: [NSNumber numberWithInt:NSUnderlineStyleNone] };
+        NSAttributedString* attrText = [[NSAttributedString alloc] initWithString:cell.detailTextLabel.text attributes:attributes];
+        cell.detailTextLabel.attributedText = attrText;
+        self.datesValid = YES;
+    }
+    
 }
 - (IBAction)textFieldDoneEditing:(id)sender {
     if([self.nameOfScheduleTextField isFirstResponder]){
@@ -627,10 +580,15 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
     
     
     if(sender == self.doneButton){
-        Schedule *scheduleToAdd = [[Schedule alloc]initWithName:self.nameOfScheduleTextField.text startDate:self.startDate endDate:self.endDate];
+        /*Schedule *scheduleToAdd = [[Schedule alloc]initWithName:self.nameOfScheduleTextField.text startDate:self.startDate endDate:self.endDate];
         scheduleToAdd.privacy = self.private ? kPrivacyValuePrivate: kPrivacyValuePublic; ;
         if(self.private) scheduleToAdd.password = self.passwordTextField.text; //add this to init
         scheduleToAdd.homeGameIndex = self.homeGameIndex;
+        */
+        
+        Schedule *scheduleToAdd = [[Schedule alloc]initWithName:self.nameOfScheduleTextField.text availabilitiesSchedule:[[NSMutableArray alloc] init] assignmentsSchedule:nil numHourIntervals:0 startDate:self.startDate endDate:self.endDate privacy:self.private ? kPrivacyValuePrivate : kPrivacyValuePublic password:self.passwordTextField.text homeGameIndex:self.homeGameIndex];
+        
+       
         MySchedulesTableViewController *mstvc = [segue destinationViewController];
         mstvc.scheduleToAdd = scheduleToAdd;
     }

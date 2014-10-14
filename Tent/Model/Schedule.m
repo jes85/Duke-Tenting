@@ -178,7 +178,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     }
     return self;
 }
-//make this the designated initializer (maybe add a numPeople parameter)
+//Designated initializer (maybe add a numPeople parameter)
 -(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex parseObjectID: (NSString *)parseObjectID
 {
     self = [super init];
@@ -265,20 +265,18 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     self.assignmentsSchedule = [self createZeroesAssignmentsSchedule];
     // PPI
         self.requiredPersonsPerInterval = ceil(self.numPeople/3.0);
-        NSLog(@"PPI %lu", (unsigned long)self.requiredPersonsPerInterval);
     
     
     // Sums Arrays
         [self calculateAvailIntervalSums];
         [self calculateAvailPeopleSums];
-        NSLog(@"AvailIntervalSums: %@ AvailPeopleSums: %@", self.availIntervalSums, self.availPeopleSums);
 
     // Check Error
         if([self checkForError]) return;
     
     // Ideal Slots arrays
         [self generateIdealSlotsArray];
-         NSLog(@"idealSlotsArray %@", self.idealSlotsArray);
+
     // Generate Schedule
         [self generateSchedule];
 }
@@ -308,7 +306,6 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     while(changed==true){
         changed = false;
         for(int p = 0; p<self.numPeople;p++){
-            //NSLog(@"Person %d's total # of intervals available: %@", p, self.availPeopleSums[p]);
 
             if([self.availPeopleSums[p] intValue] < idealSlotsPerAvailablePerson && [self.idealSlotsArray[p] isEqual:@0] ){
                 
@@ -340,23 +337,12 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 -(void)generateSchedule
 {
     
-    //NSLog(@"Assignments Schedule: %@", self.assignmentsSchedule);
-
     // Initial Assignments
         [self assignIntervals];
-        NSLog(@"Pre-swap Assignments Schedule: %@", self.assignmentsSchedule);
-        //[self printAssignmentScheduleIntervalView];
     
     // Calculate Assignment Sums
         [self calculateAssignPeopleSums];
         [self calculateAssignIntervalSums];
-    
-    
-        // print both sums
-    
-        NSLog(@"AvailIntervalSums: %@ AvailPeopleSums: %@", self.availIntervalSums, self.availPeopleSums);
-        NSLog(@"AssignIntervalSums: %@ AssignPeopleSums: %@", self.assignIntervalSums, self.assignPeopleSums);
-
     
     // Swap
     [self swapIntervalsUntilEqualityIsSufficient];
@@ -366,11 +352,6 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     // Re-calculate Assignment Sums
     [self calculateAssignPeopleSums];
     [self calculateAssignIntervalSums];
-    
-        //print
-        NSLog(@"Assignments Schedule: %@", self.assignmentsSchedule);
-        NSLog(@"AssignIntervalSums: %@ AssignPeopleSums: %@", self.assignIntervalSums, self.assignPeopleSums);
-    
     
     //[self swapSolos];
     
@@ -462,7 +443,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 -(void)swapFromEndIfPossibleAssignIntervalTo:(NSUInteger)personGainingInterval takeAwayFrom:(NSUInteger)personLosingInterval
 {
     //change to allow ends to be swapped
-    for(int i = self.numIntervals-1; i>0;i--){
+    for(NSUInteger i = self.numIntervals-1; i>0;i--){
         if([self.assignPeopleSums[personGainingInterval] integerValue] >= ceil([self.idealSlotsArray[personGainingInterval ] floatValue]) || [self.assignPeopleSums[personLosingInterval] integerValue] <= ceil([self.idealSlotsArray[personLosingInterval] floatValue])){
             return;
         }
@@ -482,7 +463,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 }
 
 
-#pragma mark - Array Shit
+#pragma mark - Array Stuff
 -(float)maximumValueInArray:(NSArray *)array
 {
     float maxValue = [array[0] floatValue];
@@ -596,7 +577,6 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         return YES;
     if (!other || ![other isKindOfClass:[self class]])
         return NO;
-    //NSLog(@"IS Equal");
     return [self isEqualToSchedule:other];
 }
 
