@@ -15,10 +15,10 @@
 int main(int argc, char * argv[])
 {
     @autoreleasepool {
-        //return UIApplicationMain(argc, argv, nil, NSStringFromClass([ScheduleAppDelegate class]));
-        AlgorithmTest *test = [[AlgorithmTest alloc]init];
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([ScheduleAppDelegate class]));
+        /*AlgorithmTest *test = [[AlgorithmTest alloc]init];
         [test setup];
         
-        return 0;
+        return 0;*/
     }
 }

@@ -143,41 +143,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 }
 
 #pragma mark - init
-//get rid of this?
--(instancetype)initWithNumPeople:(NSUInteger)numPeople numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate
-{
-    self = [super init];
-    if(self){
-        // call designated initializer
-        self = [self initWithName:nil availabilitiesSchedule:[[NSMutableArray alloc] initWithCapacity: numPeople] assignmentsSchedule:[[NSMutableArray alloc] initWithCapacity: numPeople] numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:nil  password:nil homeGameIndex:-1 parseObjectID:nil];
-        
-    }
-    return self;
-}
-//get rid of this?
--(instancetype)initWithNumPeople:(NSUInteger)numPeople withNumIntervals:(NSUInteger)numIntervals
-{
-    self = [super init];
-    if(self){
-        self.numPeople = numPeople;
-        self.numIntervals = numIntervals;
-    }
-    return self;
-}
 
-
--(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex:(NSUInteger)homeGameIndex{
-    self = [super init];
-    if(self){
-       
-        
-        
-        self = [self initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex parseObjectID:nil];
-        
-        
-    }
-    return self;
-}
 //Designated initializer (maybe add a numPeople parameter)
 -(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex parseObjectID: (NSString *)parseObjectID
 {
@@ -194,7 +160,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         self.password = password;
         
         self.parseObjectID = parseObjectID;
-
+        
         
         if(assignmentsSchedule){
             self.assignmentsSchedule = assignmentsSchedule;
@@ -219,23 +185,20 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     }
     return self;
 }
--(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule startDate:(NSDate *)startDate endDate:(NSDate *)endDate
-{
+-(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex:(NSUInteger)homeGameIndex{
     self = [super init];
     if(self){
-        
-        double time = [endDate timeIntervalSinceDate:startDate];
-        NSUInteger numHourIntervals = (NSUInteger)time/3600;
        
-        // call designated initializer
-         self = [self initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:nil password:nil homeGameIndex:-1 parseObjectID:nil];
+        
+        //call designated initializer
+        self = [self initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex parseObjectID:nil];
         
         
     }
     return self;
-
 }
--(instancetype)initWithName:(NSString *)name startDate:(NSDate *)startDate endDate:(NSDate *)endDate
+
+-(instancetype)initWithName:(NSString *)name startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex
 {
     self = [super init];
     if(self){
@@ -245,7 +208,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         NSUInteger numHourIntervals = (NSUInteger)time/3600;
 
          //call designated initializer
-        self = [self initWithName:name availabilitiesSchedule:[[NSMutableArray alloc]init] assignmentsSchedule:nil numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:nil password:nil homeGameIndex:-1 parseObjectID:nil];
+        self = [self initWithName:name availabilitiesSchedule:[[NSMutableArray alloc]init] assignmentsSchedule:nil numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex parseObjectID:nil];
         
         
         
@@ -259,10 +222,12 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 
 #pragma mark - Setup methods
 
--(void)setup
+-(BOOL)setup
 {
     
     self.assignmentsSchedule = [self createZeroesAssignmentsSchedule];
+    
+    
     // PPI
         self.requiredPersonsPerInterval = ceil(self.numPeople/3.0);
     
@@ -272,13 +237,15 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         [self calculateAvailPeopleSums];
 
     // Check Error
-        if([self checkForError]) return;
+        if([self checkForError]) return false;
     
     // Ideal Slots arrays
         [self generateIdealSlotsArray];
 
     // Generate Schedule
         [self generateSchedule];
+    
+    return true;
 }
 
 

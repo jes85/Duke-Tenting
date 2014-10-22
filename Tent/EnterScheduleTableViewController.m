@@ -78,7 +78,7 @@
     cell.textLabel.text = interval;
    
     
-    if([self.currentPerson.availabilitiesArray[indexPath.row] isEqual:@1]){
+    if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
         cell.assignedOrAvailableLabel.text = @"(Assigned)";
         cell.iconImageView.image =[UIImage imageNamed:@"GreenCircle"];
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:0 green:.3 blue:0 alpha:1.0];

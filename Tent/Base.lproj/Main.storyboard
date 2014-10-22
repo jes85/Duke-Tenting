@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="rM1-ua-818">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="rM1-ua-818">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
-        <!--Add Person View Controller - Add Person-->
+        <!--Add Person-->
         <scene sceneID="81M-3u-Ccu">
             <objects>
                 <viewController id="wPc-lp-NMA" customClass="AddPersonViewController" sceneMemberID="viewController">
@@ -56,7 +56,7 @@
             </objects>
             <point key="canvasLocation" x="3652" y="-2083"/>
         </scene>
-        <!--Pick Person Table View Controller - People List-->
+        <!--People List-->
         <scene sceneID="rFr-vt-8ge">
             <objects>
                 <tableViewController id="TOa-mG-3fN" customClass="PickPersonTableViewController" sceneMemberID="viewController">
@@ -96,7 +96,7 @@
             </objects>
             <point key="canvasLocation" x="2414" y="-1809"/>
         </scene>
-        <!--Intervals Table View Controller - Time Intervals List-->
+        <!--Time Intervals List-->
         <scene sceneID="kwK-Xi-z99">
             <objects>
                 <tableViewController id="hpW-qB-wDj" customClass="IntervalsTableViewController" sceneMemberID="viewController">
@@ -128,7 +128,7 @@
             </objects>
             <point key="canvasLocation" x="2414" y="-668"/>
         </scene>
-        <!--Persons In Interval Table View Controller - Available/Assigned People-->
+        <!--Available/Assigned People-->
         <scene sceneID="0jk-sX-spL">
             <objects>
                 <tableViewController id="y3K-f7-5YJ" customClass="PersonsInIntervalTableViewController" sceneMemberID="viewController">
@@ -157,7 +157,7 @@
             </objects>
             <point key="canvasLocation" x="2960" y="-668"/>
         </scene>
-        <!--Enter Schedule Table View Controller - Enter Availabilities-->
+        <!--Enter Availabilities-->
         <scene sceneID="loT-qd-Ft2">
             <objects>
                 <tableViewController hidesBottomBarWhenPushed="YES" id="4yK-G7-dA5" customClass="EnterScheduleTableViewController" sceneMemberID="viewController">
@@ -228,7 +228,7 @@
             </objects>
             <point key="canvasLocation" x="3120" y="-1351"/>
         </scene>
-        <!--Create Schedule Table View Controller - Create Schedule-->
+        <!--Create Schedule-->
         <scene sceneID="rqv-ou-ep7">
             <objects>
                 <tableViewController id="rsk-Jd-lrE" customClass="CreateScheduleTableViewController" sceneMemberID="viewController">
@@ -416,7 +416,7 @@
             </objects>
             <point key="canvasLocation" x="2028" y="-2073"/>
         </scene>
-        <!--Generate Schedule View Controller - Schedule-->
+        <!--Schedule-->
         <scene sceneID="rzp-UV-wcO">
             <objects>
                 <viewController id="sxk-Cx-Z7T" customClass="GenerateScheduleViewController" sceneMemberID="viewController">
@@ -471,7 +471,7 @@
             </objects>
             <point key="canvasLocation" x="1902" y="230"/>
         </scene>
-        <!--Home Base Table View Controller - Home-->
+        <!--Home-->
         <scene sceneID="Qny-hy-u7l">
             <objects>
                 <tableViewController id="zzR-bq-WU6" customClass="HomeBaseTableViewController" sceneMemberID="viewController">
@@ -573,7 +573,7 @@
             </objects>
             <point key="canvasLocation" x="1914" y="-660"/>
         </scene>
-        <!--My Schedules Table View Controller - My Schedules-->
+        <!--My Schedules-->
         <scene sceneID="Iar-1d-Bgh">
             <objects>
                 <tableViewController id="0zv-be-eut" customClass="MySchedulesTableViewController" sceneMemberID="viewController">
@@ -733,7 +733,6 @@
                                         </button>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dvs-dT-PYH">
                                             <rect key="frame" x="139" y="53" width="54" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
@@ -815,13 +814,11 @@
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Opponent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IfX-kd-ldO">
                                             <rect key="frame" x="20" y="39" width="77" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Game Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZAa-sL-pGw">
                                             <rect key="frame" x="105" y="39" width="89" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <nil key="highlightedColor"/>
                                         </label>

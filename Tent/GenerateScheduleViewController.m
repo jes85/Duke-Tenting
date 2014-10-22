@@ -16,6 +16,7 @@ static NSString *kGenerateScheduleID = @"Generate Schedule";
 static NSString *kClearAssignmentsID = @"Clear Assignments";
 static NSString *kClearAllID = @"Clear All";
 static NSString *kGenerateScheduleFinishedID = @"Success!";
+static NSString *kGenerateScheduleErrorID = @"Error";
 
 @interface GenerateScheduleViewController ()
 
@@ -60,7 +61,12 @@ static NSString *kGenerateScheduleFinishedID = @"Success!";
 -(void)generateSchedule
 {
     NSLog(@"Generating Schedule");
-    [self.schedule setup];//this does everthing to generate the assignments schedule
+    if(![self.schedule setup]){//this does everthing to generate the assignments schedule. returns false if there's an error
+        UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:kGenerateScheduleErrorID message:@"Generate Schedule unsuccessful. Probably not enough people available in one or more intervals." delegate:self cancelButtonTitle:@"Ok"otherButtonTitles:nil];
+        
+        [errorAlert show];
+        return;
+    };
    
     PFQuery *query = [PFQuery queryWithClassName:@"Schedule"];
     [query whereKey:@"name" equalTo:self.schedule.name];//change to schedule ID later
@@ -75,16 +81,20 @@ static NSString *kGenerateScheduleFinishedID = @"Success!";
     PFQuery *query2 = [PFQuery queryWithClassName:@"Person"];
     [query2 whereKey:@"scheduleName" equalTo:self.schedule.name];
     [query2 findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        
+        if(error){
+            [self clearAssignments];
+            
+            UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:kGenerateScheduleErrorID message:@"The assignments schedule was not successfully generated. Probably an internet issue" delegate:self cancelButtonTitle:@"Ok"otherButtonTitles:nil];
+            [errorAlert show];
+        }
         for(PFObject *object in objects){
             NSNumber *index = object[@"index"];
             object[@"assignmentsArray"] = self.schedule.assignmentsSchedule[[index intValue]];
             [object saveInBackground];
-            UIAlertView *messageAlert = [[UIAlertView alloc]initWithTitle:kGenerateScheduleFinishedID message:@"The assignments schedule was successfully generated" delegate:self cancelButtonTitle:@"Ok"otherButtonTitles:nil];
-            
-            [messageAlert show];
         }
+        UIAlertView *successAlert = [[UIAlertView alloc]initWithTitle:kGenerateScheduleFinishedID message:@"The assignments schedule was successfully generated." delegate:self cancelButtonTitle:@"Ok"otherButtonTitles:nil];
         
+        [successAlert show];
     }];
     
     

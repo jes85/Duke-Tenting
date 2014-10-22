@@ -586,7 +586,7 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
         scheduleToAdd.homeGameIndex = self.homeGameIndex;
         */
         
-        Schedule *scheduleToAdd = [[Schedule alloc]initWithName:self.nameOfScheduleTextField.text availabilitiesSchedule:[[NSMutableArray alloc] init] assignmentsSchedule:nil numHourIntervals:0 startDate:self.startDate endDate:self.endDate privacy:self.private ? kPrivacyValuePrivate : kPrivacyValuePublic password:self.passwordTextField.text homeGameIndex:self.homeGameIndex];
+        Schedule *scheduleToAdd = [[Schedule alloc]initWithName:self.nameOfScheduleTextField.text startDate:self.startDate endDate:self.endDate privacy:self.private ? kPrivacyValuePrivate : kPrivacyValuePublic password:self.passwordTextField.text homeGameIndex:self.homeGameIndex];
         
        
         MySchedulesTableViewController *mstvc = [segue destinationViewController];
