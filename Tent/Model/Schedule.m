@@ -155,7 +155,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         self.numIntervals = numHourIntervals;
         self.startDate = startDate;
         self.endDate = endDate;
-        
+        self.homeGameIndex = homeGameIndex;
         self.privacy = privacy;
         self.password = password;
         

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="rM1-ua-818">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="rM1-ua-818">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
@@ -182,6 +182,7 @@
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RedX" translatesAutoresizingMaskIntoConstraints="NO" id="z8z-AC-M4q">
                                             <rect key="frame" x="293" y="13" width="18" height="17"/>
                                             <constraints>
+                                                <constraint firstAttribute="height" constant="17" id="29d-Sl-Lj3"/>
                                                 <constraint firstAttribute="width" constant="18" id="VQb-4N-gp8"/>
                                             </constraints>
                                         </imageView>
@@ -189,9 +190,8 @@
                                     <constraints>
                                         <constraint firstItem="z8z-AC-M4q" firstAttribute="leading" secondItem="vvc-ef-pad" secondAttribute="trailing" constant="20" id="7SO-TX-OcS"/>
                                         <constraint firstAttribute="trailing" secondItem="z8z-AC-M4q" secondAttribute="trailing" multiplier="0.96" constant="21.439999999999998" id="A6d-uC-ZoD"/>
-                                        <constraint firstItem="z8z-AC-M4q" firstAttribute="bottom" secondItem="vvc-ef-pad" secondAttribute="bottom" constant="2" id="JPL-ia-o7V"/>
-                                        <constraint firstItem="z8z-AC-M4q" firstAttribute="top" secondItem="xiN-jI-jdh" secondAttribute="top" constant="13" id="RWg-kY-XKk"/>
                                         <constraint firstAttribute="bottom" secondItem="vvc-ef-pad" secondAttribute="bottom" constant="15" id="mwV-Xh-4qY"/>
+                                        <constraint firstItem="z8z-AC-M4q" firstAttribute="centerY" secondItem="vvc-ef-pad" secondAttribute="centerY" constant="-0.5" id="nRQ-c4-uYh"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>

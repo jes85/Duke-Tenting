@@ -48,6 +48,23 @@
     
 }
 
++(Schedule *)createScheduleObjectFromParseInfo: (PFObject *)parseSchedule{
+        NSString *name = parseSchedule[kSchedulePropertyName];
+        NSMutableArray *availabilitiesSchedule = parseSchedule[kSchedulePropertyAvailabilitiesSchedule];
+        NSMutableArray *assignmentsSchedule = parseSchedule[kSchedulePropertyAssignmentsSchedule];
+        NSDate *startDate = parseSchedule[kSchedulePropertyStartDate];
+        NSDate *endDate = parseSchedule[kSchedulePropertyEndDate];
+        NSUInteger numHourIntervals = [parseSchedule[kSchedulePropertyNumHourIntervals ] integerValue];
+        NSString *privacy = parseSchedule[kSchedulePropertyPrivacy];
+        NSString *password = parseSchedule[kSchedulePropertyPassword];
+        NSUInteger homeGameIndex = [parseSchedule[kSchedulePropertyHomeGameIndex] integerValue];
+        NSString *objectID = parseSchedule.objectId;
+
+        Schedule *scheduleObject = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex parseObjectID:objectID] ;
+    
+        return scheduleObject;
+}
+
 /*!
  *  Query Parse to retrieve schedules that current user is a part of
  */
@@ -58,20 +75,10 @@
     [query findObjectsInBackgroundWithBlock:^(NSArray *schedulesForThisUser, NSError *error) {
         self.schedules = nil;
         if(!error){
-            for(PFObject *schedule in schedulesForThisUser){
-                NSString *name = schedule[kSchedulePropertyName];
-                NSMutableArray *availabilitiesSchedule = schedule[kSchedulePropertyAvailabilitiesSchedule];
-                NSMutableArray *assignmentsSchedule = schedule[kSchedulePropertyAssignmentsSchedule];
-                NSDate *startDate = schedule[kSchedulePropertyStartDate];
-                NSDate *endDate = schedule[kSchedulePropertyEndDate];
-                NSUInteger numHourIntervals = [schedule[kSchedulePropertyNumHourIntervals ] integerValue];
-                NSString *privacy = schedule[kSchedulePropertyPrivacy];
-                NSString *password = schedule[kSchedulePropertyPassword];
-                NSUInteger homeGameIndex = [schedule[kSchedulePropertyHomeGameIndex] integerValue];
+            for(PFObject *parseSchedule in schedulesForThisUser){
+                Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
                 
-                Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex] ;
-                
-                [self.schedules addObject:schedule];
+                [self.schedules addObject:scheduleObject];
                 [self.tableView reloadData];
             }
         }
@@ -124,6 +131,9 @@
     PFQuery *query = [PFQuery queryWithClassName:kScheduleClassName];
     [query getObjectInBackgroundWithId: self.scheduleToJoin.parseObjectID block:^(PFObject *parseSchedule, NSError *error) {
         if(!error){
+            
+            Schedule *joinedScheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
+            /*
             NSString *name = parseSchedule[kSchedulePropertyName];
             NSMutableArray *availabilitiesSchedule = parseSchedule[kSchedulePropertyAvailabilitiesSchedule];
             NSMutableArray *assignmentsSchedule = parseSchedule[kSchedulePropertyAssignmentsSchedule];
@@ -133,28 +143,34 @@
             NSString *privacy = parseSchedule[kSchedulePropertyPrivacy];
             NSString *password = parseSchedule[kSchedulePropertyPassword];
             NSUInteger homeGameIndex = [parseSchedule[kSchedulePropertyHomeGameIndex] integerValue];
-            
-            NSMutableArray *zeroesArray =[self createZeroesArrayOfLength: numHourIntervals];
+            */
+            NSMutableArray *zeroesArray =[self createZeroesArrayOfLength: joinedScheduleObject.numHourIntervals];
             
             
             PFObject *personObject = [PFObject objectWithClassName:kPersonClassName];
             personObject[kPersonPropertyName] = [[PFUser currentUser] objectForKey:kUserPropertyFullName];
-            personObject[kPersonPropertyIndex] = [NSNumber numberWithInteger:[availabilitiesSchedule count]];
+            personObject[kPersonPropertyIndex] = [NSNumber numberWithInteger:[joinedScheduleObject.availabilitiesSchedule count]];
             personObject[kPersonPropertyAvailabilitiesArray] = zeroesArray;
             personObject[kPersonPropertyAssignmentsArray] = zeroesArray;
             
             
-            [availabilitiesSchedule addObject:[zeroesArray copy]];
-            [assignmentsSchedule addObject:[zeroesArray copy]];
+            //[availabilitiesSchedule addObject:[zeroesArray copy]];
+            //[assignmentsSchedule addObject:[zeroesArray copy]];
+            [joinedScheduleObject.availabilitiesSchedule addObject:[zeroesArray copy]];
+            [joinedScheduleObject.assignmentsSchedule addObject:[zeroesArray copy]];
             
-            parseSchedule[kSchedulePropertyAvailabilitiesSchedule] = availabilitiesSchedule;
-            parseSchedule[kSchedulePropertyAssignmentsSchedule] = assignmentsSchedule;
+            //parseSchedule[kSchedulePropertyAvailabilitiesSchedule] = availabilitiesSchedule;
+            //parseSchedule[kSchedulePropertyAssignmentsSchedule] = assignmentsSchedule;
+            
+            parseSchedule[kSchedulePropertyAvailabilitiesSchedule] = joinedScheduleObject.availabilitiesSchedule;
+            parseSchedule[kSchedulePropertyAssignmentsSchedule] = joinedScheduleObject.assignmentsSchedule;
             
             
-            Schedule *joinedSchedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex] ;
+            
+            //Schedule *joinedSchedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex] ;
 
            
-            personObject[@"scheduleName"] = joinedSchedule.name; //change this to a PFRelation to the schedule
+            personObject[@"scheduleName"] = joinedScheduleObject.name; //change this to a PFRelation to the schedule
             [personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if(!error){
                     PFRelation *relation = [parseSchedule relationForKey:kSchedulePropertyPersonsList];
@@ -167,7 +183,7 @@
                          PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertySchedulesList];
                          [relation addObject:parseSchedule];
                          [[PFUser currentUser] saveInBackground];
-                         [self.schedules addObject:joinedSchedule];
+                         [self.schedules addObject:joinedScheduleObject];
                          [self.tableView reloadData];
                      }
                  }];
@@ -204,6 +220,7 @@
     scheduleObject[kSchedulePropertyPrivacy] = newSchedule.privacy ? kPrivacyValuePrivate : kPrivacyValuePublic;
     scheduleObject[kSchedulePropertyPassword] = newSchedule.password;
     scheduleObject[kSchedulePropertyHomeGameIndex] = [NSNumber numberWithInteger:newSchedule.homeGameIndex];
+    NSLog(@"index: %lu", (unsigned long)newSchedule.homeGameIndex);
     scheduleObject[kSchedulePropertyCreatedBy] = [PFUser currentUser];
    
     NSMutableArray *zeroesArray =[self createZeroesArrayOfLength: newSchedule.numHourIntervals];

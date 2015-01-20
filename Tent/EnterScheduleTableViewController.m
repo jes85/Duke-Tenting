@@ -60,11 +60,33 @@
     return [self.hourIntervalsDisplayArray count];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    
-    return @"     Time                                          Status "; //fix for autolayout
-}
 
+/*
+ * Custom table header view. Add constraints.
+*/
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UILabel *label1 = [[UILabel alloc] init];
+    label1.frame = CGRectMake(10, 2, tableView.frame.size.width /2, 18);
+    label1.text=@"Time";
+    //label1.backgroundColor=[UIColor clearColor];
+    label1.textAlignment= NSTextAlignmentLeft;
+    
+    UILabel *label2 = [[UILabel alloc] init];
+    label2.frame = CGRectMake(tableView.frame.origin.x + tableView.frame.size.width/2, 2, tableView.frame.size.width/2, 18);
+    label2.text=@"Status";
+    //label2.backgroundColor=[UIColor clearColor];
+    label2.textAlignment= NSTextAlignmentCenter;
+    
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 22)];
+    [view addSubview:label1];
+    [view addSubview:label2];
+    
+    return view;
+    
+    
+
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
