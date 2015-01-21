@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
 
 @class Schedule;
+
 
 @interface MySchedulesTableViewController : UITableViewController
 
@@ -21,4 +23,5 @@
 -(IBAction)createSchedule:(UIStoryboardSegue *)segue;
 -(IBAction)joinedSchedule:(UIStoryboardSegue *)segue;
 
++(Schedule *)createScheduleObjectFromParseInfo: (PFObject *)parseSchedule;
 @end

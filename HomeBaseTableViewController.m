@@ -14,6 +14,7 @@
 #import "Interval.h"
 #import "GenerateScheduleViewController.h"
 #import "Constants.h"
+#import "MySchedulesTableViewController.h"
 
 @interface HomeBaseTableViewController () <GenerateScheduleViewControllerDelegate>
 
@@ -150,28 +151,15 @@
 
     
      PFQuery *query = [PFQuery queryWithClassName:@"Schedule"];
-     [query whereKey:@"name" equalTo:self.schedule.name];
-     [query getFirstObjectInBackgroundWithBlock:^(PFObject *schedule, NSError *error) {
-     if(!schedule){
+     [query whereKey:@"name" equalTo:self.schedule.name];//change to object ID
+     [query getFirstObjectInBackgroundWithBlock:^(PFObject *parseSchedule, NSError *error) {
+     if(!parseSchedule){
      NSLog(@"Find failed");
      }else{
      NSLog(@"Find schedule for update succeeded");
+         Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
      
-         NSString *name = schedule[kSchedulePropertyName];
-         NSMutableArray *availabilitiesSchedule = schedule[kSchedulePropertyAvailabilitiesSchedule];
-         NSMutableArray *assignmentsSchedule = schedule[kSchedulePropertyAssignmentsSchedule];
-         NSDate *startDate = schedule[kSchedulePropertyStartDate];
-         NSDate *endDate = schedule[kSchedulePropertyEndDate];
-         NSUInteger numHourIntervals = [schedule[kSchedulePropertyNumHourIntervals ] integerValue];
-         NSString *privacy = schedule[kSchedulePropertyPrivacy];
-         NSString *password = schedule[kSchedulePropertyPassword];
-         NSUInteger homeGameIndex = [schedule[kSchedulePropertyHomeGameIndex] integerValue];
-         
-         Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex] ;
-     
-         self.schedule=schedule;
-     
-     
+         self.schedule=scheduleObject;
      }
      }];
     

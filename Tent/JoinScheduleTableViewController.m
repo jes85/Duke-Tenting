@@ -54,22 +54,12 @@
         }else{
             NSLog(@"Find schedules associated with home game index %lu succeeded", (unsigned long)self.homeGameIndex);
             NSMutableArray *array = [[NSMutableArray alloc]init];
-            for(PFObject *schedule in schedules){
-                NSString *name = schedule[kSchedulePropertyName];
-                NSMutableArray *availabilitiesSchedule = schedule[kSchedulePropertyAvailabilitiesSchedule];
-                NSMutableArray *assignmentsSchedule = schedule[kSchedulePropertyAssignmentsSchedule];
-                NSDate *startDate = schedule[kSchedulePropertyStartDate];
-                NSDate *endDate = schedule[kSchedulePropertyEndDate];
-                NSUInteger numHourIntervals = [schedule[kSchedulePropertyNumHourIntervals ] integerValue];
-                NSString *privacy = schedule[kSchedulePropertyPrivacy];
-                NSString *password = schedule[kSchedulePropertyPassword];
-                NSUInteger homeGameIndex = [schedule[kSchedulePropertyHomeGameIndex] integerValue];
+            for(PFObject *parseSchedule in schedules){
                 
-                NSString *objectID = schedule.objectId;
                 
-                Schedule *schedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex parseObjectID:objectID] ;
+                Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule] ;
                 
-                [array addObject:schedule];
+                [array addObject:scheduleObject];
                 self.schedulesAssociatedWithThisHomeGame = array;
                 [self.tableView reloadData];
                 

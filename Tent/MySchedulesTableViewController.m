@@ -8,7 +8,6 @@
 
 #import "MySchedulesTableViewController.h"
 #import "Schedule.h"
-#import <Parse/Parse.h>
 #import "CreateScheduleTableViewController.h"
 #import "NameOfScheduleTableViewCell.h"
 #import "HomeBaseTableViewController.h"
