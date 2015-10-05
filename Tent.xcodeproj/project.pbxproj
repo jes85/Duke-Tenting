@@ -18,6 +18,7 @@
 		3F0294681982C0200016845A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294671982C0200016845A /* SystemConfiguration.framework */; };
 		3F09B1D41BC2B2EF00AB27CD /* ContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F09B1D31BC2B2EF00AB27CD /* ContainerViewController.m */; };
 		3F09B1D81BC2D59000AB27CD /* Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F09B1D71BC2D59000AB27CD /* Test.m */; };
+		3F09B1DB1BC2E2EB00AB27CD /* Test0.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F09B1DA1BC2E2EB00AB27CD /* Test0.m */; };
 		3F1107E419903FDB0063ED9B /* Interval.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1107E319903FDB0063ED9B /* Interval.m */; };
 		3F28B37019C7A214006E9C97 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F28B36F19C7A214006E9C97 /* Parse.framework */; };
 		3F296DB4199131A20059E19E /* PersonsInIntervalTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */; };
@@ -87,6 +88,8 @@
 		3F09B1D31BC2B2EF00AB27CD /* ContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ContainerViewController.m; path = "Container View Controllers/ContainerViewController.m"; sourceTree = "<group>"; };
 		3F09B1D61BC2D59000AB27CD /* Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test.h; sourceTree = "<group>"; };
 		3F09B1D71BC2D59000AB27CD /* Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test.m; sourceTree = "<group>"; };
+		3F09B1D91BC2E2EB00AB27CD /* Test0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test0.h; sourceTree = "<group>"; };
+		3F09B1DA1BC2E2EB00AB27CD /* Test0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test0.m; sourceTree = "<group>"; };
 		3F1107E219903FDB0063ED9B /* Interval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Interval.h; path = Model/Interval.h; sourceTree = "<group>"; };
 		3F1107E319903FDB0063ED9B /* Interval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Interval.m; path = Model/Interval.m; sourceTree = "<group>"; };
 		3F28B36F19C7A214006E9C97 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = "../AnyWall-master/Parse.framework"; sourceTree = "<group>"; };
@@ -291,6 +294,8 @@
 				3FA6D5191965E7A50043087B /* Main.storyboard */,
 				3F09B1D61BC2D59000AB27CD /* Test.h */,
 				3F09B1D71BC2D59000AB27CD /* Test.m */,
+				3F09B1D91BC2E2EB00AB27CD /* Test0.h */,
+				3F09B1DA1BC2E2EB00AB27CD /* Test0.m */,
 				3F09B1D51BC2B2F500AB27CD /* Container View Controllers */,
 				3FC432B619A0579600B560F1 /* Login */,
 				3F44CE6019CCE7E200271D3E /* Adding Schedules */,
@@ -499,6 +504,7 @@
 				3FDE35661980A6DA00CE47D8 /* Schedule.m in Sources */,
 				3F9B3E081989DEAA0041EFCC /* IntervalsTableViewController.m in Sources */,
 				3F94B853199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m in Sources */,
+				3F09B1DB1BC2E2EB00AB27CD /* Test0.m in Sources */,
 				3FCB16C419AE5BAF004E1BF3 /* NewScheduleTableViewController.m in Sources */,
 				3F09B1D81BC2D59000AB27CD /* Test.m in Sources */,
 				3FDE35631980A5DA00CE47D8 /* Person.m in Sources */,

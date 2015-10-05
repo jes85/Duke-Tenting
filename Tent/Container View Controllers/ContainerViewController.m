@@ -11,18 +11,27 @@
 
 @interface ContainerViewController ()
 @property (weak, nonatomic) IBOutlet UIView *containerView;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @property (nonatomic) UIViewController *currentViewController;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
+
+
 @end
 
 @implementation ContainerViewController
+
+-(NSArray*)viewControllers{
+    if(!_viewControllers){
+        _viewControllers = [self instantiateViewControllers];
+    }
+    return _viewControllers;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
+    
 }
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -45,6 +54,9 @@
 }
 - (UIViewController *) viewControllerForSegmentIndex: (NSInteger)index
 {
+    
+    return self.viewControllers[index];
+    /*
     UIViewController *vc;
     switch (index) {
         case 0:
@@ -60,6 +72,22 @@
     }
     
     return vc;
+     */
+}
+
+-(NSArray *)instantiateViewControllers
+{
+    NSArray *viewControllerIdentifiers = @[kChildViewControllerMe, kChildViewControllerPeople, kChildViewControllerTimeSlots];
+    NSMutableArray *array = [[NSMutableArray alloc]initWithCapacity:3];
+    
+    
+    UIViewController *vc;
+    for (NSString *identifier in viewControllerIdentifiers) {
+        vc = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+        [array addObject:vc];
+    }
+    
+    return array;
 }
 
 - (void)cycleFromViewController: (UIViewController*) oldVC

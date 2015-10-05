@@ -1,20 +1,18 @@
 //
-//  Test.m
+//  Test0.m
 //  Tent
 //
 //  Created by Jeremy on 10/5/15.
 //  Copyright (c) 2015 Jeremy. All rights reserved.
 //
 
-#import "Test.h"
 #import "Test0.h"
-#import "ContainerViewController.h"
 
-@interface Test ()
+@interface Test0 ()
 
 @end
 
-@implementation Test
+@implementation Test0
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -24,27 +22,6 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    //[NSThread sleepForTimeInterval:1];
-    UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
-    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Reload Data"];
-    [refresh addTarget:self action:@selector(updateAllInformation) forControlEvents:UIControlEventValueChanged];
-    
-    self.refreshControl = refresh;
-}
--(void)stopRefresh
-{
-    [self.refreshControl endRefreshing];
-}
-- (void)updateAllInformation
-{
-    //[ClassMethod updateScheduleDataForSchedule:currentSchedule];
-
-    ContainerViewController *cvc = (ContainerViewController *) self.parentViewController;
-    Test0 *vc = (Test0 *)cvc.viewControllers[0];
-    vc.tableView.rowHeight +=100;
-    [vc updateShit];
-    [self performSelector:@selector(stopRefresh) withObject:nil afterDelay:0];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -64,6 +41,18 @@
 #warning Incomplete method implementation.
     // Return the number of rows in the section.
     return 3;
+}
+
+
+-(void)updateShit
+{
+    NSLog(@"Update shit");
+    [self helperMethod];
+}
+
+-(void)helperMethod
+{
+    NSLog(@"Helper");
 }
 
 /*

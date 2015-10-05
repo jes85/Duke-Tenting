@@ -1,5 +1,5 @@
 //
-//  ContainerViewController.h
+//  Test0.h
 //  Tent
 //
 //  Created by Jeremy on 10/5/15.
@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ContainerViewController : UIViewController
-@property (nonatomic) NSArray *viewControllers;
-
+@interface Test0 : UITableViewController
+-(void)updateShit;
 @end
