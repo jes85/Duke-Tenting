@@ -41,7 +41,36 @@ static const NSUInteger numHomeGames = 18;
  */
 -(void)loadHomeGameScheduleData
 {
+    NSError *error;
+    NSData *data = [NSData dataWithContentsOfFile:@"/Users/jeremy/Developer/Xcode/Tent/Tent/dukeschedule.txt" options:0 error:&error];
+    NSString *scheduleFileContents = [NSString stringWithContentsOfFile:@"/Users/jeremy/Developer/Xcode/Tent/Tent/dukeschedule.txt" encoding: NSUTF8StringEncoding error:&error];
+    NSArray *jsonHomeGames = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:jsonHomeGames.count];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [[NSDateComponents alloc]init];
     
+    
+    for(int i = 0; i<jsonHomeGames.count; i++){
+        NSDictionary *gameInfo = jsonHomeGames[i];
+        [components setYear:[gameInfo[@"date_year"] integerValue]];
+        [components setMonth: [gameInfo[@"date_month"] integerValue]];
+        [components setDay:[gameInfo[@"date_day"] integerValue]];
+        [components setHour:[gameInfo[@"time_hour"]integerValue]];
+        [components setMinute:[gameInfo[@"time_minutes"]integerValue]];
+        [components setWeekday:[gameInfo[@"date_weekday"]integerValue]];
+        NSDate *gameTime = [calendar dateFromComponents:components];
+        NSString *opponent = gameInfo[@"opponent"];
+        BOOL isExhibition = [gameInfo[@"exhibition"] boolValue];
+        BOOL isConferenceGame = [gameInfo[@"conference_game"] boolValue];
+        
+        HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame];
+        [homeGamesTemp addObject: homeGame];
+        
+    }
+    self.homeGames = [homeGamesTemp copy];
+
+    
+    /*
     NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:numHomeGames];
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [[NSDateComponents alloc]init];
@@ -298,7 +327,7 @@ static const NSUInteger numHomeGames = 18;
     
     HomeGame *homeGame18 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
     [homeGamesTemp addObject: homeGame18 ];
-    
+    */
     
     self.homeGames = [homeGamesTemp copy];
 }
@@ -355,6 +384,13 @@ static const NSUInteger numHomeGames = 18;
     cell.dateLabel.text = dateLabelText;
     cell.timeLabel.text = timeLabelText;
     
+    // Disable past games
+    if([homeGame.gameTime timeIntervalSinceNow] < 0){
+        cell.joinButton.userInteractionEnabled = NO;
+        cell.createButton.userInteractionEnabled = NO;
+    }
+    
+    // Present the most recent future game at the top of the page
     
     
     

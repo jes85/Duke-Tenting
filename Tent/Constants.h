@@ -40,4 +40,8 @@
 
 #define kUserPropertyFullName                   @"additional"
 
+#define kChildViewControllerMe                  @"My Schedule View Controller"
+#define kChildViewControllerPeople              @"List of People View Controller"
+#define kChildViewControllerTimeSlots           @"Time Slots View Controller"
+
 @end

@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *numPeopleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *privacyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *startDate;
+@property (weak, nonatomic) IBOutlet UILabel *endDate;
 
 @property (weak, nonatomic) IBOutlet UIButton *joinButton;
 

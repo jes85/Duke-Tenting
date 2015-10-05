@@ -13,7 +13,8 @@
 @property (nonatomic) NSString *opponentName;
 @property (nonatomic) NSDate *gameTime;
 @property (nonatomic) BOOL isExhibition;
+@property (nonatomic) BOOL isConferenceGame;
 
--(instancetype)initWithOpponentName:(NSString *)name gameTime:(NSDate *)date isExhibition:(BOOL)isExhibition;
+-(instancetype)initWithOpponentName:(NSString *)name gameTime:(NSDate *)date isExhibition:(BOOL)isExhibition isConferenceGame:(BOOL)isConferenceGame;
 
 @end

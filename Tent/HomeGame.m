@@ -10,12 +10,13 @@
 
 @implementation HomeGame
 
--(instancetype)initWithOpponentName:(NSString *)name gameTime:(NSDate *)date isExhibition:(BOOL)isExhibition{
+-(instancetype)initWithOpponentName:(NSString *)name gameTime:(NSDate *)date isExhibition:(BOOL)isExhibition isConferenceGame:(BOOL)isConferenceGame{
     self = [super init];
     if(self){
         self.opponentName = name;
         self.gameTime = date;
         self.isExhibition = isExhibition;
+        self.isConferenceGame = isConferenceGame;
     }
     return self;
 }
