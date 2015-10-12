@@ -40,8 +40,21 @@
 
 #define kUserPropertyFullName                   @"additional"
 
-#define kChildViewControllerMe                  @"My Schedule View Controller"
-#define kChildViewControllerPeople              @"List of People View Controller"
-#define kChildViewControllerTimeSlots           @"Time Slots View Controller"
+#define kChildViewControllerMe                  @"ChildViewControllerMe"
+#define kChildViewControllerCurrent                 @"ChildViewControllerCurrent"
+#define kChildViewControllerOthers              @"ChildViewControllerOthers"
+#define kChildViewControllerTimeSlots           @"ChildViewControllerTimeSlots"
+
+
++(NSString *)formatDate:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
++(NSString *)formatTime:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
+
+/*
++(NSString *)formatWeekday:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
++(NSString *)formatDateOnly:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
++(NSString *)formatWeekdayDateTime:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
++(NSString *)formatWeekdayDate:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
++(NSString *)formatDateTime:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
+*/
 
 @end

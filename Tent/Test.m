@@ -34,6 +34,7 @@
 }
 -(void)stopRefresh
 {
+    NSLog(@"stop refresh");
     [self.refreshControl endRefreshing];
 }
 - (void)updateAllInformation

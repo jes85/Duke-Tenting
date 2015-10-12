@@ -204,18 +204,13 @@
     if([[segue destinationViewController] isKindOfClass:[PickPersonTableViewController class]]){
         
         PickPersonTableViewController *pptvc = [segue destinationViewController];
-        //maybe make personsArray a property of schedule.m? - probably not
-       
-        pptvc.personsArray = self.personsArray;
-        
         pptvc.schedule = self.schedule;
         
     }
     else if([[segue destinationViewController] isKindOfClass:[IntervalsTableViewController class]]){
         
         IntervalsTableViewController *itvc = [segue destinationViewController];
-        itvc.intervalArray = self.schedule.intervalArray;
-        itvc.hourIntervalsDisplayArray = self.schedule.hourIntervalsDisplayArray;
+        itvc.schedule = self.schedule;
         
     }
     else if([[segue destinationViewController] isKindOfClass:[GenerateScheduleViewController class]]){

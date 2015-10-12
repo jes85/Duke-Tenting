@@ -15,10 +15,9 @@
 @interface HomeGamesTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *opponentNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UIView *joinButton;
 @property (weak, nonatomic) IBOutlet UIView *createButton;
+@property (weak, nonatomic) IBOutlet UILabel *gametimeLabel;
 
 @property (nonatomic, weak) id<HomeGameTableViewCellDelegate> delegate;
 

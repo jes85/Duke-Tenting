@@ -8,6 +8,7 @@
 
 #import "Schedule.h"
 #import "Interval.h"
+
 static const int kES = 1;
 static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 
@@ -99,7 +100,11 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     }
     return assignments;
 }
-
+-(NSMutableArray *)personsArray
+{
+    if(!_personsArray)_personsArray = [[NSMutableArray alloc]init];
+    return _personsArray;
+}
 -(NSMutableArray *)intervalArray
 {
     if(!_intervalArray)_intervalArray = [[NSMutableArray alloc]init];
@@ -219,6 +224,78 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return self;
 
 }
+-(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex creator:(PFUser *)creator parseObjectID: (NSString *)parseObjectID
+{
+    self = [super init];
+    if(self){
+        self.availabilitiesSchedule = availabilitiesSchedule;
+        self.numPeople = [self.availabilitiesSchedule count];
+        self.numHourIntervals = numHourIntervals; //get rid of one of these
+        self.numIntervals = numHourIntervals;
+        self.startDate = startDate;
+        self.endDate = endDate;
+        self.homeGameIndex = homeGameIndex;
+        self.privacy = privacy;
+        self.password = password;
+        
+        self.parseObjectID = parseObjectID;
+        
+        
+        if(assignmentsSchedule){
+            self.assignmentsSchedule = assignmentsSchedule;
+        }
+        else{
+            self.assignmentsSchedule = [self createZeroesAssignmentsSchedule];
+        }
+        self.name = name;
+        
+        //intervalArray/hourIntervalDisplayArray
+        [self createIntervalDisplayArray];
+        self.intervalArray = [self createZeroedIntervalArray];
+        
+        
+        //store creator
+        self.creator = creator;
+    }
+    return self;
+}
+
+-(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex admins:(NSArray *)admins parseObjectID: (NSString *)parseObjectID
+{
+    self = [super init];
+    if(self){
+        self.availabilitiesSchedule = availabilitiesSchedule;
+        self.numPeople = [self.availabilitiesSchedule count];
+        self.numHourIntervals = numHourIntervals; //get rid of one of these
+        self.numIntervals = numHourIntervals;
+        self.startDate = startDate;
+        self.endDate = endDate;
+        self.homeGameIndex = homeGameIndex;
+        self.privacy = privacy;
+        self.password = password;
+        
+        self.parseObjectID = parseObjectID;
+        
+        
+        if(assignmentsSchedule){
+            self.assignmentsSchedule = assignmentsSchedule;
+        }
+        else{
+            self.assignmentsSchedule = [self createZeroesAssignmentsSchedule];
+        }
+        self.name = name;
+        
+        //intervalArray/hourIntervalDisplayArray
+        [self createIntervalDisplayArray];
+        self.intervalArray = [self createZeroedIntervalArray];
+        
+        
+        //store admins
+        
+    }
+    return self;
+}
+
 
 #pragma mark - Setup methods
 

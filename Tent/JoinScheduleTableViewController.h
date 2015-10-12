@@ -13,5 +13,8 @@
 
 @property (nonatomic) NSArray *schedulesAssociatedWithThisHomeGame;
 @property (nonatomic) NSUInteger homeGameIndex;
+@property (nonatomic) NSUInteger filterBy;
 
+-(IBAction)doneFilter:(UIStoryboardSegue *)segue;
+-(IBAction)cancelFilter:(UIStoryboardSegue *)segue;
 @end

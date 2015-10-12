@@ -9,24 +9,15 @@
 #import "IntervalsTableViewController.h"
 #import "PersonsInIntervalTableViewController.h"
 #import "Interval.h"
-
 @interface IntervalsTableViewController ()
-
 @end
 
 @implementation IntervalsTableViewController
 
--(NSMutableArray *)intervalArray
+-(void)viewDidLoad
 {
-    if(!_intervalArray)_intervalArray = [[NSMutableArray alloc]init];
-    return _intervalArray;
-}
-
-- (NSArray *)hourIntervalsDisplayArray //make this a class method
-{
-  
-    if(!_hourIntervalsDisplayArray)_hourIntervalsDisplayArray = [[NSArray alloc]init];
-    return _hourIntervalsDisplayArray;
+    [super viewDidLoad];
+   
 }
 
 
@@ -43,7 +34,7 @@
 {
 
     // Return the number of rows in the section.
-    return [self.intervalArray count];
+    return [self.schedule.intervalArray count];
     
 }
 
@@ -52,7 +43,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Interval Cell" forIndexPath:indexPath];
     
     //Configure the cell...
-    NSString *interval = self.hourIntervalsDisplayArray[indexPath.row];
+    NSString *interval = self.schedule.hourIntervalsDisplayArray[indexPath.row];
     
     cell.textLabel.text = interval;
     
@@ -74,12 +65,12 @@
     if([[segue destinationViewController] isKindOfClass:[PersonsInIntervalTableViewController class]]){
         PersonsInIntervalTableViewController *piitvc = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        Interval *interval = self.intervalArray[indexPath.row];
+        Interval *interval = self.schedule.intervalArray[indexPath.row];
         piitvc.availablePersonsArray = interval.availablePersons;
         piitvc.assignedPersonsArray = interval.assignedPersons;
         
         
-        piitvc.navigationItem.title = self.hourIntervalsDisplayArray[indexPath.row];
+        piitvc.navigationItem.title = self.schedule.hourIntervalsDisplayArray[indexPath.row];
 
 
     }

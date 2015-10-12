@@ -30,6 +30,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
+    UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem = back;
     
 }
 - (void)didReceiveMemoryWarning {
@@ -77,8 +79,8 @@
 
 -(NSArray *)instantiateViewControllers
 {
-    NSArray *viewControllerIdentifiers = @[kChildViewControllerMe, kChildViewControllerPeople, kChildViewControllerTimeSlots];
-    NSMutableArray *array = [[NSMutableArray alloc]initWithCapacity:3];
+    NSArray *viewControllerIdentifiers = @[kChildViewControllerMe,kChildViewControllerCurrent, kChildViewControllerOthers,kChildViewControllerTimeSlots];
+    NSMutableArray *array = [[NSMutableArray alloc]initWithCapacity:4];
     
     
     UIViewController *vc;
@@ -112,7 +114,9 @@
 
 - (IBAction)segmentChanged:(UISegmentedControl *)sender {
     UIViewController *newVC = [self viewControllerForSegmentIndex:sender.selectedSegmentIndex];
-    
+    UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    newVC.navigationItem.backBarButtonItem = back;
+
     [self cycleFromViewController:self.currentViewController toViewController:newVC];
     
     self.currentViewController = newVC;

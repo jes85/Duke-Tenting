@@ -7,8 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Parse/Parse.h>
+
 
 @interface Schedule : NSObject
+//TODO: separate schedule object used to store in parse and schedule object used for algorithm into 2 separate classes
 
 // init
 
@@ -22,26 +25,31 @@
 -(instancetype)initWithName:(NSString *)name startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex;
 
 
+//new initializers
+-(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex creator:(PFUser *)creator parseObjectID: (NSString *)parseObjectID;
+-(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex admins:(NSArray *)admins parseObjectID: (NSString *)parseObjectID;
+
 -(BOOL)setup;
 
 // Basic Parameters
 @property(nonatomic) NSUInteger numPeople;
 @property(nonatomic) NSUInteger numIntervals;
 @property(nonatomic) NSUInteger numHourIntervals;//convert to numIntervals and add property that specifies interval range (hour)
-@property (nonatomic, ) NSDate *startDate;
+@property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *endDate;
 @property (nonatomic) NSString *name; //for parse
+@property (nonatomic) NSMutableArray *personsArray;
 @property (nonatomic) NSMutableArray *intervalArray; //Interval[]
-@property (nonatomic)NSArray *hourIntervalsDisplayArray;
+@property (nonatomic) NSArray *hourIntervalsDisplayArray;
 @property (nonatomic) NSString *privacy;
 @property (nonatomic) NSString *password; //how to encrypt this?
 @property (nonatomic) NSUInteger homeGameIndex;
+@property (nonatomic) PFUser *creator;
 @property (nonatomic) NSString *parseObjectID;
 
 // Matrix Schedules (make these private later?)
     @property (nonatomic) NSMutableArray *availabilitiesSchedule;
     @property (nonatomic) NSMutableArray *assignmentsSchedule;
-
 
 
 -(NSMutableArray *)createZeroedIntervalArray;

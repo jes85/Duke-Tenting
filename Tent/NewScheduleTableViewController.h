@@ -9,13 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "HomeGamesTableViewCell.h"
 
-@interface NewScheduleTableViewController : UITableViewController <HomeGameTableViewCellDelegate>
+@interface NewScheduleTableViewController : UITableViewController <HomeGameTableViewCellDelegate, UIAlertViewDelegate>
 
 
 @property (nonatomic) NSMutableArray *publicSchedules;
 @property (nonatomic) NSMutableArray *mySchedules;
 
 -(IBAction)cancelCreateSchedule:(UIStoryboardSegue *)segue;
+
 
 @end
 

@@ -12,7 +12,6 @@
 
 @interface PickPersonTableViewController : UITableViewController
 
-@property (nonatomic) NSMutableArray *personsArray; //change to personsArray
 @property (nonatomic) NSString *addPersonName;
 @property (nonatomic) Schedule *schedule;
 

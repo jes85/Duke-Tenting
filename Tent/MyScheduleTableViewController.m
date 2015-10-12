@@ -1,10 +1,12 @@
 //
-//  EnterScheduleTableViewController.m
+//  MyScheduleTableViewController.m
 //  Tent
 //
-//  Created by Shrek on 7/23/14.
-//  Copyright (c) 2014 Jeremy. All rights reserved.
+//  Created by Jeremy on 10/9/15.
+//  Copyright (c) 2015 Jeremy. All rights reserved.
 //
+
+#import "MyScheduleTableViewController.h"
 
 #import "EnterScheduleTableViewController.h"
 #import "PickPersonTableViewController.h"
@@ -12,21 +14,37 @@
 #import "IntervalTableViewCell.h"
 #import "Interval.h"
 
-@interface EnterScheduleTableViewController ()
+@interface MyScheduleTableViewController ()
+@property (weak, nonatomic) IBOutlet UINavigationItem *editButton;
+@property (nonatomic) UIBarButtonItem *cancelButton; //should be weak
+
+
 @property(nonatomic, strong) NSMutableArray *updatedAvailabilitiesArray;
+
 @end
 
-@implementation EnterScheduleTableViewController
+@implementation MyScheduleTableViewController
 
--(void)viewDidLoad
+-(UIBarButtonItem *)cancelButton
 {
+    if(!_cancelButton) _cancelButton = [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelButtonPressed)];
+    return _cancelButton;
+}
+- (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.tableView.allowsSelection = NO;
+    self.navigationItem.leftBarButtonItem = nil;
+    if(1==1){//check for user auth (it's my schedule & assignments haven't been made yet OR I'm an admin. if admin, show alert if assignments have already been made)
+        self.navigationItem.rightBarButtonItem = self.editButtonItem;
+        
+    }
 }
 #pragma mark - Accessor Methods
 
- -(NSMutableArray *)updatedAvailabilitiesArray
+-(NSMutableArray *)updatedAvailabilitiesArray
 {
-   
+    
     if(!_updatedAvailabilitiesArray)
         _updatedAvailabilitiesArray = [[NSMutableArray alloc]initWithArray:self.currentPerson.availabilitiesArray];
     return _updatedAvailabilitiesArray;
@@ -38,23 +56,23 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     
-
+    
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-
+    
     // Return the number of rows in the section.
-   
+    
     return [self.schedule.hourIntervalsDisplayArray count];
 }
 
 
 /*
  * Custom table header view. Add constraints.
-*/
+ */
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UILabel *label1 = [[UILabel alloc] init];
@@ -76,20 +94,20 @@
     return view;
     
     
-
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-   IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Interval Cell" forIndexPath:indexPath];
+    IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Interval Cell" forIndexPath:indexPath];
     
     // Configure the cell...
     
-   
+    
     NSString *interval = self.schedule.hourIntervalsDisplayArray[indexPath.row];
     cell.textLabel.text = interval;
-   
+    
     
     if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
         cell.assignedOrAvailableLabel.text = @"(Assigned)";
@@ -120,22 +138,22 @@
 
 #pragma mark - Navigation
 
- //In a storyboard-based application, you will often want to do a little preparation before navigation
+//In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
     
-    if(sender!=self.doneButton) return; //if user presses cancel button, don't do anything
+    if(sender!=self.editButtonItem) return; //if user presses cancel button, don't do anything
     else{ //user pressed doneButton
         
         //if current person's availabilities array was changed, update Person and Schedule on current iPhone and on Parse
         if(![self.currentPerson.availabilitiesArray isEqual:self.updatedAvailabilitiesArray]){
-        
+            
             //update Person's availabilities array on local iPhone
             self.currentPerson.availabilitiesArray = self.updatedAvailabilitiesArray;
-        
+            
             //update schedule on local iPhone
             PickPersonTableViewController *pptvc = [segue destinationViewController];
             pptvc.schedule.availabilitiesSchedule[self.currentPerson.indexOfPerson] = self.currentPerson.availabilitiesArray;
@@ -157,9 +175,9 @@
                     [object saveInBackground];
                 }
             }];
-        
+            
             //update Schedule on Parse
-        
+            
             PFQuery *query2 = [PFQuery queryWithClassName:@"Schedule"];
             [query2 whereKey:@"name" equalTo:self.currentPerson.scheduleName];
             [query2 getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
@@ -171,12 +189,12 @@
                     NSMutableArray *array = object[@"availabilitiesSchedule"] ;
                     array[self.currentPerson.indexOfPerson]= self.currentPerson.availabilitiesArray;
                     object[@"availabilitiesSchedule"] =array;
-                
+                    
                     [object saveInBackground];
                 }
             }];
-        
-        
+            
+            
             //update Intervals offline
             for(int i = 0; i<[self.currentPerson.availabilitiesArray count]; i++){
                 Interval *interval = (Interval *)self.schedule.intervalArray[i];
@@ -192,8 +210,8 @@
                 }
             }
         }
-
-       
+        
+        
     }
 }
 
@@ -202,7 +220,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    
     IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     
     if([cell.assignedOrAvailableLabel.text isEqual:@""]){
@@ -215,7 +233,7 @@
         cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
         
-        }
+    }
     else {
         self.updatedAvailabilitiesArray[indexPath.row] = @0;
         
@@ -225,12 +243,37 @@
         
     }
     
-   [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     
 }
 
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    
+    // overriding this method means we can attach custom functions to the button
+    [super setEditing:editing animated:animated];
+    
+    // attaching custom actions here
+    if (editing) {
+        // we're in edit mode
+        [self.navigationItem setLeftBarButtonItem:self.cancelButton animated:animated];
+        self.tableView.allowsSelection = YES;
+        
+    } else {
+        // we're not in edit mode
+        [self.navigationItem setLeftBarButtonItem:nil animated:animated];
+        self.tableView.allowsSelection = NO;
 
+        
+    }
+}
 
+-(void)cancelButtonPressed
+{
+    //do cancel button things
+    
+    //change nav bar
+    [self setEditing:false animated:YES];
+}
 
 @end

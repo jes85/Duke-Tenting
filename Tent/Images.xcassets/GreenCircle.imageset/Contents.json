@@ -3,12 +3,16 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "green_operational_icon.png"
+      "filename" : "GreenCircle.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "green_operational_icon-1.png"
+      "filename" : "GreenCircle-1.png"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

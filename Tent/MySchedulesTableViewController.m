@@ -10,7 +10,7 @@
 #import "Schedule.h"
 #import "CreateScheduleTableViewController.h"
 #import "NameOfScheduleTableViewCell.h"
-#import "HomeBaseTableViewController.h"
+#import "MyScheduleContainerViewController.h"
 #import "NewScheduleTableViewController.h"
 #import "Constants.h"
 
@@ -44,6 +44,8 @@
 {
     [super viewDidLoad];
     [self getMySchedules];
+    UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem = back;
     
 }
 
@@ -57,9 +59,14 @@
         NSString *privacy = parseSchedule[kSchedulePropertyPrivacy];
         NSString *password = parseSchedule[kSchedulePropertyPassword];
         NSUInteger homeGameIndex = [parseSchedule[kSchedulePropertyHomeGameIndex] integerValue];
+
+    PFUser *creator = [parseSchedule objectForKey:@"creator"];
+    
+    
         NSString *objectID = parseSchedule.objectId;
 
         Schedule *scheduleObject = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex parseObjectID:objectID] ;
+        
     
         return scheduleObject;
 }
@@ -205,6 +212,8 @@
     //[self.schedules addObject:newSchedule];
     //self.scheduleToAdd = nil;
     
+    //Note: probably shouldn't update UI until after save success. b/c otherwise user will think they created the schedule, but it won't show up on other's phones
+    
     Schedule *newSchedule = self.scheduleToAdd;
     [self.schedules addObject:newSchedule];
     
@@ -273,12 +282,13 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
-    if([[segue destinationViewController] isKindOfClass:[HomeBaseTableViewController class]]){
-        HomeBaseTableViewController *hbtvc = [segue destinationViewController];
+    
+    
+    if([[segue destinationViewController] isKindOfClass:[MyScheduleContainerViewController class]]){
+        MyScheduleContainerViewController *mscvc = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         if(indexPath){
-            hbtvc.schedule = self.schedules[indexPath.row];
-            hbtvc.navigationItem.title = hbtvc.schedule.name;
+            mscvc.schedule = self.schedules[indexPath.row];
         }
     }
     else if(sender==self.addScheduleButton){

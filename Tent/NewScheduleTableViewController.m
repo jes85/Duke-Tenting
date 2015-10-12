@@ -16,12 +16,13 @@
 #import "Constants.h"
 
 
-static const NSUInteger numHomeGames = 18;
+//static const NSUInteger numHomeGames = 18;
 
 @interface NewScheduleTableViewController ()
 @property (nonatomic) NSArray *homeGames;
 
 @property (nonatomic) NSUInteger selectedIndexPathRow;
+@property (nonatomic) NSUInteger scrollRow;
 @end
 
 @implementation NewScheduleTableViewController
@@ -33,7 +34,10 @@ static const NSUInteger numHomeGames = 18;
     
     [self loadHomeGameScheduleData];
     
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
     
+    UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem = back;
 }
 
 /*!
@@ -62,6 +66,10 @@ static const NSUInteger numHomeGames = 18;
         NSString *opponent = gameInfo[@"opponent"];
         BOOL isExhibition = [gameInfo[@"exhibition"] boolValue];
         BOOL isConferenceGame = [gameInfo[@"conference_game"] boolValue];
+        
+        if([gameTime timeIntervalSinceNow] < 0){
+            self.scrollRow=i+1;
+        }
         
         HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame];
         [homeGamesTemp addObject: homeGame];
@@ -360,34 +368,26 @@ static const NSUInteger numHomeGames = 18;
     if(isExhibition) opponentNameLabelText = [opponentNameLabelText stringByAppendingString:@" (Ex.)"];//(Exhibition)
    
 
-    // Weekday and calendar date
-    NSDate *date = homeGame.gameTime;
+    // Gametime
+    NSString *dateLabelText = [Constants formatDate:homeGame.gameTime withStyle:NSDateFormatterShortStyle];
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-    [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
-    
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *comps = [calendar components:NSWeekdayCalendarUnit fromDate:date];
-    NSUInteger weekdayNum = [comps weekday];
-    NSString *weekday = [[dateFormatter shortWeekdaySymbols][weekdayNum-1] stringByAppendingString:@". "];
-    NSString *dateLabelText = [weekday stringByAppendingString:[dateFormatter stringFromDate:date]];
-    
-    // Time
-    NSDateFormatter *timeDateFormatter = [[NSDateFormatter alloc]init];
-    [timeDateFormatter setTimeStyle:NSDateFormatterShortStyle];
-    NSString *timeLabelText = [timeDateFormatter stringFromDate:date];
+    NSString *timeLabelText = [Constants formatTime:homeGame.gameTime withStyle:NSDateFormatterShortStyle];
     
     
     // Set text of labels
     cell.opponentNameLabel.text = opponentNameLabelText;
-    cell.dateLabel.text = dateLabelText;
-    cell.timeLabel.text = timeLabelText;
+    cell.gametimeLabel.text = [[dateLabelText stringByAppendingString:@" "] stringByAppendingString:timeLabelText];
     
     // Disable past games
     if([homeGame.gameTime timeIntervalSinceNow] < 0){
         cell.joinButton.userInteractionEnabled = NO;
         cell.createButton.userInteractionEnabled = NO;
+        cell.backgroundColor = [UIColor grayColor];
+    }else{
+        cell.joinButton.userInteractionEnabled = YES;
+        cell.createButton.userInteractionEnabled = YES;
+        cell.backgroundColor = [UIColor whiteColor];
+
     }
     
     // Present the most recent future game at the top of the page
@@ -400,6 +400,40 @@ static const NSUInteger numHomeGames = 18;
     return cell;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Join or Create"
+                                                                   message:@"Do you want to join an existing group or create a new schedule?"
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {}];
+    UIAlertAction* joinAction = [UIAlertAction actionWithTitle:@"Join" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        self.selectedIndexPathRow = indexPath.row;
+        [self joinSchedule];
+    }];
+    UIAlertAction* createAction = [UIAlertAction actionWithTitle:@"Create" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        self.selectedIndexPathRow = indexPath.row;
+        [self createSchedule];
+    }];
+    
+    [alert addAction:cancelAction];
+    [alert addAction:joinAction];
+    [alert addAction:createAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+                                    
+-(void)joinSchedule
+{
+    [self performSegueWithIdentifier:@"Join" sender:self]; //change string to constant and sender to button
+    
+}
+-(void)createSchedule
+{
+    [self performSegueWithIdentifier:@"Create" sender:self]; //change string to constant and sender to button
+
+    
+}
 /*!
  * Either the create or join schedule button was pressed. 
  * Save the indexPath.row of the cell that was pressed in self.selectedIndexPathRow.

@@ -13,6 +13,8 @@
 #import "MySchedulesTableViewController.h"
 #import "Schedule.h"
 
+#import "IntervalsDisplayData.h"
+
 #define kDatePickerTag              99     // view tag identifiying the date picker view
 
 #define kTitleKey       @"title"            // key for obtaining the data source item's title
@@ -103,10 +105,9 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
                                        kDateKey : self.startDate} mutableCopy];
     NSMutableDictionary *itemThree = [@{ kTitleKey : @"End Date",
                                          kDateKey : self.endDate} mutableCopy];
-    NSMutableDictionary *itemFour = [@{ kTitleKey : @"Privacy", kStatusKey: @"Private"} mutableCopy];
-    NSMutableDictionary *itemFive = [@{ kTitleKey : @"Password"} mutableCopy];
+    NSMutableDictionary *itemFour = [@{ kTitleKey : @"Password"} mutableCopy];
     
-     self.dataArray = @[itemOne, itemTwo, itemThree, itemFour, itemFive];
+     self.dataArray = @[itemOne, itemTwo, itemThree, itemFour];
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
     [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];    // picker date-style formats
@@ -280,21 +281,10 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
          
          return cell;
      }
-    
-    
-    //EDIT: change password cell to go away if they pick public
-    else if(indexPath.row == numCells-2){ // 2nd last row (privacy)
-        PrivacyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kPrivacyCellID forIndexPath:indexPath];
-        NSDictionary *itemData = self.dataArray[numCells-2];
-
-        cell.statusLabel.text = [itemData valueForKey:kStatusKey];
-        return cell;
-        
-    }
     else if (indexPath.row == numCells-1){ //last row (password)
         //password cell is same form as name of schedule cell (change name to be more general)
         PasswordTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kPasswordCellID forIndexPath:indexPath];
-        cell.passwordLabel.text = @"Password: ";
+        cell.passwordLabel.text = @"Group Code: ";
         self.passwordTextField = cell.passwordTextField;
         self.passwordTextField.delegate = self;
         return cell;
@@ -487,9 +477,9 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
     
     // make sure the dates are valid. if not, display red strikethrough and disable done button
     if(![self checkIfValidDates]){
-        [self displayInvalidDateForCell:cell];
+        [self displayInvalidDateForCell:[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:kDateStartRow inSection:0]]];
     }else{
-        [self displayValidDateForCell:cell];
+        [self displayValidDateForCell:[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:kDateStartRow inSection:0]]];
         
         NSIndexPath *otherDateCellIndexPath = [NSIndexPath indexPathForRow:(targetedCellIndexPath.row == kDateStartRow) ? targetedCellIndexPath.row + 2 : targetedCellIndexPath.row - 1 inSection:0];
         UITableViewCell *otherDateCell = [self.tableView cellForRowAtIndexPath:otherDateCellIndexPath];
@@ -540,36 +530,31 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
     }
 }
 
-- (IBAction)privacyChanged:(id)sender {
-    UISwitch *s = (UISwitch *)sender;
-    NSUInteger row = [self hasInlineDatePicker] ? self.dataArray.count-1: self.dataArray.count-2;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
-    PrivacyTableViewCell *cell = (PrivacyTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
-    NSMutableDictionary *itemData = self.dataArray[4];
-    
-
-    if(s.on == YES){
-        self.private = YES;
-        [itemData setValue:@"Private" forKey:kStatusKey];//unnecessary
-        cell.statusLabel.text = @"Private";
-        
-    }
-    else{
-        self.private = NO;
-        [itemData setValue:@"Public" forKey:kStatusKey];//unnecessary
-        cell.statusLabel.text = @"Public";
-    }
-    
-
-}
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     [self hideInLineDatePickerIfShown];
     return YES;
 }
+- (IBAction)nameDetailDisclosureTapped:(id)sender {
+    [self presentAlertViewWithTitle:@"Schedule Name" message:@"Enter a unique name for your group schedule. Tell your group members to look for this name when finding your group."];
 
+}
 
+- (IBAction)groupCodeDetailDisclosureTapped:(id)sender {
+    [self presentAlertViewWithTitle:@"Group code" message:@"Share this code with your group members only. It gives them access to join your group."];
+}
+
+-(void)presentAlertViewWithTitle:(NSString *)title message:(NSString *)message
+{
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    
+    UIAlertAction* okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {}];
+    [alert addAction:okAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -586,11 +571,14 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
         scheduleToAdd.homeGameIndex = self.homeGameIndex;
         */
         
-        Schedule *scheduleToAdd = [[Schedule alloc]initWithName:self.nameOfScheduleTextField.text startDate:self.startDate endDate:self.endDate privacy:self.private ? kPrivacyValuePrivate : kPrivacyValuePublic password:self.passwordTextField.text homeGameIndex:self.homeGameIndex];
+        Schedule *scheduleToAdd = [[Schedule alloc]initWithName:self.nameOfScheduleTextField.text startDate:self.startDate endDate:self.endDate privacy:nil password:self.passwordTextField.text homeGameIndex:self.homeGameIndex];
         
        
         MySchedulesTableViewController *mstvc = [segue destinationViewController];
         mstvc.scheduleToAdd = scheduleToAdd;
+        
+        IntervalsDisplayData *idd = [[IntervalsDisplayData alloc]initWithStartDate:self.startDate endDate:self.endDate intervalLengthInMinutes:60];
+        
     }
     
 

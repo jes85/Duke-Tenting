@@ -24,7 +24,6 @@
 @interface JoinScheduleTableViewController ()
 
 @property (nonatomic) Schedule *scheduleToJoin;
-
 @end
 
 @implementation JoinScheduleTableViewController
@@ -34,7 +33,7 @@
 {
     [super viewDidAppear:animated];
     [self getSchedulesAssociatedWithHomeGameIndex];
-
+    
     
 }
 
@@ -56,16 +55,46 @@
             NSMutableArray *array = [[NSMutableArray alloc]init];
             for(PFObject *parseSchedule in schedules){
                 
-                
                 Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule] ;
                 
                 [array addObject:scheduleObject];
-                self.schedulesAssociatedWithThisHomeGame = array;
-                [self.tableView reloadData];
-                
             }
+            
+            self.schedulesAssociatedWithThisHomeGame = [array sortedArrayUsingDescriptors:[self getSortDescriptors]];
+            [self.tableView reloadData];
+            
         }
     }];
+    
+    
+}
+
+-(NSArray *)getSortDescriptors
+{
+    NSArray *sortDescriptors;
+    NSSortDescriptor *sortByScheduleName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];;
+    NSSortDescriptor *sortByCreatorName = [NSSortDescriptor sortDescriptorWithKey:@"creator" ascending:YES];
+;
+    NSSortDescriptor *sortByStartDate = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];;
+
+
+    switch (self.filterBy) {
+        case 0: //schedule name
+            sortDescriptors = @[sortByScheduleName, sortByStartDate, sortByCreatorName];
+            
+            break;
+        case 1: //creator name
+            sortDescriptors = @[sortByCreatorName, sortByStartDate, sortByScheduleName];
+            break;
+        case 2: //start date
+            sortDescriptors = @[sortByStartDate, sortByScheduleName, sortByCreatorName];
+            break;
+            
+        default:
+            sortDescriptors = @[sortByScheduleName, sortByStartDate, sortByCreatorName];
+            break;
+    }
+    return sortDescriptors;
 }
 #pragma mark - Table view data source
 
@@ -92,6 +121,8 @@
     
     // Configure the cell...
     cell.nameLabel.text = schedule.name;
+    cell.startDate.text = [[[Constants formatDate:schedule.startDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "]stringByAppendingString:[Constants formatTime:schedule.startDate withStyle:NSDateFormatterShortStyle]];
+     cell.endDate.text = [[[Constants formatDate:schedule.endDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "]stringByAppendingString:[Constants formatTime:schedule.endDate withStyle:NSDateFormatterShortStyle]];
     //cell.creatorLabel.text = schedule.creatorName;
     
     /* If I've already joined one of the schedules, display this one first, distinguish it with a checkmark, and disable the join button on the other schedules
@@ -154,7 +185,16 @@
         }
     }
 }
-
+-(IBAction)doneFilter:(UIStoryboardSegue *)segue
+{
+    self.schedulesAssociatedWithThisHomeGame = [self.schedulesAssociatedWithThisHomeGame sortedArrayUsingDescriptors:[self getSortDescriptors]];
+    [self.tableView reloadData];
+    
+}
+-(IBAction)cancelFilter:(UIStoryboardSegue *)segue
+{
+    
+}
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation

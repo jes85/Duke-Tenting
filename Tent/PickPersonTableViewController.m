@@ -14,6 +14,8 @@
 #import "Interval.h"
 #import "Constants.h"
 #import "MySchedulesTableViewController.h"
+#import "MyScheduleContainerViewController.h"
+#import "MyScheduleTableViewController.h"
 
 @interface PickPersonTableViewController ()
 
@@ -23,13 +25,6 @@
 
 
 #pragma mark - Properties - Lazy Instantiation
-/*
-- (NSMutableArray *)personsArray
-{
-    if(!_personsArray)_personsArray = [[NSMutableArray alloc]init];
-    return _personsArray;
-}
- */
 
 
 #pragma mark - Table view data source
@@ -45,7 +40,7 @@
 {
    
     // Return the number of rows in the section.
-    return [self.personsArray count];
+    return [self.schedule.personsArray count];
 }
 
 
@@ -54,7 +49,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Person Cell" forIndexPath:indexPath];
     
     // Configure the cell...
-    Person *person = self.personsArray[indexPath.row];
+    Person *person = self.schedule.personsArray[indexPath.row];
     NSString *personName = person.name;
     
     cell.textLabel.text = personName;
@@ -64,9 +59,15 @@
 
 
 #pragma mark - Load data
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+}
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
     /*
     if(!self.personsArray){
         [self updatePersonsForSchedule];
@@ -80,108 +81,7 @@
     [self updateSchedule];
     */
 }
--(void)updatePersonsForSchedule
-{
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    
-    self.personsArray = nil; //maybe change personsArray to be property of schedule too?
-    self.schedule.intervalArray = [self.schedule createZeroedIntervalArray]; //get rid of this and just reload schedule from parse
-    
-    // Get person objects from Parse
-    PFQuery *query = [PFQuery queryWithClassName:@"Person"];
-    [query whereKey:@"scheduleName" equalTo:self.schedule.name];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if(!objects){
-            NSLog(@"Find failed");
-        }else if ([objects count]<1){
-            NSLog(@"No persons for schedule %@ in Parse", self.schedule.name);
-        }
-        else{
-            NSLog(@"Find persons for Schedule %@ succeeded %lu", self.schedule.name,(unsigned long)[objects count]);
-            //self.personsArray = [[NSMutableArray alloc]initWithCapacity:[Schedule testNumPeople]]; //take this out later
-            // NSLog(@"personsArray: %@", self.personsArray);
-            //[self.schedule createIntervalArray];
-            
-            
-            for(PFObject *object in objects){
-                
-                // Update personsArray
-                NSString *name = object[@"name"];
-                NSUInteger index = [object[@"index"] intValue];
-                NSMutableArray *availabilitiesArray = object[@"availabilitiesArray"];
-                NSMutableArray *assignmentsArray = object[@"assignmentsArray"];
-                
-                Person *person = [[Person alloc]initWithName:name index:index availabilitiesArray:availabilitiesArray assignmentsArray:assignmentsArray scheduleName:self.schedule.name];
-                
-                
-                //Fix this to prevent adding duplicates. maybe clear array and readd (but i don't want to do this every time if I don't have to)
-                if(![self.personsArray containsObject:person]){
-                    [self.personsArray addObject:person];
-                }
-                
-                //self.personsArray[person.indexOfPerson] = person;
-                //[self.personsArray removeObjectAtIndex:person.indexOfPerson];
-                //[self.personsArray insertObject:person atIndex:person.indexOfPerson];
-                
-                // Update intervalsArray (change it later to save to Parse?)
-                //maybe move this to schedule.m
-                
-                for(int i = 0; i<[availabilitiesArray count]; i++){
-                    if([availabilitiesArray[i] isEqual:@1]){
-                        Interval *interval = (Interval *)self.schedule.intervalArray[i];
-                        if([assignmentsArray[i] isEqual:@1]){
-                            if (![interval.assignedPersons containsObject:person.name])
-                            {
-                                [interval.assignedPersons addObject:person.name];
-                                //minor optimization:
-                                //[interval.availablePersons addObject:person];
-                                //then make next if an else if
-                            }
-                        }
-                        
-                        if(![interval.availablePersons containsObject:person.name]){
-                            [interval.availablePersons addObject:person.name];//used to be array of persons, but then equality would change if person's availability or assigned array changed, and the same person would be added twice
-                        }
-                    }
-                }
-                
-                
-                
-                
-            }
-            
-            [self.tableView reloadData];
-            
-        }
-    }];
-    
-}
-//same as updateSchedule in HomeBase. Consolidate this
--(void)updateSchedule
-{
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    
-    
-    PFQuery *query = [PFQuery queryWithClassName:@"Schedule"];
-    [query whereKey:@"name" equalTo:self.schedule.name];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *parseSchedule, NSError *error) {
-        if(!parseSchedule){
-            NSLog(@"Find failed");
-        }else{
-            NSLog(@"Find schedule for update succeeded");
-            
 
-            Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
-            
-            self.schedule=scheduleObject;
-            [self.tableView reloadData];
-            
-            
-        }
-    }];
-    
-    
-}
 
 
 
@@ -189,9 +89,9 @@
 -(IBAction)addPerson:(UIStoryboardSegue *)segue
 {
     // Update person and schedule on current iphone (offline)
-    Person *newPerson = [[Person alloc]initWithName:self.addPersonName index:[self.personsArray count] numIntervals:self.schedule.numHourIntervals scheduleName:self.schedule.name];
+    Person *newPerson = [[Person alloc]initWithName:self.addPersonName index:[self.schedule.personsArray count] numIntervals:self.schedule.numHourIntervals scheduleName:self.schedule.name];
     
-    [self.personsArray addObject:newPerson];
+    [self.schedule.personsArray addObject:newPerson];
     
     self.addPersonName = nil;
     
@@ -273,16 +173,15 @@
             //More checking
             if([segue.identifier isEqualToString:@"Person To Hour Interval"]){
                 
-                if([segue.destinationViewController  isKindOfClass:[EnterScheduleTableViewController class]]){
+                if([segue.destinationViewController  isKindOfClass:[MyScheduleTableViewController class]]){
                     
-                    Person *person = self.personsArray[indexPath.row];
+                    Person *person = self.schedule.personsArray[indexPath.row];
                     
-                    EnterScheduleTableViewController *estvc = [segue destinationViewController];
-                    estvc.currentPerson = person; //does it violate MVC for them to be connected like this?
-                    estvc.hourIntervalsDisplayArray = self.schedule.hourIntervalsDisplayArray;
-                    estvc.intervalArray = self.schedule.intervalArray;
+                    MyScheduleTableViewController *mstvc = [segue destinationViewController];
+                    mstvc.currentPerson = person; //does it violate MVC for them to be connected like this?
+                    mstvc.schedule = self.schedule;
                     
-                    estvc.navigationItem.title = person.name;
+                    mstvc.navigationItem.title = person.name;
                 }
             }
         }
