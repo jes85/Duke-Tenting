@@ -29,6 +29,7 @@
     PFUser *currentUser = [PFUser currentUser];
     if(currentUser){
         self.label.text = [NSString stringWithFormat:@"Currently logged in as %@.",currentUser.username];
+        [self performSegueWithIdentifier:@"test" sender:self.continueButton];
     }
     else{ //No user logged in
         [self displayLoginAndSignUpViews];

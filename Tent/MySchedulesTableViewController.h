@@ -12,7 +12,7 @@
 @class Schedule;
 
 
-@interface MySchedulesTableViewController : UITableViewController
+@interface MySchedulesTableViewController : UITableViewController <PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
 
 @property (nonatomic) NSMutableArray *schedules;
 @property (nonatomic) Schedule *scheduleToAdd;
@@ -24,4 +24,7 @@
 -(IBAction)joinedSchedule:(UIStoryboardSegue *)segue;
 
 +(Schedule *)createScheduleObjectFromParseInfo: (PFObject *)parseSchedule;
+
+-(IBAction)closeSettings:(UIStoryboardSegue *)segue;
+
 @end

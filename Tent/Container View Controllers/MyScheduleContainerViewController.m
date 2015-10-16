@@ -44,8 +44,9 @@
 {
     CGFloat borderWidth = 1.0f;
     CALayer *bottomBorder = [CALayer layer];
-    bottomBorder.frame = CGRectMake(self.viewGameInfo.frame.origin.x, self.viewGameInfo.frame.origin.y - 5, self.view.frame.size.width, borderWidth);
+    bottomBorder.frame = CGRectMake(self.viewGameInfo.frame.origin.x, self.viewGameInfo.frame.size.height - borderWidth, self.viewGameInfo.frame.size.width, borderWidth);
     bottomBorder.backgroundColor = [UIColor blackColor].CGColor;
+    
     [self.viewGameInfo.layer addSublayer:bottomBorder];
     
 }

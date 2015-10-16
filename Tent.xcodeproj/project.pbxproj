@@ -30,6 +30,8 @@
 		3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F616050198DA61E006EF048 /* IntervalTableViewCell.m */; };
 		3F71811F199D117200737662 /* DefaultSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F71811E199D117200737662 /* DefaultSettingsViewController.m */; };
 		3F738C2919B401880089878F /* JoinScheduleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F738C2819B401880089878F /* JoinScheduleTableViewController.m */; };
+		3F7527F51BD1730000748ED8 /* MySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7527F41BD1730000748ED8 /* MySettingsViewController.m */; };
+		3F7527F81BD1749000748ED8 /* MySettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7527F71BD1749000748ED8 /* MySettingsTableViewCell.m */; };
 		3F853AEC1BC7F45200489649 /* IntervalsDisplayData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F853AEB1BC7F45200489649 /* IntervalsDisplayData.m */; };
 		3F87220E19A2627A005F12DD /* AlgorithmTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F87220D19A2627A005F12DD /* AlgorithmTest.m */; };
 		3F8A32F619AEC1CC00C63E65 /* HomeGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8A32F519AEC1CC00C63E65 /* HomeGame.m */; };
@@ -115,6 +117,10 @@
 		3F71811E199D117200737662 /* DefaultSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DefaultSettingsViewController.m; path = ../DefaultSettingsViewController.m; sourceTree = "<group>"; };
 		3F738C2719B401880089878F /* JoinScheduleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinScheduleTableViewController.h; sourceTree = "<group>"; };
 		3F738C2819B401880089878F /* JoinScheduleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinScheduleTableViewController.m; sourceTree = "<group>"; };
+		3F7527F31BD1730000748ED8 /* MySettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySettingsViewController.h; sourceTree = "<group>"; };
+		3F7527F41BD1730000748ED8 /* MySettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySettingsViewController.m; sourceTree = "<group>"; };
+		3F7527F61BD1749000748ED8 /* MySettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySettingsTableViewCell.h; sourceTree = "<group>"; };
+		3F7527F71BD1749000748ED8 /* MySettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySettingsTableViewCell.m; sourceTree = "<group>"; };
 		3F853AEA1BC7F45200489649 /* IntervalsDisplayData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntervalsDisplayData.h; path = Model/IntervalsDisplayData.h; sourceTree = "<group>"; };
 		3F853AEB1BC7F45200489649 /* IntervalsDisplayData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntervalsDisplayData.m; path = Model/IntervalsDisplayData.m; sourceTree = "<group>"; };
 		3F87220C19A2627A005F12DD /* AlgorithmTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmTest.h; sourceTree = "<group>"; };
@@ -315,6 +321,8 @@
 			isa = PBXGroup;
 			children = (
 				3FA6D5191965E7A50043087B /* Main.storyboard */,
+				3F7527F31BD1730000748ED8 /* MySettingsViewController.h */,
+				3F7527F41BD1730000748ED8 /* MySettingsViewController.m */,
 				3F09B1D61BC2D59000AB27CD /* Test.h */,
 				3F09B1D71BC2D59000AB27CD /* Test.m */,
 				3F09B1D91BC2E2EB00AB27CD /* Test0.h */,
@@ -399,6 +407,8 @@
 				3FB42F4F19B2A54B0079EDE1 /* PrivacyTableViewCell.m */,
 				3F61604F198DA61E006EF048 /* IntervalTableViewCell.h */,
 				3F616050198DA61E006EF048 /* IntervalTableViewCell.m */,
+				3F7527F61BD1749000748ED8 /* MySettingsTableViewCell.h */,
+				3F7527F71BD1749000748ED8 /* MySettingsTableViewCell.m */,
 			);
 			name = "Custom Table View Cells";
 			sourceTree = "<group>";
@@ -523,7 +533,9 @@
 				3F738C2919B401880089878F /* JoinScheduleTableViewController.m in Sources */,
 				3F44CE5F19CCE6A500271D3E /* Constants.m in Sources */,
 				3FB42F5019B2A54B0079EDE1 /* PrivacyTableViewCell.m in Sources */,
+				3F7527F81BD1749000748ED8 /* MySettingsTableViewCell.m in Sources */,
 				3F552A431BC72D440095ADCA /* MyScheduleTableViewController.m in Sources */,
+				3F7527F51BD1730000748ED8 /* MySettingsViewController.m in Sources */,
 				3FFC43DF1BCC523E003333E7 /* CreateScheduleViewController.m in Sources */,
 				3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */,
 				3FC432B919A0581A00B560F1 /* MyPFLogInViewController.m in Sources */,
