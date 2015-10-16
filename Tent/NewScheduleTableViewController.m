@@ -380,12 +380,14 @@
     
     // Disable past games
     if([homeGame.gameTime timeIntervalSinceNow] < 0){
-        cell.joinButton.userInteractionEnabled = NO;
-        cell.createButton.userInteractionEnabled = NO;
+        cell.userInteractionEnabled = NO;
+        //cell.joinButton.userInteractionEnabled = NO;
+        //cell.createButton.userInteractionEnabled = NO;
         cell.backgroundColor = [UIColor grayColor];
     }else{
-        cell.joinButton.userInteractionEnabled = YES;
-        cell.createButton.userInteractionEnabled = YES;
+        cell.userInteractionEnabled = YES;
+        //cell.joinButton.userInteractionEnabled = YES;
+        //cell.createButton.userInteractionEnabled = YES;
         cell.backgroundColor = [UIColor whiteColor];
 
     }

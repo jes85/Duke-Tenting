@@ -577,8 +577,6 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
         MySchedulesTableViewController *mstvc = [segue destinationViewController];
         mstvc.scheduleToAdd = scheduleToAdd;
         
-        IntervalsDisplayData *idd = [[IntervalsDisplayData alloc]initWithStartDate:self.startDate endDate:self.endDate intervalLengthInMinutes:60];
-        
     }
     
 

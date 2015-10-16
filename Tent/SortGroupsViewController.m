@@ -10,8 +10,7 @@
 #import "JoinScheduleTableViewController.h"
 @interface SortGroupsViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic) NSUInteger selectedRow;
-
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;
 @property NSArray *dataSource;
 @end
 
@@ -50,7 +49,7 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     self.selectedRow = indexPath.row;
     UITableViewCell *cell;
-    for(int i = 0; i<3; i++){
+    for(int i = 0; i<[self.tableView numberOfRowsInSection:0]; i++){
         cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         if(i==indexPath.row){
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -64,7 +63,11 @@
 {
     
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Filters" forIndexPath:indexPath];
-    
+    if(indexPath.row == self.selectedRow){
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }else{
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
     cell.textLabel.text = self.dataSource[indexPath.row];
     
     return cell;
@@ -76,9 +79,12 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if([segue.destinationViewController isKindOfClass:[JoinScheduleTableViewController class]]){
-        JoinScheduleTableViewController *jstvc = segue.destinationViewController;
-        jstvc.filterBy = self.selectedRow;
+    
+    if([sender isEqual: self.doneButton]){
+        if([segue.destinationViewController isKindOfClass:[JoinScheduleTableViewController class]]){
+            JoinScheduleTableViewController *jstvc = segue.destinationViewController;
+            jstvc.filterBy = self.selectedRow;
+        }
     }
     
 }

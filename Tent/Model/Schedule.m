@@ -8,6 +8,7 @@
 
 #import "Schedule.h"
 #import "Interval.h"
+#import "Constants.h"
 
 static const int kES = 1;
 static const NSUInteger kTotalSwapAttemptsAllowed = 5;
@@ -128,22 +129,49 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 
 -(void)createIntervalDisplayArray
 {
-    NSDate *beginningHourDate = [self.startDate copy];
-    NSDate *endHourDate = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:beginningHourDate];
+    NSDate *currentStartInterval = [self.startDate copy];
+    NSDate *previousStartInterval = currentStartInterval;
+    NSDate *currentEndInterval = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:currentStartInterval];
     
-    NSMutableArray *array = [[NSMutableArray alloc]init];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *dateComponentsCurrent;
+    NSDateComponents *dateComponentsPrevious;
+
+    NSMutableDictionary *intervalDisplayData = [[NSMutableDictionary alloc]init]; //{index (integer):["section header ex: Mon Oct. 17", [intervalDisplayArrayForThatSection]]}
+    NSMutableArray *intervalDisplayArray = [[NSMutableArray alloc]init];
     
+    NSString *sectionHeader = [Constants formatDate:currentStartInterval withStyle:NSDateFormatterShortStyle];
+    NSUInteger sectionNumber = 0;
     for(int i = 0; i<self.numHourIntervals;i++){
-        NSString *beginningHourString = [NSDateFormatter localizedStringFromDate:beginningHourDate dateStyle:0 timeStyle:NSDateFormatterShortStyle];
-        NSString *endHourString = [NSDateFormatter localizedStringFromDate:endHourDate dateStyle:0 timeStyle:NSDateFormatterShortStyle];
-        NSString *hourInterval = [NSString stringWithFormat:@"%@ - %@", beginningHourString, endHourString];
-        [array addObject:hourInterval];
-        beginningHourDate = endHourDate;
-        endHourDate = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:beginningHourDate];
+        dateComponentsPrevious = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:previousStartInterval];
+        dateComponentsCurrent = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:currentStartInterval];
+        
+        NSUInteger day0 = dateComponentsPrevious.day;
+        NSUInteger day1 = dateComponentsCurrent.day;
+        
+        if(dateComponentsPrevious.day != dateComponentsCurrent.day){ //oct 17, oct 18. compare 17 and 18
+            
+            NSArray *sectionData = @[sectionHeader, intervalDisplayArray];
+            [intervalDisplayData setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]];
+            sectionHeader = [Constants formatDate:currentStartInterval withStyle:NSDateFormatterShortStyle];
+            intervalDisplayArray = [[NSMutableArray alloc]init];
+            sectionNumber++;
+        }
+        
+        
+        NSString *currentStartIntervalString = [NSDateFormatter localizedStringFromDate:currentStartInterval dateStyle:0 timeStyle:NSDateFormatterShortStyle];
+        NSString *currentEndIntervalString = [NSDateFormatter localizedStringFromDate:currentEndInterval dateStyle:0 timeStyle:NSDateFormatterShortStyle];
+        NSString *timeIntervalString = [NSString stringWithFormat:@"%@ - %@", currentStartIntervalString, currentEndIntervalString];
+        [intervalDisplayArray addObject:timeIntervalString];
+        
+        previousStartInterval = currentStartInterval;
+        currentStartInterval = currentEndInterval;
+        currentEndInterval = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:currentStartInterval];
         
     }
     
-    self.hourIntervalsDisplayArray = [array copy];
+    //self.hourIntervalsDisplayArray = [array copy];
+    self.intervalsDisplayData = [intervalDisplayData copy]; // why copy?
     
 }
 

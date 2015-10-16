@@ -9,11 +9,15 @@
 #import <Foundation/Foundation.h>
 
 @interface IntervalsDisplayData : NSObject
-@property (nonatomic) NSArray *intervalDisplayArray;
-@property (nonatomic) NSUInteger numDays;
+
 @property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *endDate;
 @property (nonatomic) NSUInteger intervalLengthInMinutes;
+
+@property (nonatomic) NSArray *intervalDisplayArray;
+@property (nonatomic) NSUInteger numDays;
+@property (nonatomic) NSUInteger numIntervals;
+
 
 -(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate intervalLengthInMinutes:(NSUInteger)intervalLength;
 @end

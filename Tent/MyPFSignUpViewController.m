@@ -54,6 +54,9 @@
     [self.signUpView.emailField setTextColor:[UIColor colorWithRed:135.0f/255.0f green:118.0f/255.0f blue:92.0f/255.0f alpha:1.0]];
     [self.signUpView.additionalField setTextColor:[UIColor colorWithRed:135.0f/255.0f green:118.0f/255.0f blue:92.0f/255.0f alpha:1.0]];
 
+    
+    [self.signUpView.dismissButton setImage:[UIImage imageNamed:@"ExitX"] forState:UIControlStateNormal];
+    [self.signUpView.dismissButton setImage:[UIImage imageNamed:@"ExitXHighlighted"] forState:UIControlStateHighlighted];
 
 
 

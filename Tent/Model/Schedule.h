@@ -40,7 +40,8 @@
 @property (nonatomic) NSString *name; //for parse
 @property (nonatomic) NSMutableArray *personsArray;
 @property (nonatomic) NSMutableArray *intervalArray; //Interval[]
-@property (nonatomic) NSArray *hourIntervalsDisplayArray;
+@property (nonatomic) NSArray *hourIntervalsDisplayArray; //remove when get intervalsDisplayData working
+@property (nonatomic) NSDictionary *intervalsDisplayData;
 @property (nonatomic) NSString *privacy;
 @property (nonatomic) NSString *password; //how to encrypt this?
 @property (nonatomic) NSUInteger homeGameIndex;

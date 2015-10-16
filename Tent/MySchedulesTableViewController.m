@@ -14,6 +14,7 @@
 #import "NewScheduleTableViewController.h"
 #import "Constants.h"
 
+
 @interface MySchedulesTableViewController ()
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addScheduleButton;
@@ -214,6 +215,8 @@
     
     //Note: probably shouldn't update UI until after save success. b/c otherwise user will think they created the schedule, but it won't show up on other's phones
     
+    
+    
     Schedule *newSchedule = self.scheduleToAdd;
     [self.schedules addObject:newSchedule];
     
@@ -260,7 +263,9 @@
             }];
         }
     }];
+     
 }
+
 
 /*!
  *  Create an array of zeroes of the specified length
