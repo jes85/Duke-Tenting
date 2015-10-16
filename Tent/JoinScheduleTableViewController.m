@@ -243,54 +243,16 @@
     NSIndexPath *indexPath;
     if (self.searchDisplayController.active) {
         indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
-        //self.scheduleToJoin = self.searchResults[indexPath.row];
     } else {
         indexPath = [self.tableView indexPathForCell:cell];
-        //self.scheduleToJoin = self.schedulesAssociatedWithThisHomeGame[indexPath.row];
     }
     
     //if([self.scheduleToJoin.privacy isEqualToString: @"private"]){
-        
-    //UIAlertView for password
-    /*UIAlertView *enterPasswordAlertView = [[UIAlertView alloc]initWithTitle:kEnterPasswordAlertViewTitle message:nil delegate:self cancelButtonTitle:kCancelButtonTitle otherButtonTitles: kEnterButtonTitle, nil];
     
-    enterPasswordAlertView.alertViewStyle = UIAlertViewStyleSecureTextInput; //or plain text
-    UITextField *passwordTextField = [enterPasswordAlertView textFieldAtIndex:0];
-    passwordTextField.placeholder = @"Group Code";
-    
-    
-    [enterPasswordAlertView show];*/
     [self displayEnterPasswordAlertForScheduleIndex:indexPath.row];
 
 }
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if(buttonIndex == alertView.firstOtherButtonIndex){ //enter
-        UITextField *passwordTextField = [alertView textFieldAtIndex:0];
-        NSString *passwordAttempt = passwordTextField.text;
-        if([passwordAttempt isEqualToString:self.scheduleToJoin.password]){
-            NSLog(@"Valid Password!");
-            alertView.title = @"Success";
-            
-            //segue
-            [self performSegueWithIdentifier:@"joinedSchedule" sender:self];
-        
-        }
-        else{
-            NSLog(@"Wrong Password");
-            /*alertView.title = kWrongPasswordAlertViewTitle;
-            alertView.message = kWrongPasswordAlertViewMessage;
-            [alertView show];*/
-            UIAlertView *wrongPasswordAlertView = [[UIAlertView alloc]initWithTitle:kWrongPasswordAlertViewTitle message:kWrongPasswordAlertViewMessage delegate:self cancelButtonTitle:kCancelButtonTitle otherButtonTitles: kEnterButtonTitle, nil];
-            
-            wrongPasswordAlertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
-            
-            [wrongPasswordAlertView show];
-
-        }
-    }
-}
 -(IBAction)doneFilter:(UIStoryboardSegue *)segue
 {
     self.schedulesAssociatedWithThisHomeGame = [self.schedulesAssociatedWithThisHomeGame sortedArrayUsingDescriptors:[self getSortDescriptors]];

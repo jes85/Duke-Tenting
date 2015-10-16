@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ScheduleTableViewCell.h"
 
-@interface JoinScheduleTableViewController : UITableViewController <ScheduleTableViewCellDelegate, UIAlertViewDelegate>
+@interface JoinScheduleTableViewController : UITableViewController <ScheduleTableViewCellDelegate>
 
 @property (nonatomic) NSArray *schedulesAssociatedWithThisHomeGame;
 @property (nonatomic) NSUInteger homeGameIndex;
