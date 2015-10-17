@@ -46,6 +46,7 @@
 @property (nonatomic) NSString *password; //how to encrypt this?
 @property (nonatomic) NSUInteger homeGameIndex;
 @property (nonatomic) PFUser *creator;
+@property (nonatomic) NSString *opponent; // or Home Game
 @property (nonatomic) NSString *parseObjectID;
 
 // Matrix Schedules (make these private later?)

@@ -33,7 +33,7 @@
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [calendar components:(NSCalendarUnitDay) fromDate:[NSDate date]];
-    if(components.day == 17){ //change to only do it once a month or something and make sure it does it that month (maybe push notification is better)
+    if(components.day == 16){ //change to only do it once a month or something and make sure it does it that month (maybe push notification is better)
         [self checkForUpdatedHomeGameData];
     }
     
@@ -553,11 +553,15 @@
         cstvc.gameTime = homeGame.gameTime;
     }
     
+    
+    //Segue not called when hit back button. Figure out way to keep self.homeGames consistent when updating homeGame data from Parse
+    /*
     if([[segue destinationViewController] isKindOfClass:[MySchedulesTableViewController class]]){
         MySchedulesTableViewController *jstvc = [segue destinationViewController];
         self.homeGames = nil;
         NSArray *array = jstvc.homeGames;
     }
+     */
     
 }
 

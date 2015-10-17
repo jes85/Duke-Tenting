@@ -49,6 +49,7 @@
 
 +(NSString *)formatDate:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
 +(NSString *)formatTime:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
++(NSString *)formatDateAndTime: (NSDate *)date withDateStyle:(NSDateFormatterStyle)dateStyle timeStyle: (NSDateFormatterStyle)timeStyle;
 
 /*
 +(NSString *)formatWeekday:(NSDate *)date withStyle:(NSDateFormatterStyle)style;

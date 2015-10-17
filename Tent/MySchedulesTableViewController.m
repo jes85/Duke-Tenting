@@ -9,7 +9,6 @@
 #import "MySchedulesTableViewController.h"
 #import "Schedule.h"
 #import "CreateScheduleTableViewController.h"
-#import "NameOfScheduleTableViewCell.h"
 #import "MyScheduleContainerViewController.h"
 #import "NewScheduleTableViewController.h"
 #import "HomeGame.h"
@@ -17,7 +16,7 @@
 
 #import "MyPFLogInViewController.h"
 #import "MyPFSignUpViewController.h"
-
+#import "MySchedulesTableViewCell.h"
 
 @interface MySchedulesTableViewController ()
 
@@ -350,12 +349,42 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"My Schedule Cell" forIndexPath:indexPath];
+    MySchedulesTableViewCell *cell = (MySchedulesTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"My Schedule Cell" forIndexPath:indexPath];
  
     // Configure the cell...
     Schedule *schedule = [self.schedules objectAtIndex:indexPath.row];
-    cell.textLabel.text = schedule.name;
-     
+    HomeGame *homeGame = self.homeGames[schedule.homeGameIndex];
+    cell.scheduleNameLabel.text = schedule.name;
+    cell.opponentLabel.text = homeGame.opponentName;
+    cell.gameTimeLabel.text = [[[Constants formatDate:homeGame.gameTime withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "] stringByAppendingString:[Constants formatTime:homeGame.gameTime withStyle:NSDateFormatterShortStyle]];
+    
+    if([schedule.startDate timeIntervalSinceNow] < 0){ //schedule has started
+        if([homeGame.gameTime timeIntervalSinceNow] < 0 ){//game has happened
+            cell.backgroundColor = [UIColor lightGrayColor];
+            cell.startDateLabel.text = @"Game Over";
+            cell.startDateLabel.textColor = [UIColor blueColor];
+        }else{ //game is in progress
+            cell.backgroundColor = [UIColor whiteColor];
+            cell.startDateLabel.text = @"In Progress";
+            cell.startDateLabel.textColor = [UIColor redColor];
+        }
+    }else { //schedule has not started yet
+        
+        NSDate *today;
+        NSDate *startDay;
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        [calendar rangeOfUnit:NSCalendarUnitDay startDate:&today
+                     interval:NULL forDate:[NSDate date]];
+        [calendar rangeOfUnit:NSCalendarUnitDay startDate:&startDay
+                     interval:NULL forDate:schedule.startDate];
+
+        NSDateComponents *components = [calendar components:(NSCalendarUnitDay) fromDate:today toDate:startDay options:0];
+        cell.backgroundColor = [UIColor whiteColor];
+        cell.startDateLabel.text = components.day == 0 ? @"Starts today" : [NSString stringWithFormat:@"Starts in %ld days", (long)components.day];
+
+        cell.startDateLabel.textColor = [UIColor blackColor];
+        
+    }
  
     return cell;
 }
@@ -527,7 +556,10 @@
         MyScheduleContainerViewController *mscvc = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         if(indexPath){
-            mscvc.schedule = self.schedules[indexPath.row];
+            Schedule *schedule = self.schedules[indexPath.row];
+            HomeGame *homeGame = self.homeGames[schedule.homeGameIndex];
+            mscvc.schedule = schedule;
+            mscvc.opponentName = homeGame.opponentName;
         }
     }
     else if(sender==self.addScheduleButton){

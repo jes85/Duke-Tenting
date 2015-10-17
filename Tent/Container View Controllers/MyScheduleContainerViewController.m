@@ -15,16 +15,17 @@
 #import "PickPersonTableViewController.h"
 #import "IntervalsTableViewController.h"
 #import "MyScheduleTableViewController.h"
+#import "ScheduleSettingsViewController.h"
 
 @interface MyScheduleContainerViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (nonatomic) UIViewController *currentViewController;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
-
 @property (weak, nonatomic) IBOutlet UIView *viewGameInfo;
-@property (weak, nonatomic) IBOutlet UILabel *labelOpponent;
 @property (weak, nonatomic) IBOutlet UILabel *labelDate;
+@property (weak, nonatomic) IBOutlet UILabel *labelOpponent;
+
 
 @end
 
@@ -35,12 +36,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self drawBottomBorder];
+    //[self drawBorders];
     [self updateGameLabels];
     [self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
     [self updatePersonsForSchedule];
+    UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem = back;
 }
--(void)drawBottomBorder
+-(void)drawBorders
 {
     CGFloat borderWidth = 1.0f;
     CALayer *bottomBorder = [CALayer layer];
@@ -54,6 +57,8 @@
 {
     //self.labelScheduleName.text = self.schedule.name;
     //self.labelOpponent.text = self.schedule.opponent;
+    //self.labelOpponent.text = self.schedule.opponent;
+    self.labelOpponent.text = self.opponentName;
     self.labelDate.text = [[[Constants formatDate:self.schedule.endDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "] stringByAppendingString:[Constants formatTime:self.schedule.endDate withStyle:NSDateFormatterShortStyle]];
 
     self.navigationItem.title = self.schedule.name;
@@ -136,9 +141,13 @@
         
     }
     
-    [self transitionFromViewController:oldVC toViewController:newVC duration:0.5 options:UIViewAnimationOptionTransitionNone animations:^{
+    CGRect frame = CGRectMake(-self.containerView.bounds.size.width, self.containerView.bounds.origin.y, self.containerView.bounds.size.width, self.containerView.bounds.size.height);
+    newVC.view.frame = frame;
+
+    [self transitionFromViewController:oldVC toViewController:newVC duration:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
         [oldVC.view removeFromSuperview];
         [self.containerView addSubview:newVC.view];
+
     } completion:^(BOOL finished) {
         newVC.view.frame = [self frameForContentController];
         [oldVC removeFromParentViewController];
@@ -263,14 +272,59 @@
     
 }
 
-/*
+-(NSDictionary *)createSettingsDictionary
+{
+    NSDictionary *section0 = @{
+                               @"sectionHeader":@"General",
+                               @"sectionData": @[
+                                   @{
+                                       @"title": @"Schedule Name:",
+                                       @"value": self.schedule.name,
+                                       },
+                                   @{
+                                       @"title": @"Opponent:",
+                                       @"value": @"opponent",
+                                       },
+                                   @{
+                                       @"title": @"Group Code:",
+                                       @"value": self.schedule.password,
+                                       
+                                       }
+                                   ],
+                               };
+    NSDictionary *section1 = @{
+                               @"sectionHeader":@"Dates",
+                               @"sectionData": @[
+                                       @{
+                                           @"title": @"Start Date:",
+                                           @"value": self.schedule.startDate
+                                           },
+                                       @{
+                                           @"title": @"End Date:",
+                                           @"value": self.schedule.endDate
+                                           },
+                                       @{
+                                           @"title": @"Game Time:",
+                                           @"value": @"game time" //change to gameTime
+                                           
+                                           }
+                                       ],
+                               };
+    
+    return @{@0:section0, @1:section1};
+
+}
  #pragma mark - Navigation
  
  // In a storyboard-based application, you will often want to do a little preparation before navigation
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
  // Get the new view controller using [segue destinationViewController].
  // Pass the selected object to the new view controller.
+     if([[segue destinationViewController] isKindOfClass:[ScheduleSettingsViewController class]]){
+         ScheduleSettingsViewController *ssvc = [segue destinationViewController];
+         ssvc.settings = [self createSettingsDictionary];
+     }
  }
- */
+ 
 
 @end

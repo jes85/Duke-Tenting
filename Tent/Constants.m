@@ -35,5 +35,11 @@
     return timeLabelText;
 }
 
++(NSString *)formatDateAndTime: (NSDate *)date withDateStyle:(NSDateFormatterStyle)dateStyle timeStyle: (NSDateFormatterStyle)timeStyle
+
+{
+    return [[[Constants formatDate:date withStyle:dateStyle] stringByAppendingString:@" "] stringByAppendingString:[Constants formatTime:date withStyle:timeStyle]];
+}
+
 
 @end
