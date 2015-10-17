@@ -15,14 +15,11 @@
 #import <Parse/Parse.h>
 #import "Constants.h"
 
-
+#import "MySchedulesTableViewController.h"
 //static const NSUInteger numHomeGames = 18;
 
 @interface NewScheduleTableViewController ()
-@property (nonatomic) NSArray *homeGames;
-
 @property (nonatomic) NSUInteger selectedIndexPathRow;
-@property (nonatomic) NSUInteger scrollRow;
 @end
 
 @implementation NewScheduleTableViewController
@@ -31,13 +28,88 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    self.test = @"no";
+    //[self loadHomeGameScheduleData];
     
-    [self loadHomeGameScheduleData];
-    
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitDay) fromDate:[NSDate date]];
+    if(components.day == 17){ //change to only do it once a month or something and make sure it does it that month (maybe push notification is better)
+        [self checkForUpdatedHomeGameData];
+    }
     
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+}
+
+-(void)checkForUpdatedHomeGameData
+{
+    [NewScheduleTableViewController loadHomeGameScheduleDataFromParseWithBlock:^(NSArray *updatedHomeGamesArray, NSError *error) {
+        if(!error){
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSData *currentData = [userDefaults objectForKey:kUserDefaultsHomeGamesData];
+            NSArray *currentHomeGameDataArray = (NSArray *)[NSKeyedUnarchiver unarchiveObjectWithData:currentData];
+            
+            if(![currentHomeGameDataArray isEqual:updatedHomeGamesArray]){
+                NSData *updatedData = [NSKeyedArchiver archivedDataWithRootObject:updatedHomeGamesArray];
+                [userDefaults setObject:updatedData forKey:kUserDefaultsHomeGamesData];
+                self.homeGames = updatedHomeGamesArray;
+                MySchedulesTableViewController *mstvc = (MySchedulesTableViewController *)self.parentViewController.childViewControllers[0]; // change to delegate
+                //recalculate scroll position
+                //maybe give loading wheel notice that it's loading something
+                //maybe don't automatically reload. but have button for them to load 2015-16 data
+                mstvc.homeGames = self.homeGames;
+                [self.tableView reloadData];
+            }
+            
+
+        }
+    }];
+}
+
++(void)loadHomeGameScheduleDataFromParseWithBlock:(void (^) (NSArray *updatedHomeGamesArray, NSError *error))completionHander
+{
+    PFQuery *query = [PFQuery queryWithClassName:@"HomeGame"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *parseHomeGames, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %lu home games.", (unsigned long)parseHomeGames.count);
+            // Do something with the found objects
+            NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:parseHomeGames.count];
+            NSCalendar *calendar = [NSCalendar currentCalendar];
+            NSDateComponents *components = [[NSDateComponents alloc]init];
+            for (PFObject *parseHomeGame in parseHomeGames) {
+                NSLog(@"%@", parseHomeGame.objectId);
+                [components setYear:[parseHomeGame[@"date_year"] integerValue]];
+                [components setMonth: [parseHomeGame[@"date_month"] integerValue]];
+                [components setDay:[parseHomeGame[@"date_day"] integerValue]];
+                [components setHour:[parseHomeGame[@"time_hour"]integerValue]];
+                [components setMinute:[parseHomeGame[@"time_minutes"]integerValue]];
+                [components setWeekday:[parseHomeGame[@"date_weekday"]integerValue]];
+                NSDate *gameTime = [calendar dateFromComponents:components];
+                NSString *opponent = parseHomeGame[@"opponent"];
+                BOOL isExhibition = [parseHomeGame[@"exhibition"] boolValue];
+                BOOL isConferenceGame = [parseHomeGame[@"conference_game"] boolValue];
+                
+                HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame];
+                [homeGamesTemp addObject: homeGame];
+            }
+            
+            NSSortDescriptor *sortByStartDate = [NSSortDescriptor sortDescriptorWithKey:@"gameTime" ascending:YES];
+            NSArray *homeGamesData = (NSArray *)[homeGamesTemp sortedArrayUsingDescriptors:@[sortByStartDate]];
+            completionHander(homeGamesData, error);
+            
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+            completionHander(nil, error);
+        }
+    }];
 }
 
 /*!
@@ -379,7 +451,7 @@
     cell.gametimeLabel.text = [[dateLabelText stringByAppendingString:@" "] stringByAppendingString:timeLabelText];
     
     // Disable past games
-    if([homeGame.gameTime timeIntervalSinceNow] < 0){
+    if([homeGame.gameTime timeIntervalSinceNow] < 0){ //could save this calculation when calculate scroll row to save sometime
         cell.userInteractionEnabled = NO;
         //cell.joinButton.userInteractionEnabled = NO;
         //cell.createButton.userInteractionEnabled = NO;
@@ -479,6 +551,12 @@
         CreateScheduleTableViewController *cstvc = nc.childViewControllers[0];
         cstvc.homeGameIndex = homeGameIndex;
         cstvc.gameTime = homeGame.gameTime;
+    }
+    
+    if([[segue destinationViewController] isKindOfClass:[MySchedulesTableViewController class]]){
+        MySchedulesTableViewController *jstvc = [segue destinationViewController];
+        self.homeGames = nil;
+        NSArray *array = jstvc.homeGames;
     }
     
 }

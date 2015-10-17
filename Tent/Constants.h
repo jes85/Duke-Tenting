@@ -45,6 +45,7 @@
 #define kChildViewControllerOthers              @"ChildViewControllerOthers"
 #define kChildViewControllerTimeSlots           @"ChildViewControllerTimeSlots"
 
+#define kUserDefaultsHomeGamesData                          @"homeGamesData"
 
 +(NSString *)formatDate:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
 +(NSString *)formatTime:(NSDate *)date withStyle:(NSDateFormatterStyle)style;

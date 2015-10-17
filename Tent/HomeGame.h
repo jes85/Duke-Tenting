@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface HomeGame : NSObject
+@interface HomeGame : NSObject <NSCoding>
 
 @property (nonatomic) NSString *opponentName;
 @property (nonatomic) NSDate *gameTime;

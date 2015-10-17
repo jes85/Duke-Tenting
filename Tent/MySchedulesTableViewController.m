@@ -12,6 +12,7 @@
 #import "NameOfScheduleTableViewCell.h"
 #import "MyScheduleContainerViewController.h"
 #import "NewScheduleTableViewController.h"
+#import "HomeGame.h"
 #import "Constants.h"
 
 #import "MyPFLogInViewController.h"
@@ -24,6 +25,7 @@
 @property (nonatomic) NSMutableArray *publicSchedules;
 @property PFUser *user;
 @property (nonatomic) UIActivityIndicatorView *loadingWheel;
+
 @end
 
 
@@ -33,6 +35,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self getHomeGamesDataFromUserDefaults];
+    
     PFUser *currentUser = [PFUser currentUser];
     if(currentUser){
         self.loadingWheel.center = self.tableView.center;
@@ -65,6 +69,39 @@
         [self getMySchedules];
         
     }
+}
+
+-(void)getHomeGamesDataFromUserDefaults
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    //[userDefaults setObject:nil forKey:kUserDefaultsHomeGamesData]; //testing
+    NSData *currentData = [userDefaults objectForKey:kUserDefaultsHomeGamesData];
+    if(!currentData){
+        [NewScheduleTableViewController loadHomeGameScheduleDataFromParseWithBlock:^(NSArray *updatedHomeGamesArray, NSError *error) {
+            NSData *updatedData = [NSKeyedArchiver archivedDataWithRootObject:updatedHomeGamesArray];
+            [userDefaults setObject:updatedData forKey:kUserDefaultsHomeGamesData];
+            self.homeGames = updatedHomeGamesArray;
+        }];
+    }else{
+        NSArray *currentHomeGameDataArray = (NSArray *)[NSKeyedUnarchiver unarchiveObjectWithData:currentData];
+        self.homeGames = currentHomeGameDataArray;
+
+    }
+}
+
+-(NSUInteger)calculateScrollRowForNewSchedulesTVC
+{
+    NSUInteger scrollRow = 0;
+    HomeGame *lastGame = self.homeGames[self.homeGames.count-1];
+    if([lastGame.gameTime timeIntervalSinceNow] < 0) return 0; //if all games have occurred, just show all of them
+    for(int i=0;i<self.homeGames.count - 1;i++){ //don't need to check the last game twice
+        HomeGame *game = self.homeGames[i];
+        if([game.gameTime timeIntervalSinceNow] < 0){
+            scrollRow = i+1;
+
+        }
+    }
+    return scrollRow;
 }
 
 -(UIActivityIndicatorView *)loadingWheel
@@ -497,6 +534,12 @@
         NewScheduleTableViewController *nstvc = [segue destinationViewController];
         nstvc.publicSchedules = self.publicSchedules;
         nstvc.mySchedules = self.schedules;
+        nstvc.homeGames = self.homeGames;
+        nstvc.scrollRow = [self calculateScrollRowForNewSchedulesTVC];
+        
+        self.test = @"hey";
+        
+        nstvc.test = self.test;
     }
 }
 

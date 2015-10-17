@@ -17,7 +17,8 @@
 @property (nonatomic) NSMutableArray *schedules;
 @property (nonatomic) Schedule *scheduleToAdd;
 @property (nonatomic) Schedule *scheduleToJoin;
-
+@property (nonatomic) NSArray *homeGames;
+@property (nonatomic) NSString *test;
 
 // Unwind Segues
 -(IBAction)createSchedule:(UIStoryboardSegue *)segue;
