@@ -14,6 +14,10 @@
 
 @interface EnterScheduleTableViewController ()
 @property(nonatomic, strong) NSMutableArray *updatedAvailabilitiesArray;
+
+
+@property (nonatomic) UIBarButtonItem *cancelButton; //should be weak
+
 @end
 
 @implementation EnterScheduleTableViewController
@@ -22,6 +26,13 @@
 {
     [super viewDidLoad];
 }
+
+-(UIBarButtonItem *)cancelButton
+{
+    if(!_cancelButton) _cancelButton = [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelButtonPressed)];
+    return _cancelButton;
+}
+
 #pragma mark - Accessor Methods
 
  -(NSMutableArray *)updatedAvailabilitiesArray
@@ -230,7 +241,34 @@
     
 }
 
+#pragma mark - Navigation Bar Editing
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    
+    // overriding this method means we can attach custom functions to the button
+    [super setEditing:editing animated:animated];
+    
+    // attaching custom actions here
+    if (editing) {
+        // we're in edit mode
+        [self.navigationItem setLeftBarButtonItem:self.cancelButton animated:animated];
+        self.tableView.allowsSelection = YES;
+        
+    } else {
+        // we're not in edit mode
+        [self.navigationItem setLeftBarButtonItem:nil animated:animated];
+        self.tableView.allowsSelection = NO;
+        
+        
+    }
+}
 
+-(void)cancelButtonPressed
+{
+    //do cancel button things
+    
+    //change nav bar
+    [self setEditing:false animated:YES];
+}
 
 
 @end

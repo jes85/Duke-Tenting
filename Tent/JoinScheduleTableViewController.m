@@ -84,7 +84,7 @@
 {
     NSArray *sortDescriptors;
     NSSortDescriptor *sortByScheduleName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-    NSSortDescriptor *sortByCreatorName = [NSSortDescriptor sortDescriptorWithKey:@"creator" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+    NSSortDescriptor *sortByCreatorName = [NSSortDescriptor sortDescriptorWithKey:@"creatorName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
 ;
     NSSortDescriptor *sortByStartDate = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];
     
@@ -148,7 +148,7 @@
     cell.nameLabel.text = schedule.name;
     cell.startDate.text = [[[Constants formatDate:schedule.startDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "]stringByAppendingString:[Constants formatTime:schedule.startDate withStyle:NSDateFormatterShortStyle]];
      cell.endDate.text = [[[Constants formatDate:schedule.endDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "]stringByAppendingString:[Constants formatTime:schedule.endDate withStyle:NSDateFormatterShortStyle]];
-    //cell.creatorLabel.text = schedule.creatorName;
+    cell.creatorLabel.text = schedule.creatorName;
     
     /* If I've already joined one of the schedules, display this one first, distinguish it with a checkmark, and disable the join button on the other schedules
      
@@ -220,7 +220,7 @@
 #pragma mark - Search Bar
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope
 {
-    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"(name contains[c] %@) OR (creator.name contains[c] %@)", searchText, searchText];
+    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"(name contains[c] %@) OR (creatorName contains[c] %@)", searchText, searchText];
     self.searchResults = [self.schedulesAssociatedWithThisHomeGame filteredArrayUsingPredicate:resultPredicate];
 }
 -(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString

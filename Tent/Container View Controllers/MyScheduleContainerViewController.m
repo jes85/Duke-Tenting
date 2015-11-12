@@ -38,8 +38,8 @@
     [super viewDidLoad];
     //[self drawBorders];
     [self updateGameLabels];
-    [self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
     [self updatePersonsForSchedule];
+    //[self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
 }
@@ -87,6 +87,14 @@
 
 - (UIViewController *) viewControllerForSegmentIndex: (NSInteger)index
 {
+    if([self.viewControllers[index] isKindOfClass:[MyScheduleTableViewController class]] && (self.schedule.personsArray)){
+        
+        //this gets called every time segment index is switched. should really only happen once, or once every time there's an update to current user's schedule
+        MyScheduleTableViewController *mstvc = self.viewControllers[index];
+        mstvc.currentPerson = self.schedule.personsArray[self.schedule.currentUserPersonIndex];
+        mstvc.schedule = self.schedule;
+        
+    }
     
     return self.viewControllers[index];
 }
@@ -202,6 +210,11 @@
                 
                 Person *person = [[Person alloc]initWithName:name index:index availabilitiesArray:availabilitiesArray assignmentsArray:assignmentsArray scheduleName:self.schedule.name];
                 
+                person.userObjectID = [object[kPersonPropertyUserPointer] objectId];
+                
+                if([person.userObjectID isEqualToString:[[PFUser currentUser] objectId]]){
+                    self.schedule.currentUserPersonIndex = self.schedule.personsArray.count; //TODO: check logic
+                }
                 
                 //Fix this to prevent adding duplicates. maybe clear array and readd (but i don't want to do this every time if I don't have to)
                 if(![self.schedule.personsArray containsObject:person]){
@@ -242,6 +255,8 @@
             //update table view data of child view controllers
             
         }
+        [self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
+
     }];
     
 }

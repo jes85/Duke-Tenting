@@ -45,7 +45,9 @@
 @property (nonatomic) NSString *privacy;
 @property (nonatomic) NSString *password; //how to encrypt this?
 @property (nonatomic) NSUInteger homeGameIndex;
-@property (nonatomic) PFUser *creator;
+@property (nonatomic) NSString *creatorObjectID;
+@property (nonatomic) NSString *creatorName;
+@property (nonatomic) NSUInteger currentUserPersonIndex;
 @property (nonatomic) NSString *opponent; // or Home Game
 @property (nonatomic) NSString *parseObjectID;
 

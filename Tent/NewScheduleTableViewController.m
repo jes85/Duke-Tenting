@@ -476,19 +476,26 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Join or Create"
+    HomeGame *hg = self.homeGames[indexPath.row];
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:hg.opponentName
                                                                    message:@"Do you want to join an existing group or create a new schedule?"
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     
     
-    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {}];
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }];
     UIAlertAction* joinAction = [UIAlertAction actionWithTitle:@"Join" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         self.selectedIndexPathRow = indexPath.row;
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self joinSchedule];
+
     }];
     UIAlertAction* createAction = [UIAlertAction actionWithTitle:@"Create" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         self.selectedIndexPathRow = indexPath.row;
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self createSchedule];
+        
     }];
     
     [alert addAction:cancelAction];

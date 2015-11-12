@@ -138,6 +138,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     NSDateComponents *dateComponentsPrevious;
 
     NSMutableDictionary *intervalDisplayData = [[NSMutableDictionary alloc]init]; //{index (integer):["section header ex: Mon Oct. 17", [intervalDisplayArrayForThatSection]]}
+    //TODO: edit to dict inside (maybe json). and add numRowsAtStart to each section so I can calculate true indexpath.row later
     NSMutableArray *intervalDisplayArray = [[NSMutableArray alloc]init];
     
     NSString *sectionHeader = [Constants formatDate:currentStartInterval withStyle:NSDateFormatterShortStyle];
@@ -252,7 +253,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return self;
 
 }
--(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex creator:(PFUser *)creator parseObjectID: (NSString *)parseObjectID
+-(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex creatorObjectID:(NSString *)creatorObjectID parseObjectID: (NSString *)parseObjectID
 {
     self = [super init];
     if(self){
@@ -283,7 +284,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         
         
         //store creator
-        self.creator = creator;
+        self.creatorObjectID = creatorObjectID;
     }
     return self;
 }
@@ -318,7 +319,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         self.intervalArray = [self createZeroedIntervalArray];
         
         
-        //store admins
+        //TODO: store admins
         
     }
     return self;

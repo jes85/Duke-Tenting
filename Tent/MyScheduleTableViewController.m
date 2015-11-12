@@ -21,6 +21,7 @@
 
 @property(nonatomic, strong) NSMutableArray *updatedAvailabilitiesArray;
 
+
 @end
 
 @implementation MyScheduleTableViewController
@@ -35,7 +36,7 @@
     
     self.tableView.allowsSelection = NO;
     self.navigationItem.leftBarButtonItem = nil;
-    if(1==1){//check for user auth (it's my schedule & assignments haven't been made yet OR I'm an admin. if admin, show alert if assignments have already been made)
+    if([self.schedule.creatorObjectID isEqualToString: [[PFUser currentUser] objectId]] | [self.currentPerson.userObjectID isEqualToString:[[PFUser currentUser] objectId]]){//edit to check for user auth (it's my schedule & assignments haven't been made yet OR I'm an admin. if admin, show alert if assignments have already been made)
         self.navigationItem.rightBarButtonItem = self.editButtonItem;
         
     }
@@ -53,26 +54,35 @@
 
 #pragma mark - Table view data source
 
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSArray *sectionData = [self.schedule.intervalsDisplayData objectForKey:[NSNumber numberWithInteger:section]];
+    return sectionData[0];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     
-    
     // Return the number of sections.
-    return 1;
+    return self.schedule.intervalsDisplayData.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
     // Return the number of rows in the section.
+    NSArray *intervalDisplayDataForSection =[self.schedule.intervalsDisplayData objectForKey:[NSNumber numberWithInteger:section]];
+    NSArray *intervalDisplayArrayForSection = intervalDisplayDataForSection[1];
     
-    return [self.schedule.hourIntervalsDisplayArray count];
+    return intervalDisplayArrayForSection.count;
+    //return [self.schedule.intervalArray count];
+    
 }
-
 
 /*
  * Custom table header view. Add constraints.
  */
+/*
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UILabel *label1 = [[UILabel alloc] init];
@@ -96,6 +106,35 @@
     
     
 }
+ */
+
+
+-(NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+{
+    NSMutableArray *array = [[NSMutableArray alloc]initWithCapacity:tableView.numberOfSections];
+    for(int i = 0; i<tableView.numberOfSections; i++){
+        [array addObject: [NSString stringWithFormat:@"%d", i]];
+    }
+    
+    return array;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString
+                                                                             *)title atIndex:(NSInteger)index
+{
+    return index;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleNone;
+}
+
+- (BOOL)tableView:(UITableView *)tableView
+shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -103,10 +142,17 @@
     IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Interval Cell" forIndexPath:indexPath];
     
     // Configure the cell...
+    NSArray *sectionData = [self.schedule.intervalsDisplayData objectForKey:[NSNumber numberWithInteger:indexPath.section]];
+    NSArray *intervalDisplayArray = sectionData[1];
     
     
-    NSString *interval = self.schedule.hourIntervalsDisplayArray[indexPath.row];
-    cell.textLabel.text = interval;
+    cell.textLabel.text = intervalDisplayArray[indexPath.row];
+    
+    
+    
+    
+    //NSString *interval = self.schedule.hourIntervalsDisplayArray[indexPath.row];
+    //cell.textLabel.text = interval;
     
     
     if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
@@ -134,6 +180,8 @@
     
     return cell;
 }
+
+
 
 
 #pragma mark - Navigation
@@ -257,12 +305,12 @@
     if (editing) {
         // we're in edit mode
         [self.navigationItem setLeftBarButtonItem:self.cancelButton animated:animated];
-        self.tableView.allowsSelection = YES;
+        //self.tableView.allowsSelection = YES; //unnecessary because i set this in storyboard
         
     } else {
         // we're not in edit mode
         [self.navigationItem setLeftBarButtonItem:nil animated:animated];
-        self.tableView.allowsSelection = NO;
+        //self.tableView.allowsSelection = NO;
 
         
     }

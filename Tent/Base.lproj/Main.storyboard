@@ -74,7 +74,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="05J-1J-0lz" kind="push" id="4gH-3j-pVr"/>
+                                    <segue destination="05J-1J-0lz" kind="push" id="kJj-af-VSW"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -114,7 +114,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="y3K-f7-5YJ" kind="push" identifier="Time Intervals List To Available/Assigned People" id="Q70-dz-cQA"/>
+                                    <segue destination="skg-Jo-kky" kind="push" identifier="Time Intervals List To Available/Assigned People" id="9t8-sX-Bwy"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -157,6 +157,48 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0BJ-Lc-Ndp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4556" y="-668"/>
+        </scene>
+        <!--Persons In Interval View Controller-->
+        <scene sceneID="I7y-Pb-FEp">
+            <objects>
+                <viewController id="skg-Jo-kky" customClass="PersonsInIntervalViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7m1-Xm-If2"/>
+                        <viewControllerLayoutGuide type="bottom" id="pSS-7e-mxu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="B2G-hn-wOr">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ria-ra-ndl">
+                                <rect key="frame" x="0.0" y="76" width="320" height="533"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p7n-cP-bXv">
+                                <rect key="frame" x="0.0" y="29" width="320" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TW3-j2-5pB">
+                                <rect key="frame" x="0.0" y="10" width="320" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Xoi-0d-XnM"/>
+                    <connections>
+                        <outlet property="dateLabel" destination="TW3-j2-5pB" id="eLJ-L5-y6p"/>
+                        <outlet property="tableView" destination="ria-ra-ndl" id="mbG-eb-wAI"/>
+                        <outlet property="timeLabel" destination="p7n-cP-bXv" id="UCi-9f-Tmc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6kn-pM-N9X" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4531" y="25"/>
         </scene>
         <!--Enter Availabilities-->
         <scene sceneID="loT-qd-Ft2">
@@ -227,13 +269,13 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Qn-f3-mit" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="pel-Dg-iJU" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5921" y="-1395"/>
+            <point key="canvasLocation" x="5085" y="-1499"/>
         </scene>
         <!--My Schedule Table View Controller-->
         <scene sceneID="Ub9-tK-e31">
             <objects>
                 <tableViewController storyboardIdentifier="ChildViewControllerMe" id="05J-1J-0lz" customClass="MyScheduleTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="lFO-HN-Fdj">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="lFO-HN-Fdj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -284,7 +326,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aP9-yt-GnK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4726" y="-1401"/>
+            <point key="canvasLocation" x="4406" y="-1514"/>
         </scene>
         <!--Create Schedule-->
         <scene sceneID="rqv-ou-ep7">
@@ -506,7 +548,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="HMu-Wi-huW">
-                        <barButtonItem key="rightBarButtonItem" title="Settings" id="a5p-uQ-8d4">
+                        <barButtonItem key="rightBarButtonItem" image="Icon_Gear" id="a5p-uQ-8d4">
                             <connections>
                                 <segue destination="Rzj-bl-xhh" kind="push" id="AoZ-TV-NlU"/>
                             </connections>
@@ -743,7 +785,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="My Schedules" id="gBz-Nf-avG">
-                        <barButtonItem key="leftBarButtonItem" title="Settings" id="xa1-A8-LPR">
+                        <barButtonItem key="leftBarButtonItem" image="Icon_Gear" id="xa1-A8-LPR">
                             <connections>
                                 <segue destination="DUo-Gz-A9I" kind="modal" id="F2W-SF-CKk"/>
                             </connections>
@@ -906,7 +948,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="New Schedule" rowHeight="60" id="o5F-ZX-kTR" customClass="HomeGamesTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="New Schedule" rowHeight="60" id="o5F-ZX-kTR" customClass="HomeGamesTableViewCell">
                                 <rect key="frame" x="0.0" y="86" width="320" height="75"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="o5F-ZX-kTR" id="vQa-G1-TM9">
@@ -1817,24 +1859,6 @@
             </objects>
             <point key="canvasLocation" x="3478" y="-1809"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="O2r-lo-4Fo">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7Gn-qZ-7wN" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Rde-dE-Yfi">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="4yK-G7-dA5" kind="relationship" relationship="rootViewController" id="7aR-SN-ULM"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="CvF-iU-152" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5389" y="-1395"/>
-        </scene>
         <!--View Controller-->
         <scene sceneID="uJg-pf-9HO">
             <objects>
@@ -1846,6 +1870,16 @@
                     <view key="view" contentMode="scaleToFill" id="Ckh-cr-aTw">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FVp-cd-Mxg">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <items>
+                                    <barButtonItem title="Item" id="TBR-My-lEr"/>
+                                    <barButtonItem title="Item" id="XtQ-HP-Ann"/>
+                                    <barButtonItem title="Item" id="9Oe-hp-nSd"/>
+                                </items>
+                            </toolbar>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                 </viewController>
@@ -1928,6 +1962,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Icon_Gear" width="30" height="30"/>
         <image name="Rectangle" width="114" height="76"/>
         <image name="RedX" width="127" height="126"/>
     </resources>

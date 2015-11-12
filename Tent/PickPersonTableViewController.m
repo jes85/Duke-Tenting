@@ -171,7 +171,7 @@
         
         if(indexPath){
             //More checking
-            if([segue.identifier isEqualToString:@"Person To Hour Interval"]){
+            //if([segue.identifier isEqualToString:@"Person To Hour Interval"]){
                 
                 if([segue.destinationViewController  isKindOfClass:[MyScheduleTableViewController class]]){
                     
@@ -183,7 +183,7 @@
                     
                     mstvc.navigationItem.title = person.name;
                 }
-            }
+            
         }
     }else{
         NSLog(@"Bar button add");

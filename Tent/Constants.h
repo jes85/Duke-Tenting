@@ -17,7 +17,7 @@
 #define kPersonPropertyAvailabilitiesArray  @"availabilitiesArray"
 #define kPersonPropertyAssignmentsArray     @"assignmentsArray"
 #define kPersonPropertyAssociatedSchedule   @"associatedSchedule" //or schedule name?
-
+#define kPersonPropertyUserPointer          @"userPointer"
 
 #define kScheduleClassName  @"Schedule"
 
@@ -31,6 +31,7 @@
 #define kSchedulePropertyPassword               @"password"
 #define kSchedulePropertyHomeGameIndex          @"homeGameIndex"
 #define kSchedulePropertyCreatedBy              @"createdBy" //be careful of strong reference cycle
+#define kSchedulePropertyCreatedByName          @"createdByName" //doing this so don't have to fetch PFUser relation each time. might not be what you're supposed to do 
 #define kSchedulePropertyPersonsList            @"personsList"
 
 #define kPrivacyValuePrivate                    @"private"

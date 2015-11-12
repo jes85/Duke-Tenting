@@ -7,7 +7,7 @@
 //
 
 #import "IntervalsTableViewController.h"
-#import "PersonsInIntervalTableViewController.h"
+#import "PersonsInIntervalViewController.h"
 #import "Interval.h"
 @interface IntervalsTableViewController ()
 @end
@@ -66,6 +66,22 @@
 }
 
 
+-(NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+{
+    NSMutableArray *array = [[NSMutableArray alloc]initWithCapacity:tableView.numberOfSections];
+    for(int i = 0; i<tableView.numberOfSections; i++){
+        [array addObject: [NSString stringWithFormat:@"%d", i]];
+    }
+    
+    return array;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString
+                                                                             *)title atIndex:(NSInteger)index
+{
+    return index;
+}
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -74,8 +90,8 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
-    if([[segue destinationViewController] isKindOfClass:[PersonsInIntervalTableViewController class]]){
-        PersonsInIntervalTableViewController *piitvc = [segue destinationViewController];
+    if([[segue destinationViewController] isKindOfClass:[PersonsInIntervalViewController class]]){
+        PersonsInIntervalViewController *piitvc = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         
         //need to either store intervalArray data in format that corresponds to section:data. or store total number of rows per section in this class, calculate overall row number each time
@@ -94,7 +110,9 @@
         NSString *day = intervalData[0];
         NSArray *intervalArray = intervalData[1];
         NSString *time = intervalArray[indexPath.row];
-        piitvc.navigationItem.title = [[day stringByAppendingString:@" "] stringByAppendingString:time];
+        piitvc.dateLabel.text = day;
+        piitvc.timeLabel.text = time;
+        piitvc.navigationItem.title = @"Time Slot";
 
 
     }

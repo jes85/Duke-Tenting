@@ -17,6 +17,7 @@
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSUInteger indexOfPerson;
 @property (nonatomic) NSString *scheduleName;
+@property (nonatomic) NSString *userObjectID;
 
 
 //Clear these inits up and designate one
