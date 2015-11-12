@@ -14,6 +14,7 @@
 #import "MySchedulesTableViewController.h"
 #import "PickPersonTableViewController.h"
 #import "IntervalsTableViewController.h"
+#import "PersonsInIntervalViewController.h"
 #import "MyScheduleTableViewController.h"
 #import "ScheduleSettingsViewController.h"
 
@@ -141,11 +142,14 @@
         IntervalsTableViewController *itvc = (IntervalsTableViewController *)newVC;
         itvc.schedule = self.schedule;
         
-    }else if([newVC isKindOfClass:[MySchedulesTableViewController class]]){
+    }else if([newVC isKindOfClass:[MyScheduleTableViewController class]]){
         MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)newVC;
         mstvc.schedule = self.schedule;
         
-    }else if ([newVC isKindOfClass:[PickPersonTableViewController class]]){
+    }else if ([newVC isKindOfClass:[PersonsInIntervalViewController class]]){
+        PersonsInIntervalViewController *piivc = (PersonsInIntervalViewController *)newVC;
+        piivc.schedule = self.schedule;
+        piivc.displayCurrent = YES;
         
     }
     

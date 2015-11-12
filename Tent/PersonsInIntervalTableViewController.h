@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "Schedule.h"
 @interface PersonsInIntervalTableViewController : UITableViewController
 
 @property (nonatomic) NSArray *availablePersonsArray;

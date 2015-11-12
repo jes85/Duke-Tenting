@@ -161,7 +161,7 @@
         <!--Persons In Interval View Controller-->
         <scene sceneID="I7y-Pb-FEp">
             <objects>
-                <viewController id="skg-Jo-kky" customClass="PersonsInIntervalViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChildViewControllerCurrent" id="skg-Jo-kky" customClass="PersonsInIntervalViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7m1-Xm-If2"/>
                         <viewControllerLayoutGuide type="bottom" id="pSS-7e-mxu"/>
@@ -1253,7 +1253,7 @@
         <!--Table View Controller-->
         <scene sceneID="XY3-Pl-9ZZ">
             <objects>
-                <tableViewController storyboardIdentifier="ChildViewControllerCurrent" id="2g8-3O-Vyx" sceneMemberID="viewController">
+                <tableViewController id="2g8-3O-Vyx" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="fYo-uH-Ncy">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

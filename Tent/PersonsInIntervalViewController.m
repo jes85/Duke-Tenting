@@ -7,7 +7,7 @@
 //
 
 #import "PersonsInIntervalViewController.h"
-
+#import "Interval.h"
 @interface PersonsInIntervalViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -23,6 +23,23 @@
     self.tableView.dataSource = self;
 }
 
+-(void)findCurrentTimeInterval
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *datedifferenceComponents = [calendar components:NSCalendarUnitHour|NSCalendarUnitMinute fromDate:self.schedule.startDate toDate:[NSDate date] options:0];
+    
+    NSUInteger hours = datedifferenceComponents.hour;
+    NSUInteger minutes = datedifferenceComponents.minute;
+    
+    //TODO: calculate total intervals based on interval length setting and hours/minutes
+    
+    Interval *interval = self.schedule.intervalArray[hours];
+    self.availablePersonsArray = interval.availablePersons;
+    self.assignedPersonsArray = interval.assignedPersons;
+    
+
+    
+}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -32,7 +49,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    
+    if(self.displayCurrent==YES){
+        [self findCurrentTimeInterval];
+    }
     if(section==0){
         if([self.assignedPersonsArray count]<1) return 1;
         return [self.assignedPersonsArray count];

@@ -91,7 +91,7 @@
     // Pass the selected object to the new view controller.
     
     if([[segue destinationViewController] isKindOfClass:[PersonsInIntervalViewController class]]){
-        PersonsInIntervalViewController *piitvc = [segue destinationViewController];
+        PersonsInIntervalViewController *piivc = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         
         //need to either store intervalArray data in format that corresponds to section:data. or store total number of rows per section in this class, calculate overall row number each time
@@ -101,8 +101,8 @@
             overallRow += [self.tableView numberOfRowsInSection:i];
         }
         Interval *interval = self.schedule.intervalArray[overallRow];
-        piitvc.availablePersonsArray = interval.availablePersons;
-        piitvc.assignedPersonsArray = interval.assignedPersons;
+        piivc.availablePersonsArray = interval.availablePersons;
+        piivc.assignedPersonsArray = interval.assignedPersons;
         
         
         
@@ -110,9 +110,11 @@
         NSString *day = intervalData[0];
         NSArray *intervalArray = intervalData[1];
         NSString *time = intervalArray[indexPath.row];
-        piitvc.dateLabel.text = day;
-        piitvc.timeLabel.text = time;
-        piitvc.navigationItem.title = @"Time Slot";
+        piivc.dateLabel.text = day;
+        piivc.timeLabel.text = time;
+        piivc.navigationItem.title = @"Time Slot";
+        
+        //do i have to set piivc.displayCurrent to false?
 
 
     }
