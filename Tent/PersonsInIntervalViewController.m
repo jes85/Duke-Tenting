@@ -23,23 +23,31 @@
     self.tableView.dataSource = self;
 }
 
--(void)findCurrentTimeInterval
++(NSInteger)findCurrentTimeIntervalIndexForSchedule:(Schedule *)schedule
 {
     NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *datedifferenceComponents = [calendar components:NSCalendarUnitHour|NSCalendarUnitMinute fromDate:self.schedule.startDate toDate:[NSDate date] options:0];
+    NSDateComponents *datedifferenceComponents = [calendar components:NSCalendarUnitHour|NSCalendarUnitMinute fromDate:schedule.startDate toDate:[NSDate date] options:0];
     
-    NSUInteger hours = datedifferenceComponents.hour;
-    NSUInteger minutes = datedifferenceComponents.minute;
+    NSInteger hours = datedifferenceComponents.hour;
+    NSInteger minutes = datedifferenceComponents.minute;
     
     //TODO: calculate total intervals based on interval length setting and hours/minutes
     
-    Interval *interval = self.schedule.intervalArray[hours];
-    self.availablePersonsArray = interval.availablePersons;
-    self.assignedPersonsArray = interval.assignedPersons;
-    
-
+    return hours;
+   
     
 }
+
+-(void)updatePersonsArraysForCurrentTimeInterval
+{
+    NSInteger index = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
+    if(index < 0) return;
+    Interval *interval = self.schedule.intervalArray[index];
+    self.availablePersonsArray = interval.availablePersons;
+    self.assignedPersonsArray = interval.assignedPersons;
+
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -50,7 +58,7 @@
 {
     // Return the number of rows in the section.
     if(self.displayCurrent==YES){
-        [self findCurrentTimeInterval];
+        [self updatePersonsArraysForCurrentTimeInterval];
     }
     if(section==0){
         if([self.assignedPersonsArray count]<1) return 1;

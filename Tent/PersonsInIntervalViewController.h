@@ -19,4 +19,7 @@
 @property (nonatomic) BOOL displayCurrent;
 @property (nonatomic) Schedule *schedule;
 
+
++(NSInteger)findCurrentTimeIntervalIndexForSchedule:(Schedule *)schedule
+
 @end

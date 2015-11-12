@@ -17,9 +17,16 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-   
 }
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSInteger overallRow = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
+    if(index < 0) return; //schedule hasn't started
+    NSIndexPath *indexPath = [self indexPathForOverallRow:overallRow];
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    //TODO: need to account for different sections
+}
 
 #pragma mark - Table view data source
 
@@ -82,6 +89,30 @@
     return index;
 }
 
+-(NSUInteger)overallRowForIndexPath:(NSIndexPath *)indexPath
+{
+    NSUInteger overallRow = indexPath.row;
+    for(int i = 0; i<indexPath.section; i++){
+        overallRow += [self.tableView numberOfRowsInSection:i];
+    }
+    return overallRow;
+}
+
+-(NSIndexPath *)indexPathForOverallRow:(NSUInteger)overallRow
+{
+    NSUInteger rowCount = 0;
+    NSUInteger section = 0;
+    
+    while(rowCount + [self.tableView numberOfRowsInSection:section] < overallRow){
+        section = section + 1;
+        rowCount += [self.tableView numberOfRowsInSection:section];
+    }
+    
+    NSInteger row = overallRow - rowCount;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+    return indexPath;
+}
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -96,10 +127,8 @@
         
         //need to either store intervalArray data in format that corresponds to section:data. or store total number of rows per section in this class, calculate overall row number each time
         //i'll do calculation for now
-        NSUInteger overallRow = indexPath.row;
-        for(int i = 0; i<indexPath.section; i++){
-            overallRow += [self.tableView numberOfRowsInSection:i];
-        }
+        NSUInteger overallRow = [self overallRowForIndexPath:indexPath];
+        
         Interval *interval = self.schedule.intervalArray[overallRow];
         piivc.availablePersonsArray = interval.availablePersons;
         piivc.assignedPersonsArray = interval.assignedPersons;
