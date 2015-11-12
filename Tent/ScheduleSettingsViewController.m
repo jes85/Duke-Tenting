@@ -23,6 +23,11 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
+    /*
+        if user is admin
+            display edit button in top right
+     
+     */
 
 }
 
@@ -33,7 +38,10 @@
 #pragma mark - UITableViewDataSource methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    //if PFUser is creator, then return an extra cell
+    /*
+        if PFUser is admin
+            then return an extra cell (admin tools). or have this be brought up by a diff bar button item
+     */
 
     return self.settings.count;
 }

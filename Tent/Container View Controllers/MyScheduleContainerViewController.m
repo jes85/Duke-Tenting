@@ -43,6 +43,20 @@
     //[self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
+    
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editBarButtonItemPressed)];
+    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(settingsBarButtonItemPressed)];
+    settingsButton.image = [UIImage imageNamed:@"Icon_Gear"];
+    
+    self.navigationItem.rightBarButtonItems = @[editButton, settingsButton];
+}
+-(void)editBarButtonItemPressed
+{
+    
+}
+-(void)settingsBarButtonItemPressed
+{
+    
 }
 -(void)drawBorders
 {
