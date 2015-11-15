@@ -76,8 +76,7 @@
     NSLog(@"%@", NSStringFromSelector(_cmd));
     
     self.personsArray = nil; //maybe change personsArray to be property of schedule too?
-    self.schedule.intervalArray = [self.schedule createZeroedIntervalArray]; //get rid of this and just reload schedule from parse
-   
+    [self.schedule resetIntervalArray];
     // Get person objects from Parse
     PFQuery *query = [PFQuery queryWithClassName:@"Person"];
     [query whereKey:@"scheduleName" equalTo:self.schedule.name];
@@ -119,7 +118,7 @@
                 
                  for(int i = 0; i<[availabilitiesArray count]; i++){
                      if([availabilitiesArray[i] isEqual:@1]){
-                         Interval *interval = (Interval *)self.schedule.intervalArray[i];
+                         Interval *interval = (Interval *)self.schedule.intervalDataByOverallRow[i];
                          if([assignmentsArray[i] isEqual:@1]){
                              if (![interval.assignedPersons containsObject:person.name])
                              {

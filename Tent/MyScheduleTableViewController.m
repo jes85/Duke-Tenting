@@ -56,26 +56,25 @@
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSArray *sectionData = [self.schedule.intervalsDisplayData objectForKey:[NSNumber numberWithInteger:section]];
-    return sectionData[0];
+    NSMutableDictionary *sectionData = [self.schedule.intervalDataBySection objectForKey:[NSNumber numberWithInteger:section]];
+    
+    return sectionData[@"sectionHeader"];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     
     // Return the number of sections.
-    return self.schedule.intervalsDisplayData.count;
+    return self.schedule.intervalDataBySection.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
     // Return the number of rows in the section.
-    NSArray *intervalDisplayDataForSection =[self.schedule.intervalsDisplayData objectForKey:[NSNumber numberWithInteger:section]];
-    NSArray *intervalDisplayArrayForSection = intervalDisplayDataForSection[1];
+    NSMutableDictionary *sectionData = [self.schedule.intervalDataBySection objectForKey:[NSNumber numberWithInteger:section]];
     
-    return intervalDisplayArrayForSection.count;
-    //return [self.schedule.intervalArray count];
+    return [sectionData[@"intervalEndIndex"] integerValue] - [sectionData[@"intervalStartIndex"] integerValue];
     
 }
 
@@ -142,13 +141,13 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Interval Cell" forIndexPath:indexPath];
     
     // Configure the cell...
-    NSArray *sectionData = [self.schedule.intervalsDisplayData objectForKey:[NSNumber numberWithInteger:indexPath.section]];
-    NSArray *intervalDisplayArray = sectionData[1];
+    NSMutableDictionary *sectionData = [self.schedule.intervalDataBySection objectForKey:[NSNumber numberWithInteger:indexPath.section]];
     
+    NSUInteger index = [sectionData[@"intervalStartIndex"] integerValue] + indexPath.row;
+
+    Interval *interval = self.schedule.intervalDataByOverallRow[index];
     
-    cell.textLabel.text = intervalDisplayArray[indexPath.row];
-    
-    
+    cell.textLabel.text =interval.timeString;
     
     
     //NSString *interval = self.schedule.hourIntervalsDisplayArray[indexPath.row];
@@ -245,7 +244,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
             
             //update Intervals offline
             for(int i = 0; i<[self.currentPerson.availabilitiesArray count]; i++){
-                Interval *interval = (Interval *)self.schedule.intervalArray[i];
+                Interval *interval = (Interval *)self.schedule.intervalDataByOverallRow[i];
                 if([self.currentPerson.availabilitiesArray[i] isEqual:@1]) {
                     if(![interval.availablePersons containsObject:self.currentPerson.name]){
                         [interval.availablePersons addObject: self.currentPerson.name];

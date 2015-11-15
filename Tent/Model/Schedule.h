@@ -39,9 +39,14 @@
 @property (nonatomic) NSDate *endDate;
 @property (nonatomic) NSString *name; //for parse
 @property (nonatomic) NSMutableArray *personsArray;
-@property (nonatomic) NSMutableArray *intervalArray; //Interval[]
-@property (nonatomic) NSArray *hourIntervalsDisplayArray; //remove when get intervalsDisplayData working
-@property (nonatomic) NSDictionary *intervalsDisplayData;
+
+@property (nonatomic) NSMutableArray *intervalDataByOverallRow;
+@property (nonatomic) NSMutableDictionary *intervalDataBySection;
+
+//@property (nonatomic) NSMutableArray *intervalArray; //Interval[]
+//@property (nonatomic) NSDictionary *intervalsDisplayData;
+
+
 @property (nonatomic) NSString *privacy;
 @property (nonatomic) NSString *password; //how to encrypt this?
 @property (nonatomic) NSUInteger homeGameIndex;
@@ -56,7 +61,12 @@
     @property (nonatomic) NSMutableArray *assignmentsSchedule;
 
 
--(NSMutableArray *)createZeroedIntervalArray;
+-(void)resetIntervalArray;
 
+
+//Formatting
+-(NSString *)dateStringForSection:(NSUInteger)section;
+-(NSString *)timeStringForIndexPath:(NSIndexPath *)indexPath;
+-(NSString *)dateTimeStringForIndexPath:(NSIndexPath *)indexPath;
 
 @end

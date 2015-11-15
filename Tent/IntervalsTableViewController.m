@@ -32,24 +32,23 @@
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSArray *sectionData = [self.schedule.intervalsDisplayData objectForKey:[NSNumber numberWithInteger:section]];
-    return sectionData[0];
+    NSMutableDictionary *sectionData = [self.schedule.intervalDataBySection objectForKey:[NSNumber numberWithInteger:section]];
+    return sectionData[@"sectionHeader"];
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 
     // Return the number of sections.
-    return self.schedule.intervalsDisplayData.count;
+    return self.schedule.intervalDataBySection.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 
     // Return the number of rows in the section.
-    NSArray *intervalDisplayDataForSection =[self.schedule.intervalsDisplayData objectForKey:[NSNumber numberWithInteger:section]];
-    NSArray *intervalDisplayArrayForSection = intervalDisplayDataForSection[1];
-                                            
-    return intervalDisplayArrayForSection.count;
+    NSMutableDictionary *sectionData = [self.schedule.intervalDataBySection objectForKey:[NSNumber numberWithInteger:section]];
+    
+    return [sectionData[@"intervalEndIndex"] integerValue] - [sectionData[@"intervalStartIndex"] integerValue];
     //return [self.schedule.intervalArray count];
     
 }
@@ -59,12 +58,11 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Interval Cell" forIndexPath:indexPath];
     
     //Configure the cell...
-    //NSString *interval = self.schedule.hourIntervalsDisplayArray[indexPath.row];
-    NSArray *sectionData = [self.schedule.intervalsDisplayData objectForKey:[NSNumber numberWithInteger:indexPath.section]];
-    NSArray *intervalDisplayArray = sectionData[1];
+    NSMutableDictionary *sectionData = [self.schedule.intervalDataBySection objectForKey:[NSNumber numberWithInteger:indexPath.section]];
+    NSUInteger index = [sectionData[@"intervalStartIndex"] integerValue] + indexPath.row;
 
-    
-    cell.textLabel.text = intervalDisplayArray[indexPath.row];
+    Interval *interval = self.schedule.intervalDataByOverallRow[index];
+    cell.textLabel.text = interval.timeString;
     
 
     
@@ -122,25 +120,27 @@
     // Pass the selected object to the new view controller.
     
     if([[segue destinationViewController] isKindOfClass:[PersonsInIntervalViewController class]]){
-        PersonsInIntervalViewController *piivc = [segue destinationViewController];
+        PersonsInIntervalViewController *piivc = (PersonsInIntervalViewController *)[segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         
         //need to either store intervalArray data in format that corresponds to section:data. or store total number of rows per section in this class, calculate overall row number each time
         //i'll do calculation for now
         NSUInteger overallRow = [self overallRowForIndexPath:indexPath];
         
-        Interval *interval = self.schedule.intervalArray[overallRow];
+        Interval *interval = self.schedule.intervalDataByOverallRow[overallRow];
         piivc.availablePersonsArray = interval.availablePersons;
         piivc.assignedPersonsArray = interval.assignedPersons;
         
         
-        
+        /*
         NSArray *intervalData = [self.schedule.intervalsDisplayData objectForKey:[NSNumber numberWithInteger:indexPath.section]];
         NSString *day = intervalData[0];
         NSArray *intervalArray = intervalData[1];
         NSString *time = intervalArray[indexPath.row];
-        piivc.dateLabel.text = day;
-        piivc.timeLabel.text = time;
+         */
+        
+        
+        piivc.dateTimeText = [self.schedule dateTimeStringForIndexPath:indexPath];
         piivc.navigationItem.title = @"Time Slot";
         
         //do i have to set piivc.displayCurrent to false?

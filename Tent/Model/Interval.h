@@ -12,5 +12,12 @@
 
 @property (nonatomic) NSMutableArray *availablePersons;
 @property (nonatomic) NSMutableArray *assignedPersons;
+@property (nonatomic) NSDate *startDate;
+@property (nonatomic) NSDate *endDate;
+@property (nonatomic) NSString *timeString;
+@property (nonatomic) NSString *dateTimeString;
 
+@property (nonatomic) NSUInteger section;
+
+-(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate section:(NSUInteger) section;
 @end

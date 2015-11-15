@@ -59,7 +59,7 @@
 
     // Return the number of rows in the section.
    
-    return [self.schedule.hourIntervalsDisplayArray count];
+    return [self.schedule.intervalDataByOverallRow count];
 }
 
 
@@ -98,8 +98,8 @@
     // Configure the cell...
     
    
-    NSString *interval = self.schedule.hourIntervalsDisplayArray[indexPath.row];
-    cell.textLabel.text = interval;
+    Interval *interval = self.schedule.intervalDataByOverallRow[indexPath.row];
+    cell.textLabel.text = interval.timeString;
    
     
     if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
@@ -190,7 +190,7 @@
         
             //update Intervals offline
             for(int i = 0; i<[self.currentPerson.availabilitiesArray count]; i++){
-                Interval *interval = (Interval *)self.schedule.intervalArray[i];
+                Interval *interval = (Interval *)self.schedule.intervalDataByOverallRow[i];
                 if([self.currentPerson.availabilitiesArray[i] isEqual:@1]) {
                     if(![interval.availablePersons containsObject:self.currentPerson.name]){
                         [interval.availablePersons addObject: self.currentPerson.name];

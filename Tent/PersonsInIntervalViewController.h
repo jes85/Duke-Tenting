@@ -13,13 +13,13 @@
 
 @property (nonatomic) NSArray *availablePersonsArray;
 @property (nonatomic) NSArray *assignedPersonsArray;
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (nonatomic) NSString *dateTimeText;
+
 
 @property (nonatomic) BOOL displayCurrent;
 @property (nonatomic) Schedule *schedule;
 
 
-+(NSInteger)findCurrentTimeIntervalIndexForSchedule:(Schedule *)schedule
++(NSInteger)findCurrentTimeIntervalIndexForSchedule:(Schedule *)schedule;
 
 @end

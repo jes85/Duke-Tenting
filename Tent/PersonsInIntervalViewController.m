@@ -8,9 +8,11 @@
 
 #import "PersonsInIntervalViewController.h"
 #import "Interval.h"
+#import "Constants.h"
 @interface PersonsInIntervalViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UILabel *dateTimeLabel;
 
 @end
 
@@ -21,6 +23,8 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.dateTimeLabel.text = self.dateTimeText;
+    NSLog(self.dateTimeLabel.text);
 }
 
 +(NSInteger)findCurrentTimeIntervalIndexForSchedule:(Schedule *)schedule
@@ -42,9 +46,11 @@
 {
     NSInteger index = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
     if(index < 0) return;
-    Interval *interval = self.schedule.intervalArray[index];
+    Interval *interval = self.schedule.intervalDataByOverallRow[index];
     self.availablePersonsArray = interval.availablePersons;
     self.assignedPersonsArray = interval.assignedPersons;
+    self.dateTimeText = interval.dateTimeString;
+    self.dateTimeLabel.text = interval.dateTimeString;
 
 }
 

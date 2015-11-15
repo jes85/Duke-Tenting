@@ -106,29 +106,35 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     if(!_personsArray)_personsArray = [[NSMutableArray alloc]init];
     return _personsArray;
 }
--(NSMutableArray *)intervalArray
-{
-    if(!_intervalArray)_intervalArray = [[NSMutableArray alloc]init];
-    return _intervalArray;
-}
--(NSArray *)hourIntervalsDisplayArray
-{
-    if(!_hourIntervalsDisplayArray)_hourIntervalsDisplayArray = [[NSArray alloc]init];
-    return _hourIntervalsDisplayArray;
-}
--(NSMutableArray *)createZeroedIntervalArray
-{
-    NSMutableArray *intervalArray = [[NSMutableArray alloc]init];
-    for(int i = 0;i<self.numHourIntervals;i++){
-        Interval *interval = [[Interval alloc]init];
-        [intervalArray addObject:interval];
-    }
-   
-    return intervalArray;
-}
 
--(void)createIntervalDisplayArray
+
+-(void)createIntervalDataArrays
 {
+    
+    NSMutableArray *intervalDataByOverallRow = [[NSMutableArray alloc]init];
+    /*
+     [Interval, Interval,...]
+     */
+    NSMutableDictionary *intervalDataBySection = [[NSMutableDictionary alloc]init]; //{index (integer):["section header ex: Mon Oct. 17", [intervalDisplayArrayForThatSection]]}
+    //TODO: edit to dict inside (maybe json). and add numRowsAtStart to each section so I can calculate true indexpath.row later
+    /*
+     {
+     sectionIndex:
+     {
+     
+     day: NSDate
+     sectionHeader: NSString
+     intervalStartIndex: NSUInteger
+     intervalEndIndex: NSUInteger (
+     (if contains intervals 0, 1,2,3,4, start = 0, end = 5
+     //numIntervalsBeforeDay: startIndex
+     //numIntervalsInDay: endIndex - startIndex
+     //intervals: [Interval, Interval] //this is copy of intervalDataByOverRow data. I guess I could just store start and end index of section
+     }
+     }
+     */
+    NSMutableArray *sectionIntervals = [[NSMutableArray alloc]init];
+    
     NSDate *currentStartInterval = [self.startDate copy];
     NSDate *previousStartInterval = currentStartInterval;
     NSDate *currentEndInterval = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:currentStartInterval];
@@ -136,44 +142,59 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *dateComponentsCurrent;
     NSDateComponents *dateComponentsPrevious;
-
-    NSMutableDictionary *intervalDisplayData = [[NSMutableDictionary alloc]init]; //{index (integer):["section header ex: Mon Oct. 17", [intervalDisplayArrayForThatSection]]}
-    //TODO: edit to dict inside (maybe json). and add numRowsAtStart to each section so I can calculate true indexpath.row later
-    NSMutableArray *intervalDisplayArray = [[NSMutableArray alloc]init];
     
     NSString *sectionHeader = [Constants formatDate:currentStartInterval withStyle:NSDateFormatterShortStyle];
+    NSDate *sectionDate = [currentStartInterval copy];
     NSUInteger sectionNumber = 0;
+    NSUInteger intervalStartIndex = 0;
+    
     for(int i = 0; i<self.numHourIntervals;i++){
         dateComponentsPrevious = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:previousStartInterval];
         dateComponentsCurrent = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:currentStartInterval];
         
-        NSUInteger day0 = dateComponentsPrevious.day;
-        NSUInteger day1 = dateComponentsCurrent.day;
-        
-        if(dateComponentsPrevious.day != dateComponentsCurrent.day){ //oct 17, oct 18. compare 17 and 18
+        if(dateComponentsPrevious.day != dateComponentsCurrent.day){ //i.e. oct 17, oct 18. compare 17 and 18
             
-            NSArray *sectionData = @[sectionHeader, intervalDisplayArray];
-            [intervalDisplayData setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]];
+            //Add current section data to dict and initialize new section
+            NSMutableDictionary *sectionData = [[NSMutableDictionary alloc]init];
+            sectionData[@"day"] = sectionDate;
+            sectionData[@"sectionHeader"] = sectionHeader;
+            sectionData[@"intervalStartIndex"] = [NSNumber numberWithInteger:intervalStartIndex];
+            sectionData[@"intervalEndIndex"] = [NSNumber numberWithInteger:i];
+            
+            [intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]];
+            
+            //Initialize next section
             sectionHeader = [Constants formatDate:currentStartInterval withStyle:NSDateFormatterShortStyle];
-            intervalDisplayArray = [[NSMutableArray alloc]init];
+            sectionDate = [currentStartInterval copy];
+            sectionIntervals = [[NSMutableArray alloc]init];
+            intervalStartIndex = i;
             sectionNumber++;
+
         }
         
-        
-        NSString *currentStartIntervalString = [NSDateFormatter localizedStringFromDate:currentStartInterval dateStyle:0 timeStyle:NSDateFormatterShortStyle];
-        NSString *currentEndIntervalString = [NSDateFormatter localizedStringFromDate:currentEndInterval dateStyle:0 timeStyle:NSDateFormatterShortStyle];
-        NSString *timeIntervalString = [NSString stringWithFormat:@"%@ - %@", currentStartIntervalString, currentEndIntervalString];
-        [intervalDisplayArray addObject:timeIntervalString];
+        Interval *interval = [[Interval alloc]initWithStartDate:currentStartInterval endDate:currentEndInterval section:sectionNumber];
+        [intervalDataByOverallRow addObject:interval];
+        [sectionIntervals addObject:interval];
         
         previousStartInterval = currentStartInterval;
         currentStartInterval = currentEndInterval;
         currentEndInterval = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:currentStartInterval];
         
+        
     }
     
-    //self.hourIntervalsDisplayArray = [array copy];
-    self.intervalsDisplayData = [intervalDisplayData copy]; // why copy?
+    self.intervalDataBySection = [intervalDataBySection copy];
+    self.intervalDataByOverallRow = [intervalDataByOverallRow copy];
     
+}
+-(void)resetIntervalArray
+{
+    for(int i = 0;i<self.intervalDataByOverallRow.count;i++){
+        Interval *interval = (Interval *)self.intervalDataByOverallRow[i];
+        interval.assignedPersons = [[NSMutableArray alloc]init];
+        interval.availablePersons = [[NSMutableArray alloc]init];
+    }
+
 }
 
 #pragma mark - init
@@ -204,9 +225,10 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         }
         self.name = name;
         
-        //intervalArray/hourIntervalDisplayArray
-        [self createIntervalDisplayArray];
-        self.intervalArray = [self createZeroedIntervalArray];
+        //intervalArray
+            //[self createIntervalDisplayArray];
+            //self.intervalArray = [self createZeroedIntervalArray];
+            [self createIntervalDataArrays];
         
         //maybe create actual interval array: 2 options
         //1. make personsArray a property of Schedule (that way we can eliminate the need for a "Person" object in Parse
@@ -278,10 +300,10 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         }
         self.name = name;
         
-        //intervalArray/hourIntervalDisplayArray
-        [self createIntervalDisplayArray];
-        self.intervalArray = [self createZeroedIntervalArray];
-        
+        //intervalArray
+            //[self createIntervalDisplayArray];
+            //self.intervalArray = [self createZeroedIntervalArray];
+            [self createIntervalDataArrays];
         
         //store creator
         self.creatorObjectID = creatorObjectID;
@@ -314,9 +336,10 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         }
         self.name = name;
         
-        //intervalArray/hourIntervalDisplayArray
-        [self createIntervalDisplayArray];
-        self.intervalArray = [self createZeroedIntervalArray];
+        //intervalArray
+            //[self createIntervalDisplayArray];
+            //self.intervalArray = [self createZeroedIntervalArray];
+            [self createIntervalDataArrays];
         
         
         //TODO: store admins
@@ -667,7 +690,33 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return YES;
 }
 
+#pragma mark - formatting
+-(NSString *)dateStringForSection:(NSUInteger)section
+{
+    NSMutableDictionary *sectionData = [self.intervalDataBySection objectForKey:[NSNumber numberWithInteger:section]];
 
+    NSString *dateString = [Constants formatDate:sectionData[@"day"] withStyle:NSDateFormatterShortStyle];
+    return dateString;
+}
+-(NSString *)timeStringForIndexPath:(NSIndexPath *)indexPath
+{
+    NSMutableDictionary *sectionData = [self.intervalDataBySection objectForKey:[NSNumber numberWithInteger:indexPath.section]];
+    
+    NSUInteger startIndex = [sectionData[@"intervalStartIndex"] integerValue];
+    
+    NSUInteger index = startIndex + indexPath.row;
+    Interval *interval = self.intervalDataByOverallRow[index];
 
-
+    return interval.timeString;
+}
+-(NSString *)dateTimeStringForIndexPath:(NSIndexPath *)indexPath
+{
+    return [[[self dateStringForSection:indexPath.section] stringByAppendingString:@" "] stringByAppendingString:[self timeStringForIndexPath:indexPath]];
+}
+-(NSString *)dateTimeStringForOverallRow:(NSIndexPath *)indexPath
+{
+    Interval *interval = self.intervalDataByOverallRow[indexPath.row];
+    
+    return [[[self dateStringForSection:interval.section] stringByAppendingString:@" "] stringByAppendingString:interval.timeString];
+}
 @end

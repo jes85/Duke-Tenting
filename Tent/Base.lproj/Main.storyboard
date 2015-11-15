@@ -171,17 +171,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ria-ra-ndl">
-                                <rect key="frame" x="0.0" y="76" width="320" height="533"/>
+                                <rect key="frame" x="0.0" y="38" width="320" height="571"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" restorationIdentifier="Person Cell" selectionStyle="default" indentationWidth="10" reuseIdentifier="Person Cell" id="acz-vU-hn0">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="acz-vU-hn0" id="1wY-Ro-sVB">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p7n-cP-bXv">
-                                <rect key="frame" x="0.0" y="29" width="320" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TW3-j2-5pB">
-                                <rect key="frame" x="0.0" y="10" width="320" height="18"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O64-3v-Tqr">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -191,9 +194,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="Xoi-0d-XnM"/>
                     <connections>
-                        <outlet property="dateLabel" destination="TW3-j2-5pB" id="eLJ-L5-y6p"/>
+                        <outlet property="dateTimeLabel" destination="O64-3v-Tqr" id="gem-Qd-wge"/>
                         <outlet property="tableView" destination="ria-ra-ndl" id="mbG-eb-wAI"/>
-                        <outlet property="timeLabel" destination="p7n-cP-bXv" id="UCi-9f-Tmc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6kn-pM-N9X" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1962,7 +1964,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Icon_Gear" width="30" height="30"/>
+        <image name="Icon_Gear" width="29" height="29"/>
         <image name="Rectangle" width="114" height="76"/>
         <image name="RedX" width="127" height="126"/>
     </resources>
