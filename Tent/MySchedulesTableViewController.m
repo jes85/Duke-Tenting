@@ -298,6 +298,7 @@
 {
     PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertySchedulesList];
     PFQuery *query = [relation query];
+    [query orderByAscending:@"endDate"];
   
     //[self.loadingWheel startAnimating];
     [query findObjectsInBackgroundWithBlock:^(NSArray *schedulesForThisUser, NSError *error) {

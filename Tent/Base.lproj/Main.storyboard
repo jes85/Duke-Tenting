@@ -1786,6 +1786,37 @@
                                             <outlet property="nameOfScheduleTextField" destination="ddY-PK-Xvw" id="mmk-Ax-bQi"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="passwordCell" id="vnO-Fb-1si" customClass="PasswordTableViewCell">
+                                        <rect key="frame" x="0.0" y="467" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vnO-Fb-1si" id="O4J-dT-0Mq">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Group Code:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ad0-L8-xIY">
+                                                    <rect key="frame" x="15" y="12" width="100" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter group code" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="O4u-6t-mOh">
+                                                    <rect key="frame" x="123" y="8" width="222" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                                    <connections>
+                                                        <action selector="textFieldDoneEditing:" destination="rsk-Jd-lrE" eventType="editingDidEndOnExit" id="38w-fx-kUC"/>
+                                                    </connections>
+                                                </textField>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="detailDisclosure" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YRo-M9-IAO">
+                                                    <rect key="frame" x="290" y="12" width="22" height="22"/>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="passwordLabel" destination="Ad0-L8-xIY" id="FG7-QQ-iuP"/>
+                                            <outlet property="passwordTextField" destination="O4u-6t-mOh" id="dj1-fT-DLy"/>
+                                        </connections>
+                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="dateCell" textLabel="NGl-iR-WH1" detailTextLabel="5NT-df-Lcw" style="IBUITableViewCellStyleValue1" id="auD-0G-Dap">
                                         <rect key="frame" x="0.0" y="163" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
@@ -1828,37 +1859,6 @@
                                                 </datePicker>
                                             </subviews>
                                         </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="passwordCell" id="vnO-Fb-1si" customClass="PasswordTableViewCell">
-                                        <rect key="frame" x="0.0" y="467" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vnO-Fb-1si" id="O4J-dT-0Mq">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Group Code:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ad0-L8-xIY">
-                                                    <rect key="frame" x="15" y="12" width="100" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter group code" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="O4u-6t-mOh">
-                                                    <rect key="frame" x="123" y="8" width="222" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                                                    <connections>
-                                                        <action selector="textFieldDoneEditing:" destination="rsk-Jd-lrE" eventType="editingDidEndOnExit" id="38w-fx-kUC"/>
-                                                    </connections>
-                                                </textField>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="detailDisclosure" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YRo-M9-IAO">
-                                                    <rect key="frame" x="290" y="12" width="22" height="22"/>
-                                                </button>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="passwordLabel" destination="Ad0-L8-xIY" id="FG7-QQ-iuP"/>
-                                            <outlet property="passwordTextField" destination="O4u-6t-mOh" id="dj1-fT-DLy"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
