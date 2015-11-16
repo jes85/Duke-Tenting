@@ -152,14 +152,11 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         dateComponentsPrevious = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:previousStartInterval];
         dateComponentsCurrent = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:currentStartInterval];
         
-        if(dateComponentsPrevious.day != dateComponentsCurrent.day){ //i.e. oct 17, oct 18. compare 17 and 18
+        if(dateComponentsPrevious.day != dateComponentsCurrent.day) { //i.e. oct 17, oct 18. compare 17 and 18
             
             //Add current section data to dict and initialize new section
-            NSMutableDictionary *sectionData = [[NSMutableDictionary alloc]init];
-            sectionData[@"day"] = sectionDate;
-            sectionData[@"sectionHeader"] = sectionHeader;
-            sectionData[@"intervalStartIndex"] = [NSNumber numberWithInteger:intervalStartIndex];
-            sectionData[@"intervalEndIndex"] = [NSNumber numberWithInteger:i];
+            
+            NSMutableDictionary *sectionData = [self sectionDictForDay:sectionDate sectionHeader:sectionHeader intervalStartIndex:intervalStartIndex intervalEndIndex:i];
             
             [intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]];
             
@@ -179,7 +176,19 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         previousStartInterval = currentStartInterval;
         currentStartInterval = currentEndInterval;
         currentEndInterval = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:currentStartInterval];
+        NSTimeInterval timeUntilEnd = [self.endDate timeIntervalSinceDate:currentEndInterval];
         
+        
+        if(timeUntilEnd <= 0 ){
+            Interval *interval = [[Interval alloc]initWithStartDate:currentStartInterval endDate:self.endDate section:sectionNumber];
+            [intervalDataByOverallRow addObject:interval];
+            [sectionIntervals addObject:interval];
+            
+            NSMutableDictionary *sectionData = [self sectionDictForDay:sectionDate sectionHeader:sectionHeader intervalStartIndex:intervalStartIndex intervalEndIndex:i+1];
+            
+            [intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]];
+            
+        }
         
     }
     
@@ -187,6 +196,19 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     self.intervalDataByOverallRow = [intervalDataByOverallRow copy];
     
 }
+
+-(NSMutableDictionary *)sectionDictForDay:(NSDate *)day sectionHeader:(NSString *)sectionHeader intervalStartIndex:(NSUInteger) start intervalEndIndex: (NSUInteger) end
+{
+    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc]init];
+    sectionData[@"day"] = day;
+    sectionData[@"sectionHeader"] = sectionHeader;
+    sectionData[@"intervalStartIndex"] = [NSNumber numberWithInteger:start];
+    sectionData[@"intervalEndIndex"] = [NSNumber numberWithInteger:end];
+
+    return sectionData;
+    
+}
+
 -(void)resetIntervalArray
 {
     for(int i = 0;i<self.intervalDataByOverallRow.count;i++){
@@ -261,7 +283,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         
         
         double time = [endDate timeIntervalSinceDate:startDate];
-        NSUInteger numHourIntervals = (NSUInteger)time/3600;
+        NSUInteger numHourIntervals = ceil(time/3600);
 
          //call designated initializer
         self = [self initWithName:name availabilitiesSchedule:[[NSMutableArray alloc]init] assignmentsSchedule:nil numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex parseObjectID:nil];

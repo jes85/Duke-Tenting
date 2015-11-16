@@ -24,7 +24,7 @@
     NSInteger overallRow = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
     if(index < 0) return; //schedule hasn't started
     NSIndexPath *indexPath = [self indexPathForOverallRow:overallRow];
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    //[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
     //TODO: need to account for different sections
 }
 

@@ -102,7 +102,7 @@
 
 - (UIViewController *) viewControllerForSegmentIndex: (NSInteger)index
 {
-    if([self.viewControllers[index] isKindOfClass:[MyScheduleTableViewController class]] && (self.schedule.personsArray)){
+    if([self.viewControllers[index] isKindOfClass:[MyScheduleTableViewController class]] && (self.schedule.personsArray)){ //TODO: add condition that persons array is > 1 count
         
         //this gets called every time segment index is switched. should really only happen once, or once every time there's an update to current user's schedule
         MyScheduleTableViewController *mstvc = self.viewControllers[index];
