@@ -56,7 +56,7 @@
 }
 -(void)settingsBarButtonItemPressed
 {
-    
+    [self performSegueWithIdentifier:@"MyScheduleSettingsSegue" sender:self];
 }
 -(void)drawBorders
 {

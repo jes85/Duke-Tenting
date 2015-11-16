@@ -90,6 +90,18 @@
     return cell;
     }
 }
+- (IBAction)deleteScheduleButtonPressed:(id)sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete" message:@"Are you sure?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        NSLog(@"delete");
+    }];
+    [alert addAction:cancelAction];
+    [alert addAction:deleteAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
 
 /*
 #pragma mark - Navigation

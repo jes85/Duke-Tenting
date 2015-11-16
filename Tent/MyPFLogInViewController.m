@@ -11,6 +11,7 @@
 
 @interface MyPFLogInViewController ()
 @property(nonatomic, strong) UIImageView *fieldsBackground;
+@property(nonatomic, strong) UIView *fieldsBackgroundTest;
 @end
 
 @implementation MyPFLogInViewController
@@ -31,11 +32,24 @@
 
     //[self.logInView setBackgroundColor:[UIColor blueColor]];
     [self.logInView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"DukeBlueBG"]]];
-    [self.logInView setLogo: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Krzyzewskiville"]]];
+    
+    UIView *logoView = [[UIView alloc]init];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 300, 100)];
+    label.text = @"DUKE K-VILLE PLANNER";
+    label.textColor = [UIColor whiteColor];
+    [logoView insertSubview:label atIndex:0];
+    
+    [self.logInView setLogo:logoView];
+    //[self.logInView setLogo: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Krzyzewskiville"]]];
+    
     
     // Add login field background
     self.fieldsBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginFieldBG.png"]];
-    [self.logInView insertSubview:self.fieldsBackground atIndex:1];
+    self.fieldsBackgroundTest = [[UIView alloc]init];
+    self.fieldsBackgroundTest.backgroundColor = [UIColor whiteColor];
+    [self.logInView insertSubview:self.fieldsBackgroundTest atIndex:1];
+    
+    
     // Remove text shadow
     CALayer *layer = self.logInView.usernameField.layer;
     layer.shadowOpacity = 0.0;
@@ -53,7 +67,7 @@
     [self.logInView.logo setFrame:CGRectMake(66.5f, 70.0f, 187.0f, 78.5f)];
     [self.logInView.usernameField setFrame:CGRectMake(35.0f, 185.0f, 250.0f, 50.0f)];
     [self.logInView.passwordField setFrame:CGRectMake(35.0f, 235.0f, 250.0f, 50.0f)];
-    [self.fieldsBackground setFrame:CGRectMake(35.0f, 185.0f, 250.0f, 100.0f)];
+    [self.fieldsBackgroundTest setFrame:CGRectMake(35.0f, 185.0f, 250.0f, 100.0f)];
 }
 - (void)didReceiveMemoryWarning
 {
