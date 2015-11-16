@@ -12,7 +12,7 @@
 
 
 
-@interface HomeGamesTableViewCell : UITableViewCell
+@interface HomeGamesTableViewCell : UITableViewCell //maybe make this a subclass of JoinedTableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *opponentNameLabel;
 @property (weak, nonatomic) IBOutlet UIView *joinButton;

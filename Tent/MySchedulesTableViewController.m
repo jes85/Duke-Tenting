@@ -25,10 +25,19 @@
 @property PFUser *user;
 @property (nonatomic) UIActivityIndicatorView *loadingWheel;
 
+@property (nonatomic) NSMutableSet *mySchedulesHomeGameIndexes;
+
 @end
 
 
 @implementation MySchedulesTableViewController
+
+-(NSMutableSet *)mySchedulesHomeGameIndexes
+{
+    if(!_mySchedulesHomeGameIndexes) _mySchedulesHomeGameIndexes = [[NSMutableSet alloc]init];
+    return _mySchedulesHomeGameIndexes;
+}
+
 #pragma mark - View Controller Lifecycle
 
 - (void)viewDidLoad
@@ -297,7 +306,7 @@
             for(PFObject *parseSchedule in schedulesForThisUser){
                 Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
                 
-                [self.schedules addObject:scheduleObject];
+                [self addSchedule:scheduleObject];
             }
             [self.loadingWheel stopAnimating];
             [self.tableView reloadData];
@@ -472,7 +481,7 @@
                          PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertySchedulesList];
                          [relation addObject:parseSchedule];
                          [[PFUser currentUser] saveInBackground];
-                         [self.schedules addObject:joinedScheduleObject];
+                         [self addSchedule:joinedScheduleObject];
                          [self.tableView reloadData];
                      }
                  }];
@@ -484,7 +493,13 @@
     
 }
 
-/*! 
+
+-(void)addSchedule:(Schedule *)schedule
+{
+    [self.schedules addObject:schedule];
+    [self.mySchedulesHomeGameIndexes addObject:[NSNumber numberWithInteger:schedule.homeGameIndex]];
+}
+/*!
  *  Called when user chooses to create a schedule.
  *  Creates the schedule, and saves to Parse
  */
@@ -500,7 +515,7 @@
     
     
     Schedule *newSchedule = self.scheduleToAdd;
-    [self.schedules addObject:newSchedule];
+    [self addSchedule:newSchedule];
     
     [self.tableView reloadData];
     
@@ -586,7 +601,7 @@
     else if(sender==self.addScheduleButton){
         NewScheduleTableViewController *nstvc = [segue destinationViewController];
         nstvc.publicSchedules = self.publicSchedules;
-        nstvc.mySchedules = self.schedules;
+        nstvc.mySchedulesHomeGameIndexes = self.mySchedulesHomeGameIndexes;
         nstvc.homeGames = self.homeGames;
         nstvc.scrollRow = [self calculateScrollRowForNewSchedulesTVC];
         

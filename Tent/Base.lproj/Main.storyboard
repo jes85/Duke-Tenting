@@ -941,7 +941,7 @@
             </objects>
             <point key="canvasLocation" x="-450" y="-576"/>
         </scene>
-        <!--New-->
+        <!--New Schedule-->
         <scene sceneID="fly-9y-F2Y">
             <objects>
                 <tableViewController id="e5a-eJ-8GA" customClass="NewScheduleTableViewController" sceneMemberID="viewController">
@@ -950,7 +950,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="New Schedule" rowHeight="60" id="o5F-ZX-kTR" customClass="HomeGamesTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="HomeGameTVC" rowHeight="60" id="o5F-ZX-kTR" customClass="HomeGamesTableViewCell">
                                 <rect key="frame" x="0.0" y="86" width="320" height="75"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="o5F-ZX-kTR" id="vQa-G1-TM9">
@@ -1027,17 +1027,67 @@
                                     <outlet property="opponentNameLabel" destination="vth-Uj-Bse" id="G9g-0t-Aeo"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JoinedHomeGameTVC" rowHeight="60" id="XFq-fU-XgS" customClass="JoinedHomeGameTableViewCell">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XFq-fU-XgS" id="N6y-Gy-x6C">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Home Game" lineBreakMode="clip" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="165" translatesAutoresizingMaskIntoConstraints="NO" id="EBI-ik-5GT">
+                                            <rect key="frame" x="20" y="7" width="165" height="25"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="165" id="3Uy-uR-lK4"/>
+                                                <constraint firstAttribute="height" constant="25" id="QxZ-Dg-aTd"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gametime" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eM7-wi-dqY">
+                                            <rect key="frame" x="20" y="37" width="156" height="15"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="15" id="AwS-rj-ie5"/>
+                                                <constraint firstAttribute="width" constant="156" id="CKc-Y8-Ghp"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Already Joined" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PgD-aO-qEm">
+                                            <rect key="frame" x="204" y="7" width="100" height="45"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="100" id="9jm-DX-bnQ"/>
+                                                <constraint firstAttribute="height" constant="45" id="sr3-wR-ZI0"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.0" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="EBI-ik-5GT" firstAttribute="leading" secondItem="eM7-wi-dqY" secondAttribute="leading" id="8OC-Nb-5Wu"/>
+                                        <constraint firstItem="EBI-ik-5GT" firstAttribute="top" secondItem="PgD-aO-qEm" secondAttribute="top" id="JvJ-cv-mxY"/>
+                                        <constraint firstItem="PgD-aO-qEm" firstAttribute="trailing" secondItem="N6y-Gy-x6C" secondAttribute="trailingMargin" constant="-8" id="a19-xu-CtP"/>
+                                        <constraint firstItem="eM7-wi-dqY" firstAttribute="bottom" secondItem="PgD-aO-qEm" secondAttribute="bottom" id="crm-Sc-yOL"/>
+                                        <constraint firstItem="EBI-ik-5GT" firstAttribute="leading" secondItem="N6y-Gy-x6C" secondAttribute="leadingMargin" constant="12" id="dcv-h8-Tmf"/>
+                                        <constraint firstAttribute="centerY" secondItem="PgD-aO-qEm" secondAttribute="centerY" id="wZa-wc-zCb"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="gametimeLabel" destination="eM7-wi-dqY" id="h8Q-UB-8Gx"/>
+                                    <outlet property="opponentNameLabel" destination="EBI-ik-5GT" id="hrG-Dc-Bbu"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="e5a-eJ-8GA" id="lz8-hr-FfK"/>
                             <outlet property="delegate" destination="e5a-eJ-8GA" id="He1-6N-m7p"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="New" id="OwR-Rf-KYy"/>
+                    <navigationItem key="navigationItem" title="New Schedule" id="OwR-Rf-KYy"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z4J-FT-1aX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="641" y="-2051"/>
+            <point key="canvasLocation" x="641" y="-2057"/>
         </scene>
         <!--Join Schedule Table View Controller-->
         <scene sceneID="tgq-sf-VUU">

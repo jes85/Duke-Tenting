@@ -13,7 +13,7 @@
 
 
 @property (nonatomic) NSMutableArray *publicSchedules;
-@property (nonatomic) NSMutableArray *mySchedules;
+@property (nonatomic) NSMutableSet *mySchedulesHomeGameIndexes;
 @property (nonatomic) NSArray *homeGames;
 @property (nonatomic) NSUInteger scrollRow;
 @property (nonatomic) NSString *test;

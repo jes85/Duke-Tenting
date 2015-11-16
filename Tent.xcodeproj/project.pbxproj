@@ -39,6 +39,7 @@
 		3F87220E19A2627A005F12DD /* AlgorithmTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F87220D19A2627A005F12DD /* AlgorithmTest.m */; };
 		3F8A32F619AEC1CC00C63E65 /* HomeGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8A32F519AEC1CC00C63E65 /* HomeGame.m */; };
 		3F94B853199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */; };
+		3F96F6CB1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F96F6CA1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m */; };
 		3F9B3E081989DEAA0041EFCC /* IntervalsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */; };
 		3FA6D50A1965E7A50043087B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D5091965E7A50043087B /* CoreGraphics.framework */; };
 		3FA6D50C1965E7A50043087B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA6D50B1965E7A50043087B /* UIKit.framework */; };
@@ -138,6 +139,8 @@
 		3F8A32F519AEC1CC00C63E65 /* HomeGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeGame.m; sourceTree = "<group>"; };
 		3F94B851199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameOfScheduleTableViewCell.h; sourceTree = "<group>"; };
 		3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameOfScheduleTableViewCell.m; sourceTree = "<group>"; };
+		3F96F6C91BFA1F6F00636737 /* JoinedHomeGameTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinedHomeGameTableViewCell.h; sourceTree = "<group>"; };
+		3F96F6CA1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinedHomeGameTableViewCell.m; sourceTree = "<group>"; };
 		3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntervalsTableViewController.h; sourceTree = "<group>"; };
 		3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntervalsTableViewController.m; sourceTree = "<group>"; };
 		3FA6D5041965E7A50043087B /* Tent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tent.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -410,6 +413,8 @@
 				3F1304341BD2EF0900243C29 /* MySchedulesTableViewCell.m */,
 				3FE8448F19AFB05000BAFB78 /* HomeGamesTableViewCell.h */,
 				3FE8449019AFB05000BAFB78 /* HomeGamesTableViewCell.m */,
+				3F96F6C91BFA1F6F00636737 /* JoinedHomeGameTableViewCell.h */,
+				3F96F6CA1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m */,
 				3FF4D30D19B4F24500D09EC6 /* ScheduleTableViewCell.h */,
 				3FF4D30E19B4F24500D09EC6 /* ScheduleTableViewCell.m */,
 				3F94B851199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.h */,
@@ -555,6 +560,7 @@
 				3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */,
 				3FC432B919A0581A00B560F1 /* MyPFLogInViewController.m in Sources */,
 				3FFC43E21BCC60E4003333E7 /* SortGroupsViewController.m in Sources */,
+				3F96F6CB1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m in Sources */,
 				3F1304351BD2EF0900243C29 /* MySchedulesTableViewCell.m in Sources */,
 				3F853AEC1BC7F45200489649 /* IntervalsDisplayData.m in Sources */,
 				3FA6D5141965E7A50043087B /* main.m in Sources */,
