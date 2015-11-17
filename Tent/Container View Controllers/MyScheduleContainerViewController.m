@@ -28,6 +28,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelOpponent;
 
 
+@property (nonatomic) UIBarButtonItem *editButton;
+@property (nonatomic) UIBarButtonItem *settingsButton;
+@property (nonatomic) UIBarButtonItem *addPersonButton;
+
+
 @end
 
 @implementation MyScheduleContainerViewController
@@ -45,14 +50,26 @@
     self.navigationItem.backBarButtonItem = back;
     
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editBarButtonItemPressed)];
+    self.editButton = editButton;
     UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(settingsBarButtonItemPressed)];
     settingsButton.image = [UIImage imageNamed:@"Icon_Gear"];
+    self.settingsButton = settingsButton;
+    
+    UIBarButtonItem *addPersonButton = [[UIBarButtonItem alloc]initWithTitle:@"+" style:UIBarButtonItemStylePlain target:self action:@selector(addPersonBarButtonItemPressed)];
+    self.addPersonButton = addPersonButton;
+    
     
     self.navigationItem.rightBarButtonItems = @[editButton, settingsButton];
 }
+-(void)addPersonBarButtonItemPressed
+{
+    //[self performSegueWithIdentifier:@"AddPersonWithoutAppSegue" sender:self];
+
+    
+}
 -(void)editBarButtonItemPressed
 {
-    
+
 }
 -(void)settingsBarButtonItemPressed
 {
@@ -152,18 +169,25 @@
         PickPersonTableViewController *pptvc = (PickPersonTableViewController *)newVC;
         pptvc.schedule = self.schedule;
         
+        //TODO: check if creator for addPersonB
+        self.navigationItem.rightBarButtonItems = @[self.addPersonButton, self.settingsButton];
     }else if ([newVC isKindOfClass:[IntervalsTableViewController class]]){
         IntervalsTableViewController *itvc = (IntervalsTableViewController *)newVC;
         itvc.schedule = self.schedule;
+        self.navigationItem.rightBarButtonItems = @[self.settingsButton];
+
         
     }else if([newVC isKindOfClass:[MyScheduleTableViewController class]]){
         MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)newVC;
         mstvc.schedule = self.schedule;
+        self.navigationItem.rightBarButtonItems = @[self.editButton, self.settingsButton];
         
     }else if ([newVC isKindOfClass:[PersonsInIntervalViewController class]]){
         PersonsInIntervalViewController *piivc = (PersonsInIntervalViewController *)newVC;
         piivc.schedule = self.schedule;
         piivc.displayCurrent = YES;
+        self.navigationItem.rightBarButtonItems = @[self.settingsButton];
+
         
     }
     
@@ -347,17 +371,27 @@
     return @{@0:section0, @1:section1};
 
 }
+
+
+-(IBAction)closeSettings:(UIStoryboardSegue *)segue
+{
+}
  #pragma mark - Navigation
  
  // In a storyboard-based application, you will often want to do a little preparation before navigation
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
  // Get the new view controller using [segue destinationViewController].
  // Pass the selected object to the new view controller.
-     if([[segue destinationViewController] isKindOfClass:[ScheduleSettingsViewController class]]){
-         ScheduleSettingsViewController *ssvc = [segue destinationViewController];
-         ssvc.settings = [self createSettingsDictionary];
-     }
+     if([[segue destinationViewController] isKindOfClass:[UINavigationController class]]){
+         UINavigationController *nc = [segue destinationViewController];
+         if([nc.childViewControllers[0] isKindOfClass:[ScheduleSettingsViewController class]]){
+             ScheduleSettingsViewController *ssvc = (ScheduleSettingsViewController *)nc.childViewControllers[0];
+             ssvc.settings = [self createSettingsDictionary];
+
+         }
+    }
  }
- 
+
+
 
 @end
