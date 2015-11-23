@@ -13,12 +13,12 @@
 @interface Person : NSObject
 
 @property (nonatomic) NSMutableArray *assignmentsArray;
-@property (nonatomic) PFUser *user;
+@property (nonatomic) PFObject *user;
 @property (nonatomic) NSUInteger scheduleIndex;
 @property (nonatomic) NSString *parseObjectID;
 
 
--(instancetype)initWithUser:(PFUser *)user assignmentsArray:(NSMutableArray *)assignments scheduleIndex:(NSUInteger)index parseObjectID:(NSString *)parseObjectID;
--(instancetype)initWithUser:(PFUser *)user numIntervals: (NSUInteger)numIntervals;
+-(instancetype)initWithUser:(PFObject *)user assignmentsArray:(NSMutableArray *)assignments scheduleIndex:(NSUInteger)index parseObjectID:(NSString *)parseObjectID;
+-(instancetype)initWithUser:(PFObject *)user numIntervals: (NSUInteger)numIntervals;
 
 @end

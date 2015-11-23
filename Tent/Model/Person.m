@@ -22,7 +22,7 @@
 
 #pragma mark - Init
 
--(instancetype)initWithUser:(PFUser *)user assignmentsArray:(NSMutableArray *)assignments scheduleIndex:(NSUInteger)index parseObjectID:(NSString *)parseObjectID
+-(instancetype)initWithUser:(PFObject *)user assignmentsArray:(NSMutableArray *)assignments scheduleIndex:(NSUInteger)index parseObjectID:(NSString *)parseObjectID
 {
     self = [super init];
     if(self) {
@@ -35,7 +35,7 @@
     return self;
 }
 
--(instancetype)initWithUser:(PFUser *)user numIntervals: (NSUInteger)numIntervals
+-(instancetype)initWithUser:(PFObject *)user numIntervals: (NSUInteger)numIntervals
 {
     self = [super init];
     if(self) {

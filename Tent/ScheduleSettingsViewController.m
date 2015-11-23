@@ -1,4 +1,4 @@
-//
+ //
 //  ScheduleSettingsViewController.m
 //  Tent
 //
@@ -9,6 +9,8 @@
 #import "ScheduleSettingsViewController.h"
 #import "MySettingsTableViewCell.h"
 #import "Constants.h"
+#import <Parse/Parse.h>
+#import "Person.h"
 
 @interface ScheduleSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -96,13 +98,54 @@
         
     }];
     UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-        NSLog(@"delete");
+        if(self.isCreator){
+            [self deleteEntireSchedule];
+        }else{
+            [self removeCurrentUserFromSchedule];
+        }
+        
     }];
     [alert addAction:cancelAction];
     [alert addAction:deleteAction];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+-(void)removeCurrentUserFromSchedule
+{
+    PFObject *parseSchedule = [PFObject objectWithoutDataWithClassName:kGroupScheduleClassName objectId:self.schedule.parseObjectID]; //might need data
+    PFObject *personToDelete;
+    for(int i = 0; i<self.schedule.personsArray.count; i++){
+        Person *person = self.schedule.personsArray[i];
+        //TODO: maybe do it by index instead. Consider case where person is not associated with a user
+        if([[[PFUser currentUser] objectId] isEqual: person.user.objectId]){
+            [self.schedule.personsArray removeObjectAtIndex:i];
+            personToDelete = [PFObject objectWithoutDataWithClassName:kPersonClassName objectId:person.parseObjectID];
+            [parseSchedule removeObject:personToDelete forKey:kGroupSchedulePropertyPersonsInGroup];
+            
+            PFRelation *userGroupSchedule = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
+            [userGroupSchedule removeObject:parseSchedule];
+            break;
+        }
+    }
+    
+    [[PFUser currentUser] saveInBackground];
+    [parseSchedule saveInBackground];
+    [personToDelete deleteInBackground];
+    
+}
+
+-(void)deleteEntireSchedule
+{
+    PFObject *parseSchedule = [PFObject objectWithoutDataWithClassName:kGroupScheduleClassName objectId:self.schedule.parseObjectID];
+    [parseSchedule deleteInBackground];
+    NSMutableArray *personsArray = [[NSMutableArray alloc]initWithCapacity:self.schedule.personsArray.count];
+    for(Person *person in self.schedule.personsArray){
+        PFObject *parsePerson = [PFObject objectWithoutDataWithClassName:kPersonClassName objectId:person.parseObjectID];
+        [personsArray addObject:parsePerson];
+    }
+    
+    [PFObject deleteAllInBackground:personsArray];
+}
 /*
 #pragma mark - Navigation
 

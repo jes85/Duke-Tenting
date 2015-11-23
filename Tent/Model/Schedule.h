@@ -14,7 +14,7 @@
 @interface Schedule : NSObject
 
 // Init
--(instancetype)initWithGroupName:(NSString *)name groupCode:(NSString *)groupCode startDate:(NSDate *)startDate endDate:(NSDate *)endDate intervalLengthInMinutes: (NSUInteger)intervalLength personsArray:(NSMutableArray *)personsArray homeGame:(HomeGame *)hg createdBy:(PFUser *)createdBy assignmentsGenerated:(BOOL)assignmentsGenerated parseObjectID:(NSString *)parseObjectID;
+-(instancetype)initWithGroupName:(NSString *)name groupCode:(NSString *)groupCode startDate:(NSDate *)startDate endDate:(NSDate *)endDate intervalLengthInMinutes: (NSUInteger)intervalLength personsArray:(NSMutableArray *)personsArray homeGame:(HomeGame *)hg createdBy:(PFObject *)createdBy assignmentsGenerated:(BOOL)assignmentsGenerated parseObjectID:(NSString *)parseObjectID;
 
 // Basic Info
 @property (nonatomic) NSString *groupName;
@@ -30,7 +30,7 @@
 
 // Relationships
 @property (nonatomic) NSMutableArray *personsArray; 
-@property (nonatomic) PFUser *createdBy;
+@property (nonatomic) PFObject *createdBy;
 @property (nonatomic) HomeGame *homeGame;
 
 

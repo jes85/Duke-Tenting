@@ -62,6 +62,11 @@
     }
     
     
+    UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Reload Data"];
+    [refresh addTarget:self action:@selector(refreshSchedules) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refresh;
+    
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
 }
@@ -85,6 +90,16 @@
     }
 }
 
+-(void)refreshSchedules
+{
+    [self getMySchedules];
+    [self performSelector:@selector(stopRefresh) withObject:nil afterDelay:0];
+
+}
+-(void)stopRefresh
+{
+    [self.refreshControl endRefreshing];
+}
 -(void)resetUserScheduleData
 {
     self.schedules = nil;
@@ -259,6 +274,7 @@
             if([schedulesForThisUser count] == 0){
                 //TODO: update view to say "You are not in any group schedules. Tap the plus button in the top right to create or join one".
                 [self.loadingWheel stopAnimating];
+                [self.tableView reloadData];
                 return;
             }
             for(PFObject *parseSchedule in schedulesForThisUser){
@@ -308,13 +324,14 @@
     NSUInteger index = [parseHomeGame[kHomeGamePropertyIndex] unsignedIntegerValue];
     HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame index:index parseObjectID:parseHomeGame.objectId];
      
-    PFUser *creator = parseSchedule[kGroupSchedulePropertyCreatedBy];
+    PFObject *creator = parseSchedule[kGroupSchedulePropertyCreatedBy];
      
     NSArray *personsInGroup = parseSchedule[kGroupSchedulePropertyPersonsInGroup];
     NSMutableArray *personsArray = [[NSMutableArray alloc]initWithCapacity:personsInGroup.count];
     for(int i = 0; i < personsInGroup.count; i++){
         PFObject *parsePerson = (PFObject *)personsInGroup[i];
-        PFUser *user = parsePerson[kPersonPropertyAssociatedUser];
+        //PFUser *user = parsePerson[kPersonPropertyAssociatedUser];
+        PFObject *user = parsePerson[kPersonPropertyAssociatedUser];
         NSMutableArray *assignmentsArray = parsePerson[kPersonPropertyAssignmentsArray]; //TODO: do i need mutable copy?
         Person *person = [[Person alloc]initWithUser:user assignmentsArray:assignmentsArray scheduleIndex:i  parseObjectID:parsePerson.objectId];
         [personsArray addObject:person];

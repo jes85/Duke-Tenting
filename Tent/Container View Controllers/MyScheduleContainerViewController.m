@@ -400,8 +400,16 @@
      if([[segue destinationViewController] isKindOfClass:[UINavigationController class]]){
          UINavigationController *nc = [segue destinationViewController];
          if([nc.childViewControllers[0] isKindOfClass:[ScheduleSettingsViewController class]]){
+             
+             //TODO: decide which objects to pass
              ScheduleSettingsViewController *ssvc = (ScheduleSettingsViewController *)nc.childViewControllers[0];
              ssvc.settings = [self createSettingsDictionary];
+             ssvc.schedule = self.schedule;
+             if([[[PFUser currentUser] objectId] isEqual: self.schedule.createdBy.objectId]){
+                 ssvc.isCreator = true;
+             }else{
+                 ssvc.isCreator = false;
+             }
 
          }
     }

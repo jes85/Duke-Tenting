@@ -805,7 +805,7 @@
             </objects>
             <point key="canvasLocation" x="1043" y="-597"/>
         </scene>
-        <!--My Settings View Controller-->
+        <!--User Settings-->
         <scene sceneID="aj9-AU-HGl">
             <objects>
                 <viewController id="tb2-Ux-EBH" customClass="MySettingsViewController" sceneMemberID="viewController">
@@ -826,9 +826,9 @@
                                     <action selector="logOutButtonPressed:" destination="tb2-Ux-EBH" eventType="touchUpInside" id="0bp-bU-Lso"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="3Ic-5P-ah1">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="3Ic-5P-ah1">
                                 <rect key="frame" x="0.0" y="64" width="320" height="345"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsCell" id="Tk9-J7-k33" customClass="MySettingsTableViewCell">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -861,7 +861,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="NSZ-Pz-DyE">
+                    <navigationItem key="navigationItem" title="User Settings" id="NSZ-Pz-DyE">
                         <barButtonItem key="leftBarButtonItem" title="Close" id="L24-ld-dFR">
                             <connections>
                                 <segue destination="fvd-5w-IYA" kind="unwind" identifier="closeSettingsSegue" unwindAction="closeSettings:" id="GxG-XV-zQl"/>
