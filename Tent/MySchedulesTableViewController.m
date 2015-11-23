@@ -565,6 +565,10 @@
 -(IBAction)closeSettings:(UIStoryboardSegue *)segue
 {
 }
+-(IBAction)scheduleDeleted:(UIStoryboardSegue *)segue
+{
+    [self refreshSchedules];
+}
 
 #pragma mark - Navigation
 

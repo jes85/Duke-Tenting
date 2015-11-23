@@ -128,7 +128,12 @@
         }
     }
     
-    [[PFUser currentUser] saveInBackground];
+    //TODO: how to make sure all 3 happen without waiting unnecessary amount of time?
+    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if(succeeded){
+            [self performSegueWithIdentifier:@"scheduleDeleted" sender:self];
+        }
+    }];
     [parseSchedule saveInBackground];
     [personToDelete deleteInBackground];
     
@@ -137,13 +142,18 @@
 -(void)deleteEntireSchedule
 {
     PFObject *parseSchedule = [PFObject objectWithoutDataWithClassName:kGroupScheduleClassName objectId:self.schedule.parseObjectID];
-    [parseSchedule deleteInBackground];
+    
     NSMutableArray *personsArray = [[NSMutableArray alloc]initWithCapacity:self.schedule.personsArray.count];
     for(Person *person in self.schedule.personsArray){
         PFObject *parsePerson = [PFObject objectWithoutDataWithClassName:kPersonClassName objectId:person.parseObjectID];
         [personsArray addObject:parsePerson];
     }
     
+    [parseSchedule deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if(succeeded){
+            [self performSegueWithIdentifier:@"scheduleDeleted" sender:self];
+        }
+    }];
     [PFObject deleteAllInBackground:personsArray];
 }
 /*

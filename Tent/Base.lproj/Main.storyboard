@@ -1732,12 +1732,13 @@
                     <navigationItem key="navigationItem" id="req-vB-WCK">
                         <barButtonItem key="leftBarButtonItem" title="Close" id="QS3-Ez-Y0e">
                             <connections>
-                                <segue destination="r6C-AZ-s67" kind="unwind" unwindAction="closeSettings:" id="Qjd-6h-SYv"/>
+                                <segue destination="r6C-AZ-s67" kind="unwind" identifier="closeSettings" unwindAction="closeSettings:" id="Qjd-6h-SYv"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="K8N-WE-Kaz" id="YLN-gv-1KV"/>
+                        <segue destination="r6C-AZ-s67" kind="unwind" identifier="scheduleDeleted" unwindAction="scheduleDeleted:" id="YbD-7l-VTm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wq0-iZ-A4f" userLabel="First Responder" sceneMemberID="firstResponder"/>
