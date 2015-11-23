@@ -25,6 +25,8 @@
 		3F28B37019C7A214006E9C97 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F28B36F19C7A214006E9C97 /* Parse.framework */; };
 		3F296DB4199131A20059E19E /* PersonsInIntervalTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */; };
 		3F2AC3DC1BF526BF007C694C /* PersonsInIntervalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F2AC3DB1BF526BF007C694C /* PersonsInIntervalViewController.m */; };
+		3F3B0C371BFBEB2A0056E378 /* AlgorithmSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F3B0C361BFBEB2A0056E378 /* AlgorithmSchedule.m */; };
+		3F3B0C3A1BFBEC180056E378 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F3B0C391BFBEC180056E378 /* User.m */; };
 		3F439672198364CF00C27E6D /* GenerateScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */; };
 		3F44CE5F19CCE6A500271D3E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F44CE5E19CCE6A500271D3E /* Constants.m */; };
 		3F4CA9BB19B2ABD500EA5BDE /* PasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4CA9BA19B2ABD500EA5BDE /* PasswordTableViewCell.m */; };
@@ -112,6 +114,10 @@
 		3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonsInIntervalTableViewController.m; sourceTree = "<group>"; };
 		3F2AC3DA1BF526BF007C694C /* PersonsInIntervalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonsInIntervalViewController.h; sourceTree = "<group>"; };
 		3F2AC3DB1BF526BF007C694C /* PersonsInIntervalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonsInIntervalViewController.m; sourceTree = "<group>"; };
+		3F3B0C351BFBEB2A0056E378 /* AlgorithmSchedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmSchedule.h; sourceTree = "<group>"; };
+		3F3B0C361BFBEB2A0056E378 /* AlgorithmSchedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlgorithmSchedule.m; sourceTree = "<group>"; };
+		3F3B0C381BFBEC180056E378 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		3F3B0C391BFBEC180056E378 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		3F439670198364CF00C27E6D /* GenerateScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenerateScheduleViewController.h; sourceTree = "<group>"; };
 		3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenerateScheduleViewController.m; sourceTree = "<group>"; };
 		3F44CE5D19CCE6A500271D3E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -236,8 +242,6 @@
 		3F09B1D51BC2B2F500AB27CD /* Container View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				3F09B1D21BC2B2EF00AB27CD /* ContainerViewController.h */,
-				3F09B1D31BC2B2EF00AB27CD /* ContainerViewController.m */,
 				3FB9388B1BC713CD00834159 /* MyScheduleContainerViewController.h */,
 				3FB9388C1BC713CD00834159 /* MyScheduleContainerViewController.m */,
 			);
@@ -247,6 +251,7 @@
 		3F26ABB019CCE97F00B74859 /* Current Schedule View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3F09B1D51BC2B2F500AB27CD /* Container View Controllers */,
 				3F1304391BD300A400243C29 /* ScheduleSettingsViewController.h */,
 				3F13043A1BD300A400243C29 /* ScheduleSettingsViewController.m */,
 				3FEAEB131989B07D00E3218F /* HomeBaseTableViewController.h */,
@@ -257,12 +262,8 @@
 				3FD6963B1996A7DB00D9C5C4 /* AddPersonViewController.m */,
 				3F552A411BC72D440095ADCA /* MyScheduleTableViewController.h */,
 				3F552A421BC72D440095ADCA /* MyScheduleTableViewController.m */,
-				3FDE3558198094C700CE47D8 /* EnterScheduleTableViewController.h */,
-				3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */,
 				3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */,
 				3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */,
-				3F296DB2199131A20059E19E /* PersonsInIntervalTableViewController.h */,
-				3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */,
 				3F2AC3DA1BF526BF007C694C /* PersonsInIntervalViewController.h */,
 				3F2AC3DB1BF526BF007C694C /* PersonsInIntervalViewController.m */,
 				3F439670198364CF00C27E6D /* GenerateScheduleViewController.h */,
@@ -271,11 +272,48 @@
 			name = "Current Schedule View Controllers";
 			sourceTree = "<group>";
 		};
+		3F3B0C3B1BFBF58F0056E378 /* Container Tests */ = {
+			isa = PBXGroup;
+			children = (
+				3F09B1D61BC2D59000AB27CD /* Test.h */,
+				3F09B1D71BC2D59000AB27CD /* Test.m */,
+				3F09B1D91BC2E2EB00AB27CD /* Test0.h */,
+				3F09B1DA1BC2E2EB00AB27CD /* Test0.m */,
+				3F09B1D21BC2B2EF00AB27CD /* ContainerViewController.h */,
+				3F09B1D31BC2B2EF00AB27CD /* ContainerViewController.m */,
+			);
+			name = "Container Tests";
+			sourceTree = "<group>";
+		};
+		3F3B0C3C1BFBF5B10056E378 /* Old Unused View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				3FDE3558198094C700CE47D8 /* EnterScheduleTableViewController.h */,
+				3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */,
+				3F71811D199D117200737662 /* DefaultSettingsViewController.h */,
+				3F71811E199D117200737662 /* DefaultSettingsViewController.m */,
+				3F296DB2199131A20059E19E /* PersonsInIntervalTableViewController.h */,
+				3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */,
+			);
+			name = "Old Unused View Controllers";
+			sourceTree = "<group>";
+		};
+		3F3B0C3D1BFBF6180056E378 /* Model Testing */ = {
+			isa = PBXGroup;
+			children = (
+				3F853AEA1BC7F45200489649 /* IntervalsDisplayData.h */,
+				3F853AEB1BC7F45200489649 /* IntervalsDisplayData.m */,
+				3F3B0C381BFBEC180056E378 /* User.h */,
+				3F3B0C391BFBEC180056E378 /* User.m */,
+				3F87220C19A2627A005F12DD /* AlgorithmTest.h */,
+				3F87220D19A2627A005F12DD /* AlgorithmTest.m */,
+			);
+			name = "Model Testing";
+			sourceTree = "<group>";
+		};
 		3F44CE6019CCE7E200271D3E /* Adding Schedules */ = {
 			isa = PBXGroup;
 			children = (
-				3FF75E8F19985BBB005D7857 /* MySchedulesTableViewController.h */,
-				3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */,
 				3FCB16C219AE5BAF004E1BF3 /* NewScheduleTableViewController.h */,
 				3FCB16C319AE5BAF004E1BF3 /* NewScheduleTableViewController.m */,
 				3F738C2719B401880089878F /* JoinScheduleTableViewController.h */,
@@ -337,18 +375,15 @@
 			isa = PBXGroup;
 			children = (
 				3FA6D5191965E7A50043087B /* Main.storyboard */,
-				3F09B1D61BC2D59000AB27CD /* Test.h */,
-				3F09B1D71BC2D59000AB27CD /* Test.m */,
-				3F09B1D91BC2E2EB00AB27CD /* Test0.h */,
-				3F09B1DA1BC2E2EB00AB27CD /* Test0.m */,
-				3F09B1D51BC2B2F500AB27CD /* Container View Controllers */,
-				3FC432B619A0579600B560F1 /* Login */,
-				3F44CE6019CCE7E200271D3E /* Adding Schedules */,
-				3FB42F4D19B2A5220079EDE1 /* Custom Table View Cells */,
-				3F26ABB019CCE97F00B74859 /* Current Schedule View Controllers */,
 				3FA6D51F1965E7A50043087B /* Images.xcassets */,
-				3FA6D50E1965E7A50043087B /* Supporting Files */,
+				3FC432B619A0579600B560F1 /* Login and Home */,
+				3F44CE6019CCE7E200271D3E /* Adding Schedules */,
+				3F26ABB019CCE97F00B74859 /* Current Schedule View Controllers */,
+				3FB42F4D19B2A5220079EDE1 /* Custom Table View Cells */,
 				3FA6D5401965E8110043087B /* Model */,
+				3FA6D50E1965E7A50043087B /* Supporting Files */,
+				3F3B0C3B1BFBF58F0056E378 /* Container Tests */,
+				3F3B0C3C1BFBF5B10056E378 /* Old Unused View Controllers */,
 			);
 			path = Tent;
 			sourceTree = "<group>";
@@ -356,7 +391,6 @@
 		3FA6D50E1965E7A50043087B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				3F4CDA961B857A6000D6C2B0 /* dukeschedule.txt */,
 				3F44CE5D19CCE6A500271D3E /* Constants.h */,
 				3F44CE5E19CCE6A500271D3E /* Constants.m */,
 				3FA6D5161965E7A50043087B /* ScheduleAppDelegate.h */,
@@ -365,6 +399,7 @@
 				3FA6D5101965E7A50043087B /* InfoPlist.strings */,
 				3FA6D5131965E7A50043087B /* main.m */,
 				3FA6D5151965E7A50043087B /* Tent-Prefix.pch */,
+				3F4CDA961B857A6000D6C2B0 /* dukeschedule.txt */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -390,8 +425,6 @@
 		3FA6D5401965E8110043087B /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				3F853AEA1BC7F45200489649 /* IntervalsDisplayData.h */,
-				3F853AEB1BC7F45200489649 /* IntervalsDisplayData.m */,
 				3F8A32F419AEC1CC00C63E65 /* HomeGame.h */,
 				3F8A32F519AEC1CC00C63E65 /* HomeGame.m */,
 				3F1107E219903FDB0063ED9B /* Interval.h */,
@@ -400,8 +433,9 @@
 				3FDE35621980A5DA00CE47D8 /* Person.m */,
 				3FDE35641980A6DA00CE47D8 /* Schedule.h */,
 				3FDE35651980A6DA00CE47D8 /* Schedule.m */,
-				3F87220C19A2627A005F12DD /* AlgorithmTest.h */,
-				3F87220D19A2627A005F12DD /* AlgorithmTest.m */,
+				3F3B0C351BFBEB2A0056E378 /* AlgorithmSchedule.h */,
+				3F3B0C361BFBEB2A0056E378 /* AlgorithmSchedule.m */,
+				3F3B0C3D1BFBF6180056E378 /* Model Testing */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -431,19 +465,19 @@
 			name = "Custom Table View Cells";
 			sourceTree = "<group>";
 		};
-		3FC432B619A0579600B560F1 /* Login */ = {
+		3FC432B619A0579600B560F1 /* Login and Home */ = {
 			isa = PBXGroup;
 			children = (
-				3F71811D199D117200737662 /* DefaultSettingsViewController.h */,
-				3F71811E199D117200737662 /* DefaultSettingsViewController.m */,
 				3FC432B719A0581A00B560F1 /* MyPFLogInViewController.h */,
 				3FC432B819A0581A00B560F1 /* MyPFLogInViewController.m */,
 				3FC432BA19A0583700B560F1 /* MyPFSignUpViewController.h */,
 				3FC432BB19A0583700B560F1 /* MyPFSignUpViewController.m */,
 				3F7527F31BD1730000748ED8 /* MySettingsViewController.h */,
 				3F7527F41BD1730000748ED8 /* MySettingsViewController.m */,
+				3FF75E8F19985BBB005D7857 /* MySchedulesTableViewController.h */,
+				3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */,
 			);
-			name = Login;
+			name = "Login and Home";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -545,6 +579,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F3B0C371BFBEB2A0056E378 /* AlgorithmSchedule.m in Sources */,
 				3FC432BC19A0583700B560F1 /* MyPFSignUpViewController.m in Sources */,
 				3F09B1D41BC2B2EF00AB27CD /* ContainerViewController.m in Sources */,
 				3FF75E9119985BBB005D7857 /* MySchedulesTableViewController.m in Sources */,
@@ -572,6 +607,7 @@
 				3FCB16C419AE5BAF004E1BF3 /* NewScheduleTableViewController.m in Sources */,
 				3F13043B1BD300A400243C29 /* ScheduleSettingsViewController.m in Sources */,
 				3F09B1D81BC2D59000AB27CD /* Test.m in Sources */,
+				3F3B0C3A1BFBEC180056E378 /* User.m in Sources */,
 				3FDE35631980A5DA00CE47D8 /* Person.m in Sources */,
 				3F296DB4199131A20059E19E /* PersonsInIntervalTableViewController.m in Sources */,
 				3F2AC3DC1BF526BF007C694C /* PersonsInIntervalViewController.m in Sources */,

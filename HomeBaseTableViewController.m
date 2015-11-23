@@ -49,8 +49,8 @@
     self.refreshControl = refresh;
     
     
-    [self updatePersonsForSchedule];
-    
+    //[self updatePersonsForSchedule];
+    [self updateSchedule];
 
 }
 
@@ -71,6 +71,7 @@
     [self.refreshControl endRefreshing];
 }
 
+/*
 -(void)updatePersonsForSchedule
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
@@ -144,6 +145,7 @@
     }];
 
 }
+ 
 -(void)updateSchedule
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
@@ -164,12 +166,40 @@
     
 
 }
-
+*/
+//same as updateSchedule in Container Controller. Consolidate this
+-(void)updateSchedule
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    
+    
+    PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
+    [query includeKey:kGroupSchedulePropertyPersonsInGroup];
+    [query includeKey:kGroupSchedulePropertyHomeGame];
+    [query includeKey:kGroupSchedulePropertyCreatedBy];
+    [query includeKey:[NSString stringWithFormat:@"%@.%@", kGroupSchedulePropertyPersonsInGroup, kPersonPropertyAssociatedUser]];
+    [query getObjectInBackgroundWithId:self.schedule.parseObjectID block:^(PFObject *parseSchedule, NSError *error) {
+        if(error){
+            NSLog(@"Find failed");
+        }else{
+            NSLog(@"Find schedule for update succeeded");
+            
+            Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
+            
+            self.schedule=scheduleObject;
+            //update table view data for views (or just do that in view did appear for each of them)
+            
+            
+        }
+        
+    }];
+    
+}
 - (void)updateAllInformation
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
     [self updateSchedule];
-    [self updatePersonsForSchedule];
+    //[self updatePersonsForSchedule];
     
     [self performSelector:@selector(stopRefresh) withObject:nil afterDelay:0];
 }
@@ -221,16 +251,18 @@
     }
 
 }
+/*
 -(void)updatePersonsArrayOffline
 {
     for(Person *person in self.personsArray){
         person.assignmentsArray = self.schedule.assignmentsSchedule[person.indexOfPerson];
     }
 }
+ 
 
 -(void)generateScheduleViewControllerDidGenerateSchedule:(GenerateScheduleViewController *)controller{
     NSLog(@"didGenerateSchedule");
     [self updatePersonsArrayOffline];
 }
-
+*/
 @end

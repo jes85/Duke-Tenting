@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HomeGame.h"
 
 @interface CreateScheduleViewController : UIViewController<UITextFieldDelegate>
 
-@property (nonatomic) NSUInteger homeGameIndex;
+@property (nonatomic) HomeGame *homeGame;
 @property (nonatomic) NSDate *gameTime;
 
 

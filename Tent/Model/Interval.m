@@ -46,6 +46,19 @@
     }
     return self;
 }
+-(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate section:(NSUInteger)section availablePersons:(NSMutableArray *)available assignedPersons:(NSMutableArray *)assigned
+{
+    self = [super init];
+    if(self){
+        self.startDate = startDate;
+        self.endDate = endDate;
+        self.section =  section;
+        self.availablePersons = available;
+        self.assignedPersons = assigned;
+        [self createIntervalDateTimeStrings];
+    }
+    return self;
+}
 
 -(void)createIntervalDateTimeStrings
 {
@@ -53,7 +66,7 @@
     NSString *end = [Constants formatTime:self.endDate withStyle:NSDateFormatterShortStyle];
     NSString *timeString = [[start stringByAppendingString:@" - "]stringByAppendingString:end];
     NSString *dateString = [Constants formatDate:self.startDate withStyle:NSDateFormatterShortStyle];
-    self.timeString =timeString;
+    self.timeString = timeString;
     self.dateTimeString = [[dateString stringByAppendingString:@" "]stringByAppendingString:timeString];
 }
 

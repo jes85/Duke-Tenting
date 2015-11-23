@@ -24,7 +24,7 @@
 -(IBAction)createSchedule:(UIStoryboardSegue *)segue;
 -(IBAction)joinedSchedule:(UIStoryboardSegue *)segue;
 
-+(Schedule *)createScheduleObjectFromParseInfo: (PFObject *)parseSchedule;
++(Schedule *)createScheduleObjectFromParseInfo: (PFObject *)parseSchedule; //TODO: maybe method move to another class
 
 -(IBAction)closeSettings:(UIStoryboardSegue *)segue;
 

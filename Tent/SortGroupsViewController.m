@@ -39,7 +39,7 @@
 {
     
     // Return the number of rows in the section.
-    return 3;
+    return self.dataSource.count;
 }
 
 

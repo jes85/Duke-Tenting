@@ -7,23 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <Parse/Parse.h>
 
 
 @interface Person : NSObject
 
-@property (nonatomic) NSMutableArray *availabilitiesArray;
 @property (nonatomic) NSMutableArray *assignmentsArray;
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSUInteger indexOfPerson;
-@property (nonatomic) NSString *scheduleName;
-@property (nonatomic) NSString *userObjectID;
+@property (nonatomic) PFUser *user;
+@property (nonatomic) NSUInteger scheduleIndex;
+@property (nonatomic) NSString *parseObjectID;
 
 
-//Clear these inits up and designate one
-
--(instancetype)initWithName: (NSString *)name index:(NSUInteger)index numIntervals:(NSUInteger)numIntervals scheduleName:(NSString *)scheduleName;
--(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray scheduleName:(NSString *)scheduleName;
--(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray assignmentsArray:(NSMutableArray *)assignArray scheduleName:(NSString *)scheduleName;
+-(instancetype)initWithUser:(PFUser *)user assignmentsArray:(NSMutableArray *)assignments scheduleIndex:(NSUInteger)index parseObjectID:(NSString *)parseObjectID;
+-(instancetype)initWithUser:(PFUser *)user numIntervals: (NSUInteger)numIntervals;
 
 @end

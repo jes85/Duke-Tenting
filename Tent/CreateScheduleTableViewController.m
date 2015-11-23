@@ -33,12 +33,7 @@
 static NSString *kDateCellID = @"dateCell";     // the cells with the start or end date
 static NSString *kDatePickerID = @"datePicker"; // the cell containing the date picker
 static NSString *kNameCellID = @"nameCell";     // the name of schedule cell
-static NSString *kPrivacyCellID = @"privacyCell"; // the privacy cell
-static NSString *kPasswordCellID = @"passwordCell"; //the password cell
-
-
-#define kPrivacyValuePrivate                    @"private"
-#define kPrivacyValuePublic                     @"public"
+static NSString *kGroupCodeCellID = @"groupCodeCell"; //the groupCode cell
 
 #pragma mark -
 @interface CreateScheduleTableViewController ()
@@ -60,11 +55,10 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 @property (nonatomic) NSDate *roundedStartDateAtViewDidLoad;
 @property (nonatomic) NSDate *roundedEndDateAtViewDidLoad;
 @property (nonatomic, weak) UITextField *nameOfScheduleTextField;
-@property (nonatomic, weak) UITextField *passwordTextField;
+@property (nonatomic, weak) UITextField *groupCodeTextField;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;
 
-@property (nonatomic) BOOL private;
-@property (nonatomic) NSString *password;
+@property (nonatomic) NSString *groupCode;
 
 @property (nonatomic) NSUInteger intervalLengthInMinutes; //use this later
 
@@ -105,7 +99,7 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
                                        kDateKey : self.startDate} mutableCopy];
     NSMutableDictionary *itemThree = [@{ kTitleKey : @"End Date",
                                          kDateKey : self.endDate} mutableCopy];
-    NSMutableDictionary *itemFour = [@{ kTitleKey : @"Password"} mutableCopy];
+    NSMutableDictionary *itemFour = [@{ kTitleKey : @"Group Code"} mutableCopy];
     
      self.dataArray = @[itemOne, itemTwo, itemThree, itemFour];
     
@@ -122,10 +116,9 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
     self.datePickerCellRowHeight = CGRectGetHeight(datePickerViewCellToCheck.frame);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.nameOfScheduleTextField];
-     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.passwordTextField];
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.groupCodeTextField];
     self.datesValid = YES;
     self.doneButton.enabled = NO;
-    self.private = YES;
     
    
   
@@ -134,14 +127,14 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:self.nameOfScheduleTextField];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:self.passwordTextField];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:self.groupCodeTextField];
     
 }
 
 -(BOOL)shouldEnableDoneButton
 {
     BOOL enableDoneButton = NO;
-    if(self.nameOfScheduleTextField.text!=nil &&  self.nameOfScheduleTextField.text.length>0 && self.passwordTextField.text!= nil && self.passwordTextField.text.length > 0 && self.datesValid == YES)
+    if(self.nameOfScheduleTextField.text!=nil &&  self.nameOfScheduleTextField.text.length>0 && self.groupCodeTextField.text!= nil && self.groupCodeTextField.text.length > 0 && self.datesValid == YES)
     {
 
         
@@ -281,12 +274,12 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
          
          return cell;
      }
-    else if (indexPath.row == numCells-1){ //last row (password)
-        //password cell is same form as name of schedule cell (change name to be more general)
-        PasswordTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kPasswordCellID forIndexPath:indexPath];
+    else if (indexPath.row == numCells-1){ //last row (groupCode)
+        //groupCode cell is same form as name of schedule cell (change name to be more general)
+        PasswordTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kGroupCodeCellID forIndexPath:indexPath];
         cell.passwordLabel.text = @"Group Code: ";
-        self.passwordTextField = cell.passwordTextField;
-        self.passwordTextField.delegate = self;
+        self.groupCodeTextField = cell.passwordTextField;
+        self.groupCodeTextField.delegate = self;
         return cell;
     }
     UITableViewCell *cell = nil;
@@ -412,8 +405,8 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
     if([self.nameOfScheduleTextField isFirstResponder] && cell.reuseIdentifier != kNameCellID){
         [self.nameOfScheduleTextField resignFirstResponder];
     }
-    else if([self.passwordTextField isFirstResponder] && cell.reuseIdentifier != kPasswordCellID){
-        [self.passwordTextField resignFirstResponder];
+    else if([self.groupCodeTextField isFirstResponder] && cell.reuseIdentifier != kGroupCodeCellID){
+        [self.groupCodeTextField resignFirstResponder];
     }
     if (cell.reuseIdentifier == kDateCellID)
     {
@@ -516,8 +509,8 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 - (IBAction)textFieldDoneEditing:(id)sender {
     if([self.nameOfScheduleTextField isFirstResponder]){
         [self.nameOfScheduleTextField resignFirstResponder];
-    }else if([self.passwordTextField isFirstResponder]){
-        [self.passwordTextField resignFirstResponder];
+    }else if([self.groupCodeTextField isFirstResponder]){
+        [self.groupCodeTextField resignFirstResponder];
     }
 }
 
@@ -525,8 +518,8 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
 - (IBAction)touchOutsideOfTableView:(id)sender {
     if([self.nameOfScheduleTextField isFirstResponder]){
         [self.nameOfScheduleTextField resignFirstResponder];
-    }else if([self.passwordTextField isFirstResponder]){
-        [self.passwordTextField resignFirstResponder];
+    }else if([self.groupCodeTextField isFirstResponder]){
+        [self.groupCodeTextField resignFirstResponder];
     }
 }
 
@@ -565,14 +558,7 @@ static NSString *kPasswordCellID = @"passwordCell"; //the password cell
     
     
     if(sender == self.doneButton){
-        /*Schedule *scheduleToAdd = [[Schedule alloc]initWithName:self.nameOfScheduleTextField.text startDate:self.startDate endDate:self.endDate];
-        scheduleToAdd.privacy = self.private ? kPrivacyValuePrivate: kPrivacyValuePublic; ;
-        if(self.private) scheduleToAdd.password = self.passwordTextField.text; //add this to init
-        scheduleToAdd.homeGameIndex = self.homeGameIndex;
-        */
-        
-        Schedule *scheduleToAdd = [[Schedule alloc]initWithName:self.nameOfScheduleTextField.text startDate:self.startDate endDate:self.endDate privacy:nil password:self.passwordTextField.text homeGameIndex:self.homeGameIndex];
-        
+        Schedule *scheduleToAdd = [[Schedule alloc]initWithGroupName:self.nameOfScheduleTextField.text groupCode:self.groupCodeTextField.text startDate:self.startDate endDate:self.endDate intervalLengthInMinutes:60 personsArray:nil homeGame:self.homeGame createdBy:[PFUser currentUser] assignmentsGenerated:false parseObjectID:nil]; //TODO: personsArray, parseObjectID
        
         MySchedulesTableViewController *mstvc = [segue destinationViewController];
         mstvc.scheduleToAdd = scheduleToAdd;

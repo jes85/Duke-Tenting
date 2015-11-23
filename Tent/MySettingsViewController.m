@@ -8,6 +8,7 @@
 
 #import "MySettingsViewController.h"
 #import "MySettingsTableViewCell.h"
+#import "Constants.h"
 
 @interface MySettingsViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -25,7 +26,7 @@
     PFUser *currentUser = [PFUser currentUser];
 
     self.settings = @[@"Username:", @"Password:", @"Email:", @"Full Name:"];
-    self.settingValues = @[currentUser.username, @"Password", currentUser.email, @"Full Name"];
+    self.settingValues = @[currentUser.username, @"Password", currentUser.email, [currentUser objectForKey:kUserPropertyFullName]];
     // Do any additional setup after loading the view.
 }
 

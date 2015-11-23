@@ -12,7 +12,6 @@
 
 @property (nonatomic) NSArray *viewControllers;
 @property (nonatomic) Schedule *schedule;
-@property (nonatomic) NSString *opponentName;//incorporate opponent in schedule object
 
 -(void)refreshData;
 -(IBAction)closeSettings:(UIStoryboardSegue *)segue;

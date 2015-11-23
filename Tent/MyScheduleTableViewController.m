@@ -13,6 +13,7 @@
 #import "Person.h"
 #import "IntervalTableViewCell.h"
 #import "Interval.h"
+#import "Constants.h"
 
 @interface MyScheduleTableViewController ()
 @property (weak, nonatomic) IBOutlet UINavigationItem *editButton;
@@ -36,7 +37,7 @@
     
     self.tableView.allowsSelection = NO;
     self.navigationItem.leftBarButtonItem = nil;
-    if([self.schedule.creatorObjectID isEqualToString: [[PFUser currentUser] objectId]] | [self.currentPerson.userObjectID isEqualToString:[[PFUser currentUser] objectId]]){//edit to check for user auth (it's my schedule & assignments haven't been made yet OR I'm an admin. if admin, show alert if assignments have already been made)
+    if([self.schedule.createdBy.objectId isEqualToString: [[PFUser currentUser] objectId]] | [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]]){//edit to check for user auth (it's my schedule & assignments haven't been made yet OR I'm an admin. if admin, show alert if assignments have already been made)
         self.navigationItem.rightBarButtonItem = self.editButtonItem;
         
     }
@@ -47,7 +48,7 @@
 {
     
     if(!_updatedAvailabilitiesArray)
-        _updatedAvailabilitiesArray = [[NSMutableArray alloc]initWithArray:self.currentPerson.availabilitiesArray];
+        _updatedAvailabilitiesArray = [[NSMutableArray alloc]initWithArray:self.currentPerson.assignmentsArray];
     return _updatedAvailabilitiesArray;
 }
 
@@ -110,6 +111,8 @@
 
 -(NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
+    if(tableView.numberOfSections < 2) return nil; //table view # sections = self.schedule.intervalDataBySection.count
+    
     NSMutableArray *array = [[NSMutableArray alloc]initWithCapacity:tableView.numberOfSections];
     for(int i = 0; i<tableView.numberOfSections; i++){
         [array addObject: [NSString stringWithFormat:@"%d", i]];
@@ -154,7 +157,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     //cell.textLabel.text = interval;
     
     
-    if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
+    if([self.updatedAvailabilitiesArray[indexPath.row] isEqual:@2]){
         cell.assignedOrAvailableLabel.text = @"(Assigned)";
         cell.iconImageView.image =[UIImage imageNamed:@"GreenCircle"];
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:0 green:.3 blue:0 alpha:1.0];
@@ -196,35 +199,44 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     else{ //user pressed doneButton
         
         //if current person's availabilities array was changed, update Person and Schedule on current iPhone and on Parse
-        if(![self.currentPerson.availabilitiesArray isEqual:self.updatedAvailabilitiesArray]){
+        if(![self.currentPerson.assignmentsArray isEqual:self.updatedAvailabilitiesArray]){
             
             //update Person's availabilities array on local iPhone
-            self.currentPerson.availabilitiesArray = self.updatedAvailabilitiesArray;
+            self.currentPerson.assignmentsArray = self.updatedAvailabilitiesArray;
+            NSMutableArray *personsList = self.schedule.personsArray;
+            [personsList removeObjectAtIndex:self.currentPerson.scheduleIndex];
+            [personsList insertObject:self.currentPerson atIndex:self.currentPerson.scheduleIndex];
+            self.schedule.personsArray = personsList;
+            /*
+             can i just do this? pointers or values
+             Person *currentPerson = personsList[self.currentPerson.scheduleIndex];
+             currentPerson = self.currentPerson;
+             */
             
+            //TODO: figure how way to keep schedule object data consistent across multiple view controllers
             //update schedule on local iPhone
             PickPersonTableViewController *pptvc = [segue destinationViewController];
-            pptvc.schedule.availabilitiesSchedule[self.currentPerson.indexOfPerson] = self.currentPerson.availabilitiesArray;
+            pptvc.schedule = self.schedule;
             
             
             
             //Update Person on Parse
-            PFQuery *query = [PFQuery queryWithClassName:@"Person"];
-            [query whereKey:@"scheduleName" equalTo:self.currentPerson.scheduleName];
-            [query whereKey:@"index" equalTo:[NSNumber numberWithInteger:self.currentPerson.indexOfPerson]];
-            [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
+            [query getObjectInBackgroundWithId:self.currentPerson.parseObjectID block:^(PFObject *object, NSError *error) {
                 if(!object){
                     NSLog(@"Find failed");
                 }else{
                     //the find succeeded
                     NSLog(@"Find succeeded");
-                    object[@"availabilitiesArray"] = self.currentPerson.availabilitiesArray;
-                    //object[@"assignmentsArray"] = self.currentPerson.assignmentsArray;
+                    object[kPersonPropertyAssignmentsArray] = self.currentPerson.assignmentsArray;
                     [object saveInBackground];
                 }
             }];
             
             //update Schedule on Parse
             
+            // I don't think I have to update schedule anymore since i restructured data in parse
+            /*
             PFQuery *query2 = [PFQuery queryWithClassName:@"Schedule"];
             [query2 whereKey:@"name" equalTo:self.currentPerson.scheduleName];
             [query2 getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
@@ -234,25 +246,25 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
                     //the find succeeded
                     NSLog(@"Find succeeded");
                     NSMutableArray *array = object[@"availabilitiesSchedule"] ;
-                    array[self.currentPerson.indexOfPerson]= self.currentPerson.availabilitiesArray;
+                    array[self.currentPerson.scheduleIndex]= self.currentPerson.assignmentsArray;
                     object[@"availabilitiesSchedule"] =array;
                     
                     [object saveInBackground];
                 }
             }];
-            
-            
+            */
+            PFUser *user = self.currentPerson.user;
             //update Intervals offline
-            for(int i = 0; i<[self.currentPerson.availabilitiesArray count]; i++){
+            for(int i = 0; i<[self.currentPerson.assignmentsArray count]; i++){
                 Interval *interval = (Interval *)self.schedule.intervalDataByOverallRow[i];
-                if([self.currentPerson.availabilitiesArray[i] isEqual:@1]) {
-                    if(![interval.availablePersons containsObject:self.currentPerson.name]){
-                        [interval.availablePersons addObject: self.currentPerson.name];
+                if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
+                    if(![interval.availablePersons containsObject:[user objectForKey:kUserPropertyFullName]]){
+                        [interval.availablePersons addObject: user.username];
                     }
                 }
                 if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
-                    if(![interval.assignedPersons containsObject:self.currentPerson.name]){
-                        [interval.assignedPersons addObject:self.currentPerson.name];
+                    if(![interval.assignedPersons containsObject:user.username]){
+                        [interval.assignedPersons addObject:user.username];
                     }
                 }
             }

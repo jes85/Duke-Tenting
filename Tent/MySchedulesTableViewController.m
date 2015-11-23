@@ -7,21 +7,24 @@
 //
 
 #import "MySchedulesTableViewController.h"
-#import "Schedule.h"
-#import "CreateScheduleTableViewController.h"
-#import "MyScheduleContainerViewController.h"
-#import "NewScheduleTableViewController.h"
-#import "HomeGame.h"
+#import "MySchedulesTableViewCell.h"
+
 #import "Constants.h"
+#import "Schedule.h"
+#import "HomeGame.h"
+#import "Person.h"
+
+
 
 #import "MyPFLogInViewController.h"
 #import "MyPFSignUpViewController.h"
-#import "MySchedulesTableViewCell.h"
+
+#import "MyScheduleContainerViewController.h"
+#import "NewScheduleTableViewController.h"
 
 @interface MySchedulesTableViewController ()
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addScheduleButton;
-@property (nonatomic) NSMutableArray *publicSchedules;
 @property PFUser *user;
 @property (nonatomic) UIActivityIndicatorView *loadingWheel;
 
@@ -40,9 +43,11 @@
 
 #pragma mark - View Controller Lifecycle
 
+//TODO: Review the process of retreiving my schedules.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self getHomeGamesDataFromUserDefaults];
     
     PFUser *currentUser = [PFUser currentUser];
@@ -51,8 +56,6 @@
         [self.loadingWheel startAnimating];
         [self getMySchedules];
         self.user = currentUser;
-        
-
     }
     else{ //No user logged in
         //[self displayLoginAndSignUpViews];
@@ -66,25 +69,32 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
     PFUser *currentUser = [PFUser currentUser];
     if(!currentUser){
-        self.schedules = nil;
+        [self resetUserScheduleData];
         [self.tableView setNeedsDisplay];
         [self displayLoginAndSignUpViews];
     }else if(currentUser!=self.user){
         self.user = currentUser;
         [self.loadingWheel startAnimating];
-        self.schedules = nil;
+        [self resetUserScheduleData];
         [self.tableView reloadData];
         [self getMySchedules];
         
     }
 }
 
+-(void)resetUserScheduleData
+{
+    self.schedules = nil;
+    self.mySchedulesHomeGameIndexes = nil;
+}
+//TODO: Review the process of retreiving home games.
 -(void)getHomeGamesDataFromUserDefaults
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    //[userDefaults setObject:nil forKey:kUserDefaultsHomeGamesData]; //testing
+    [userDefaults setObject:nil forKey:kUserDefaultsHomeGamesData]; //testing
     NSData *currentData = [userDefaults objectForKey:kUserDefaultsHomeGamesData];
     if(!currentData){
         [NewScheduleTableViewController loadHomeGameScheduleDataFromParseWithBlock:^(NSArray *updatedHomeGamesArray, NSError *error) {
@@ -99,31 +109,15 @@
     }
 }
 
--(NSUInteger)calculateScrollRowForNewSchedulesTVC
-{
-    NSUInteger scrollRow = 0;
-    HomeGame *lastGame = self.homeGames[self.homeGames.count-1];
-    if([lastGame.gameTime timeIntervalSinceNow] < 0) return 0; //if all games have occurred, just show all of them
-    for(int i=0;i<self.homeGames.count - 1;i++){ //don't need to check the last game twice
-        HomeGame *game = self.homeGames[i];
-        if([game.gameTime timeIntervalSinceNow] < 0){
-            scrollRow = i+1;
-
-        }
-    }
-    return scrollRow;
-}
-
 -(UIActivityIndicatorView *)loadingWheel
 {
     if(!_loadingWheel){
         _loadingWheel = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         _loadingWheel.transform = CGAffineTransformMakeScale(1.75, 1.75);
-
-
     }
     return _loadingWheel;
 }
+
 #pragma mark - Login/Signup Control
 
 -(void)displayLoginAndSignUpViews
@@ -243,70 +237,32 @@
     if(!_schedules)_schedules = [[NSMutableArray alloc]init];
     return _schedules;
 }
--(NSMutableArray *)publicSchedules
-{
-    if(!_publicSchedules)_publicSchedules = [[NSMutableArray alloc]init];
-    return _publicSchedules;
-}
-
-
-
-
-+(Schedule *)createScheduleObjectFromParseInfo: (PFObject *)parseSchedule{
-    NSString *name = parseSchedule[kSchedulePropertyName];
-    NSMutableArray *availabilitiesSchedule = parseSchedule[kSchedulePropertyAvailabilitiesSchedule];
-    NSMutableArray *assignmentsSchedule = parseSchedule[kSchedulePropertyAssignmentsSchedule];
-    NSDate *startDate = parseSchedule[kSchedulePropertyStartDate];
-    NSDate *endDate = parseSchedule[kSchedulePropertyEndDate];
-    NSUInteger numHourIntervals = [parseSchedule[kSchedulePropertyNumHourIntervals ] integerValue];
-    NSString *privacy = parseSchedule[kSchedulePropertyPrivacy];
-    NSString *password = parseSchedule[kSchedulePropertyPassword];
-    NSUInteger homeGameIndex = [parseSchedule[kSchedulePropertyHomeGameIndex] integerValue];
-
-    
-    PFUser *creator = parseSchedule[kSchedulePropertyCreatedBy];
-    
-
-    /*
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if(!error){
-            creatorObjectID = object.objectId;
-        }else{
-            
-        }
-    }];
-     */
-    
-
-
-
-
-    NSString *objectID = parseSchedule.objectId;
-
-    Schedule *scheduleObject = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex parseObjectID:objectID] ;
-    
-    scheduleObject.creatorObjectID = creator.objectId;
-    scheduleObject.creatorName = parseSchedule[kSchedulePropertyCreatedByName];
-
-    return scheduleObject;
-}
 
 /*!
  *  Query Parse to retrieve schedules that current user is a part of
  */
 -(void)getMySchedules
 {
-    PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertySchedulesList];
+    PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
     PFQuery *query = [relation query];
     [query orderByAscending:@"endDate"];
+    [query includeKey:kGroupSchedulePropertyPersonsInGroup];
+    [query includeKey:kGroupSchedulePropertyHomeGame];
+    [query includeKey:kGroupSchedulePropertyCreatedBy];
+    [query includeKey:[NSString stringWithFormat:@"%@.%@", kGroupSchedulePropertyPersonsInGroup, kPersonPropertyAssociatedUser]];
+    
   
     //[self.loadingWheel startAnimating];
     [query findObjectsInBackgroundWithBlock:^(NSArray *schedulesForThisUser, NSError *error) {
         if(!error){
-            self.schedules = nil;
+            self.schedules = nil; //TODO: in v2, compare retreived schedules to current and only update ones that have changed
+            if([schedulesForThisUser count] == 0){
+                //TODO: update view to say "You are not in any group schedules. Tap the plus button in the top right to create or join one".
+                [self.loadingWheel stopAnimating];
+                return;
+            }
             for(PFObject *parseSchedule in schedulesForThisUser){
                 Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
-                
                 [self addSchedule:scheduleObject];
             }
             [self.loadingWheel stopAnimating];
@@ -315,14 +271,61 @@
         else{
             [self.loadingWheel stopAnimating];
             NSLog(@"error retrieving user's schedules from parse");
-            //update view to say this
+            //TODO: update view to say "Error retrieving schedules"
         }
-
         
     }];
     
 
 }
+
+-(void)addSchedule:(Schedule *)schedule
+{
+    [self.schedules addObject:schedule];
+    
+    //TODO: only create this set on prepareforsegue. that way you don't have to update this set every time you update self.schedules
+        // is creating this set on prepareForSEgue too slow?
+    HomeGame *hg = schedule.homeGame;
+    [self.mySchedulesHomeGameIndexes addObject:[NSNumber numberWithInteger:hg.index]];
+}
+
+
+
++(Schedule *)createScheduleObjectFromParseInfo: (PFObject *)parseSchedule{
+    
+    NSString *groupName = parseSchedule[kGroupSchedulePropertyGroupName];
+    NSString *groupCode = parseSchedule[kGroupSchedulePropertyGroupCode];
+    NSDate *startDate = parseSchedule[kGroupSchedulePropertyStartDate];
+    NSDate *endDate = parseSchedule[kGroupSchedulePropertyEndDate];
+    BOOL assignmentsGenerated = [parseSchedule[kGroupSchedulePropertyAssignmentsGenerated] boolValue];
+    NSString *parseObjectID = parseSchedule.objectId;
+    
+    PFObject *parseHomeGame = parseSchedule[kGroupSchedulePropertyHomeGame];
+    NSString *opponent = parseHomeGame[kHomeGamePropertyOpponent];
+    NSDate * gameTime = parseHomeGame[kHomeGamePropertyGameTime];
+    BOOL isConferenceGame = parseHomeGame[kHomeGamePropertyConferenceGame];
+    BOOL isExhibition = parseHomeGame[kHomeGamePropertyExhibition];
+    NSUInteger index = [parseHomeGame[kHomeGamePropertyIndex] unsignedIntegerValue];
+    HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame index:index parseObjectID:parseHomeGame.objectId];
+     
+    PFUser *creator = parseSchedule[kGroupSchedulePropertyCreatedBy];
+     
+    NSArray *personsInGroup = parseSchedule[kGroupSchedulePropertyPersonsInGroup];
+    NSMutableArray *personsArray = [[NSMutableArray alloc]initWithCapacity:personsInGroup.count];
+    for(int i = 0; i < personsInGroup.count; i++){
+        PFObject *parsePerson = (PFObject *)personsInGroup[i];
+        PFUser *user = parsePerson[kPersonPropertyAssociatedUser];
+        NSMutableArray *assignmentsArray = parsePerson[kPersonPropertyAssignmentsArray]; //TODO: do i need mutable copy?
+        Person *person = [[Person alloc]initWithUser:user assignmentsArray:assignmentsArray scheduleIndex:i  parseObjectID:parsePerson.objectId];
+        [personsArray addObject:person];
+    }
+    
+    Schedule *schedule = [[Schedule alloc]initWithGroupName:groupName groupCode:groupCode startDate:startDate endDate:endDate intervalLengthInMinutes:60 personsArray:personsArray homeGame:homeGame createdBy:creator assignmentsGenerated:assignmentsGenerated parseObjectID:parseObjectID] ;
+     
+    return schedule;
+    
+}
+
 
 #pragma mark - Table view data source
 
@@ -330,6 +333,8 @@
 {
 
     if (self.schedules==nil | self.schedules.count == 0) {
+        
+        //TODO: display appropriate message
         if(self.loadingWheel.isAnimating){
             UILabel *messageLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,
                                                                             self.tableView.bounds.size.width,
@@ -373,7 +378,7 @@
 {
 
     // Return the number of rows in the section.
-    return [self.schedules count];
+    return [self.schedules count]; //TODO: what if self.schedules = nil?
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -382,8 +387,8 @@
  
     // Configure the cell...
     Schedule *schedule = [self.schedules objectAtIndex:indexPath.row];
-    HomeGame *homeGame = self.homeGames[schedule.homeGameIndex];
-    cell.scheduleNameLabel.text = schedule.name;
+    HomeGame *homeGame = schedule.homeGame;
+    cell.scheduleNameLabel.text = schedule.groupName;
     cell.opponentLabel.text = homeGame.opponentName;
     cell.gameTimeLabel.text = [[[Constants formatDate:homeGame.gameTime withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "] stringByAppendingString:[Constants formatTime:homeGame.gameTime withStyle:NSDateFormatterShortStyle]];
     
@@ -409,7 +414,7 @@
 
         NSDateComponents *components = [calendar components:(NSCalendarUnitDay) fromDate:today toDate:startDay options:0];
         cell.backgroundColor = [UIColor whiteColor];
-        cell.startDateLabel.text = components.day == 0 ? @"Starts today" : [NSString stringWithFormat:@"Starts in %ld days", (long)components.day];
+        cell.startDateLabel.text = components.day == 0 ? @"Schedule Starts today" : [NSString stringWithFormat:@"Schedule Starts in %ld days", (long)components.day];
 
         cell.startDateLabel.textColor = [UIColor blackColor];
         
@@ -427,62 +432,36 @@
 -(IBAction)joinedSchedule:(UIStoryboardSegue *)segue
 {
     
-    PFQuery *query = [PFQuery queryWithClassName:kScheduleClassName];
+    PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
+    //TODO: I could store actual scheduleParseObject in JoinScheduleViewController
+    //TODO: Might need to deal with concurrency here
+    //TODO: Maybe display loading wheel
+    //TODO: deal with errors
     [query getObjectInBackgroundWithId: self.scheduleToJoin.parseObjectID block:^(PFObject *parseSchedule, NSError *error) {
         if(!error){
-            
-            Schedule *joinedScheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
-            /*
-            NSString *name = parseSchedule[kSchedulePropertyName];
-            NSMutableArray *availabilitiesSchedule = parseSchedule[kSchedulePropertyAvailabilitiesSchedule];
-            NSMutableArray *assignmentsSchedule = parseSchedule[kSchedulePropertyAssignmentsSchedule];
-            NSDate *startDate = parseSchedule[kSchedulePropertyStartDate];
-            NSDate *endDate = parseSchedule[kSchedulePropertyEndDate];
-            NSUInteger numHourIntervals = [parseSchedule[kSchedulePropertyNumHourIntervals ] integerValue];
-            NSString *privacy = parseSchedule[kSchedulePropertyPrivacy];
-            NSString *password = parseSchedule[kSchedulePropertyPassword];
-            NSUInteger homeGameIndex = [parseSchedule[kSchedulePropertyHomeGameIndex] integerValue];
-            */
-            NSMutableArray *zeroesArray =[self createZeroesArrayOfLength: joinedScheduleObject.numHourIntervals];
-            
-            
+            NSLog(@"Retrieved schedule to join from parse");
+            Person *newPerson = [[Person alloc]initWithUser:[PFUser currentUser] numIntervals:self.scheduleToJoin.numIntervals];
             PFObject *personObject = [PFObject objectWithClassName:kPersonClassName];
-            personObject[kPersonPropertyName] = [[PFUser currentUser] objectForKey:kUserPropertyFullName];
-            personObject[kPersonPropertyIndex] = [NSNumber numberWithInteger:[joinedScheduleObject.availabilitiesSchedule count]];
-            personObject[kPersonPropertyAvailabilitiesArray] = zeroesArray;
-            personObject[kPersonPropertyAssignmentsArray] = zeroesArray;
-            personObject[kPersonPropertyUserPointer] = [PFUser currentUser];
+            personObject[kPersonPropertyAssignmentsArray] = newPerson.assignmentsArray;
+            personObject[kPersonPropertyAssociatedUser] = newPerson.user;
             
-            //[availabilitiesSchedule addObject:[zeroesArray copy]];
-            //[assignmentsSchedule addObject:[zeroesArray copy]];
-            [joinedScheduleObject.availabilitiesSchedule addObject:[zeroesArray copy]];
-            [joinedScheduleObject.assignmentsSchedule addObject:[zeroesArray copy]];
-            
-            //parseSchedule[kSchedulePropertyAvailabilitiesSchedule] = availabilitiesSchedule;
-            //parseSchedule[kSchedulePropertyAssignmentsSchedule] = assignmentsSchedule;
-            
-            parseSchedule[kSchedulePropertyAvailabilitiesSchedule] = joinedScheduleObject.availabilitiesSchedule;
-            parseSchedule[kSchedulePropertyAssignmentsSchedule] = joinedScheduleObject.assignmentsSchedule;
-            
-            
-            
-            //Schedule *joinedSchedule = [[Schedule alloc]initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex] ;
-
-           
-            personObject[@"scheduleName"] = joinedScheduleObject.name; //change this to a PFRelation to the schedule
+    
             [personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if(!error){
-                    PFRelation *relation = [parseSchedule relationForKey:kSchedulePropertyPersonsList];
-                    [relation addObject:personObject];
-                    
-                   
+                    NSLog(@"Saved new person object to parse");
 
+                    NSMutableArray *personsArray = (NSMutableArray *)parseSchedule[kGroupSchedulePropertyPersonsInGroup]; //TODO: might need mutable copy
+                    [personsArray addObject:personObject];
+                    parseSchedule[kGroupSchedulePropertyPersonsInGroup] = (NSArray *)personsArray;
+                    
                     [parseSchedule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                      if(!error){
-                         PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertySchedulesList];
+                         NSLog(@"Saved schedule to join to parse");
+
+                         PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
                          [relation addObject:parseSchedule];
                          [[PFUser currentUser] saveInBackground];
-                         [self addSchedule:joinedScheduleObject];
+                         [self addSchedule:self.scheduleToJoin];
                          [self.tableView reloadData];
                      }
                  }];
@@ -491,15 +470,9 @@
         }
     }];
     
-    
 }
 
 
--(void)addSchedule:(Schedule *)schedule
-{
-    [self.schedules addObject:schedule];
-    [self.mySchedulesHomeGameIndexes addObject:[NSNumber numberWithInteger:schedule.homeGameIndex]];
-}
 /*!
  *  Called when user chooses to create a schedule.
  *  Creates the schedule, and saves to Parse
@@ -514,69 +487,66 @@
     //Note: probably shouldn't update UI until after save success. b/c otherwise user will think they created the schedule, but it won't show up on other's phones
     
     
-    
+    //TODO: similar to join schedule todo's
     Schedule *newSchedule = self.scheduleToAdd;
     [self addSchedule:newSchedule];
     
     [self.tableView reloadData];
     
-    PFObject *scheduleObject = [PFObject objectWithClassName:kScheduleClassName];
-    scheduleObject[kSchedulePropertyName ] = newSchedule.name;
-    scheduleObject[kSchedulePropertyStartDate] = newSchedule.startDate;
-    scheduleObject[kSchedulePropertyEndDate] = newSchedule.endDate;
-   
-    scheduleObject[kSchedulePropertyNumHourIntervals] = [NSNumber numberWithInteger:newSchedule.numHourIntervals];
-    scheduleObject[kSchedulePropertyPrivacy] = newSchedule.privacy ? kPrivacyValuePrivate : kPrivacyValuePublic;
-    scheduleObject[kSchedulePropertyPassword] = newSchedule.password;
-    scheduleObject[kSchedulePropertyHomeGameIndex] = [NSNumber numberWithInteger:newSchedule.homeGameIndex];
-    NSLog(@"index: %lu", (unsigned long)newSchedule.homeGameIndex);
-    scheduleObject[kSchedulePropertyCreatedBy] = [PFUser currentUser];
-    scheduleObject[kSchedulePropertyCreatedByName] = [[PFUser currentUser] objectForKey:kUserPropertyFullName];
-   
-    NSMutableArray *zeroesArray =[self createZeroesArrayOfLength: newSchedule.numHourIntervals];
+    PFObject *scheduleObject = [PFObject objectWithClassName:kGroupScheduleClassName];
+    scheduleObject[kGroupSchedulePropertyGroupName ] = newSchedule.groupName;
+    scheduleObject[kGroupSchedulePropertyGroupCode] = newSchedule.groupCode;
+    scheduleObject[kGroupSchedulePropertyStartDate] = newSchedule.startDate;
+    scheduleObject[kGroupSchedulePropertyEndDate] = newSchedule.endDate;
+    PFObject *homeGame = [PFObject objectWithoutDataWithClassName:kHomeGameClassName objectId:newSchedule.homeGame.parseObjectID];
+    scheduleObject[kGroupSchedulePropertyHomeGame] = homeGame;
+    scheduleObject[kGroupSchedulePropertyCreatedBy] = [PFUser currentUser];
+    
+    scheduleObject[kGroupSchedulePropertyAssignmentsGenerated] = [NSNumber numberWithBool:false];
+
     
     
+   
+    Person *person = [[Person alloc]initWithUser:[PFUser currentUser] numIntervals:self.scheduleToAdd.numIntervals];
     PFObject *personObject = [PFObject objectWithClassName:kPersonClassName];
-    personObject[kPersonPropertyName] = [[PFUser currentUser] objectForKey:@"additional"];//change to first name
+    personObject[kPersonPropertyAssignmentsArray] = person.assignmentsArray;
+    personObject[kPersonPropertyAssociatedUser] = person.user;
     personObject[kPersonPropertyIndex] = @0;
-    personObject[kPersonPropertyAvailabilitiesArray] = zeroesArray;
-    personObject[kPersonPropertyAssignmentsArray] = zeroesArray;
-    personObject[kPersonPropertyUserPointer] = [PFUser currentUser];
-    personObject[@"scheduleName"] = newSchedule.name; //change this to a PFRelation to the schedule
     
-    [newSchedule.availabilitiesSchedule addObject:[zeroesArray copy]];
-    [newSchedule.assignmentsSchedule addObject:[zeroesArray copy]];
+    /*
+    [personObject saveInBackground];
     
-    scheduleObject[kSchedulePropertyAvailabilitiesSchedule] = newSchedule.availabilitiesSchedule;
-    scheduleObject[kSchedulePropertyAssignmentsSchedule] = newSchedule.assignmentsSchedule;
+    NSArray *personsArray = @[[PFObject objectWithoutDataWithClassName:kPersonClassName objectId:personObject.objectId]];
+    scheduleObject[kGroupSchedulePropertyPersonsInGroup] = personsArray;
     
+    [scheduleObject saveInBackground];
+    
+    PFRelation *userRelation = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
+    [userRelation addObject:[PFObject objectWithoutDataWithClassName:kGroupScheduleClassName objectId:scheduleObject.objectId]];
+    [[PFUser currentUser] saveInBackground];
+     */
+    
+    //TODO: do i need to do all of these separately or can I do them at the same time?check when objectID gets initialized
     [personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if(!error){
-            PFRelation *scheduleRelation = [scheduleObject relationForKey:kSchedulePropertyPersonsList];
-            [scheduleRelation addObject:personObject];
+            NSArray *personsArray = @[personObject];
+            scheduleObject[kGroupSchedulePropertyPersonsInGroup] = personsArray;
+            
             [scheduleObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if(!error){
-                    PFRelation *userRelation = [[PFUser currentUser] relationForKey:kUserPropertySchedulesList];
+                    PFRelation *userRelation = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
                     [userRelation addObject:scheduleObject];
                     [[PFUser currentUser] saveInBackground];
                 }
             }];
         }
     }];
+    
      
 }
 
-
-/*!
- *  Create an array of zeroes of the specified length
- */
--(NSMutableArray *)createZeroesArrayOfLength: (NSUInteger)length
+-(IBAction)closeSettings:(UIStoryboardSegue *)segue
 {
-    NSMutableArray *array = [[NSMutableArray alloc]initWithCapacity:length];
-    for(int i = 0; i<length; i++){
-        [array addObject:@0];
-    }
-    return array;
 }
 
 #pragma mark - Navigation
@@ -587,34 +557,49 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
-    
-    
     if([[segue destinationViewController] isKindOfClass:[MyScheduleContainerViewController class]]){
-        MyScheduleContainerViewController *mscvc = [segue destinationViewController];
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        if(indexPath){
-            Schedule *schedule = self.schedules[indexPath.row];
-            HomeGame *homeGame = self.homeGames[schedule.homeGameIndex];
-            mscvc.schedule = schedule;
-            mscvc.opponentName = homeGame.opponentName;
+        if([sender isKindOfClass:[UITableViewCell class]]){
+            MyScheduleContainerViewController *mscvc = [segue destinationViewController];
+            NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+            if(indexPath){
+                Schedule *schedule = self.schedules[indexPath.row];
+                mscvc.schedule = schedule;
+            }
         }
     }
-    else if(sender==self.addScheduleButton){
-        NewScheduleTableViewController *nstvc = [segue destinationViewController];
-        nstvc.publicSchedules = self.publicSchedules;
-        nstvc.mySchedulesHomeGameIndexes = self.mySchedulesHomeGameIndexes;
-        nstvc.homeGames = self.homeGames;
-        nstvc.scrollRow = [self calculateScrollRowForNewSchedulesTVC];
-        
-        self.test = @"hey";
-        
-        nstvc.test = self.test;
+    else if([[segue destinationViewController] isKindOfClass:[NewScheduleTableViewController class]]){
+        if(sender==self.addScheduleButton){
+            NewScheduleTableViewController *nstvc = [segue destinationViewController];
+            //TODO: Possible changes heres
+            nstvc.mySchedulesHomeGameIndexes = self.mySchedulesHomeGameIndexes;
+            nstvc.homeGames = self.homeGames;
+            nstvc.scrollRow = [self calculateScrollRowForNewSchedulesTVC];
+            
+            
+            // Pointer testing
+            self.test = @"hey";
+            nstvc.test = self.test;
+        }
     }
 }
 
--(IBAction)closeSettings:(UIStoryboardSegue *)segue
+
+-(NSUInteger)calculateScrollRowForNewSchedulesTVC
 {
+    NSUInteger scrollRow = 0;
+    HomeGame *lastGame = self.homeGames[self.homeGames.count-1];
+    if([lastGame.gameTime timeIntervalSinceNow] < 0) return 0; //if all games have occurred, just show all of them
+    for(int i=0;i<self.homeGames.count - 1;i++){ //don't need to check the last game twice
+        HomeGame *game = self.homeGames[i];
+        if([game.gameTime timeIntervalSinceNow] < 0){
+            scrollRow = i+1;
+            
+        }
+    }
+    return scrollRow;
 }
+
+
 
 
 @end

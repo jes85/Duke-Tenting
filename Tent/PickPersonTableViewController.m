@@ -50,7 +50,7 @@
     
     // Configure the cell...
     Person *person = self.schedule.personsArray[indexPath.row];
-    NSString *personName = person.name;
+    NSString *personName = [person.user objectForKey:kUserPropertyFullName];
     
     cell.textLabel.text = personName;
     
@@ -86,6 +86,8 @@
 
 
 #pragma mark - Add Person
+//TODO: implement add offline person
+/*
 -(IBAction)addPerson:(UIStoryboardSegue *)segue
 {
     // Update person and schedule on current iphone (offline)
@@ -145,6 +147,7 @@
     
 
 }
+ */
 -(IBAction)cancelAddPerson:(UIStoryboardSegue *)segue
 {
     
@@ -181,7 +184,7 @@
                     mstvc.currentPerson = person; //does it violate MVC for them to be connected like this?
                     mstvc.schedule = self.schedule;
                     
-                    mstvc.navigationItem.title = person.name;
+                    mstvc.navigationItem.title = [person.user objectForKey:kUserPropertyFullName];
                 }
             
         }

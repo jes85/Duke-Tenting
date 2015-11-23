@@ -10,43 +10,58 @@
 
 @interface Constants : NSObject
 
-#define kPersonClassName    @"Person"
 
-#define kPersonPropertyName                 @"name"
-#define kPersonPropertyIndex                @"index"
-#define kPersonPropertyAvailabilitiesArray  @"availabilitiesArray"
-#define kPersonPropertyAssignmentsArray     @"assignmentsArray"
-#define kPersonPropertyAssociatedSchedule   @"associatedSchedule" //or schedule name?
-#define kPersonPropertyUserPointer          @"userPointer"
+// Person ParseObject
+#define kPersonClassName                        @"Person"
 
-#define kScheduleClassName  @"Schedule"
+#define kPersonPropertyAssignmentsArray                 @"assignmentsArray"
+#define kPersonPropertyAssociatedUser                   @"associatedUser"
+#define kPersonPropertyIndex                            @"index"
 
-#define kSchedulePropertyName                   @"name"
-#define kSchedulePropertyStartDate              @"startDate"
-#define kSchedulePropertyEndDate                @"endDate"
-#define kSchedulePropertyAvailabilitiesSchedule @"availabilitiesSchedule"
-#define kSchedulePropertyAssignmentsSchedule    @"assignmentsSchedule"
-#define kSchedulePropertyNumHourIntervals       @"numHourIntervals"
-#define kSchedulePropertyPrivacy                @"privacy"
-#define kSchedulePropertyPassword               @"password"
-#define kSchedulePropertyHomeGameIndex          @"homeGameIndex"
-#define kSchedulePropertyCreatedBy              @"createdBy" //be careful of strong reference cycle
-#define kSchedulePropertyCreatedByName          @"createdByName" //doing this so don't have to fetch PFUser relation each time. might not be what you're supposed to do 
-#define kSchedulePropertyPersonsList            @"personsList"
+
+// GroupSchedule ParseObject
+#define kGroupScheduleClassName                 @"GroupSchedule"
+
+#define kGroupSchedulePropertyGroupName                 @"groupName"
+#define kGroupSchedulePropertyGroupCode                 @"groupCode"
+#define kGroupSchedulePropertyStartDate                 @"startDate"
+#define kGroupSchedulePropertyEndDate                   @"endDate"
+#define kGroupSchedulePropertyHomeGame                  @"homeGame"
+#define kGroupSchedulePropertyPersonsInGroup            @"personsInGroup"
+#define kGroupSchedulePropertyCreatedBy                 @"createdBy" 
+#define kGroupSchedulePropertyAssignmentsGenerated      @"assignmentsGenerated"
+#define kGroupSchedulePropertyNumIntervals              @"numIntervals"
+/* V2
+#define kGroupSchedulePropertyIntervalLengthInMinutes   @"intervalLengthInMinutes"
+#define kGroupSchedulePropertyAdmins                    @"admins"
+#define kGroupSchedulePropertyPrivacy                   @"privacy"
+ */
+
+// User ParseObject
+#define kUserPropertyGroupSchedules                     @"groupSchedules"
+#define kUserPropertyFullName                           @"additional"
+
+// HomeGame ParseObject
+#define kHomeGameClassName                      @"HomeGame"
+
+#define kHomeGamePropertyOpponent                       @"opponent"
+#define kHomeGamePropertyGameTime                       @"gameTime"
+#define kHomeGamePropertyConferenceGame                 @"conferenceGame"
+#define kHomeGamePropertyExhibition                     @"exhibition"
+#define kHomeGamePropertyIndex                          @"index"
+
+
+#define kUserDefaultsHomeGamesData                      @"homeGamesData"
 
 #define kPrivacyValuePrivate                    @"private"
 #define kPrivacyValuePublic                     @"public"
 
-#define kUserPropertySchedulesList              @"schedulesList"
-
-#define kUserPropertyFullName                   @"additional"
-
+// Container View Controller Children Storyboard Identifiers
 #define kChildViewControllerMe                  @"ChildViewControllerMe"
-#define kChildViewControllerCurrent                 @"ChildViewControllerCurrent"
+#define kChildViewControllerCurrent             @"ChildViewControllerCurrent"
 #define kChildViewControllerOthers              @"ChildViewControllerOthers"
 #define kChildViewControllerTimeSlots           @"ChildViewControllerTimeSlots"
 
-#define kUserDefaultsHomeGamesData                          @"homeGamesData"
 
 +(NSString *)formatDate:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
 +(NSString *)formatTime:(NSDate *)date withStyle:(NSDateFormatterStyle)style;

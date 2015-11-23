@@ -14,12 +14,12 @@
 #import "Constants.h"
 #import "SortGroupsViewController.h"
 
-#define kEnterPasswordAlertViewTitle            @"Enter Group Code: "
+#define kEnterGroupCodeAlertViewTitle           @"Enter Group Code: "
 #define kCancelButtonTitle                      @"Cancel"
 #define kEnterButtonTitle                       @"Enter"
 
-#define kWrongPasswordAlertViewTitle            @"Incorrect!"
-#define kWrongPasswordAlertViewMessage          @"Please enter the group code again."
+#define kWrongGroupCodeAlertViewTitle            @"Incorrect!"
+#define kWrongGroupCodeAlertViewMessage          @"Please enter the group code again."
 
 @interface JoinScheduleTableViewController ()
 
@@ -39,11 +39,17 @@
     return _cancelAlertAction;
 }
 
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self getSchedulesAssociatedWithHomeGameIndex];
+
+}
 #pragma mark - View Controller Lifecycle
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self getSchedulesAssociatedWithHomeGameIndex];
+    //[self getSchedulesAssociatedWithHomeGameIndex];
     
     
 }
@@ -54,20 +60,24 @@
 -(void)getSchedulesAssociatedWithHomeGameIndex
 {
     
-    PFQuery *query = [PFQuery queryWithClassName:kScheduleClassName];
-    [query whereKey:kSchedulePropertyHomeGameIndex equalTo:[NSNumber numberWithInteger:self.homeGameIndex ]];
+    PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
+    PFObject *homeGame = [PFObject objectWithoutDataWithClassName:kHomeGameClassName objectId:self.homeGame.parseObjectID];
+    [query whereKey:kGroupSchedulePropertyHomeGame equalTo:homeGame];
+    [query includeKey:kGroupSchedulePropertyPersonsInGroup];
+    [query includeKey:kGroupSchedulePropertyHomeGame];
+    [query includeKey:kGroupSchedulePropertyCreatedBy];
+    [query includeKey:[NSString stringWithFormat:@"%@.%@", kGroupSchedulePropertyPersonsInGroup, kPersonPropertyAssociatedUser]];
+
     [query findObjectsInBackgroundWithBlock:^(NSArray *schedules, NSError *error) {
         if(!schedules){
             NSLog(@"Find failed");
         }else if ([schedules count]<1){
-            NSLog(@"No schedules associated with home game index %lu in Parse", (unsigned long)self.homeGameIndex);
+            NSLog(@"No schedules associated with home game %@ in Parse", self.homeGame.opponentName);
         }else{
-            NSLog(@"Find schedules associated with home game index %lu succeeded", (unsigned long)self.homeGameIndex);
+            NSLog(@"Find schedules associated with home game %@ succeeded", self.homeGame.opponentName);
             NSMutableArray *array = [[NSMutableArray alloc]init];
             for(PFObject *parseSchedule in schedules){
-                
                 Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule] ;
-                
                 [array addObject:scheduleObject];
             }
             
@@ -82,9 +92,10 @@
 
 -(NSArray *)getSortDescriptors
 {
+    //TODO: Need different way to sort, because creatorName is no longer a property of schedule. how do implement custom PFUser compare for full name?
     NSArray *sortDescriptors;
-    NSSortDescriptor *sortByScheduleName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-    NSSortDescriptor *sortByCreatorName = [NSSortDescriptor sortDescriptorWithKey:@"creatorName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+    NSSortDescriptor *sortByScheduleName = [NSSortDescriptor sortDescriptorWithKey:@"groupName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+    NSSortDescriptor *sortByCreatorName = [NSSortDescriptor sortDescriptorWithKey:@"createdBy" ascending:YES selector:@selector(caseInsensitiveCompare:)];
 ;
     NSSortDescriptor *sortByStartDate = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];
     
@@ -106,6 +117,9 @@
     }
     return sortDescriptors;
 }
+
+
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -130,9 +144,9 @@
 {
 
     NSString *reuseIdentifier = @"joinScheduleCell";
-   ScheduleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
+    ScheduleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
     
-    if (cell == nil) {
+    if (cell == nil) { // necessary?
         cell = [[ScheduleTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
@@ -145,18 +159,11 @@
     }
     
     // Configure the cell...
-    cell.nameLabel.text = schedule.name;
+    cell.nameLabel.text = schedule.groupName;
     cell.startDate.text = [[[Constants formatDate:schedule.startDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "]stringByAppendingString:[Constants formatTime:schedule.startDate withStyle:NSDateFormatterShortStyle]];
      cell.endDate.text = [[[Constants formatDate:schedule.endDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "]stringByAppendingString:[Constants formatTime:schedule.endDate withStyle:NSDateFormatterShortStyle]];
-    cell.creatorLabel.text = schedule.creatorName;
     
-    /* If I've already joined one of the schedules, display this one first, distinguish it with a checkmark, and disable the join button on the other schedules
-     
-        if([self.mySchedules containsObject:schedule]) {
-        cell.detailTextLabel.text = @"Joined";
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        }
-     */
+    cell.creatorLabel.text = [schedule.createdBy objectForKey:kUserPropertyFullName];
     
     cell.delegate = self;
     
@@ -171,17 +178,17 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self displayEnterPasswordAlertForScheduleIndex:indexPath.row];
+    [self displayEnterGroupCodeAlertForScheduleIndex:indexPath.row];
 }
 
--(void)displayEnterPasswordAlertForScheduleIndex:(NSInteger)scheduleIndex
+-(void)displayEnterGroupCodeAlertForScheduleIndex:(NSInteger)scheduleIndex
 {
     if(self.searchDisplayController.active){
         self.scheduleToJoin = self.searchResults[scheduleIndex];
     }else{
         self.scheduleToJoin = self.schedulesAssociatedWithThisHomeGame[scheduleIndex];
     }
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:kEnterPasswordAlertViewTitle
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:kEnterGroupCodeAlertViewTitle
                                                                    message:nil
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
@@ -195,7 +202,7 @@
     [alert addAction:joinAction];
     [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         textField.placeholder = @"Group Code";
-        textField.secureTextEntry = YES;
+        //textField.secureTextEntry = YES; // TODO: probably don't need it secure since its a group code, not a password
     }];
     [self presentViewController:alert animated:YES completion:nil];
     
@@ -203,15 +210,15 @@
 
 -(void)tryToJoinSchedule:(UIAlertController *)alert
 {
-    UITextField *passwordTextField = alert.textFields.firstObject;
-    NSString *passwordAttempt = passwordTextField.text;
-    if([passwordAttempt isEqualToString:self.scheduleToJoin.password]){
+    UITextField *groupCodeTextField = alert.textFields.firstObject;
+    NSString *groupCodeAttempt = groupCodeTextField.text;
+    if([groupCodeAttempt isEqualToString:self.scheduleToJoin.groupCode]){
         alert.title = @"Success";
         [self performSegueWithIdentifier:@"joinedSchedule" sender:self];
     }else{
-        alert.title = kWrongPasswordAlertViewTitle;
-        alert.message = kWrongPasswordAlertViewMessage;
-        passwordTextField.text = nil;
+        alert.title = kWrongGroupCodeAlertViewTitle;
+        alert.message = kWrongGroupCodeAlertViewMessage;
+        groupCodeTextField.text = nil; // TODO: maybe keep texts
         [self presentViewController:alert animated:YES completion:nil];
     }
 
@@ -220,9 +227,10 @@
 #pragma mark - Search Bar
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope
 {
-    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"(name contains[c] %@) OR (creatorName contains[c] %@)", searchText, searchText];
+    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"(name contains[c] %@) OR (createdBy.additional contains[c] %@)", searchText, searchText]; //TODO: don't think createdBy.additional will work. used to do creatorName
     self.searchResults = [self.schedulesAssociatedWithThisHomeGame filteredArrayUsingPredicate:resultPredicate];
 }
+
 -(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
     [self filterContentForSearchText:searchString
@@ -247,9 +255,7 @@
         indexPath = [self.tableView indexPathForCell:cell];
     }
     
-    //if([self.scheduleToJoin.privacy isEqualToString: @"private"]){
-    
-    [self displayEnterPasswordAlertForScheduleIndex:indexPath.row];
+    [self displayEnterGroupCodeAlertForScheduleIndex:indexPath.row];
 
 }
 
@@ -259,10 +265,12 @@
     [self.tableView reloadData];
     
 }
+
 -(IBAction)cancelFilter:(UIStoryboardSegue *)segue
 {
     
 }
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation

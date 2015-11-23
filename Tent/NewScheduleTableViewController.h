@@ -12,15 +12,17 @@
 @interface NewScheduleTableViewController : UITableViewController <HomeGameTableViewCellDelegate, UIAlertViewDelegate>
 
 
-@property (nonatomic) NSMutableArray *publicSchedules;
 @property (nonatomic) NSMutableSet *mySchedulesHomeGameIndexes;
 @property (nonatomic) NSArray *homeGames;
 @property (nonatomic) NSUInteger scrollRow;
-@property (nonatomic) NSString *test;
 
 
 -(IBAction)cancelCreateSchedule:(UIStoryboardSegue *)segue;
 +(void)loadHomeGameScheduleDataFromParseWithBlock:(void (^) (NSArray *updatedHomeGamesArray, NSError *error))completionHander;
+
+
+
+@property (nonatomic) NSString *test;
 
 @end
 

@@ -44,8 +44,9 @@
     [super viewDidLoad];
     //[self drawBorders];
     [self updateGameLabels];
-    [self updatePersonsForSchedule];
-    //[self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
+    //[self updatePersonsForSchedule];
+    //[self updateSchedule];
+    [self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
     
@@ -87,13 +88,12 @@
 }
 -(void)updateGameLabels
 {
-    //self.labelScheduleName.text = self.schedule.name;
-    //self.labelOpponent.text = self.schedule.opponent;
-    //self.labelOpponent.text = self.schedule.opponent;
-    self.labelOpponent.text = self.opponentName;
+
+    HomeGame *hg = self.schedule.homeGame;
+    self.labelOpponent.text = hg.opponentName;
     self.labelDate.text = [[[Constants formatDate:self.schedule.endDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "] stringByAppendingString:[Constants formatTime:self.schedule.endDate withStyle:NSDateFormatterShortStyle]];
 
-    self.navigationItem.title = self.schedule.name;
+    self.navigationItem.title = self.schedule.groupName;
     
 }
 
@@ -165,32 +165,42 @@
     [oldVC willMoveToParentViewController:nil];
     [self addChildViewController:newVC];
     
-    if([newVC isKindOfClass:[PickPersonTableViewController class]]){
+    
+    // Me
+    if([newVC isKindOfClass:[MyScheduleTableViewController class]]){
+        MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)newVC;
+        mstvc.schedule = self.schedule;
+        self.navigationItem.rightBarButtonItems = @[self.editButton, self.settingsButton];
+        
+    }
+    
+    // Current
+    else if ([newVC isKindOfClass:[PersonsInIntervalViewController class]]){
+        PersonsInIntervalViewController *piivc = (PersonsInIntervalViewController *)newVC;
+        piivc.schedule = self.schedule;
+        piivc.displayCurrent = YES;
+        self.navigationItem.rightBarButtonItems = @[self.settingsButton];
+        
+        
+    }
+    
+    // Others
+    else if([newVC isKindOfClass:[PickPersonTableViewController class]]){
         PickPersonTableViewController *pptvc = (PickPersonTableViewController *)newVC;
         pptvc.schedule = self.schedule;
         
         //TODO: check if creator for addPersonB
         self.navigationItem.rightBarButtonItems = @[self.addPersonButton, self.settingsButton];
-    }else if ([newVC isKindOfClass:[IntervalsTableViewController class]]){
+    }
+    
+    // Time Slots
+    else if ([newVC isKindOfClass:[IntervalsTableViewController class]]){
         IntervalsTableViewController *itvc = (IntervalsTableViewController *)newVC;
         itvc.schedule = self.schedule;
         self.navigationItem.rightBarButtonItems = @[self.settingsButton];
-
-        
-    }else if([newVC isKindOfClass:[MyScheduleTableViewController class]]){
-        MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)newVC;
-        mstvc.schedule = self.schedule;
-        self.navigationItem.rightBarButtonItems = @[self.editButton, self.settingsButton];
-        
-    }else if ([newVC isKindOfClass:[PersonsInIntervalViewController class]]){
-        PersonsInIntervalViewController *piivc = (PersonsInIntervalViewController *)newVC;
-        piivc.schedule = self.schedule;
-        piivc.displayCurrent = YES;
-        self.navigationItem.rightBarButtonItems = @[self.settingsButton];
-
         
     }
-    
+
     CGRect frame = CGRectMake(-self.containerView.bounds.size.width, self.containerView.bounds.origin.y, self.containerView.bounds.size.width, self.containerView.bounds.size.height);
     newVC.view.frame = frame;
 
@@ -218,7 +228,7 @@
 
 
 
-
+/*
 -(void)updatePersonsForSchedule
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
@@ -302,20 +312,23 @@
     }];
     
 }
+ */
 //same as updateSchedule in HomeBase. Consolidate this
 -(void)updateSchedule
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
     
     
-    PFQuery *query = [PFQuery queryWithClassName:@"Schedule"];
-    [query whereKey:@"name" equalTo:self.schedule.name];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *parseSchedule, NSError *error) {
-        if(!parseSchedule){
+    PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
+    [query includeKey:kGroupSchedulePropertyPersonsInGroup];
+    [query includeKey:kGroupSchedulePropertyHomeGame];
+    [query includeKey:kGroupSchedulePropertyCreatedBy];
+    [query includeKey:[NSString stringWithFormat:@"%@.%@", kGroupSchedulePropertyPersonsInGroup, kPersonPropertyAssociatedUser]];
+    [query getObjectInBackgroundWithId:self.schedule.parseObjectID block:^(PFObject *parseSchedule, NSError *error) {
+        if(error){
             NSLog(@"Find failed");
         }else{
             NSLog(@"Find schedule for update succeeded");
-            
             
             Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
             
@@ -324,27 +337,29 @@
             
             
         }
+
     }];
-    
     
 }
 
 -(NSDictionary *)createSettingsDictionary
+
 {
+    HomeGame *hg = self.schedule.homeGame;
     NSDictionary *section0 = @{
                                @"sectionHeader":@"General",
                                @"sectionData": @[
                                    @{
                                        @"title": @"Schedule Name:",
-                                       @"value": self.schedule.name,
+                                       @"value": self.schedule.groupName,
                                        },
                                    @{
                                        @"title": @"Opponent:",
-                                       @"value": @"opponent",
+                                       @"value": hg.opponentName,
                                        },
                                    @{
                                        @"title": @"Group Code:",
-                                       @"value": self.schedule.password,
+                                       @"value": self.schedule.groupCode,
                                        
                                        }
                                    ],
@@ -362,7 +377,7 @@
                                            },
                                        @{
                                            @"title": @"Game Time:",
-                                           @"value": @"game time" //change to gameTime
+                                           @"value": hg.gameTime,
                                            
                                            }
                                        ],

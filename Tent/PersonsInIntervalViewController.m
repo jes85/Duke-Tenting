@@ -9,6 +9,7 @@
 #import "PersonsInIntervalViewController.h"
 #import "Interval.h"
 #import "Constants.h"
+#import "Person.h"
 @interface PersonsInIntervalViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -23,7 +24,9 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.dateTimeLabel.text = self.dateTimeText;
+    if(self.displayCurrent == NO) {
+        self.dateTimeLabel.text = self.dateTimeText;
+    }
     NSLog(self.dateTimeLabel.text);
 }
 
@@ -35,9 +38,13 @@
     NSInteger hours = datedifferenceComponents.hour;
     NSInteger minutes = datedifferenceComponents.minute;
     
-    //TODO: calculate total intervals based on interval length setting and hours/minutes
+    //TODO: calculate time interval index based on interval length setting and hours/minutes
+    NSInteger index = hours;
+    if(minutes < 0){ 
+        index = index - 1;
+    }
     
-    return hours;
+    return index;
    
     
 }
@@ -45,7 +52,11 @@
 -(void)updatePersonsArraysForCurrentTimeInterval
 {
     NSInteger index = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
-    if(index < 0) return;
+    if(index < 0) {
+        // display fact that schedule has not started yet
+        self.dateTimeLabel.text = @"Schedule has not started yet";
+        return;
+    }
     Interval *interval = self.schedule.intervalDataByOverallRow[index];
     self.availablePersonsArray = interval.availablePersons;
     self.assignedPersonsArray = interval.assignedPersons;
@@ -56,16 +67,19 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    //TODO: maybe move this to another method
+    if(self.displayCurrent==YES){
+        [self updatePersonsArraysForCurrentTimeInterval];
+    }
     // Return the number of sections.
+
     return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if(self.displayCurrent==YES){
-        [self updatePersonsArraysForCurrentTimeInterval];
-    }
+    
     if(section==0){
         if([self.assignedPersonsArray count]<1) return 1;
         return [self.assignedPersonsArray count];
@@ -107,8 +121,8 @@
         
         
         // Display person's name
-        NSString *personName = self.assignedPersonsArray[indexPath.row];
-        cell.textLabel.text = personName;
+        Person *person = self.availablePersonsArray[indexPath.row];
+        cell.textLabel.text = [person.user objectForKey:kUserPropertyFullName];
     }
     
     
@@ -122,8 +136,8 @@
         }
         
         // Display person's name
-        NSString *personName = self.availablePersonsArray[indexPath.row];
-        cell.textLabel.text = personName;
+        Person *person = self.availablePersonsArray[indexPath.row];
+        cell.textLabel.text = [person.user objectForKey:kUserPropertyFullName];
     }
     return cell;
 }

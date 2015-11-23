@@ -11,6 +11,7 @@
 #import "Person.h"
 #import "IntervalTableViewCell.h"
 #import "Interval.h"
+#import "Constants.h"
 
 @interface EnterScheduleTableViewController ()
 @property(nonatomic, strong) NSMutableArray *updatedAvailabilitiesArray;
@@ -39,7 +40,7 @@
 {
    
     if(!_updatedAvailabilitiesArray)
-        _updatedAvailabilitiesArray = [[NSMutableArray alloc]initWithArray:self.currentPerson.availabilitiesArray];
+        _updatedAvailabilitiesArray = [[NSMutableArray alloc]initWithArray:self.currentPerson.assignmentsArray];
     return _updatedAvailabilitiesArray;
 }
 
@@ -102,7 +103,7 @@
     cell.textLabel.text = interval.timeString;
    
     
-    if([self.currentPerson.assignmentsArray[indexPath.row] isEqual:@1]){
+    if([self.updatedAvailabilitiesArray[indexPath.row] isEqual:@2]){
         cell.assignedOrAvailableLabel.text = @"(Assigned)";
         cell.iconImageView.image =[UIImage imageNamed:@"GreenCircle"];
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:0 green:.3 blue:0 alpha:1.0];
@@ -130,7 +131,7 @@
 
 
 #pragma mark - Navigation
-
+/*
  //In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -205,6 +206,92 @@
         }
 
        
+    }
+}
+*/
+//In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    
+    
+    if(sender!=self.editButtonItem) return; //if user presses cancel button, don't do anything
+    else{ //user pressed doneButton
+        
+        //if current person's availabilities array was changed, update Person and Schedule on current iPhone and on Parse
+        if(![self.currentPerson.assignmentsArray isEqual:self.updatedAvailabilitiesArray]){
+            
+            //update Person's availabilities array on local iPhone
+            self.currentPerson.assignmentsArray = self.updatedAvailabilitiesArray;
+            NSMutableArray *personsList = self.schedule.personsArray;
+            [personsList removeObjectAtIndex:self.currentPerson.scheduleIndex];
+            [personsList insertObject:self.currentPerson atIndex:self.currentPerson.scheduleIndex];
+            self.schedule.personsArray = personsList;
+            /*
+             can i just do this? pointers or values
+             Person *currentPerson = personsList[self.currentPerson.scheduleIndex];
+             currentPerson = self.currentPerson;
+             */
+            
+            //TODO: figure how way to keep schedule object data consistent across multiple view controllers
+            //update schedule on local iPhone
+            PickPersonTableViewController *pptvc = [segue destinationViewController];
+            pptvc.schedule = self.schedule;
+            
+            
+            
+            //Update Person on Parse
+            PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
+            [query getObjectInBackgroundWithId:self.currentPerson.parseObjectID block:^(PFObject *object, NSError *error) {
+                if(!object){
+                    NSLog(@"Find failed");
+                }else{
+                    //the find succeeded
+                    NSLog(@"Find succeeded");
+                    object[kPersonPropertyAssignmentsArray] = self.currentPerson.assignmentsArray;
+                    [object saveInBackground];
+                }
+            }];
+            
+            //update Schedule on Parse
+            
+            // I don't think I have to update schedule anymore since i restructured data in parse
+            /*
+             PFQuery *query2 = [PFQuery queryWithClassName:@"Schedule"];
+             [query2 whereKey:@"name" equalTo:self.currentPerson.scheduleName];
+             [query2 getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+             if(!object){
+             NSLog(@"Find failed");
+             }else{
+             //the find succeeded
+             NSLog(@"Find succeeded");
+             NSMutableArray *array = object[@"availabilitiesSchedule"] ;
+             array[self.currentPerson.scheduleIndex]= self.currentPerson.assignmentsArray;
+             object[@"availabilitiesSchedule"] =array;
+             
+             [object saveInBackground];
+             }
+             }];
+             */
+            PFUser *user = self.currentPerson.user;
+            //update Intervals offline
+            for(int i = 0; i<[self.currentPerson.assignmentsArray count]; i++){
+                Interval *interval = (Interval *)self.schedule.intervalDataByOverallRow[i];
+                if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
+                    if(![interval.availablePersons containsObject:[user objectForKey:kUserPropertyFullName]]){
+                        [interval.availablePersons addObject: user.username];
+                    }
+                }
+                if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
+                    if(![interval.assignedPersons containsObject:user.username]){
+                        [interval.assignedPersons addObject:user.username];
+                    }
+                }
+            }
+        }
+        
+        
     }
 }
 

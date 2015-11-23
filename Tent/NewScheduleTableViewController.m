@@ -48,6 +48,8 @@
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
+#pragma mark - Update Home Games Data from Parse
+// TODO: Review the process of retreiving home games.
 -(void)checkForUpdatedHomeGameData
 {
     [NewScheduleTableViewController loadHomeGameScheduleDataFromParseWithBlock:^(NSArray *updatedHomeGamesArray, NSError *error) {
@@ -75,17 +77,21 @@
 
 +(void)loadHomeGameScheduleDataFromParseWithBlock:(void (^) (NSArray *updatedHomeGamesArray, NSError *error))completionHander
 {
-    PFQuery *query = [PFQuery queryWithClassName:@"HomeGame"];
+    PFQuery *query = [PFQuery queryWithClassName:kHomeGameClassName];
+    [query orderByAscending:kHomeGamePropertyGameTime];
     [query findObjectsInBackgroundWithBlock:^(NSArray *parseHomeGames, NSError *error) {
         if (!error) {
             // The find succeeded.
             NSLog(@"Successfully retrieved %lu home games.", (unsigned long)parseHomeGames.count);
+            
             // Do something with the found objects
             NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:parseHomeGames.count];
             NSCalendar *calendar = [NSCalendar currentCalendar];
             NSDateComponents *components = [[NSDateComponents alloc]init];
             for (PFObject *parseHomeGame in parseHomeGames) {
                 NSLog(@"%@", parseHomeGame.objectId);
+                
+                /*
                 [components setYear:[parseHomeGame[@"date_year"] integerValue]];
                 [components setMonth: [parseHomeGame[@"date_month"] integerValue]];
                 [components setDay:[parseHomeGame[@"date_day"] integerValue]];
@@ -93,17 +99,25 @@
                 [components setMinute:[parseHomeGame[@"time_minutes"]integerValue]];
                 [components setWeekday:[parseHomeGame[@"date_weekday"]integerValue]];
                 NSDate *gameTime = [calendar dateFromComponents:components];
-                NSString *opponent = parseHomeGame[@"opponent"];
-                BOOL isExhibition = [parseHomeGame[@"exhibition"] boolValue];
-                BOOL isConferenceGame = [parseHomeGame[@"conference_game"] boolValue];
+                 */
+                //TODO: uncomment this line and comment lines above once change scraper to put dates in date format on parse
+                NSDate *gameTime = parseHomeGame[kHomeGamePropertyGameTime];
+                NSString *opponent = parseHomeGame[kHomeGamePropertyOpponent];
+                BOOL isExhibition = [parseHomeGame[kHomeGamePropertyExhibition] boolValue];
+                BOOL isConferenceGame = [parseHomeGame[kHomeGamePropertyConferenceGame] boolValue];
+                NSUInteger index = [parseHomeGame[kHomeGamePropertyIndex] unsignedIntegerValue];
                 
-                HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame];
+                HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame index:index parseObjectID:parseHomeGame.objectId];
                 [homeGamesTemp addObject: homeGame];
             }
             
+            /*
             NSSortDescriptor *sortByStartDate = [NSSortDescriptor sortDescriptorWithKey:@"gameTime" ascending:YES];
             NSArray *homeGamesData = (NSArray *)[homeGamesTemp sortedArrayUsingDescriptors:@[sortByStartDate]];
-            completionHander(homeGamesData, error);
+             */
+            
+            NSArray *homeGamesArray = (NSArray *)homeGamesTemp;
+            completionHander(homeGamesArray, error);
             
         } else {
             // Log details of the failure
@@ -120,7 +134,6 @@
 {
     NSError *error;
     NSData *data = [NSData dataWithContentsOfFile:@"/Users/jeremy/Developer/Xcode/Tent/Tent/dukeschedule.txt" options:0 error:&error];
-    NSString *scheduleFileContents = [NSString stringWithContentsOfFile:@"/Users/jeremy/Developer/Xcode/Tent/Tent/dukeschedule.txt" encoding: NSUTF8StringEncoding error:&error];
     NSArray *jsonHomeGames = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
     NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:jsonHomeGames.count];
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -144,274 +157,13 @@
             self.scrollRow=i+1;
         }
         
-        HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame];
+        HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame index:i parseObjectID:nil];
         [homeGamesTemp addObject: homeGame];
-        
     }
-    self.homeGames = [homeGamesTemp copy];
-
     
-    /*
-    NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:numHomeGames];
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [[NSDateComponents alloc]init];
-    [components setYear:2014];
-    
-    
-    //Countdown To Craziness Saturday Oct. 25 8 pm
-    [components setMonth: 10];
-    [components setDay:25];
-    [components setHour:20];
-    [components setWeekday:7];
-    NSDate *gameTime = [calendar dateFromComponents:components];
-    
-    NSString *opponent = @"Countdown To Craziness";
-    BOOL isExhibition = NO;
-    
-    HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame ];
-    
-    //Livingstone (Exhibition) Tuesday Nov. 4, 7 pm
-    [components setMonth: 11];
-    [components setDay:4];
-    [components setHour:19];
-    [components setWeekday:3];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Livingstone";
-    isExhibition = YES;
-    
-    HomeGame *homeGame1 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame1 ];
-    
-    
-    //Central Missouri (Exhibition) Saturday Nov. 8, 1 pm
-    [components setMonth: 11];
-    [components setDay:8];
-    [components setHour:13];
-    [components setWeekday:7];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"C. Missouri";
-    isExhibition = YES;
-    
-    HomeGame *homeGame2 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame2 ];
-    
-    //Presbyterian Friday Nov. 14, 6 pm
-    [components setMonth: 11];
-    [components setDay:14];
-    [components setHour:18];
-    [components setWeekday:6];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Presbyterian";
-    isExhibition = NO;
-    
-    HomeGame *homeGame3 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame3 ];
-    
-    //Fairfield Saturday Nov.15, 8 pm
-    [components setMonth: 11];
-    [components setDay:15];
-    [components setHour:20];
-    [components setWeekday:7];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Fairfield";
-    isExhibition = NO;
-    
-    HomeGame *homeGame4 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame4 ];
-    
-    //Furman Wednesday Nov. 26, 5 pm
-    [components setMonth: 11];
-    [components setDay:26];
-    [components setHour:17];
-    [components setWeekday:4];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Furman";
-    isExhibition = NO;
-    
-    HomeGame *homeGame5 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame5 ];
-    
-    //Army Sunday Nov. 30, 12pm
-    [components setMonth: 11];
-    [components setDay:30];
-    [components setHour:12];
-    [components setWeekday:1];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Army";
-    isExhibition = NO;
-    
-    HomeGame *homeGame6 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame6 ];
-    
-    //Elon Monday Dec. 15, 7 pm
-    [components setMonth: 12];
-    [components setDay:15];
-    [components setHour:19];
-    [components setWeekday:2];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Elon";
-    isExhibition = NO;
-    
-    HomeGame *homeGame7 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame7 ];
-    
-    //Toledo Monday Dec. 29, 7 pm
-    [components setMonth: 12];
-    [components setDay:29];
-    [components setHour:19];
-    [components setWeekday:2];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Toledo";
-    isExhibition = NO;
-    
-    HomeGame *homeGame8 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame8 ];
-    
-    //Wofford Wednesday Dec. 31, 3 pm
-    [components setMonth: 12];
-    [components setDay:31];
-    [components setHour:15];
-    [components setWeekday:4];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Wofford";
-    isExhibition = NO;
-    
-    HomeGame *homeGame9 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame9 ];
-    
-    //Boston College Saturday Jan. 3, 4 pm
-    [components setMonth: 1];
-    [components setDay:3];
-    [components setHour:16];
-    [components setWeekday:7];
-    [components setYear:2015];
-
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Boston College";
-    isExhibition = NO;
-    
-    HomeGame *homeGame10 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame10 ];
-    
-    //Miami Tuesday Jan. 13, 9 pm
-    [components setMonth: 1];
-    [components setDay:13];
-    [components setHour:21];
-    [components setWeekday:3];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Miami";
-    isExhibition = NO;
-    
-    HomeGame *homeGame11 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame11 ];
-    
-    //Pittsburgh Monday Jan. 19, 7 pm
-    [components setMonth: 1];
-    [components setDay:19];
-    [components setHour:19];
-    [components setWeekday:2];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Pittsburgh";
-    isExhibition = NO;
-    
-    HomeGame *homeGame12 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame12 ];
-    
-    //Georgia Tech Wednesday Feb 04, 7pm
-    [components setMonth: 2];
-    [components setDay:4];
-    [components setHour:19];
-    [components setWeekday:4];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Georgia Tech";
-    isExhibition = NO;
-    
-    HomeGame *homeGame13 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame13 ];
-    
-    //Notre Dame Saturday Feb 07, 1 pm
-    [components setMonth: 2];
-    [components setDay:7];
-    [components setHour:13];
-    [components setWeekday:7];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Notre Dame";
-    isExhibition = NO;
-    
-    HomeGame *homeGame14 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame14 ];
-    
-    // UNC Wednesday Feb. 18, 9 pm
-    [components setMonth: 2];
-    [components setDay:18];
-    [components setHour:21];
-    [components setWeekday:4];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"UNC";
-    isExhibition = NO;
-    
-    HomeGame *homeGame15 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame15 ];
-    
-    //Clemson Saturday Feb 21, 4 pm
-    [components setMonth: 2];
-    [components setDay:21];
-    [components setHour:16];
-    [components setWeekday:7];
-    
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Clemson";
-    isExhibition = NO;
-    
-    HomeGame *homeGame16 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame16 ];
-    
-    //Syracuse Saturday Feb. 28, Time TBA
-    [components setMonth: 2];
-    [components setDay:28];
-    [components setHour:19];
-    [components setWeekday:7];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Syracuse";
-    isExhibition = NO;
-    
-    HomeGame *homeGame17 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame17 ];
-    
-    //Wake Forest Wednesday March 04, 8pm
-    [components setMonth: 3];
-    [components setDay:4];
-    [components setHour:20];
-    [components setWeekday:4];
-    gameTime = [calendar dateFromComponents:components];
-    
-    opponent = @"Wake Forest";
-    isExhibition = NO;
-    
-    HomeGame *homeGame18 = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition];
-    [homeGamesTemp addObject: homeGame18 ];
-    */
-    
-    self.homeGames = [homeGamesTemp copy];
+    self.homeGames = [homeGamesTemp copy]; // is copy necessary?
 }
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -432,21 +184,19 @@
 
     HomeGame *homeGame = self.homeGames[indexPath.row];
     
-    
     // Opponent name
     NSString *opponentNameLabelText = homeGame.opponentName;
-    BOOL isExhibition = homeGame.isExhibition;
-    if(isExhibition) opponentNameLabelText = [opponentNameLabelText stringByAppendingString:@" (Ex.)"];//(Exhibition)
+    if(homeGame.isExhibition) opponentNameLabelText = [opponentNameLabelText stringByAppendingString:@" (Ex.)"];
+    if(homeGame.isConferenceGame) opponentNameLabelText = [opponentNameLabelText stringByAppendingString:@" *"];
     
     
     // Gametime
     NSString *dateLabelText = [Constants formatDate:homeGame.gameTime withStyle:NSDateFormatterShortStyle];
-    
     NSString *timeLabelText = [Constants formatTime:homeGame.gameTime withStyle:NSDateFormatterShortStyle];
     
-    JoinedHomeGameTableViewCell *cell;
-    
     if(![self.mySchedulesHomeGameIndexes containsObject:[NSNumber numberWithInteger:indexPath.row]]){
+        // User has not joined a group schedule for this home game
+        
         HomeGamesTableViewCell *cell = (HomeGamesTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"HomeGameTVC" forIndexPath:indexPath];
         
         // Set text of labels
@@ -461,6 +211,7 @@
 
         return cell;
     }else{
+        // User already joined a group schedule for this home game.
         JoinedHomeGameTableViewCell *cell = (JoinedHomeGameTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"JoinedHomeGameTVC" forIndexPath:indexPath];
         
         // Set text of labels
@@ -474,16 +225,11 @@
 
     }
 
-    
-   // Present the most recent future game at the top of the page
-    
-    
-
 }
 
 -(void)disableCell:(UITableViewCell *)cell IfGameAlreadyOccured:(NSDate *)gametime
 {
-    if([gametime timeIntervalSinceNow] < 0){ //could save this calculation when calculate scroll row to save sometime
+    if([gametime timeIntervalSinceNow] < 0){ //could save this calculation when calculate scroll row to save some time
         cell.userInteractionEnabled = NO;
         //cell.joinButton.userInteractionEnabled = NO;
         //cell.createButton.userInteractionEnabled = NO;
@@ -549,6 +295,45 @@
     }
     [self presentViewController:alert animated:YES completion:nil];
 }
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    
+    HomeGame *homeGame = self.homeGames[self.selectedIndexPathRow];
+
+    if([[segue destinationViewController] isKindOfClass:[JoinScheduleTableViewController class]]){
+        JoinScheduleTableViewController *jstvc = [segue destinationViewController];
+        
+        jstvc.navigationItem.title = homeGame.opponentName;
+        jstvc.homeGame = homeGame;
+        
+    }
+
+    if([[segue destinationViewController] isKindOfClass:[UINavigationController class]]){
+        UINavigationController *nc = [segue destinationViewController];
+        if([nc.childViewControllers[0] isKindOfClass:[CreateScheduleTableViewController class]]){
+            CreateScheduleTableViewController *cstvc = nc.childViewControllers[0];
+            cstvc.homeGame = homeGame;
+            cstvc.gameTime = homeGame.gameTime;
+        }
+    }
+    
+    
+    //Segue not called when hit back button. Figure out way to keep self.homeGames consistent when updating homeGame data from Parse
+    /*
+    if([[segue destinationViewController] isKindOfClass:[MySchedulesTableViewController class]]){
+        MySchedulesTableViewController *jstvc = [segue destinationViewController];
+        self.homeGames = nil;
+        NSArray *array = jstvc.homeGames;
+    }
+     */
+    
+}
+
 
 -(void)joinSchedule
 {
@@ -558,11 +343,12 @@
 -(void)createSchedule
 {
     [self performSegueWithIdentifier:@"Create" sender:self]; //change string to constant and sender to button
-
+    
     
 }
+
 /*!
- * Either the create or join schedule button was pressed. 
+ * Either the create or join schedule button was pressed.
  * Save the indexPath.row of the cell that was pressed in self.selectedIndexPathRow.
  * Will determine if user pressed "Create" or "Join" in prepareForSegue
  */
@@ -577,44 +363,6 @@
 
 -(IBAction)cancelCreateSchedule:(UIStoryboardSegue *)segue
 {
-    
-}
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    
-    NSUInteger homeGameIndex = self.selectedIndexPathRow;
-    HomeGame *homeGame = self.homeGames[self.selectedIndexPathRow];
-
-    if([[segue destinationViewController] isKindOfClass:[JoinScheduleTableViewController class]]){
-        JoinScheduleTableViewController *jstvc = [segue destinationViewController];
-        
-        
-            jstvc.navigationItem.title = homeGame.opponentName;
-            jstvc.homeGameIndex = homeGameIndex;
-        
-    }
-
-    if([[segue destinationViewController] isKindOfClass:[UINavigationController class]]){
-        UINavigationController *nc = [segue destinationViewController];
-        CreateScheduleTableViewController *cstvc = nc.childViewControllers[0];
-        cstvc.homeGameIndex = homeGameIndex;
-        cstvc.gameTime = homeGame.gameTime;
-    }
-    
-    
-    //Segue not called when hit back button. Figure out way to keep self.homeGames consistent when updating homeGame data from Parse
-    /*
-    if([[segue destinationViewController] isKindOfClass:[MySchedulesTableViewController class]]){
-        MySchedulesTableViewController *jstvc = [segue destinationViewController];
-        self.homeGames = nil;
-        NSArray *array = jstvc.homeGames;
-    }
-     */
     
 }
 
