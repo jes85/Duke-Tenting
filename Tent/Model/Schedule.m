@@ -125,7 +125,7 @@
         NSArray *array = [self availableAndAssignedPersonsForOverallInterval:i];
         NSMutableArray *availablePersons = array[0];
         NSMutableArray *assignedPersons = array[1];
-        Interval *interval = [[Interval alloc]initWithStartDate:currentStartInterval endDate:self.endDate section:sectionNumber availablePersons:availablePersons assignedPersons:assignedPersons];
+        Interval *interval = [[Interval alloc]initWithStartDate:currentStartInterval endDate:currentEndInterval section:sectionNumber availablePersons:availablePersons assignedPersons:assignedPersons];
         [intervalDataByOverallRow addObject:interval];
         [sectionIntervals addObject:interval];
         

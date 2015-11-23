@@ -25,11 +25,10 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    /*
-        if user is admin
-            display edit button in top right
-     
-     */
+    if(self.isCreator){
+        // display edit button in top right
+        self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    }
 
 }
 
@@ -44,6 +43,9 @@
         if PFUser is admin
             then return an extra cell (admin tools). or have this be brought up by a diff bar button item
      */
+    if(self.isCreator){
+        return self.settings.count + 1;
+    }
 
     return self.settings.count;
 }
@@ -128,14 +130,20 @@
         }
     }
     
-    //TODO: how to make sure all 3 happen without waiting unnecessary amount of time?
-    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+    NSArray *objectsToSave = @[[PFUser currentUser], parseSchedule];
+    [PFObject saveAllInBackground:objectsToSave block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             [self performSegueWithIdentifier:@"scheduleDeleted" sender:self];
         }
     }];
+    [personToDelete deleteInBackground];
+
+    
+    /*
+    [[PFUser currentUser] saveInBackground];
     [parseSchedule saveInBackground];
     [personToDelete deleteInBackground];
+     */
     
 }
 

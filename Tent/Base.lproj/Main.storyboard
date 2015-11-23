@@ -1699,7 +1699,7 @@
                                             <outlet property="settingValueLabel" destination="OsX-Aw-tGX" id="VPx-7r-I87"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="YP2-Qr-RQa" style="IBUITableViewCellStyleDefault" id="USY-yM-1K5">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="adminCell" textLabel="YP2-Qr-RQa" style="IBUITableViewCellStyleDefault" id="USY-yM-1K5">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="USY-yM-1K5" id="ynN-nF-Ftn">
