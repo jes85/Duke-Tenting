@@ -135,7 +135,7 @@
         
         // Display person's name
         Person *person = self.availablePersonsArray[indexPath.row];
-        cell.textLabel.text = [person.user objectForKey:kUserPropertyFullName];
+        cell.textLabel.text = person.user ? [person.user objectForKey:kUserPropertyFullName] : person.offlineName;
     }
     
     
@@ -150,7 +150,7 @@
         
         // Display person's name
         Person *person = self.availablePersonsArray[indexPath.row];
-        cell.textLabel.text = [person.user objectForKey:kUserPropertyFullName];
+        cell.textLabel.text = person.user ? [person.user objectForKey:kUserPropertyFullName] : person.offlineName;
     }
     return cell;
 }

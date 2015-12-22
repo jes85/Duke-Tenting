@@ -253,6 +253,9 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
                 }
             }];
             */
+            
+            
+            //TODO: What is this??
             PFUser *user = self.currentPerson.user;
             //update Intervals offline
             for(int i = 0; i<[self.currentPerson.assignmentsArray count]; i++){

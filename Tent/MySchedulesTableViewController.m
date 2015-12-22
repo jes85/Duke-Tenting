@@ -331,9 +331,16 @@
     for(int i = 0; i < personsInGroup.count; i++){
         PFObject *parsePerson = (PFObject *)personsInGroup[i];
         //PFUser *user = parsePerson[kPersonPropertyAssociatedUser];
-        PFObject *user = parsePerson[kPersonPropertyAssociatedUser];
+        PFObject *user = nil;
+        NSString *offlineName = parsePerson[kPersonPropertyOfflineName];
+        if(![parsePerson objectForKey: kPersonPropertyAssociatedUser]){
+            offlineName = parsePerson[kPersonPropertyOfflineName];
+        }else{
+            user = parsePerson[kPersonPropertyAssociatedUser];
+        }
         NSMutableArray *assignmentsArray = parsePerson[kPersonPropertyAssignmentsArray]; //TODO: do i need mutable copy?
         Person *person = [[Person alloc]initWithUser:user assignmentsArray:assignmentsArray scheduleIndex:i  parseObjectID:parsePerson.objectId];
+        person.offlineName = offlineName;
         [personsArray addObject:person];
     }
     

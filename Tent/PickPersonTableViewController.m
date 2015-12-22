@@ -50,7 +50,12 @@
     
     // Configure the cell...
     Person *person = self.schedule.personsArray[indexPath.row];
-    NSString *personName = [person.user objectForKey:kUserPropertyFullName];
+    NSString *personName;
+    if(person.user) {
+        personName = [person.user objectForKey:kUserPropertyFullName];
+    }else{
+        personName = person.offlineName;
+    }
     
     cell.textLabel.text = personName;
     
@@ -91,13 +96,15 @@
 -(IBAction)addPerson:(UIStoryboardSegue *)segue
 {
     Person *newPerson = [[Person alloc]initWithUser:nil  numIntervals:self.schedule.numIntervals];
-    newPerson.offlineName = self.addPersonName; //TODO: need way to save name
+    newPerson.offlineName = self.addPersonName; //TODO: make sure to deal with this case when displaying names and saving personArrays
     
     // Update person and schedule to parse
     PFObject *personObject = [PFObject objectWithClassName:kPersonClassName];
     personObject[kPersonPropertyAssignmentsArray] = newPerson.assignmentsArray;
-    personObject[kPersonPropertyAssociatedUser] = [NSNull null];
+    //personObject[kPersonPropertyAssociatedUser] = [NSNull null]; //set as undefined
     personObject[kPersonPropertyIndex] = [NSNumber numberWithInteger: self.schedule.personsArray.count]; //TODO: change this to only update person index in beforesave in parse cloud code
+    personObject[kPersonPropertyOfflineName] = newPerson.offlineName;
+    
     [personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         
         //query for schedule and update
@@ -166,7 +173,7 @@
                     mstvc.currentPerson = person; //does it violate MVC for them to be connected like this?
                     mstvc.schedule = self.schedule;
                     
-                    mstvc.navigationItem.title = [person.user objectForKey:kUserPropertyFullName];
+                    mstvc.navigationItem.title = person.user? [person.user objectForKey:kUserPropertyFullName] : person.offlineName;
                 }
             
         }
