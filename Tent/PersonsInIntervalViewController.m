@@ -30,6 +30,10 @@
     NSLog(self.dateTimeLabel.text);
 }
 
+
+/*
+ only valid if schedule has started and is not over
+ */
 +(NSInteger)findCurrentTimeIntervalIndexForSchedule:(Schedule *)schedule
 {
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -51,12 +55,21 @@
 
 -(void)updatePersonsArraysForCurrentTimeInterval
 {
-    NSInteger index = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
-    if(index < 0) {
-        // display fact that schedule has not started yet
-        self.dateTimeLabel.text = @"Schedule has not started yet";
+    //TODO: Maybe have schedule status be a property
+    // Schedule Has Not Started
+    if([self.schedule.startDate timeIntervalSinceNow] > 0 ){
+        self.dateTimeLabel.text = @"Schedule has not started yet.";
         return;
+
     }
+    // Schedule is Over
+    if([self.schedule.endDate timeIntervalSinceNow] < 0 ){
+        self.dateTimeLabel.text = @"Schedule is over.";
+        return;
+
+    }
+    // Schedule is In Progress
+    NSInteger index = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
     Interval *interval = self.schedule.intervalDataByOverallRow[index];
     self.availablePersonsArray = interval.availablePersons;
     self.assignedPersonsArray = interval.assignedPersons;

@@ -570,7 +570,7 @@
         <!--Schedule-->
         <scene sceneID="rzp-UV-wcO">
             <objects>
-                <viewController id="sxk-Cx-Z7T" customClass="GenerateScheduleViewController" sceneMemberID="viewController">
+                <viewController id="sxk-Cx-Z7T" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sYo-yg-fem"/>
                         <viewControllerLayoutGuide type="bottom" id="1lN-sH-hp8"/>
@@ -620,7 +620,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="60b-63-InC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4035" y="55"/>
+            <point key="canvasLocation" x="3339" y="313"/>
         </scene>
         <!--Home-->
         <scene sceneID="Qny-hy-u7l">
@@ -703,9 +703,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="sxk-Cx-Z7T" kind="push" identifier="Home To Generate Schedule" id="18t-nK-WcH"/>
-                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -1713,6 +1710,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="sxk-Cx-Z7T" kind="push" id="tW2-dM-Y2w"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
