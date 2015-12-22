@@ -506,9 +506,6 @@
     
     //TODO: similar to join schedule todo's
     Schedule *newSchedule = self.scheduleToAdd;
-    [self addSchedule:newSchedule];
-    
-    [self.tableView reloadData];
     
     PFObject *scheduleObject = [PFObject objectWithClassName:kGroupScheduleClassName];
     scheduleObject[kGroupSchedulePropertyGroupName ] = newSchedule.groupName;
@@ -546,14 +543,26 @@
     //TODO: do i need to do all of these separately or can I do them at the same time?check when objectID gets initialized
     [personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if(!error){
-            NSArray *personsArray = @[personObject];
-            scheduleObject[kGroupSchedulePropertyPersonsInGroup] = personsArray;
+            
+            person.assignmentsArray = personObject[kPersonPropertyAssignmentsArray];
+            person.parseObjectID = personObject.objectId;
+            person.scheduleIndex = 0;
+            NSMutableArray *personsArray = [[NSMutableArray alloc]initWithArray:@[person]];
+            newSchedule.personsArray = personsArray;
+            NSArray *parsePersonsArray = @[personObject];
+            scheduleObject[kGroupSchedulePropertyPersonsInGroup] = parsePersonsArray;
             
             [scheduleObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if(!error){
                     PFRelation *userRelation = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
                     [userRelation addObject:scheduleObject];
-                    [[PFUser currentUser] saveInBackground];
+                    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        if(!error){
+                            [self addSchedule:newSchedule];
+                            [self.tableView reloadData];
+
+                        }
+                    }];
                 }
             }];
         }

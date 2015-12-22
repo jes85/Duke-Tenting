@@ -42,6 +42,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if([[[PFUser currentUser] objectId] isEqual: self.schedule.createdBy.objectId]){
+        self.isCreator = true;
+    }else{
+        self.isCreator = false;
+    }
+
     //[self drawBorders];
     [self updateGameLabels];
     //[self updatePersonsForSchedule];
@@ -60,7 +67,7 @@
     self.addPersonButton = addPersonButton;
     
     
-    self.navigationItem.rightBarButtonItems = @[editButton, settingsButton];
+    self.navigationItem.rightBarButtonItems = @[settingsButton, editButton];
 }
 -(void)addPersonBarButtonItemPressed
 {
@@ -119,9 +126,9 @@
 
 - (UIViewController *) viewControllerForSegmentIndex: (NSInteger)index
 {
-    if([self.viewControllers[index] isKindOfClass:[MyScheduleTableViewController class]] && (self.schedule.personsArray)){ //TODO: add condition that persons array is > 1 count
+    if([self.viewControllers[index] isKindOfClass:[MyScheduleTableViewController class]] && (self.schedule.personsArray.count > 0)){
         
-        //this gets called every time segment index is switched. should really only happen once, or once every time there's an update to current user's schedule
+        //TODO: this gets called every time segment index is switched. should really only happen once, or once every time there's an update to current user's schedule
         MyScheduleTableViewController *mstvc = self.viewControllers[index];
         mstvc.currentPerson = self.schedule.personsArray[self.schedule.currentUserPersonIndex];
         mstvc.schedule = self.schedule;
@@ -170,7 +177,7 @@
     if([newVC isKindOfClass:[MyScheduleTableViewController class]]){
         MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)newVC;
         mstvc.schedule = self.schedule;
-        self.navigationItem.rightBarButtonItems = @[self.editButton, self.settingsButton];
+        self.navigationItem.rightBarButtonItems = @[self.settingsButton, self.editButton];
         
     }
     
@@ -189,8 +196,11 @@
         PickPersonTableViewController *pptvc = (PickPersonTableViewController *)newVC;
         pptvc.schedule = self.schedule;
         
-        //TODO: check if creator for addPersonB
-        self.navigationItem.rightBarButtonItems = @[self.addPersonButton, self.settingsButton];
+        if(self.isCreator){
+            self.navigationItem.rightBarButtonItems = @[self.settingsButton, self.addPersonButton];
+        }else{
+            self.navigationItem.rightBarButtonItems = @[self.settingsButton];
+        }
     }
     
     // Time Slots
@@ -405,12 +415,8 @@
              ScheduleSettingsViewController *ssvc = (ScheduleSettingsViewController *)nc.childViewControllers[0];
              ssvc.settings = [self createSettingsDictionary];
              ssvc.schedule = self.schedule;
-             if([[[PFUser currentUser] objectId] isEqual: self.schedule.createdBy.objectId]){
-                 ssvc.isCreator = true;
-             }else{
-                 ssvc.isCreator = false;
-             }
-
+             ssvc.isCreator = self.isCreator;
+             
          }
     }
  }
