@@ -36,26 +36,26 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Add Person" id="WGT-NS-OYX">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="YlY-8b-Y89">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="x1E-xD-5en">
                             <connections>
-                                <segue destination="dcN-nk-ly1" kind="unwind" unwindAction="cancelAddPerson:" id="beH-eH-ch5"/>
+                                <segue destination="dcN-nk-ly1" kind="unwind" unwindAction="cancelAddPerson:" id="tW9-y4-qlr"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="AvP-kg-koS">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="L7G-oB-pdb">
                             <connections>
-                                <segue destination="dcN-nk-ly1" kind="unwind" unwindAction="addPerson:" id="dtQ-JY-1o5"/>
+                                <segue destination="dcN-nk-ly1" kind="unwind" unwindAction="addPerson:" id="nO9-Z3-9Qz"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="doneButton" destination="AvP-kg-koS" id="huX-Ni-ZLz"/>
+                        <outlet property="doneButton" destination="L7G-oB-pdb" id="4kc-fG-4cy"/>
                         <outlet property="enterNameTextField" destination="wo6-Ni-xdg" id="Jae-Av-fKw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nm2-5a-Gb4" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="dcN-nk-ly1" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2448" y="-879"/>
+            <point key="canvasLocation" x="2980" y="-879"/>
         </scene>
         <!--People List-->
         <scene sceneID="rFr-vt-8ge">
@@ -126,7 +126,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WyZ-wb-8xS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4010" y="-668"/>
+            <point key="canvasLocation" x="4542" y="-668"/>
         </scene>
         <!--Available/Assigned People-->
         <scene sceneID="0jk-sX-spL">
@@ -155,7 +155,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0BJ-Lc-Ndp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4556" y="-668"/>
+            <point key="canvasLocation" x="5088" y="-668"/>
         </scene>
         <!--Persons In Interval View Controller-->
         <scene sceneID="I7y-Pb-FEp">
@@ -561,6 +561,7 @@
                         <outlet property="labelOpponent" destination="Jur-dS-06h" id="WWv-O6-5r4"/>
                         <outlet property="segmentedControl" destination="wp4-dF-pJV" id="OY5-bo-nKV"/>
                         <outlet property="viewGameInfo" destination="Gwk-ft-lGs" id="wNr-4H-lJe"/>
+                        <segue destination="X8h-XA-1MN" kind="modal" identifier="AddPersonWithoutAppSegue" id="HCm-Qh-xDW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lJa-VH-6Zu" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -716,7 +717,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KxG-xT-gCZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3510" y="-660"/>
+            <point key="canvasLocation" x="4042" y="-660"/>
         </scene>
         <!--My Schedules-->
         <scene sceneID="Iar-1d-Bgh">
@@ -873,24 +874,6 @@
                 <exit id="fvd-5w-IYA" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="480" y="-1218"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="0ab-UE-Kde">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="CKu-ZP-UVA" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="MeW-U9-5JB">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="wPc-lp-NMA" kind="relationship" relationship="rootViewController" id="Y3m-cp-N7H"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="XDQ-X9-pTR" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2014" y="-879"/>
         </scene>
         <!--Default Settings View Controller-->
         <scene sceneID="dbr-aI-ytH">
@@ -1908,7 +1891,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l0w-3K-2zf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2560" y="-1434"/>
+            <point key="canvasLocation" x="3092" y="-1434"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Iwq-Rj-r6Q">
@@ -2046,6 +2029,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lIi-2X-1Gj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2388" y="329"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="kxH-Y1-NQ6">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="X8h-XA-1MN" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="uKa-q3-O2U">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="wPc-lp-NMA" kind="relationship" relationship="rootViewController" id="wx9-hf-8F5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="E1p-d9-h9A" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2448" y="-879"/>
         </scene>
     </scenes>
     <resources>

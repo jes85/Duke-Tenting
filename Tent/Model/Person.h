@@ -16,7 +16,7 @@
 @property (nonatomic) PFObject *user;
 @property (nonatomic) NSUInteger scheduleIndex;
 @property (nonatomic) NSString *parseObjectID;
-
+@property (nonatomic) NSString *offlineName;
 
 -(instancetype)initWithUser:(PFObject *)user assignmentsArray:(NSMutableArray *)assignments scheduleIndex:(NSUInteger)index parseObjectID:(NSString *)parseObjectID;
 -(instancetype)initWithUser:(PFObject *)user numIntervals: (NSUInteger)numIntervals;

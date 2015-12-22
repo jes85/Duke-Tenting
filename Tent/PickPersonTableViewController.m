@@ -87,67 +87,49 @@
 
 #pragma mark - Add Person
 //TODO: implement add offline person
-/*
+
 -(IBAction)addPerson:(UIStoryboardSegue *)segue
 {
-    // Update person and schedule on current iphone (offline)
-    Person *newPerson = [[Person alloc]initWithName:self.addPersonName index:[self.schedule.personsArray count] numIntervals:self.schedule.numHourIntervals scheduleName:self.schedule.name];
+    Person *newPerson = [[Person alloc]initWithUser:nil  numIntervals:self.schedule.numIntervals];
+    newPerson.offlineName = self.addPersonName; //TODO: need way to save name
     
-    [self.schedule.personsArray addObject:newPerson];
-    
-    self.addPersonName = nil;
-    
-    [self.schedule.availabilitiesSchedule addObject:newPerson.availabilitiesArray];
-    [self.schedule.assignmentsSchedule addObject:newPerson.assignmentsArray];
-    self.schedule.numPeople++;
-    [self.tableView reloadData];
-    
-    // Update person and schedule online
+    // Update person and schedule to parse
     PFObject *personObject = [PFObject objectWithClassName:kPersonClassName];
-    personObject[kPersonPropertyName] = newPerson.name;
-    personObject[kPersonPropertyIndex] = [NSNumber numberWithInteger:newPerson.indexOfPerson];
-    personObject[kPersonPropertyAvailabilitiesArray] = newPerson.availabilitiesArray;
     personObject[kPersonPropertyAssignmentsArray] = newPerson.assignmentsArray;
-    
-    personObject[@"scheduleName"] = self.schedule.name;
+    personObject[kPersonPropertyAssociatedUser] = [NSNull null];
+    personObject[kPersonPropertyIndex] = [NSNumber numberWithInteger: self.schedule.personsArray.count]; //TODO: change this to only update person index in beforesave in parse cloud code
     [personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         
-    //query for schedule and update
-    PFQuery *query = [PFQuery queryWithClassName:kScheduleClassName];
-    
-    [query whereKey:kPersonPropertyName equalTo:self.schedule.name];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *parseSchedule, NSError *error) {
-        if(!parseSchedule){
-            NSLog(@"Error retrieving schedule from Parse");
-        }else {
-            NSLog(@"Find succeeded to add new person to schedule's 2d arrays");
-            NSMutableArray *availabilitiesSchedule =  parseSchedule[kSchedulePropertyAvailabilitiesSchedule];
-            [availabilitiesSchedule addObject:newPerson.availabilitiesArray];
-          
-            parseSchedule[kSchedulePropertyAvailabilitiesSchedule]= availabilitiesSchedule;
-           
-            
-            NSMutableArray *assignmentsSchedule = parseSchedule[kSchedulePropertyAssignmentsSchedule];
-            [assignmentsSchedule addObject:newPerson.assignmentsArray];
-            parseSchedule[kSchedulePropertyAssignmentsSchedule]= assignmentsSchedule;
-            
-            
-            PFRelation *relation = [parseSchedule relationForKey:kSchedulePropertyPersonsList];
-            [relation addObject:personObject];
-            
-            [parseSchedule saveInBackground];
-           
-            
-        }
+        //query for schedule and update
+        PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
+        [query getObjectInBackgroundWithId:self.schedule.parseObjectID block:^(PFObject *parseSchedule, NSError *error) {
+            if(!error){
+                NSLog(@"Saved new person object to parse");
+                
+                NSMutableArray *personsArray = (NSMutableArray *)parseSchedule[kGroupSchedulePropertyPersonsInGroup];
+                [personsArray addObject:personObject];
+                parseSchedule[kGroupSchedulePropertyPersonsInGroup] = (NSArray *)personsArray;
+                
+                [parseSchedule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    if(!error){
+                        NSLog(@"Saved schedule to join to parse");
+                        // Update person and schedule on current iphone (offline)
+
+                        [self.schedule.personsArray addObject:newPerson];
+                        self.addPersonName = nil;
+                        [self.tableView reloadData];
+                    }
+                }];
+
+            }
+        }];
     }];
-    }];
-    
-   
+
     
     
 
 }
- */
+ 
 -(IBAction)cancelAddPerson:(UIStoryboardSegue *)segue
 {
     

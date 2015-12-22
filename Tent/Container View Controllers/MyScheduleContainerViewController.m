@@ -71,8 +71,7 @@
 }
 -(void)addPersonBarButtonItemPressed
 {
-    //[self performSegueWithIdentifier:@"AddPersonWithoutAppSegue" sender:self];
-
+    [self performSegueWithIdentifier:@"AddPersonWithoutAppSegue" sender:self];
     
 }
 -(void)editBarButtonItemPressed

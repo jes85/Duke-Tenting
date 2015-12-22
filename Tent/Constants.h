@@ -17,7 +17,7 @@
 #define kPersonPropertyAssignmentsArray                 @"assignmentsArray"
 #define kPersonPropertyAssociatedUser                   @"associatedUser"
 #define kPersonPropertyIndex                            @"index"
-
+#define kPersonPropertyOfflineName                      @"offlineName"
 
 // GroupSchedule ParseObject
 #define kGroupScheduleClassName                 @"GroupSchedule"
