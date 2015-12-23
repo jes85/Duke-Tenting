@@ -27,6 +27,10 @@
 
 @implementation MyScheduleTableViewController
 
+
+//TODO: Add an Edit button for creator to remove members from schedule
+
+
 -(UIBarButtonItem *)cancelButton
 {
     if(!_cancelButton) _cancelButton = [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelButtonPressed)];

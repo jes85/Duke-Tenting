@@ -62,11 +62,38 @@
     return cell;
 }
 
+#pragma mark - UITableViewDelegate
+- (NSString *)tableView:(UITableView *)tableView
+titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"Remove";
+}
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    Person *person = self.schedule.personsArray[indexPath.row];
+    if ([person.user.objectId isEqual: [[PFUser currentUser] objectId]]) {
+        return UITableViewCellEditingStyleNone;
+    } else {
+        return UITableViewCellEditingStyleDelete;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    // If row is deleted, remove it from the list.
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //TODO: Remove person on Parse
+        Person *person = self.schedule.personsArray[indexPath.row];
+        //Update UI
+        [self.schedule.personsArray removeObjectAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
 
 #pragma mark - Load data
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
     
 }
 -(void)viewDidAppear:(BOOL)animated
@@ -87,8 +114,23 @@
     */
 }
 
-
-
+-(void)editBarButtonItemPressed
+{
+    if([self.schedule.createdBy.objectId isEqual:[[PFUser currentUser] objectId]]
+       ){
+        [self setEditing:YES animated:YES];
+        NSArray *test = self.navigationItem.rightBarButtonItems;
+        NSMutableArray *rbbitems =  [[NSMutableArray alloc]initWithArray: self.navigationItem.rightBarButtonItems];
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneEditingButtonPressed)];
+        rbbitems[0] = doneButton;
+        self.navigationItem.rightBarButtonItems = rbbitems;
+    }
+}
+-(void)doneEditingButtonPressed
+{
+    [self setEditing:NO animated:YES];
+    
+}
 
 #pragma mark - Add Person
 //TODO: implement add offline person

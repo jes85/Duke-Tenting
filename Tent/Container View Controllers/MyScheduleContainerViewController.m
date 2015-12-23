@@ -29,6 +29,7 @@
 
 
 @property (nonatomic) UIBarButtonItem *editButton;
+@property (nonatomic) UIBarButtonItem *editPeopleButton;
 @property (nonatomic) UIBarButtonItem *settingsButton;
 @property (nonatomic) UIBarButtonItem *addPersonButton;
 
@@ -59,6 +60,8 @@
     
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editBarButtonItemPressed)];
     self.editButton = editButton;
+    UIBarButtonItem *editPeopleButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self.viewControllers[2] action:@selector(editBarButtonItemPressed)];
+    self.editPeopleButton = editPeopleButton;
     UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(settingsBarButtonItemPressed)];
     settingsButton.image = [UIImage imageNamed:@"Icon_Gear"];
     self.settingsButton = settingsButton;
@@ -76,7 +79,7 @@
 }
 -(void)editBarButtonItemPressed
 {
-
+    
 }
 -(void)settingsBarButtonItemPressed
 {
@@ -196,7 +199,7 @@
         pptvc.schedule = self.schedule;
         
         if(self.isCreator){
-            self.navigationItem.rightBarButtonItems = @[self.settingsButton, self.addPersonButton];
+            self.navigationItem.rightBarButtonItems = @[self.settingsButton, self.addPersonButton, self.editPeopleButton];
         }else{
             self.navigationItem.rightBarButtonItems = @[self.settingsButton];
         }
