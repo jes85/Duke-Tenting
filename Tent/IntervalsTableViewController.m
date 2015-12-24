@@ -23,7 +23,7 @@
 {
     [super viewWillAppear:animated];
     NSInteger overallRow = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
-    if(index < 0) return; //schedule hasn't started
+    if(overallRow < 0) return; //schedule hasn't started
     NSIndexPath *indexPath = [Constants indexPathForOverallRow:overallRow tableView:self.tableView];
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }

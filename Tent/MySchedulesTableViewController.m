@@ -340,6 +340,7 @@
         }
         NSMutableArray *assignmentsArray = parsePerson[kPersonPropertyAssignmentsArray]; //TODO: do i need mutable copy?
         Person *person = [[Person alloc]initWithUser:user assignmentsArray:assignmentsArray scheduleIndex:i  parseObjectID:parsePerson.objectId];
+        //OR, scheduleIndex = parseObject[scheduleIndexProperty]; forgot why I decided to store this property on Parse. might not be necessary
         person.offlineName = offlineName;
         [personsArray addObject:person];
     }
@@ -468,7 +469,8 @@
             PFObject *personObject = [PFObject objectWithClassName:kPersonClassName];
             personObject[kPersonPropertyAssignmentsArray] = newPerson.assignmentsArray;
             personObject[kPersonPropertyAssociatedUser] = newPerson.user;
-            
+            personObject[kPersonPropertyIndex] = [NSNumber numberWithInteger: self.scheduleToJoin.personsArray.count];
+
     
             [personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if(!error){
