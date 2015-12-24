@@ -42,8 +42,7 @@
     self.tableView.allowsSelection = NO;
     self.navigationItem.leftBarButtonItem = nil;
     if([self.schedule.createdBy.objectId isEqualToString: [[PFUser currentUser] objectId]] | [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]]){//edit to check for user auth (it's my schedule & assignments haven't been made yet OR I'm an admin. if admin, show alert if assignments have already been made)
-        self.navigationItem.rightBarButtonItem = self.editButtonItem;
-        
+        [self changeNavBarToShowEditButton];
     }
 }
 #pragma mark - Accessor Methods
@@ -161,13 +160,13 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     //cell.textLabel.text = interval;
     
     
-    if([self.updatedAvailabilitiesArray[indexPath.row] isEqual:@2]){
+    if([self.updatedAvailabilitiesArray[index] isEqual:@2]){
         cell.assignedOrAvailableLabel.text = @"(Assigned)";
         cell.iconImageView.image =[UIImage imageNamed:@"GreenCircle"];
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:0 green:.3 blue:0 alpha:1.0];
     }
     
-    else if([self.updatedAvailabilitiesArray[indexPath.row] isEqual:@1]) { //self.updatedAvailabilitiesArray instead of currentPerson.availabilitiesArray because the screen should show the updates as the user is making them. If they then hit cancel, those updates are not saved. UpdatedAvailabilitiesArray is reinitialized to currentPerson.availabilitiesArray every time the view loads
+    else if([self.updatedAvailabilitiesArray[index] isEqual:@1]) { //self.updatedAvailabilitiesArray instead of currentPerson.availabilitiesArray because the screen should show the updates as the user is making them. If they then hit cancel, those updates are not saved. UpdatedAvailabilitiesArray is reinitialized to currentPerson.availabilitiesArray every time the view loads
         cell.assignedOrAvailableLabel.text = @"(Available)";
         cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
@@ -199,86 +198,10 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     // Pass the selected object to the new view controller.
     
     
-    if(sender!=self.editButtonItem) return; //if user presses cancel button, don't do anything
-    else{ //user pressed doneButton
-        
-        //if current person's availabilities array was changed, update Person and Schedule on current iPhone and on Parse
-        if(![self.currentPerson.assignmentsArray isEqual:self.updatedAvailabilitiesArray]){
-            
-            //update Person's availabilities array on local iPhone
-            self.currentPerson.assignmentsArray = self.updatedAvailabilitiesArray;
-            NSMutableArray *personsList = self.schedule.personsArray;
-            [personsList removeObjectAtIndex:self.currentPerson.scheduleIndex];
-            [personsList insertObject:self.currentPerson atIndex:self.currentPerson.scheduleIndex];
-            self.schedule.personsArray = personsList;
-            /*
-             can i just do this? pointers or values
-             Person *currentPerson = personsList[self.currentPerson.scheduleIndex];
-             currentPerson = self.currentPerson;
-             */
-            
-            //TODO: figure how way to keep schedule object data consistent across multiple view controllers
-            //update schedule on local iPhone
-            PickPersonTableViewController *pptvc = [segue destinationViewController];
-            pptvc.schedule = self.schedule;
-            
-            
-            
-            //Update Person on Parse
-            PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
-            [query getObjectInBackgroundWithId:self.currentPerson.parseObjectID block:^(PFObject *object, NSError *error) {
-                if(!object){
-                    NSLog(@"Find failed");
-                }else{
-                    //the find succeeded
-                    NSLog(@"Find succeeded");
-                    object[kPersonPropertyAssignmentsArray] = self.currentPerson.assignmentsArray;
-                    [object saveInBackground];
-                }
-            }];
-            
-            //update Schedule on Parse
-            
-            // I don't think I have to update schedule anymore since i restructured data in parse
-            /*
-            PFQuery *query2 = [PFQuery queryWithClassName:@"Schedule"];
-            [query2 whereKey:@"name" equalTo:self.currentPerson.scheduleName];
-            [query2 getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                if(!object){
-                    NSLog(@"Find failed");
-                }else{
-                    //the find succeeded
-                    NSLog(@"Find succeeded");
-                    NSMutableArray *array = object[@"availabilitiesSchedule"] ;
-                    array[self.currentPerson.scheduleIndex]= self.currentPerson.assignmentsArray;
-                    object[@"availabilitiesSchedule"] =array;
-                    
-                    [object saveInBackground];
-                }
-            }];
-            */
-            
-            
-            //TODO: What is this??
-            PFUser *user = self.currentPerson.user;
-            //update Intervals offline
-            for(int i = 0; i<[self.currentPerson.assignmentsArray count]; i++){
-                Interval *interval = (Interval *)self.schedule.intervalDataByOverallRow[i];
-                if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
-                    if(![interval.availablePersons containsObject:[user objectForKey:kUserPropertyFullName]]){
-                        [interval.availablePersons addObject: user.username];
-                    }
-                }
-                if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
-                    if(![interval.assignedPersons containsObject:user.username]){
-                        [interval.assignedPersons addObject:user.username];
-                    }
-                }
-            }
-        }
-        
-        
-    }
+    
+    //TODO: figure how way to keep schedule object data consistent across multiple view controllers
+    /*self.schedule may have changed. need to update all schedule objects on local iphone. maybe with delegate
+     */
 }
 
 
@@ -288,12 +211,14 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
     IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+    NSMutableDictionary *sectionData = [self.schedule.intervalDataBySection objectForKey:[NSNumber numberWithInteger:indexPath.section]];
     
+    NSUInteger index = [sectionData[@"intervalStartIndex"] integerValue] + indexPath.row;
     if([cell.assignedOrAvailableLabel.text isEqual:@""]){
         
         //Save data in updatedAvailabilities array (will save/ignore this in Done/Cancel button action later)
         
-        self.updatedAvailabilitiesArray[indexPath.row] = @1;
+        self.updatedAvailabilitiesArray[index] = @1;
         
         cell.assignedOrAvailableLabel.text = @"(Available)";
         cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
@@ -301,7 +226,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         
     }
     else {
-        self.updatedAvailabilitiesArray[indexPath.row] = @0;
+        self.updatedAvailabilitiesArray[index] = @0;
         
         cell.assignedOrAvailableLabel.text = @"";
         cell.iconImageView.image =[UIImage imageNamed:@"RedX"];
@@ -317,29 +242,123 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
     
     // overriding this method means we can attach custom functions to the button
+    // this is the default action method for self.editButtonItem
     [super setEditing:editing animated:animated];
     
     // attaching custom actions here
     if (editing) {
         // we're in edit mode
-        [self.navigationItem setLeftBarButtonItem:self.cancelButton animated:animated];
+        //[self.navigationItem setLeftBarButtonItem:self.cancelButton animated:animated];
         //self.tableView.allowsSelection = YES; //unnecessary because i set this in storyboard
         
     } else {
         // we're not in edit mode
-        [self.navigationItem setLeftBarButtonItem:nil animated:animated];
+        //[self.navigationItem setLeftBarButtonItem:nil animated:animated];
         //self.tableView.allowsSelection = NO;
 
         
     }
 }
+-(void)editButtonPressed
+{
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonPressed)];
+    self.navigationItem.rightBarButtonItem = doneButton;
+    
+    self.navigationItem.leftBarButtonItem = self.cancelButton;
+    [self setEditing:true animated:YES];
+}
+-(void)doneButtonPressed
+{
+    //do done button things
+    [self saveEdits];
+    [self changeNavBarToShowEditButton];
+    [self setEditing:false animated:YES];
+}
+-(void)saveEdits
+{
+    
+    //if current person's availabilities array was changed, update Person and Schedule on current iPhone and on Parse
+    if(![self.currentPerson.assignmentsArray isEqual:self.updatedAvailabilitiesArray]){
+        
+        //update Person's availabilities array on local iPhone
+        self.currentPerson.assignmentsArray = self.updatedAvailabilitiesArray;
+        NSMutableArray *personsList = self.schedule.personsArray;
+        [personsList removeObjectAtIndex:self.currentPerson.scheduleIndex];
+        [personsList insertObject:self.currentPerson atIndex:self.currentPerson.scheduleIndex];
+        self.schedule.personsArray = personsList;
+        /*
+         can i just do this? pointers or values
+         Person *currentPerson = personsList[self.currentPerson.scheduleIndex];
+         currentPerson = self.currentPerson;
+         */
+        
+        //Update Person on Parse
+        PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
+        [query getObjectInBackgroundWithId:self.currentPerson.parseObjectID block:^(PFObject *object, NSError *error) {
+            if(!object){
+                NSLog(@"Find failed");
+            }else{
+                //the find succeeded
+                NSLog(@"Find succeeded");
+                object[kPersonPropertyAssignmentsArray] = self.currentPerson.assignmentsArray;
+                [object saveInBackground];
+            }
+        }];
+        
+        //update Schedule on Parse
+        
+        // I don't think I have to update schedule anymore since i restructured data in parse
+        /*
+         PFQuery *query2 = [PFQuery queryWithClassName:@"Schedule"];
+         [query2 whereKey:@"name" equalTo:self.currentPerson.scheduleName];
+         [query2 getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+         if(!object){
+         NSLog(@"Find failed");
+         }else{
+         //the find succeeded
+         NSLog(@"Find succeeded");
+         NSMutableArray *array = object[@"availabilitiesSchedule"] ;
+         array[self.currentPerson.scheduleIndex]= self.currentPerson.assignmentsArray;
+         object[@"availabilitiesSchedule"] =array;
+         
+         [object saveInBackground];
+         }
+         }];
+         */
+        
+        
+        //update Intervals offline
+        for(int i = 0; i<[self.currentPerson.assignmentsArray count]; i++){
+            Interval *interval = (Interval *)self.schedule.intervalDataByOverallRow[i];
+            if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
+                if(![interval.availablePersons containsObject:self.currentPerson]){
+                    [interval.availablePersons addObject: self.currentPerson];
+                }
+            }
+            if([self.currentPerson.assignmentsArray[i] isEqual:@2]) {
+                if(![interval.assignedPersons containsObject:self.currentPerson]){
+                    [interval.assignedPersons addObject:self.currentPerson];
+                }
+            }
+        }
+    }
 
+    
+                     
+}
 -(void)cancelButtonPressed
 {
     //do cancel button things
     
-    //change nav bar
+    [self changeNavBarToShowEditButton];
     [self setEditing:false animated:YES];
+}
+-(void)changeNavBarToShowEditButton
+{
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButtonPressed)];
+    self.navigationItem.rightBarButtonItem = editButton;
+
+    self.navigationItem.leftBarButtonItem = nil;
 }
 
 @end

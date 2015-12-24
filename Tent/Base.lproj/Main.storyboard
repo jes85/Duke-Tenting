@@ -510,17 +510,29 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gwk-ft-lGs">
-                                <rect key="frame" x="0.0" y="538" width="320" height="30"/>
+                                <rect key="frame" x="0.0" y="518" width="320" height="50"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Countdown To Craziness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jur-dS-06h">
-                                        <rect key="frame" x="15" y="4" width="162" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Date" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7z0-O4-0jg">
+                                        <rect key="frame" x="185" y="15" width="120" height="21"/>
+                                        <fontDescription key="fontDescription" type="italicSystem" pointSize="10"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Date" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7z0-O4-0jg">
-                                        <rect key="frame" x="185" y="4" width="120" height="21"/>
-                                        <fontDescription key="fontDescription" type="italicSystem" pointSize="10"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Icon_Gear" translatesAutoresizingMaskIntoConstraints="NO" id="CEb-AS-PpM">
+                                        <rect key="frame" x="16" y="8" width="40" height="40"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Tv-G2-t3G">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                                        <state key="normal">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="vRs-Og-BJU" kind="modal" identifier="MyScheduleSettingsSegue" id="vO3-Ub-4pO"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Countdown To Craziness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jur-dS-06h">
+                                        <rect key="frame" x="86" y="15" width="162" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -528,7 +540,7 @@
                                 <color key="backgroundColor" red="0.84673648002588453" green="0.84870472842847799" blue="0.8787399334380952" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IbX-KH-RhN">
-                                <rect key="frame" x="0.0" y="108" width="320" height="430"/>
+                                <rect key="frame" x="0.0" y="108" width="320" height="410"/>
                                 <connections>
                                     <segue destination="6FI-Dv-9a1" kind="embed" id="qrs-Wf-ipQ"/>
                                 </connections>
@@ -537,8 +549,8 @@
                                 <rect key="frame" x="16" y="72" width="288" height="29"/>
                                 <segments>
                                     <segment title="Me"/>
-                                    <segment title="Current"/>
-                                    <segment title="Others"/>
+                                    <segment title="Now"/>
+                                    <segment title="Group"/>
                                     <segment title="Time Slots"/>
                                 </segments>
                                 <connections>
@@ -549,11 +561,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="HMu-Wi-huW">
-                        <barButtonItem key="rightBarButtonItem" image="Icon_Gear" id="a5p-uQ-8d4">
-                            <connections>
-                                <segue destination="vRs-Og-BJU" kind="modal" identifier="MyScheduleSettingsSegue" id="AoZ-TV-NlU"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="vgP-QZ-nZX"/>
                     </navigationItem>
                     <connections>
                         <outlet property="containerView" destination="IbX-KH-RhN" id="c4J-mI-8rh"/>
@@ -1628,7 +1636,7 @@
                         <viewControllerLayoutGuide type="bottom" id="gH8-xC-TeO"/>
                     </layoutGuides>
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="DdC-nI-ZRD">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="430"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="410"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>

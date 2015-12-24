@@ -12,7 +12,8 @@
 
 @interface MyScheduleTableViewController : UITableViewController
 
-@property (nonatomic, weak) Person *currentPerson;
+@property (nonatomic) Person *currentPerson;
 @property (nonatomic) Schedule *schedule;
 
+-(void)saveEdits;
 @end

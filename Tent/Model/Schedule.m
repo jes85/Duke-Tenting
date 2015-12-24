@@ -64,6 +64,7 @@
         self.createdBy = createdBy;
         self.assignmentsGenerated = assignmentsGenerated;
         self.parseObjectID = parseObjectID;
+        self.currentUserPersonIndex = [self findCurrentUserPersonIndex];
         [self calculateNumIntervals];
         [self createIntervalDataArrays];
     
@@ -71,6 +72,17 @@
     return self;
 }
 
+-(NSUInteger)findCurrentUserPersonIndex
+{
+    for(int i = 0; i<self.personsArray.count; i++){
+        Person *person = self.personsArray[i];
+        if([person.user.objectId isEqualToString:[[PFUser currentUser] objectId]]){
+            return i;
+        }
+    }
+    return -1; //helps catch errors: will throw a bug if it returns -1 because it will try to access an array index -1
+    
+}
 -(void)calculateNumIntervals
 {
     NSTimeInterval timeInterval = [self.endDate timeIntervalSinceDate:self.startDate];

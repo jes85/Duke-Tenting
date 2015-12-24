@@ -60,17 +60,17 @@
     
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editBarButtonItemPressed)];
     self.editButton = editButton;
-    UIBarButtonItem *editPeopleButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self.viewControllers[2] action:@selector(editBarButtonItemPressed)];
+    UIBarButtonItem *editPeopleButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editPeopleBarButtonItemPressed)];
     self.editPeopleButton = editPeopleButton;
-    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(settingsBarButtonItemPressed)];
-    settingsButton.image = [UIImage imageNamed:@"Icon_Gear"];
-    self.settingsButton = settingsButton;
+    //UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(settingsBarButtonItemPressed)];
+    //settingsButton.image = [UIImage imageNamed:@"Icon_Gear"];
+    //self.settingsButton = settingsButton;
     
-    UIBarButtonItem *addPersonButton = [[UIBarButtonItem alloc]initWithTitle:@"+" style:UIBarButtonItemStylePlain target:self action:@selector(addPersonBarButtonItemPressed)];
+    UIBarButtonItem *addPersonButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addPersonBarButtonItemPressed)];
     self.addPersonButton = addPersonButton;
     
     
-    self.navigationItem.rightBarButtonItems = @[settingsButton, editButton];
+    self.navigationItem.rightBarButtonItems = @[editButton];
 }
 -(void)addPersonBarButtonItemPressed
 {
@@ -79,11 +79,49 @@
 }
 -(void)editBarButtonItemPressed
 {
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditingMyScheduleButtonPressed)];
+    self.navigationItem.rightBarButtonItem = doneButton;
+     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelEditingMyScheduleButtonPressed)];
+    self.navigationItem.leftBarButtonItem = cancelButton;
+    MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)self.currentViewController;
+    [mstvc setEditing:true animated:YES];
     
+}
+-(void)doneEditingMyScheduleButtonPressed
+{
+    self.navigationItem.rightBarButtonItem = self.editButton;
+    self.navigationItem.leftBarButtonItem = nil;
+    MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)self.currentViewController;
+    [mstvc setEditing:false animated:YES];
+    [mstvc saveEdits];
+}
+-(void)cancelEditingMyScheduleButtonPressed
+{
+    self.navigationItem.rightBarButtonItem = self.editButton;
+    self.navigationItem.leftBarButtonItem = nil;
+    MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)self.currentViewController;
+    [mstvc setEditing:false animated:YES];
+
 }
 -(void)settingsBarButtonItemPressed
 {
     [self performSegueWithIdentifier:@"MyScheduleSettingsSegue" sender:self];
+}
+
+-(void)editPeopleBarButtonItemPressed
+{
+    [self.viewControllers[2] setEditing:YES animated:YES];
+    self.navigationItem.leftBarButtonItem = self.addPersonButton;
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneEditingPeopleButtonPressed)];
+    self.navigationItem.rightBarButtonItem = doneButton;
+    
+}
+-(void)doneEditingPeopleButtonPressed
+{
+    [self.viewControllers[2] setEditing:NO animated:YES];
+    self.navigationItem.rightBarButtonItem = self.editPeopleButton;
+    self.navigationItem.leftBarButtonItem = nil;
+    
 }
 -(void)drawBorders
 {
@@ -179,7 +217,9 @@
     if([newVC isKindOfClass:[MyScheduleTableViewController class]]){
         MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)newVC;
         mstvc.schedule = self.schedule;
-        self.navigationItem.rightBarButtonItems = @[self.settingsButton, self.editButton];
+        
+        
+        self.navigationItem.rightBarButtonItems = @[self.editButton];
         
     }
     
@@ -188,7 +228,7 @@
         PersonsInIntervalViewController *piivc = (PersonsInIntervalViewController *)newVC;
         piivc.schedule = self.schedule;
         piivc.displayCurrent = YES;
-        self.navigationItem.rightBarButtonItems = @[self.settingsButton];
+        self.navigationItem.rightBarButtonItems = @[];
         
         
     }
@@ -199,9 +239,9 @@
         pptvc.schedule = self.schedule;
         
         if(self.isCreator){
-            self.navigationItem.rightBarButtonItems = @[self.settingsButton, self.addPersonButton, self.editPeopleButton];
+            self.navigationItem.rightBarButtonItems = @[self.editPeopleButton];
         }else{
-            self.navigationItem.rightBarButtonItems = @[self.settingsButton];
+            self.navigationItem.rightBarButtonItems = @[];
         }
     }
     
@@ -209,7 +249,7 @@
     else if ([newVC isKindOfClass:[IntervalsTableViewController class]]){
         IntervalsTableViewController *itvc = (IntervalsTableViewController *)newVC;
         itvc.schedule = self.schedule;
-        self.navigationItem.rightBarButtonItems = @[self.settingsButton];
+        self.navigationItem.rightBarButtonItems = @[];
         
     }
 
@@ -235,7 +275,6 @@
     
     self.currentViewController = newVC;
 }
-
 
 
 

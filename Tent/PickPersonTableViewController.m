@@ -114,23 +114,7 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
     */
 }
 
--(void)editBarButtonItemPressed
-{
-    if([self.schedule.createdBy.objectId isEqual:[[PFUser currentUser] objectId]]
-       ){
-        [self setEditing:YES animated:YES];
-        NSArray *test = self.navigationItem.rightBarButtonItems;
-        NSMutableArray *rbbitems =  [[NSMutableArray alloc]initWithArray: self.navigationItem.rightBarButtonItems];
-        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneEditingButtonPressed)];
-        rbbitems[0] = doneButton;
-        self.navigationItem.rightBarButtonItems = rbbitems;
-    }
-}
--(void)doneEditingButtonPressed
-{
-    [self setEditing:NO animated:YES];
-    
-}
+
 
 #pragma mark - Add Person
 //TODO: implement add offline person
