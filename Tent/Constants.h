@@ -75,4 +75,8 @@
 +(NSString *)formatDateTime:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
 */
 
+
++(NSUInteger)overallRowForIndexPath:(NSIndexPath *)indexPath tableView:(UITableView *)tableView;
++(NSIndexPath *)indexPathForOverallRow:(NSUInteger)overallRow tableView:(UITableView *)tableView;
+
 @end

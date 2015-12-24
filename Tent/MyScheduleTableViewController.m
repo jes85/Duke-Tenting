@@ -14,6 +14,7 @@
 #import "IntervalTableViewCell.h"
 #import "Interval.h"
 #import "Constants.h"
+#import "PersonsInIntervalViewController.h"
 
 @interface MyScheduleTableViewController ()
 @property (weak, nonatomic) IBOutlet UINavigationItem *editButton;
@@ -44,6 +45,15 @@
     if([self.schedule.createdBy.objectId isEqualToString: [[PFUser currentUser] objectId]] | [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]]){//edit to check for user auth (it's my schedule & assignments haven't been made yet OR I'm an admin. if admin, show alert if assignments have already been made)
         [self changeNavBarToShowEditButton];
     }
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    NSInteger overallRow = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
+    if(index < 0) return; //schedule hasn't started
+    NSIndexPath *indexPath = [Constants indexPathForOverallRow:overallRow tableView:self.tableView];
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 #pragma mark - Accessor Methods
 
