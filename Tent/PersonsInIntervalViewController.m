@@ -26,11 +26,18 @@
     self.tableView.dataSource = self;
     if(self.displayCurrent == NO) {
         self.dateTimeLabel.text = self.dateTimeText;
+        [self.view addSubview:self.dateTimeLabel];
     }
     NSLog(self.dateTimeLabel.text);
 }
 
-
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if(self.displayCurrent == NO) {
+        self.dateTimeLabel.text = self.dateTimeText;
+    }
+}
 /*
  only valid if schedule has started and is not over
  */
@@ -83,6 +90,14 @@
     //TODO: maybe move this to another method
     if(self.displayCurrent==YES){
         [self updatePersonsArraysForCurrentTimeInterval];
+    }else{
+        NSString *test1 = self.dateTimeLabel.text;
+        NSString *test2 = self.dateTimeText;
+
+        self.dateTimeLabel.text = self.dateTimeText; //why doesn't this work in view did load?
+        NSString *test3 = self.dateTimeLabel.text;
+        NSString *test4 = self.dateTimeText;
+
     }
     // Return the number of sections.
 

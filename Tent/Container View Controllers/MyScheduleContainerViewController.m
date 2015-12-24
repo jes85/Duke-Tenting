@@ -17,6 +17,7 @@
 #import "PersonsInIntervalViewController.h"
 #import "MyScheduleTableViewController.h"
 #import "ScheduleSettingsViewController.h"
+#import "NowPersonsInIntervalViewController.h"
 
 @interface MyScheduleContainerViewController ()
 
@@ -224,8 +225,8 @@
     }
     
     // Current
-    else if ([newVC isKindOfClass:[PersonsInIntervalViewController class]]){
-        PersonsInIntervalViewController *piivc = (PersonsInIntervalViewController *)newVC;
+    else if ([newVC isKindOfClass:[NowPersonsInIntervalViewController class]]){
+        NowPersonsInIntervalViewController *piivc = (NowPersonsInIntervalViewController *)newVC;
         piivc.schedule = self.schedule;
         piivc.displayCurrent = YES;
         self.navigationItem.rightBarButtonItems = @[];

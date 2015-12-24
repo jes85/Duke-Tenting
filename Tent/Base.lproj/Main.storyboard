@@ -126,7 +126,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WyZ-wb-8xS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4542" y="-668"/>
+            <point key="canvasLocation" x="5074" y="-668"/>
         </scene>
         <!--Available/Assigned People-->
         <scene sceneID="0jk-sX-spL">
@@ -155,12 +155,12 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0BJ-Lc-Ndp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5088" y="-668"/>
+            <point key="canvasLocation" x="5620" y="-668"/>
         </scene>
         <!--Persons In Interval View Controller-->
         <scene sceneID="I7y-Pb-FEp">
             <objects>
-                <viewController storyboardIdentifier="ChildViewControllerCurrent" id="skg-Jo-kky" customClass="PersonsInIntervalViewController" sceneMemberID="viewController">
+                <viewController id="skg-Jo-kky" customClass="PersonsInIntervalViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7m1-Xm-If2"/>
                         <viewControllerLayoutGuide type="bottom" id="pSS-7e-mxu"/>
@@ -170,7 +170,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ria-ra-ndl">
-                                <rect key="frame" x="0.0" y="38" width="320" height="571"/>
+                                <rect key="frame" x="0.0" y="39" width="320" height="571"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" restorationIdentifier="Person Cell" selectionStyle="default" indentationWidth="10" reuseIdentifier="Person Cell" id="acz-vU-hn0">
@@ -183,7 +183,7 @@
                                 </prototypes>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Mon. 11/23/15 1:00 PM - 2:00 PM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O64-3v-Tqr">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="41"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -200,6 +200,49 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6kn-pM-N9X" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5063" y="25"/>
+        </scene>
+        <!--Now Persons In Interval View Controller-->
+        <scene sceneID="UOc-3W-4sV">
+            <objects>
+                <viewController storyboardIdentifier="ChildViewControllerCurrent" id="8so-io-CxH" customClass="NowPersonsInIntervalViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="08S-oJ-AnE"/>
+                        <viewControllerLayoutGuide type="bottom" id="lTg-hZ-CMX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Mvk-OT-dq7">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Lr0-fa-RRc">
+                                <rect key="frame" x="0.0" y="39" width="320" height="571"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Person Cell" id="wMZ-eX-Xvg">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wMZ-eX-Xvg" id="z4p-f4-75r">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Mon. 11/23/15 1:00 PM - 2:00 PM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0lf-gv-tYb">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="41"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="dateTimeLabel" destination="0lf-gv-tYb" id="jxN-kq-aIV"/>
+                        <outlet property="tableView" destination="Lr0-fa-RRc" id="aMm-6H-5Ns"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bk2-PX-Pn4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5406" y="25"/>
         </scene>
         <!--Enter Availabilities-->
         <scene sceneID="loT-qd-Ft2">
@@ -675,9 +718,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="hpW-qB-wDj" kind="push" identifier="Home To Time Intervals" id="a4j-xc-aGx"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="ECa-ap-OqP" style="IBUITableViewCellStyleDefault" id="TJr-q2-HrT">
                                         <rect key="frame" x="0.0" y="152" width="320" height="44"/>
@@ -2055,6 +2095,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E1p-d9-h9A" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2448" y="-879"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="YnE-Yj-HNl">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="F9w-kT-ujL" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7mE-vD-4FN">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="hpW-qB-wDj" kind="relationship" relationship="rootViewController" id="qOM-ZX-hYX"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ezp-jS-1uy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4542" y="-668"/>
         </scene>
     </scenes>
     <resources>

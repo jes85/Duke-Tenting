@@ -275,7 +275,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     self.navigationItem.rightBarButtonItem = doneButton;
     
     self.navigationItem.leftBarButtonItem = self.cancelButton;
-    [self setEditing:true animated:YES];
+    [self setEditing:true animated:YES]; //true vs yes?
 }
 -(void)doneButtonPressed
 {
