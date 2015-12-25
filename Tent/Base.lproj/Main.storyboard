@@ -66,7 +66,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Person Cell" id="t0c-Aq-qID">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Person Cell" id="t0c-Aq-qID">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="t0c-Aq-qID" id="iqW-7V-9OG">
@@ -173,7 +173,7 @@
                                 <rect key="frame" x="0.0" y="39" width="320" height="571"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" restorationIdentifier="Person Cell" selectionStyle="default" indentationWidth="10" reuseIdentifier="Person Cell" id="acz-vU-hn0">
+                                    <tableViewCell contentMode="scaleToFill" restorationIdentifier="Person Cell" selectionStyle="none" indentationWidth="10" reuseIdentifier="Person Cell" id="acz-vU-hn0">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="acz-vU-hn0" id="1wY-Ro-sVB">
@@ -217,7 +217,7 @@
                                 <rect key="frame" x="0.0" y="39" width="320" height="571"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Person Cell" id="wMZ-eX-Xvg">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Person Cell" id="wMZ-eX-Xvg">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wMZ-eX-Xvg" id="z4p-f4-75r">
@@ -622,7 +622,7 @@
         <!--Schedule-->
         <scene sceneID="rzp-UV-wcO">
             <objects>
-                <viewController id="sxk-Cx-Z7T" sceneMemberID="viewController">
+                <viewController id="sxk-Cx-Z7T" customClass="AdminToolsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sYo-yg-fem"/>
                         <viewControllerLayoutGuide type="bottom" id="1lN-sH-hp8"/>
@@ -632,34 +632,34 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vr2-Xl-Xxu">
-                                <rect key="frame" x="94" y="91" width="132" height="30"/>
-                                <state key="normal" title="Generate Schedule">
+                                <rect key="frame" x="82" y="90" width="156" height="30"/>
+                                <state key="normal" title="Generate Assignments">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="generateScheduleButton:" destination="sxk-Cx-Z7T" eventType="touchUpInside" id="yo3-i8-x0Y"/>
+                                    <action selector="generateAssignmentsButtonPressed:" destination="sxk-Cx-Z7T" eventType="touchUpInside" id="ibw-n6-8aP"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XGD-ll-bCy">
-                                <rect key="frame" x="71" y="135" width="179" height="30"/>
-                                <state key="normal" title="Reset (Clear assignments)">
+                                <rect key="frame" x="96" y="128" width="129" height="30"/>
+                                <state key="normal" title="Clear Assignments">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="clearAssignmentsButton:" destination="sxk-Cx-Z7T" eventType="touchUpInside" id="fHm-xi-Om8"/>
+                                    <action selector="clearAssignmentsButtonPressed:" destination="sxk-Cx-Z7T" eventType="touchUpInside" id="nrI-Op-raz"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ECc-YS-V6z">
-                                <rect key="frame" x="16" y="188" width="288" height="30"/>
-                                <state key="normal" title="Reset All (Clear assignments/availabilities)">
+                                <rect key="frame" x="98" y="166" width="125" height="30"/>
+                                <state key="normal" title="Clear Availabilities">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="clearAvailabilititesAndAssignments:" destination="sxk-Cx-Z7T" eventType="touchUpInside" id="sLO-IZ-8bb"/>
+                                    <action selector="clearAvailabilitiesButtonPressed:" destination="sxk-Cx-Z7T" eventType="touchUpInside" id="T73-QQ-TRY"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gIZ-v5-4yH">
-                                <rect key="frame" x="69" y="231" width="182" height="30"/>
+                                <rect key="frame" x="69" y="204" width="182" height="30"/>
                                 <state key="normal" title="Update Hours of Schedule">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>

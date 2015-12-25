@@ -11,6 +11,7 @@
 #import "Constants.h"
 #import <Parse/Parse.h>
 #import "Person.h"
+#import "AdminToolsViewController.h"
 
 @interface ScheduleSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -52,7 +53,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(section == self.settings.count) return 1; //Admin tools
+    if(self.isCreator && section == 0) return 1; //Admin tools
     NSDictionary *sectionDict = [self.settings objectForKey:[NSNumber numberWithInteger:section]];
     NSArray *sectionData = [sectionDict objectForKey:@"sectionData"];
     return [sectionData count];
@@ -61,14 +62,14 @@
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     
-    if(section == self.settings.count) return @"Admin";
+    if(self.isCreator && section == 0) return @"Admin";
     NSDictionary *sectionDict = [self.settings objectForKey:[NSNumber numberWithInteger:section]];
     return [sectionDict objectForKey:@"sectionHeader"];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section == self.settings.count){
+    if(self.isCreator && indexPath.section == 0){
         UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"adminCell"];
         
         
@@ -93,6 +94,11 @@
     
     return cell;
     }
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 - (IBAction)deleteScheduleButtonPressed:(id)sender {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete" message:@"Are you sure?" preferredStyle:UIAlertControllerStyleAlert];
@@ -164,14 +170,18 @@
     }];
     [PFObject deleteAllInBackground:personsArray];
 }
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if([segue.destinationViewController isKindOfClass:[AdminToolsViewController class]]){
+        AdminToolsViewController *atvc = segue.destinationViewController;
+        atvc.schedule = self.schedule;
+    }
 }
-*/
+
 
 @end

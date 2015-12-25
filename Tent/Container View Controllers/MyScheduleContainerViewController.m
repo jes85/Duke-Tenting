@@ -171,7 +171,7 @@
         
         //TODO: this gets called every time segment index is switched. should really only happen once, or once every time there's an update to current user's schedule
         MyScheduleTableViewController *mstvc = self.viewControllers[index];
-        mstvc.currentPerson = self.schedule.personsArray[self.schedule.currentUserPersonIndex];
+        mstvc.currentPerson = self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]];
         mstvc.schedule = self.schedule;
         
     }
@@ -398,7 +398,7 @@
 
 {
     HomeGame *hg = self.schedule.homeGame;
-    NSDictionary *section0 = @{
+    NSDictionary *sectionGeneral = @{
                                @"sectionHeader":@"General",
                                @"sectionData": @[
                                    @{
@@ -413,10 +413,15 @@
                                        @"title": @"Group Code:",
                                        @"value": self.schedule.groupCode,
                                        
+                                       },
+                                   @{
+                                       @"title": @"Creator:",
+                                       @"value": [self.schedule.createdBy objectForKey:kUserPropertyFullName],
                                        }
+                                   
                                    ],
                                };
-    NSDictionary *section1 = @{
+    NSDictionary *sectionDates = @{
                                @"sectionHeader":@"Dates",
                                @"sectionData": @[
                                        @{
@@ -435,7 +440,7 @@
                                        ],
                                };
     
-    return @{@0:section0, @1:section1};
+    return self.isCreator ? @{@1:sectionGeneral, @2:sectionDates} : @{@0:sectionGeneral, @1:sectionDates};
 
 }
 

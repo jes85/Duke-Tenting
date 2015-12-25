@@ -26,6 +26,8 @@
 @property (nonatomic) BOOL assignmentsGenerated;
 @property (nonatomic) NSString *parseObjectID;
 @property (nonatomic) NSUInteger currentUserPersonIndex; //TODO: might want to make this a method instead of a property. not sure if it initializes properly if schedule is initiated without a personsArray
+-(NSUInteger)findCurrentUserPersonIndex;
+
 
 
 // Relationships
