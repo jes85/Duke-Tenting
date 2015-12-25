@@ -4085,11 +4085,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AdminToolsViewController.m"
-            timestampString = "472694403.16407"
+            timestampString = "472724533.106802"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
             landmarkName = "-generateAssignments"
             landmarkType = "5">
          </BreakpointContent>
@@ -4101,11 +4101,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AdminToolsViewController.m"
-            timestampString = "472694105.876723"
+            timestampString = "472724533.106802"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "-clearAssignmentsButtonPressed:"
             landmarkType = "5">
          </BreakpointContent>

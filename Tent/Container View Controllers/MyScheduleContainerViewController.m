@@ -171,7 +171,7 @@
         
         //TODO: this gets called every time segment index is switched. should really only happen once, or once every time there's an update to current user's schedule
         MyScheduleTableViewController *mstvc = self.viewControllers[index];
-        mstvc.currentPerson = self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]];
+        mstvc.currentPerson = self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]]; //TODO: there's an error here when someone first joins a schedule
         mstvc.schedule = self.schedule;
         
     }

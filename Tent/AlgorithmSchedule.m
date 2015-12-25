@@ -21,8 +21,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 @property (nonatomic) NSUInteger intervalLengthInMinutes;
 @property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *endDate;
-//Todo: change to just assignmentsSchedule with 0, 1, 2 = unavailable, available, assigned
-@property (nonatomic) NSMutableArray *availabilitiesSchedule;
+
 @property (nonatomic) NSMutableArray *assignmentsSchedule;
 
 
@@ -79,13 +78,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return _idealSlotsArray;
 }
 
--(NSMutableArray *) availabilitiesSchedule
-{
-    if(!_availabilitiesSchedule){
-        _availabilitiesSchedule = [[NSMutableArray alloc]init];
-    }
-    return _availabilitiesSchedule;
-}
+
 -(NSMutableArray *) assignmentsSchedule
 {
     if(!_assignmentsSchedule) _assignmentsSchedule = [[NSMutableArray alloc]init];
@@ -95,28 +88,38 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 
 #pragma mark - Setup methods
 
+
+-(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate intervalLengthInMinutes: (NSUInteger)intervalLength assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numIntervals:(NSUInteger)numIntervals
+{
+    self = [super init];
+    if(self){
+        self.startDate = startDate;
+        self.endDate = endDate;
+        self.intervalLengthInMinutes = intervalLength;
+        self.assignmentsSchedule = assignmentsSchedule;
+        self.numIntervals = numIntervals;
+        self.numPeople = assignmentsSchedule.count;
+        self.requiredPersonsPerInterval = ceil(self.numPeople/3.0);
+        [self setup];
+    }
+    return self;
+}
 -(BOOL)setup
 {
-    
-    //self.assignmentsSchedule = [self createZeroesAssignmentsSchedule];
-    
-    
-    // PPI
-    self.requiredPersonsPerInterval = ceil(self.numPeople/3.0);
-    
+    //[self resetAssignments]; //taken care of in availPeopleSums
     
     // Sums Arrays
-    [self calculateAvailIntervalSums];
     [self calculateAvailPeopleSums];
+    [self calculateAvailIntervalSums];
+
     
     // Check Error
-    if([self checkForError]) return false;
+    //if([self checkForError]) return false;
     
-    // Ideal Slots arrays
-    [self generateIdealSlotsArray];
+    
     
     // Generate Schedule
-    [self generateSchedule];
+    //[self generateSchedule];
     
     return true;
 }
@@ -174,8 +177,10 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 }
 
 #pragma mark - Generate Schedule
--(void)generateSchedule
+-(NSMutableArray *)generateAssignments
 {
+    // Ideal Slots arrays
+    [self generateIdealSlotsArray];
     
     // Initial Assignments
     [self assignIntervals];
@@ -194,6 +199,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     [self calculateAssignIntervalSums];
     
     //[self swapSolos];
+    return self.assignmentsSchedule;
     
 }
 
@@ -205,8 +211,8 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         assignCountInThisInterval = 0;
         //for now, just assign intervals to first people available and then swap
         for(int p = 0; p<self.numPeople;p++){
-            if([self.availabilitiesSchedule[p][i] isEqual:@1]){
-                self.assignmentsSchedule[p][i]=@1;
+            if([self.assignmentsSchedule[p][i] isEqual:@1]){
+                self.assignmentsSchedule[p][i]=@2;
                 assignCountInThisInterval++;
             }
             if(assignCountInThisInterval==self.requiredPersonsPerInterval) break;
@@ -217,7 +223,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 
 -(void)swapSingleInterval:(NSUInteger)i assignToPerson:(NSUInteger)personGainingInterval takeAwayFromPerson:(NSUInteger)personLosingInterval
 {
-    self.assignmentsSchedule[personGainingInterval][i]=@1;
+    self.assignmentsSchedule[personGainingInterval][i]=@2;
     self.assignmentsSchedule[personLosingInterval][i]=@0;
     
     self.assignPeopleSums[personGainingInterval] = [NSNumber numberWithInteger:[self.assignPeopleSums[personGainingInterval] integerValue]+1];
@@ -255,7 +261,22 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         }
     }
 }
-
+-(BOOL)personIndex:(NSUInteger)p isAvailableInInterval:(NSUInteger)i
+{
+    if([self.assignmentsSchedule[p][i] isEqual:@1] || [self.assignmentsSchedule[p][i] isEqual:@2] ){
+        return YES;
+    }else{
+        return NO;
+    }
+}
+-(BOOL)personIndex:(NSUInteger)p isAssignedInInterval:(NSUInteger)i
+{
+    if([self.assignmentsSchedule[p][i] isEqual:@2] ){
+        return YES;
+    }else{
+        return NO;
+    }
+}
 -(void)swapFromBeginningIfPossibleAssignIntervalTo:(NSUInteger)personGainingInterval takeAwayFrom:(NSUInteger)personLosingInterval
 {
     for(int i = 0;i<self.numIntervals-1;i++){
@@ -266,10 +287,10 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         
         
         //if person1 is free but not assigned to this interval && person2 is assigned to this interval
-        if([self.availabilitiesSchedule[personGainingInterval][i] integerValue]==1 && [self.assignmentsSchedule[personGainingInterval][i] integerValue]==0 && [self.assignmentsSchedule[personLosingInterval][i] integerValue] ==1){
+        if([self personIndex:personGainingInterval isAvailableInInterval:i] && ![self personIndex:personGainingInterval isAssignedInInterval:i] && [self personIndex:personLosingInterval isAssignedInInterval:i]){
             
             //if person2 is not assigned to the previous interval or it's the first interval
-            if(i == 0 || [self.assignmentsSchedule[personLosingInterval][i-1] integerValue] ==0){
+            if(i == 0 || ![self personIndex:personLosingInterval isAssignedInInterval:i-1]){
                 
                 //switch intervals
                 [self swapSingleInterval:i assignToPerson:personGainingInterval takeAwayFromPerson:personLosingInterval];
@@ -289,10 +310,10 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         }
         
         //if person1 is free but not assigned to this interval && person2 is assigned to this interval
-        if([self.availabilitiesSchedule[personGainingInterval][i] integerValue]==1 && [self.assignmentsSchedule[personGainingInterval][i] integerValue]==0 && [self.assignmentsSchedule[personLosingInterval][i] integerValue] ==1){
+       if([self personIndex:personGainingInterval isAvailableInInterval:i] && ![self personIndex:personGainingInterval isAssignedInInterval:i] && [self personIndex:personLosingInterval isAssignedInInterval:i]){
             
             //if person2 is not assigned to the previous (chronologically, next) interval or it's the last interval
-            if((i == self.numIntervals-1) || [self.assignmentsSchedule[personLosingInterval][i+1] integerValue] ==0){
+            if((i == self.numIntervals-1) || ![self personIndex:personLosingInterval isAssignedInInterval:i+1]){
                 
                 //switch intervals
                 [self swapSingleInterval:i assignToPerson:personGainingInterval takeAwayFromPerson:personLosingInterval];
@@ -348,6 +369,102 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 
 #pragma mark - Sums
 
+-(void)calculateAvailAndAssignPeopleSums
+{
+    for(int r = 0;r<self.numPeople;r++){
+        int assignSums = 0;
+        int availSums = 0;
+        for(int c = 0; c<self.numIntervals;c++){
+            if([self.assignmentsSchedule[r][c] integerValue]== 2){
+                assignSums += 1;
+                availSums += 1;
+            }else if ([self.assignmentsSchedule[r][c] integerValue]== 1){
+                availSums += 1;
+            }
+        }
+        self.availPeopleSums[r] = [NSNumber numberWithInteger:availSums];
+        self.assignPeopleSums[r] = [NSNumber numberWithInteger:assignSums];
+        
+    }
+}
+-(void)calculateAvailPeopleSums
+{
+    for(int r = 0;r<self.numPeople;r++){
+        int availSums = 0;
+        for(int c = 0; c<self.numIntervals;c++){
+            if ([self.assignmentsSchedule[r][c] integerValue]== 1 || [self.assignmentsSchedule[r][c] integerValue]== 2){
+                availSums += 1;
+                self.assignmentsSchedule[r][c] = @1; //takes care of resetting assignments schedule. maybe move to new method (this would make it clearer, but also less efficient)
+            }
+        }
+        self.availPeopleSums[r] = [NSNumber numberWithInteger:availSums];
+        
+    }
+}
+-(void)calculateAssignPeopleSums
+{
+    for(int r = 0;r<self.numPeople;r++){
+        int assignSums = 0;
+        for(int c = 0; c<self.numIntervals;c++){
+            if([self.assignmentsSchedule[r][c] integerValue] == 2){
+                assignSums += 1;
+            }
+        }
+        self.assignPeopleSums[r] = [NSNumber numberWithInteger:assignSums];
+
+    }
+
+}
+
+-(void)calculateAvailAndAssignIntervalSums
+{
+    for(int c = 0; c<self.numIntervals; c++){
+        int assignSums = 0;
+        int availSums = 0;
+        for(int r = 0; r<self.numPeople; r++){
+            if([self.assignmentsSchedule[r][c] integerValue] == 2){
+                assignSums += 1;
+                availSums += 1;
+            }else if([self.assignmentsSchedule[r][c] integerValue] == 1){
+                availSums += 1;
+            }
+
+        }
+        self.assignIntervalSums[c] = [NSNumber numberWithInteger:assignSums];
+        self.availIntervalSums[c] = [NSNumber numberWithInteger:availSums];
+
+    }
+}
+-(void)calculateAvailIntervalSums
+{
+    for(int c = 0; c<self.numIntervals; c++){
+        int availSums = 0;
+        for(int r = 0; r<self.numPeople; r++){
+            if([self.assignmentsSchedule[r][c] integerValue] == 1 || [self.assignmentsSchedule[r][c] integerValue] == 2){
+                availSums += 1;
+            }
+            
+        }
+        self.availIntervalSums[c] = [NSNumber numberWithInteger:availSums];
+        
+    }
+
+}
+-(void)calculateAssignIntervalSums
+{
+    for(int c = 0; c<self.numIntervals; c++){
+        int assignSums = 0;
+        for(int r = 0; r<self.numPeople; r++){
+            if([self.assignmentsSchedule[r][c] integerValue] == 2){
+                assignSums += 1;
+            }
+        }
+        self.assignIntervalSums[c] = [NSNumber numberWithInteger:assignSums];
+        
+    }
+
+}
+/*
 -(void) calculateAvailPeopleSums
 {
     
@@ -411,6 +528,6 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     
 }
 
-
+*/
 
 @end

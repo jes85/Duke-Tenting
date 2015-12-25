@@ -8,7 +8,9 @@
 
 #import "AdminToolsViewController.h"
 #import "Constants.h"
+#import "Person.h"
 #import "AlgorithmSchedule.h"
+#import <Parse/Parse.h>
 @interface AdminToolsViewController ()
 
 @end
@@ -74,10 +76,61 @@
 
 -(void)generateAssignments
 {
-   // AlgorithmSchedule *algorithmSchedule = [AlgorithmSchedule alloc]init
-    self.schedule.assignmentsGenerated = YES;
+    AlgorithmSchedule *algorithmSchedule = [self createAlgorithmScheduleFromScheduleObject];
+    if([algorithmSchedule checkForError]){
+        //deal with error
+        return;
+    }
+    NSMutableArray *assignments = [algorithmSchedule generateAssignments];
+    [self updateScheduleWithAlgorithmScheduleAssignments:assignments];
 }
+-(AlgorithmSchedule *)createAlgorithmScheduleFromScheduleObject
+{
+    NSMutableArray *assignmentsSchedule = [[NSMutableArray alloc]init];
+    for(Person *person in self.schedule.personsArray){
+        [assignmentsSchedule addObject:person.assignmentsArray];
+    }
+    AlgorithmSchedule *algorithmSchedule = [[AlgorithmSchedule alloc]initWithStartDate:self.schedule.startDate endDate:self.schedule.endDate intervalLengthInMinutes:self.schedule.intervalLengthInMinutes assignmentsSchedule:assignmentsSchedule numIntervals:self.schedule.numIntervals];
+    return algorithmSchedule;
+}
+-(void)updateScheduleWithAlgorithmScheduleAssignments:(NSMutableArray *)assignments
+{
+    //update Parse Schedule
+        //update persons arrays and assignmentsGenerated
+    //update local schedule
+        //update persons arrays and assignmentsGenerated
+    
+    NSMutableArray *objectIds = [[NSMutableArray alloc]initWithCapacity:self.schedule.personsArray.count];
+    for(Person *person in self.schedule.personsArray){
+        [objectIds addObject:person.parseObjectID];
+    }
+    PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
+    
+    [query whereKey:@"objectId" containedIn:objectIds];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if(!error){
+            for(PFObject *parsePerson in objects){
+                parsePerson[kPersonPropertyAssignmentsArray] = assignments[[parsePerson[kPersonPropertyIndex] integerValue]];
+                
+            }
+            [PFObject saveAllInBackground:objects block:^(BOOL succeeded, NSError *error) {
+                if(succeeded){
+                    PFQuery *scheduleQuery = [PFQuery queryWithClassName:kGroupScheduleClassName];
+                    [scheduleQuery getObjectInBackgroundWithId:self.schedule.parseObjectID block:^(PFObject *object, NSError *error) {
+                        object[kGroupSchedulePropertyAssignmentsGenerated] = [NSNumber numberWithBool:YES];
+                        [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                            if(succeeded){
+                                //TODO: update local iphone
+                            }
+                        }];
+                    }];
 
+                }
+            }];
+        }
+    }];
+    
+}
 -(void)clearAssignments
 {
     //update parse
