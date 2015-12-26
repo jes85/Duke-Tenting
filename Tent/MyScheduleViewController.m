@@ -226,6 +226,20 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     NSMutableDictionary *sectionData = [self.schedule.intervalDataBySection objectForKey:[NSNumber numberWithInteger:indexPath.section]];
     
     NSUInteger index = [sectionData[@"intervalStartIndex"] integerValue] + indexPath.row;
+    
+    if(self.schedule.assignmentsGenerated){
+        [self updateStatusAfterAssignmentsGeneratedForCell:cell AtIndex:index];
+    }else{
+        [self updateStatusBeforeAssignmentsGeneratedForCell:cell AtIndex:index];
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    
+}
+
+-(void)updateStatusBeforeAssignmentsGeneratedForCell:(IntervalTableViewCell *)cell AtIndex:(NSUInteger)index
+{
     if([self.updatedAvailabilitiesArray[index] isEqual:@0]){
         
         //Save data in updatedAvailabilities array (will save/ignore this in Done/Cancel button action later)
@@ -247,11 +261,41 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         cell.assignedOrAvailableLabel.textColor = [UIColor blueColor];
         
     }
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    
+
 }
+
+-(void)updateStatusAfterAssignmentsGeneratedForCell:(IntervalTableViewCell *)cell AtIndex:(NSUInteger)index
+{
+    if([self.updatedAvailabilitiesArray[index] isEqual:@2]){
+        
+        self.updatedAvailabilitiesArray[index] = @0;
+        
+        cell.assignedOrAvailableLabel.text = @"(Unavailable)";
+        //cell.iconImageView.image =[UIImage imageNamed:@"RedX"];
+        cell.iconImageView.backgroundColor =[UIColor blueColor];
+        cell.assignedOrAvailableLabel.textColor = [UIColor blueColor];
+        
+    }
+    else if([self.updatedAvailabilitiesArray[index] isEqual:@1]) {
+        self.updatedAvailabilitiesArray[index] = @2;
+        
+        cell.assignedOrAvailableLabel.text = @"(Assigned)";
+        cell.iconImageView.backgroundColor =[UIColor greenColor];
+        cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:0 green:.3 blue:0 alpha:1.0];
+    }else if([self.updatedAvailabilitiesArray[index] isEqual:@0]){
+        //Save data in updatedAvailabilities array (will save/ignore this in Done/Cancel button action later)
+        
+        self.updatedAvailabilitiesArray[index] = @1;
+        
+        cell.assignedOrAvailableLabel.text = @"(Available)";
+        //cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
+        cell.iconImageView.backgroundColor =[UIColor yellowColor];
+        cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
+    }
+
+}
+
+
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
     
@@ -274,6 +318,22 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     }
 }
 -(void)editButtonPressed
+{
+    if(self.schedule.assignmentsGenerated){
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Assignments Already Generated" message:@"Are you sure you want to edit?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            [self changeToEditMode];
+        }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:cancel];
+        [alert addAction:yesAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+    }else{
+        [self changeToEditMode];
+    }
+}
+-(void)changeToEditMode
 {
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonPressed)];
     self.navigationItem.rightBarButtonItem = doneButton;

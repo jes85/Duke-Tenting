@@ -78,11 +78,29 @@
     [self performSegueWithIdentifier:@"AddPersonWithoutAppSegue" sender:self];
     
 }
+
 -(void)editBarButtonItemPressed
+{
+    if(self.schedule.assignmentsGenerated){
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Assignments Already Generated" message:@"Are you sure you want to edit?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            [self changeMyScheduleTableViewToEditMode];
+        }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:cancel];
+        [alert addAction:yesAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+    }else{
+        [self changeMyScheduleTableViewToEditMode];
+    }
+    
+}
+-(void)changeMyScheduleTableViewToEditMode
 {
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditingMyScheduleButtonPressed)];
     self.navigationItem.rightBarButtonItem = doneButton;
-     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelEditingMyScheduleButtonPressed)];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelEditingMyScheduleButtonPressed)];
     self.navigationItem.leftBarButtonItem = cancelButton;
     MeScheduleViewController *msvc = (MeScheduleViewController *)self.currentViewController;
     [msvc.tableView setEditing:true animated:YES];
