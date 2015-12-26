@@ -31,7 +31,10 @@
     // Configure the view for the selected state
 }
 
-
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    
+}
 
 
 

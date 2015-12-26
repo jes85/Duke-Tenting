@@ -20,7 +20,7 @@
 @property(nonatomic, strong) NSMutableArray *updatedAvailabilitiesArray;
 
 
-
+@property (nonatomic) BOOL canEdit;
 @end
 
 @implementation MyScheduleViewController
@@ -38,14 +38,21 @@
     
     self.tableView.allowsSelection = NO;
     self.navigationItem.leftBarButtonItem = nil;
-    if([self.schedule.createdBy.objectId isEqualToString: [[PFUser currentUser] objectId]] | [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]]){//edit to check for user auth (it's my schedule & assignments haven't been made yet OR I'm an admin. if admin, show alert if assignments have already been made)
+    self.canEdit = [self.schedule.createdBy.objectId isEqualToString: [[PFUser currentUser] objectId]] | [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]];
+    if(self.canEdit){//change to check for user auth (it's my schedule & assignments haven't been made yet OR I'm an admin. if admin, show alert if assignments have already been made)
         [self changeNavBarToShowEditButton];
+    }else{
     }
+    [self scrollToCurrentInterval];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    //[self scrollToCurrentInterval];
+}
+-(void)scrollToCurrentInterval
+{
     NSInteger overallRow = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
     if(overallRow < 0) return; //schedule hasn't started
     NSIndexPath *indexPath = [Constants indexPathForOverallRow:overallRow tableView:self.tableView];
@@ -296,7 +303,6 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
 }
 
 
-
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
     
     // overriding this method means we can attach custom functions to the button
@@ -433,6 +439,14 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     self.navigationItem.rightBarButtonItem = editButton;
     
     self.navigationItem.leftBarButtonItem = nil;
+}
+
+- (IBAction)helpButtonPressed:(id)sender {
+    NSString *message = self.canEdit ? @"Press edit and tap a cell to change the availability status for that time interval." : @"You do not have access to edit this person's schedule. Only this person and the group creator have access.";
+    UIAlertController *alert =[UIAlertController alertControllerWithTitle:@"Help" message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+    [alert addAction:okAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 
