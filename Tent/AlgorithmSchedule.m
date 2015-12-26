@@ -70,7 +70,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     if(!_idealSlotsArray){
         NSMutableArray *array = [[NSMutableArray alloc]initWithCapacity:self.numPeople];
         for(int i = 0; i<self.numPeople;i++){
-            [array addObject:@0];
+            [array addObject:@-1];
         }
         _idealSlotsArray = [[NSMutableArray alloc]initWithArray:array];
         
@@ -141,6 +141,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 }
 -(void)generateIdealSlotsArray
 {
+    //TODO: test this with edge cases
     double totalSlotsRequired = self.requiredPersonsPerInterval*self.numIntervals;
     double idealSlotsPerAvailablePerson = totalSlotsRequired/self.numPeople;
     double numPeopleLeft = self.numPeople;
@@ -150,7 +151,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         changed = false;
         for(int p = 0; p<self.numPeople;p++){
             
-            if([self.availPeopleSums[p] intValue] < idealSlotsPerAvailablePerson && [self.idealSlotsArray[p] isEqual:@0] ){
+            if([self.idealSlotsArray[p] isEqual:@-1] && [self.availPeopleSums[p] intValue] <= idealSlotsPerAvailablePerson ){
                 
                 self.idealSlotsArray[p]=self.availPeopleSums[p];
                 numPeopleLeft--;

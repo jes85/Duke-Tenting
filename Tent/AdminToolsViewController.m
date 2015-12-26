@@ -121,6 +121,9 @@
                         [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                             if(succeeded){
                                 //TODO: update local iphone
+                                
+                                //Alert success message
+                                [self alertSuccessWithMessage:@"Assignments were successfully generated."];
                             }
                         }];
                     }];
@@ -134,18 +137,86 @@
 -(void)clearAssignments
 {
     //update parse
-    //update UI
-    //[self.schedule clearAssignments];
+    NSMutableArray *parsePersonIds = [[NSMutableArray alloc]initWithCapacity:self.schedule.personsArray.count];
+    NSMutableArray *clearedAssignmentsArrays = [[NSMutableArray alloc]initWithCapacity:self.schedule.personsArray.count];
+    for(int i = 0; i<self.schedule.personsArray.count;i++){
+        Person *person = self.schedule.personsArray[i];
+        [parsePersonIds addObject:person.parseObjectID];
+        [clearedAssignmentsArrays addObject:[self clearedAssignmentsArrayFromAssignmentsArray:person.assignmentsArray]];
+        
+    }
+    
+    [self updatePersons:parsePersonIds WithNewAssignmentsArrays:clearedAssignmentsArrays];
+   
+   
     
 }
-
+-(NSMutableArray *)clearedAssignmentsArrayFromAssignmentsArray:(NSMutableArray *)assignmentsArray
+{
+    for(int i = 0; i<assignmentsArray.count;i++){
+        if([assignmentsArray[i] isEqual:@2]) assignmentsArray[i] = @1;
+    }
+    return assignmentsArray;
+}
 -(void)clearAvailabilities
 {
     //update parse
-    //update UI
-    //[self.schedule clearAvailabilities];
+    NSMutableArray *parsePersonIds = [[NSMutableArray alloc]initWithCapacity:self.schedule.personsArray.count];
+    NSMutableArray *clearedAssignmentsArrays = [[NSMutableArray alloc]initWithCapacity:self.schedule.personsArray.count];
+    for(int i = 0; i<self.schedule.personsArray.count;i++){
+        Person *person = self.schedule.personsArray[i];
+        [parsePersonIds addObject:person.parseObjectID];
+        [clearedAssignmentsArrays addObject:[self clearedAvailabilitiesArrayFromAssignmentsArray:person.assignmentsArray]];
+        
+    }
+    
+    [self updatePersons:parsePersonIds WithNewAssignmentsArrays:clearedAssignmentsArrays];
+    
+}
+-(NSMutableArray *)clearedAvailabilitiesArrayFromAssignmentsArray:(NSMutableArray *)assignmentsArray
+{
+    for(int i = 0; i<assignmentsArray.count;i++){
+        assignmentsArray[i] = @0;
+    }
+    return assignmentsArray;
 }
 
+-(void)updatePersons:(NSMutableArray *)parsePersonIds WithNewAssignmentsArrays:(NSMutableArray *)assignmentsArrays
+{
+    PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
+    [query whereKey:@"objectId" containedIn:parsePersonIds];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if(!error){
+            for(int i = 0; i<objects.count;i++){
+                PFObject *parsePerson = objects[i];
+                parsePerson[kPersonPropertyAssignmentsArray] = assignmentsArrays[i];
+            }
+            [PFObject saveAllInBackground:objects block:^(BOOL succeeded, NSError *error) {
+                if(succeeded){
+                    //update UI
+                    for(int i = 0; i<self.schedule.personsArray.count;i++){
+                        Person *person = self.schedule.personsArray[i];
+                        person.assignmentsArray = assignmentsArrays[i];
+                        
+                    }
+                    
+                    //TODO: update local schedule object in other vcs
+                    
+                    //Show success alert
+                    //TODO: make method return a completion handler
+                    [self alertSuccessWithMessage:@"Successfully cleared schedule"];
+                }
+            }];
+        }
+    }];
+}
+-(void)alertSuccessWithMessage:(NSString *)message
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success!" message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+    [alert addAction:okAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
 /*
 #pragma mark - Navigation
 
