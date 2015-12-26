@@ -53,34 +53,40 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(self.isCreator && section == 0) return 1; //Admin tools
+    
     NSDictionary *sectionDict = [self.settings objectForKey:[NSNumber numberWithInteger:section]];
+    NSString *sectionHeader =[sectionDict objectForKey:@"sectionHeader"];
+    if(self.isCreator && [sectionHeader isEqual:@"Admin"]) return 1; //Admin tools
+    if([sectionHeader isEqual:@"Stats"]) return 1;
     NSArray *sectionData = [sectionDict objectForKey:@"sectionData"];
     return [sectionData count];
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    
-    if(self.isCreator && section == 0) return @"Admin";
-    NSDictionary *sectionDict = [self.settings objectForKey:[NSNumber numberWithInteger:section]];
+     NSDictionary *sectionDict = [self.settings objectForKey:[NSNumber numberWithInteger:section]];
     return [sectionDict objectForKey:@"sectionHeader"];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(self.isCreator && indexPath.section == 0){
+    NSDictionary *sectionDict = [self.settings objectForKey:[NSNumber numberWithInteger:indexPath.section]];
+    NSString *sectionHeader =[sectionDict objectForKey:@"sectionHeader"];
+
+    if(self.isCreator && [sectionHeader isEqualToString:@"Admin"]){
         UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"adminCell"];
         
         
+        return cell;
+    }else if([sectionHeader isEqualToString:@"Stats"]){
+        UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"statsCell"];
         return cell;
     }else{
         MySettingsTableViewCell *cell = (MySettingsTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"SettingsCell" forIndexPath:indexPath];
         
         //change use json serializer
         
-        NSDictionary *sectionDict = [self.settings objectForKey:[NSNumber numberWithInteger:indexPath.section]];
-        NSArray *sectionData = [sectionDict objectForKey:@"sectionData"];
+               NSArray *sectionData = [sectionDict objectForKey:@"sectionData"];
         NSDictionary *settingData = sectionData[indexPath.row];
         cell.settingNameLabel.text = [settingData objectForKey:@"title"];
         

@@ -15,7 +15,7 @@
 #import "Constants.h"
 #import "MySchedulesTableViewController.h"
 #import "MyScheduleContainerViewController.h"
-#import "MyScheduleTableViewController.h"
+#import "MyScheduleViewController.h"
 
 @interface PickPersonTableViewController ()
 
@@ -191,15 +191,15 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
             //More checking
             //if([segue.identifier isEqualToString:@"Person To Hour Interval"]){
                 
-                if([segue.destinationViewController  isKindOfClass:[MyScheduleTableViewController class]]){
+                if([segue.destinationViewController  isKindOfClass:[MyScheduleViewController class]]){
                     
                     Person *person = self.schedule.personsArray[indexPath.row];
                     
-                    MyScheduleTableViewController *mstvc = [segue destinationViewController];
-                    mstvc.currentPerson = person; //does it violate MVC for them to be connected like this?
-                    mstvc.schedule = self.schedule;
+                    MyScheduleViewController *msvc = [segue destinationViewController];
+                    msvc.currentPerson = person; //does it violate MVC for them to be connected like this?
+                    msvc.schedule = self.schedule;
                     
-                    mstvc.navigationItem.title = person.user? [person.user objectForKey:kUserPropertyFullName] : person.offlineName;
+                    msvc.navigationItem.title = person.user? [person.user objectForKey:kUserPropertyFullName] : person.offlineName;
                 }
             
         }

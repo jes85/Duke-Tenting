@@ -239,7 +239,51 @@
     return [[[self dateStringForSection:interval.section] stringByAppendingString:@" "] stringByAppendingString:interval.timeString];
 }
 
-#pragma mark - equality
+#pragma mark - Stats
+-(NSUInteger)numPeople
+{
+    return self.personsArray.count;
+}
+-(void)calculateNumIntervalsEachPersonIsAvailableAndAssigned
+{
+    for(int r = 0;r<[self numPeople];r++){
+        int assignSums = 0;
+        int availSums = 0;
+        Person *person = self.personsArray[r];
+        for(int c = 0; c<self.numIntervals;c++){
+            
+            if([person.assignmentsArray[c] integerValue]== 2){
+                assignSums += 1;
+                availSums += 1;
+           }else if ([person.assignmentsArray[c] integerValue]== 1){
+                availSums += 1;
+            }
+        }
+        self.numIntervalsEachPersonIsAvailable[r] = [NSNumber numberWithInteger:availSums];
+        self.numIntervalsEachPersonIsAssigned[r] = [NSNumber numberWithInteger:assignSums];
+        
+    }
+}
+
+-(void)calculateNumPeopleAvailableAndAssignedInEachInterval
+{
+    for(int c = 0; c<self.numIntervals;c++){
+        int assignSums = 0;
+        int availSums = 0;
+        for(int r = 0;r<[self numPeople];r++){
+            Person *person = self.personsArray[r];
+            if([person.assignmentsArray[c] integerValue]== 2){
+                assignSums += 1;
+                availSums += 1;
+            }else if ([person.assignmentsArray[c] integerValue]== 1){
+                availSums += 1;
+            }
+        }
+        self.numPeopleAvailableInEachInterval[c] = [NSNumber numberWithInteger:availSums];
+        self.numPeopleAssignedInEachInterval[c] = [NSNumber numberWithInteger:assignSums];
+        
+    }
+}
 
 
 #pragma mark - Equality

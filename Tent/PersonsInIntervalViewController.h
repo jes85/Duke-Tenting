@@ -14,7 +14,7 @@
 @property (nonatomic) NSArray *availablePersonsArray;
 @property (nonatomic) NSArray *assignedPersonsArray;
 @property (nonatomic) NSString *dateTimeText;
-
+@property (nonatomic) NSUInteger requiredPersons;
 
 @property (nonatomic) BOOL displayCurrent;
 @property (nonatomic) Schedule *schedule;

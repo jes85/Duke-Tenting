@@ -81,4 +81,17 @@
 -(NSString *)timeStringForIndexPath:(NSIndexPath *)indexPath;
 -(NSString *)dateTimeStringForIndexPath:(NSIndexPath *)indexPath;
 
+// Stats
+
+-(void)calculateNumIntervalsEachPersonIsAvailableAndAssigned;
+-(NSMutableArray *)numIntervalsEachPersonIsAvailable;
+-(NSMutableArray *)numIntervalsEachPersonIsAssigned;
+
+-(void)calculateNumPeopleAvailableAndAssignedInEachInterval;
+-(NSMutableArray *)numPeopleAvailableInEachInterval;
+-(NSMutableArray *)numPeopleAssignedInEachInterval;
+
+
+
+
 @end

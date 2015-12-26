@@ -16,6 +16,7 @@
 @property (nonatomic) NSDate *endDate;
 @property (nonatomic) NSString *timeString;
 @property (nonatomic) NSString *dateTimeString;
+@property (nonatomic) NSUInteger requiredPersons;
 
 @property (nonatomic) NSUInteger section;
 

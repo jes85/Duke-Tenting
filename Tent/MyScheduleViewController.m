@@ -1,13 +1,12 @@
 //
-//  MyScheduleTableViewController.m
+//  MyScheduleViewController.m
 //  Tent
 //
-//  Created by Jeremy on 10/9/15.
+//  Created by Jeremy on 12/25/15.
 //  Copyright (c) 2015 Jeremy. All rights reserved.
 //
 
-#import "MyScheduleTableViewController.h"
-
+#import "MyScheduleViewController.h"
 #import "EnterScheduleTableViewController.h"
 #import "PickPersonTableViewController.h"
 #import "Person.h"
@@ -15,18 +14,16 @@
 #import "Interval.h"
 #import "Constants.h"
 #import "PersonsInIntervalViewController.h"
+@interface MyScheduleViewController ()
 
-@interface MyScheduleTableViewController ()
-@property (weak, nonatomic) IBOutlet UINavigationItem *editButton;
 @property (nonatomic) UIBarButtonItem *cancelButton; //should be weak
-
-
 @property(nonatomic, strong) NSMutableArray *updatedAvailabilitiesArray;
+
 
 
 @end
 
-@implementation MyScheduleTableViewController
+@implementation MyScheduleViewController
 
 
 -(UIBarButtonItem *)cancelButton
@@ -36,6 +33,8 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     
     self.tableView.allowsSelection = NO;
     self.navigationItem.leftBarButtonItem = nil;
@@ -93,29 +92,29 @@
  * Custom table header view. Add constraints.
  */
 /*
--(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UILabel *label1 = [[UILabel alloc] init];
-    label1.frame = CGRectMake(10, 2, tableView.frame.size.width /2, 18);
-    label1.text=@"Time";
-    //label1.backgroundColor=[UIColor clearColor];
-    label1.textAlignment= NSTextAlignmentLeft;
-    
-    UILabel *label2 = [[UILabel alloc] init];
-    label2.frame = CGRectMake(tableView.frame.origin.x + tableView.frame.size.width/2, 2, tableView.frame.size.width/2, 18);
-    label2.text=@"Status";
-    //label2.backgroundColor=[UIColor clearColor];
-    label2.textAlignment= NSTextAlignmentCenter;
-    
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 22)];
-    [view addSubview:label1];
-    [view addSubview:label2];
-    
-    return view;
-    
-    
-    
-}
+ -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+ {
+ UILabel *label1 = [[UILabel alloc] init];
+ label1.frame = CGRectMake(10, 2, tableView.frame.size.width /2, 18);
+ label1.text=@"Time";
+ //label1.backgroundColor=[UIColor clearColor];
+ label1.textAlignment= NSTextAlignmentLeft;
+ 
+ UILabel *label2 = [[UILabel alloc] init];
+ label2.frame = CGRectMake(tableView.frame.origin.x + tableView.frame.size.width/2, 2, tableView.frame.size.width/2, 18);
+ label2.text=@"Status";
+ //label2.backgroundColor=[UIColor clearColor];
+ label2.textAlignment= NSTextAlignmentCenter;
+ 
+ UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 22)];
+ [view addSubview:label1];
+ [view addSubview:label2];
+ 
+ return view;
+ 
+ 
+ 
+ }
  */
 
 
@@ -159,7 +158,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     NSMutableDictionary *sectionData = [self.schedule.intervalDataBySection objectForKey:[NSNumber numberWithInteger:indexPath.section]];
     
     NSUInteger index = [sectionData[@"intervalStartIndex"] integerValue] + indexPath.row;
-
+    
     Interval *interval = self.schedule.intervalDataByOverallRow[index];
     
     cell.textLabel.text =interval.timeString;
@@ -187,7 +186,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         cell.assignedOrAvailableLabel.text = @"(Unavailable)";
         //cell.iconImageView.image =[UIImage imageNamed:@"RedX"];
         cell.iconImageView.backgroundColor =[UIColor blueColor];
-
+        
         cell.assignedOrAvailableLabel.textColor = [UIColor blueColor];
     }
     
@@ -270,7 +269,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         // we're not in edit mode
         //[self.navigationItem setLeftBarButtonItem:nil animated:animated];
         //self.tableView.allowsSelection = NO;
-
+        
         
     }
 }
@@ -280,14 +279,14 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     self.navigationItem.rightBarButtonItem = doneButton;
     
     self.navigationItem.leftBarButtonItem = self.cancelButton;
-    [self setEditing:true animated:YES]; //true vs yes?
+    [self.tableView setEditing:true animated:YES]; //true vs yes?
 }
 -(void)doneButtonPressed
 {
     //do done button things
     [self saveEdits];
     [self changeNavBarToShowEditButton];
-    [self setEditing:false animated:YES];
+    [self.tableView setEditing:false animated:YES];
 }
 -(void)saveEdits
 {
@@ -357,23 +356,24 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
             }
         }
     }
-
     
-                     
+    
+    
 }
 -(void)cancelButtonPressed
 {
     //do cancel button things
     
     [self changeNavBarToShowEditButton];
-    [self setEditing:false animated:YES];
+    [self.tableView setEditing:false animated:YES];
 }
 -(void)changeNavBarToShowEditButton
 {
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButtonPressed)];
     self.navigationItem.rightBarButtonItem = editButton;
-
+    
     self.navigationItem.leftBarButtonItem = nil;
 }
+
 
 @end

@@ -15,7 +15,7 @@
 #import "PickPersonTableViewController.h"
 #import "IntervalsTableViewController.h"
 #import "PersonsInIntervalViewController.h"
-#import "MyScheduleTableViewController.h"
+#import "MeScheduleViewController.h"
 #import "ScheduleSettingsViewController.h"
 #import "NowPersonsInIntervalViewController.h"
 
@@ -84,24 +84,24 @@
     self.navigationItem.rightBarButtonItem = doneButton;
      UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelEditingMyScheduleButtonPressed)];
     self.navigationItem.leftBarButtonItem = cancelButton;
-    MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)self.currentViewController;
-    [mstvc setEditing:true animated:YES];
+    MeScheduleViewController *msvc = (MeScheduleViewController *)self.currentViewController;
+    [msvc.tableView setEditing:true animated:YES];
     
 }
 -(void)doneEditingMyScheduleButtonPressed
 {
     self.navigationItem.rightBarButtonItem = self.editButton;
     self.navigationItem.leftBarButtonItem = nil;
-    MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)self.currentViewController;
-    [mstvc setEditing:false animated:YES];
-    [mstvc saveEdits];
+    MeScheduleViewController *msvc = (MeScheduleViewController *)self.currentViewController;
+    [msvc.tableView setEditing:false animated:YES];
+    [msvc saveEdits];
 }
 -(void)cancelEditingMyScheduleButtonPressed
 {
     self.navigationItem.rightBarButtonItem = self.editButton;
     self.navigationItem.leftBarButtonItem = nil;
-    MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)self.currentViewController;
-    [mstvc setEditing:false animated:YES];
+    MeScheduleViewController *msvc = (MeScheduleViewController *)self.currentViewController;
+    [msvc.tableView setEditing:false animated:YES];
 
 }
 -(void)settingsBarButtonItemPressed
@@ -167,12 +167,12 @@
 
 - (UIViewController *) viewControllerForSegmentIndex: (NSInteger)index
 {
-    if([self.viewControllers[index] isKindOfClass:[MyScheduleTableViewController class]] && (self.schedule.personsArray.count > 0)){
+    if([self.viewControllers[index] isKindOfClass:[MeScheduleViewController class]] && (self.schedule.personsArray.count > 0)){
         
         //TODO: this gets called every time segment index is switched. should really only happen once, or once every time there's an update to current user's schedule
-        MyScheduleTableViewController *mstvc = self.viewControllers[index];
-        mstvc.currentPerson = self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]]; //TODO: there's an error here when someone first joins a schedule
-        mstvc.schedule = self.schedule;
+        MeScheduleViewController *msvc = self.viewControllers[index];
+        msvc.currentPerson = self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]]; //TODO: there's an error here when someone first joins a schedule
+        msvc.schedule = self.schedule;
         
     }
     
@@ -215,9 +215,9 @@
     
     
     // Me
-    if([newVC isKindOfClass:[MyScheduleTableViewController class]]){
-        MyScheduleTableViewController *mstvc = (MyScheduleTableViewController *)newVC;
-        mstvc.schedule = self.schedule;
+    if([newVC isKindOfClass:[MeScheduleViewController class]]){
+        MeScheduleViewController *msvc = (MeScheduleViewController *)newVC;
+        msvc.schedule = self.schedule;
         
         
         self.navigationItem.rightBarButtonItems = @[self.editButton];
@@ -398,6 +398,10 @@
 
 {
     HomeGame *hg = self.schedule.homeGame;
+    NSDictionary *sectionAdmin = @{
+                                   @"sectionHeader":@"Admin",
+                                   @"sectionData": @[]
+                                   };
     NSDictionary *sectionGeneral = @{
                                @"sectionHeader":@"General",
                                @"sectionData": @[
@@ -439,8 +443,12 @@
                                            }
                                        ],
                                };
+    NSDictionary *sectionStats = @{
+                                   @"sectionHeader":@"Stats",
+                                   @"sectionData": @[]
+                                   };
     
-    return self.isCreator ? @{@1:sectionGeneral, @2:sectionDates} : @{@0:sectionGeneral, @1:sectionDates};
+    return self.isCreator ? @{@0:sectionAdmin,@1:sectionGeneral, @2:sectionDates, @3:sectionStats} : @{@0:sectionGeneral, @1:sectionDates, @3:sectionStats};
 
 }
 

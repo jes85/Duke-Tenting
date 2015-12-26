@@ -122,10 +122,11 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
+    
     if(section == 0)
-        return @"Assigned";
+        return [NSString stringWithFormat:@"Assigned (%lu/%lu)", (unsigned long)self.assignedPersonsArray.count, self.requiredPersons];
     if(section == 1)
-        return @"Available";
+        return [NSString stringWithFormat:@"Available (%lu/%lu)", (unsigned long)self.availablePersonsArray.count, self.requiredPersons];;
     return @"";
 }
 
