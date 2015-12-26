@@ -92,10 +92,10 @@
 
 -(NSArray *)getSortDescriptors
 {
-    //TODO: Need different way to sort, because creatorName is no longer a property of schedule. how do implement custom PFUser compare for full name?
+   //TODO: 2nd sort descriptor not working to break ties
     NSArray *sortDescriptors;
     NSSortDescriptor *sortByScheduleName = [NSSortDescriptor sortDescriptorWithKey:@"groupName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-    NSSortDescriptor *sortByCreatorName = [NSSortDescriptor sortDescriptorWithKey:@"createdBy" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+    NSSortDescriptor *sortByCreatorName = [NSSortDescriptor sortDescriptorWithKey:@"createdBy.additional" ascending:YES selector:@selector(caseInsensitiveCompare:)];
 ;
     NSSortDescriptor *sortByStartDate = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];
     
@@ -227,7 +227,7 @@
 #pragma mark - Search Bar
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope
 {
-    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"(name contains[c] %@) OR (createdBy.additional contains[c] %@)", searchText, searchText]; //TODO: don't think createdBy.additional will work. used to do creatorName
+    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"(groupName contains[c] %@) OR (createdBy.additional contains[c] %@)", searchText, searchText];
     self.searchResults = [self.schedulesAssociatedWithThisHomeGame filteredArrayUsingPredicate:resultPredicate];
 }
 
