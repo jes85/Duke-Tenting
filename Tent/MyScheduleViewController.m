@@ -19,7 +19,8 @@
 @property (nonatomic) UIBarButtonItem *cancelButton; //should be weak
 @property(nonatomic, strong) NSMutableArray *updatedAvailabilitiesArray;
 
-
+@property (nonatomic) BOOL isMe;
+@property (nonatomic) BOOL isCreator;
 @property (nonatomic) BOOL canEdit;
 @end
 
@@ -38,8 +39,9 @@
     
     self.tableView.allowsSelection = NO;
     self.navigationItem.leftBarButtonItem = nil;
-    self.canEdit = [self.schedule.createdBy.objectId isEqualToString: [[PFUser currentUser] objectId]] | [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]];
-    if(self.canEdit){//change to check for user auth (it's my schedule & assignments haven't been made yet OR I'm an admin. if admin, show alert if assignments have already been made)
+    [self decideIfEditingIsAllowed];
+   
+    if(self.canEdit){
         [self changeNavBarToShowEditButton];
     }else{
     }
@@ -441,8 +443,22 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     self.navigationItem.leftBarButtonItem = nil;
 }
 
+-(void)decideIfEditingIsAllowed
+{
+    self.isMe = [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]];
+    self.isCreator = [self.schedule.createdBy.objectId isEqualToString: [[PFUser currentUser] objectId]];
+    self.canEdit =  (self.isMe && !self.schedule.assignmentsGenerated) | self.isCreator ;
+}
 - (IBAction)helpButtonPressed:(id)sender {
-    NSString *message = self.canEdit ? @"Press edit and tap a cell to change the availability status for that time interval." : @"You do not have access to edit this person's schedule. Only this person and the group creator have access.";
+    
+    
+    NSString *message;
+    if(!self.canEdit){
+        if(self.isMe) message = @"Assignments have already been generated. Only the creator can edit the schedule now.";
+        else message = @"You do not have access to edit this person's schedule. Only this person and the group creator have access.";
+    }else{
+        message = @"Press edit and tap a cell to change the availability status for that time interval";
+    }
     UIAlertController *alert =[UIAlertController alertControllerWithTitle:@"Help" message:message preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:okAction];

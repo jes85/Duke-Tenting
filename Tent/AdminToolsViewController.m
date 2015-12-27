@@ -145,8 +145,22 @@
         [clearedAssignmentsArrays addObject:[self clearedAssignmentsArrayFromAssignmentsArray:person.assignmentsArray]];
         
     }
+    //TODO: test completion handlers
     
-    [self updatePersons:parsePersonIds WithNewAssignmentsArrays:clearedAssignmentsArrays];
+    [self updateParsePersons:parsePersonIds WithNewAssignmentsArrays:clearedAssignmentsArrays completion:^{
+        NSDictionary *dictionary = @{kGroupSchedulePropertyAssignmentsGenerated: [NSNumber numberWithBool:NO]};
+        [self updateParseSchedule:self.schedule.parseObjectID WithDictionary: dictionary completion:^{
+            //update UI
+            for(int i = 0; i<self.schedule.personsArray.count;i++){
+                Person *person = self.schedule.personsArray[i];
+                person.assignmentsArray = clearedAssignmentsArrays[i];
+                
+            }
+            //Alert success message
+            [self alertSuccessWithMessage:@"Successfully cleared availabilities"];
+            
+        }];
+    }];
    
    
     
@@ -170,7 +184,31 @@
         
     }
     
-    [self updatePersons:parsePersonIds WithNewAssignmentsArrays:clearedAssignmentsArrays];
+    [self updateParsePersons:parsePersonIds WithNewAssignmentsArrays:clearedAssignmentsArrays completion:^{
+        if(self.schedule.assignmentsGenerated){
+            NSDictionary *dictionary = @{kGroupSchedulePropertyAssignmentsGenerated: [NSNumber numberWithBool:NO]};
+            [self updateParseSchedule:self.schedule.parseObjectID WithDictionary: dictionary completion:^{
+                //update UI
+                for(int i = 0; i<self.schedule.personsArray.count;i++){
+                    Person *person = self.schedule.personsArray[i];
+                    person.assignmentsArray = clearedAssignmentsArrays[i];
+                    
+                }
+                //Alert success message
+                [self alertSuccessWithMessage:@"Successfully cleared availabilities"];
+
+            }];
+        }else{
+            //update UI
+            for(int i = 0; i<self.schedule.personsArray.count;i++){
+                Person *person = self.schedule.personsArray[i];
+                person.assignmentsArray = clearedAssignmentsArrays[i];
+                
+            }
+            //Alert success message
+            [self alertSuccessWithMessage:@"Successfully cleared availabilities"];
+        }
+    }];
     
 }
 -(NSMutableArray *)clearedAvailabilitiesArrayFromAssignmentsArray:(NSMutableArray *)assignmentsArray
@@ -181,7 +219,28 @@
     return assignmentsArray;
 }
 
--(void)updatePersons:(NSMutableArray *)parsePersonIds WithNewAssignmentsArrays:(NSMutableArray *)assignmentsArrays
+//Move to other class for use by others
++(void)updateParseSchedule:(NSString *)parseGroupScheduleId WithDictionary:(NSDictionary *)dictionary completion:(void(^)(void))callback
+{
+    //Make callback have an error parameter
+    PFQuery *scheduleQuery = [PFQuery queryWithClassName:kGroupScheduleClassName];
+    [scheduleQuery getObjectInBackgroundWithId:parseGroupScheduleId block:^(PFObject *object, NSError *error) {
+        if(!error){
+            for(NSString *schedulePropertyName in dictionary.allKeys){
+                object[schedulePropertyName] = dictionary[schedulePropertyName];
+            }
+            [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if(succeeded){
+                    callback();
+                    
+                }
+            }];
+        }
+    }];
+
+    
+}
++(void)updateParsePersons:(NSMutableArray *)parsePersonIds WithNewAssignmentsArrays:(NSMutableArray *)assignmentsArrays completion:(void(^)(void))callback
 {
     PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
     [query whereKey:@"objectId" containedIn:parsePersonIds];
@@ -193,18 +252,8 @@
             }
             [PFObject saveAllInBackground:objects block:^(BOOL succeeded, NSError *error) {
                 if(succeeded){
-                    //update UI
-                    for(int i = 0; i<self.schedule.personsArray.count;i++){
-                        Person *person = self.schedule.personsArray[i];
-                        person.assignmentsArray = assignmentsArrays[i];
-                        
-                    }
-                    
-                    //TODO: update local schedule object in other vcs
-                    
-                    //Show success alert
-                    //TODO: make method return a completion handler
-                    [self alertSuccessWithMessage:@"Successfully cleared schedule"];
+                    callback();
+
                 }
             }];
         }

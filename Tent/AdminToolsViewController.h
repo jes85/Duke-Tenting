@@ -12,4 +12,8 @@
 
 
 @property (nonatomic) Schedule *schedule;
+
+
++(void)updateParsePersons:(NSMutableArray *)parsePersonIds WithNewAssignmentsArrays:(NSMutableArray *)assignmentsArrays completion:(void(^)(void))callback;
++(void)updateParseSchedule:(NSString *)parseGroupScheduleId WithDictionary:(NSDictionary *)dictionary completion:(void(^)(void))callback;
 @end

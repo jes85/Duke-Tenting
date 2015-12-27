@@ -16,7 +16,7 @@
 #import "MySchedulesTableViewController.h"
 #import "MyScheduleContainerViewController.h"
 #import "MyScheduleViewController.h"
-
+#import "AdminToolsViewController.h"
 @interface PickPersonTableViewController ()
 
 @end
@@ -81,11 +81,18 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     // If row is deleted, remove it from the list.
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        //TODO: Remove person on Parse
+        //Remove person on Parse
         Person *person = self.schedule.personsArray[indexPath.row];
-        //Update UI
-        [self.schedule.personsArray removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
+        //delete person on parse
+        //delete pointer from schedule pointers
+        [AdminToolsViewController updateParsePersons:@[person.parseObjectID] WithNewAssignmentsArrays:@[person.assignmentsArray] completion:^{
+            //check for error first
+            //Update UI
+            [self.schedule.personsArray removeObjectAtIndex:indexPath.row];
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }];
+        
     }
 }
 
