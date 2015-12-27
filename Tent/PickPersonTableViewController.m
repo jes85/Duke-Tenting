@@ -83,17 +83,30 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //Remove person on Parse
         Person *person = self.schedule.personsArray[indexPath.row];
-        PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
-        //delete person on parse
-        //delete pointer from schedule pointers
-        [AdminToolsViewController updateParsePersons:@[person.parseObjectID] WithNewAssignmentsArrays:@[person.assignmentsArray] completion:^{
-            //check for error first
+        PFObject *object = [PFObject objectWithoutDataWithClassName:kPersonClassName objectId:person.parseObjectID];
+        [PickPersonTableViewController deleteParsePersons:@[object] fromSchedule:self.schedule.parseObjectID completion:^{
+            
             //Update UI
             [self.schedule.personsArray removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            
         }];
-        
     }
+}
++(void)deleteParsePersons:(NSArray *)parsePersonObjects fromSchedule:(NSString *)scheduleId completion:(void(^)(void))callback
+{
+    PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
+    [query getObjectInBackgroundWithId:scheduleId block:^(PFObject *parseSchedule, NSError *error) {
+        if(!error){
+            [parseSchedule removeObjectsInArray:parsePersonObjects forKey:kGroupSchedulePropertyPersonsInGroup];
+            [parseSchedule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if(succeeded){
+                    [PFObject deleteAllInBackground:parsePersonObjects];
+                    callback();
+                }
+            }];
+        }
+    }];
 }
 
 #pragma mark - Load data

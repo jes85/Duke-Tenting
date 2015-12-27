@@ -1814,11 +1814,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/PickPersonTableViewController.m"
-            timestampString = "472618108.950514"
+            timestampString = "472881361.555861"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "199"
-            endingLineNumber = "199"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1830,11 +1830,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/PickPersonTableViewController.m"
-            timestampString = "472618108.950514"
+            timestampString = "472881361.555861"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
+            startingLineNumber = "205"
+            endingLineNumber = "205"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "5">
          </BreakpointContent>
@@ -3671,11 +3671,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/PickPersonTableViewController.m"
-            timestampString = "472618108.950514"
+            timestampString = "472881361.555861"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
             landmarkName = "-addPerson:"
             landmarkType = "5">
             <Locations>
@@ -3717,11 +3717,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/PickPersonTableViewController.m"
-            timestampString = "472618108.950514"
+            timestampString = "472881361.555861"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
             landmarkName = "-addPerson:"
             landmarkType = "5">
          </BreakpointContent>

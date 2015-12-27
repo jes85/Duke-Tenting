@@ -147,9 +147,9 @@
     }
     //TODO: test completion handlers
     
-    [self updateParsePersons:parsePersonIds WithNewAssignmentsArrays:clearedAssignmentsArrays completion:^{
+    [AdminToolsViewController updateParsePersons:parsePersonIds WithNewAssignmentsArrays:clearedAssignmentsArrays completion:^{
         NSDictionary *dictionary = @{kGroupSchedulePropertyAssignmentsGenerated: [NSNumber numberWithBool:NO]};
-        [self updateParseSchedule:self.schedule.parseObjectID WithDictionary: dictionary completion:^{
+        [AdminToolsViewController updateParseSchedule:self.schedule.parseObjectID WithDictionary: dictionary completion:^{
             //update UI
             for(int i = 0; i<self.schedule.personsArray.count;i++){
                 Person *person = self.schedule.personsArray[i];
@@ -184,10 +184,10 @@
         
     }
     
-    [self updateParsePersons:parsePersonIds WithNewAssignmentsArrays:clearedAssignmentsArrays completion:^{
+    [AdminToolsViewController updateParsePersons:parsePersonIds WithNewAssignmentsArrays:clearedAssignmentsArrays completion:^{
         if(self.schedule.assignmentsGenerated){
             NSDictionary *dictionary = @{kGroupSchedulePropertyAssignmentsGenerated: [NSNumber numberWithBool:NO]};
-            [self updateParseSchedule:self.schedule.parseObjectID WithDictionary: dictionary completion:^{
+            [AdminToolsViewController updateParseSchedule:self.schedule.parseObjectID WithDictionary: dictionary completion:^{
                 //update UI
                 for(int i = 0; i<self.schedule.personsArray.count;i++){
                     Person *person = self.schedule.personsArray[i];
