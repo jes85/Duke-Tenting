@@ -1814,11 +1814,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/PickPersonTableViewController.m"
-            timestampString = "472881361.555861"
+            timestampString = "472884756.358157"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "220"
-            endingLineNumber = "220"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1830,11 +1830,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/PickPersonTableViewController.m"
-            timestampString = "472881361.555861"
+            timestampString = "472884756.358157"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "205"
-            endingLineNumber = "205"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "5">
          </BreakpointContent>
@@ -3671,11 +3671,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/PickPersonTableViewController.m"
-            timestampString = "472881361.555861"
+            timestampString = "472884756.358157"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
             landmarkName = "-addPerson:"
             landmarkType = "5">
             <Locations>
@@ -3717,11 +3717,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/PickPersonTableViewController.m"
-            timestampString = "472881361.555861"
+            timestampString = "472884756.358157"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "-addPerson:"
             landmarkType = "5">
          </BreakpointContent>
@@ -4485,11 +4485,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/MyScheduleViewController.m"
-            timestampString = "472865715.449761"
+            timestampString = "472884756.358157"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "246"
-            endingLineNumber = "246"
+            startingLineNumber = "233"
+            endingLineNumber = "233"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -4501,11 +4501,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/MyScheduleViewController.m"
-            timestampString = "472865715.449761"
+            timestampString = "472884756.358157"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
+            startingLineNumber = "272"
+            endingLineNumber = "272"
             landmarkName = "-updateStatusAfterAssignmentsGeneratedForCell:AtIndex:"
             landmarkType = "5">
          </BreakpointContent>
@@ -4517,11 +4517,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/MyScheduleViewController.m"
-            timestampString = "472865715.449761"
+            timestampString = "472884756.358157"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -4533,11 +4533,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/MyScheduleViewController.m"
-            timestampString = "472865715.449761"
+            timestampString = "472884756.358157"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "284"
-            endingLineNumber = "284"
+            startingLineNumber = "271"
+            endingLineNumber = "271"
             landmarkName = "-updateStatusAfterAssignmentsGeneratedForCell:AtIndex:"
             landmarkType = "5">
          </BreakpointContent>
@@ -4581,12 +4581,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/MyScheduleViewController.m"
-            timestampString = "472865715.449761"
+            timestampString = "472884756.358157"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
             landmarkName = "-viewDidLoad"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Tent/MyScheduleViewController.m"
+            timestampString = "472884726.318321"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "-viewDidAppear:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

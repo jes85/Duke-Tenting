@@ -14,6 +14,7 @@
 #import "Interval.h"
 #import "Constants.h"
 #import "PersonsInIntervalViewController.h"
+#import "StatsViewController.h"
 @interface MyScheduleViewController ()
 
 @property (nonatomic) UIBarButtonItem *cancelButton; //should be weak
@@ -210,20 +211,6 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
 
 
 
-#pragma mark - Navigation
-
-//In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    
-    
-    
-    //TODO: figure how way to keep schedule object data consistent across multiple view controllers
-    /*self.schedule may have changed. need to update all schedule objects on local iphone. maybe with delegate
-     */
-}
 
 
 #pragma mark - Table View Delegate
@@ -463,6 +450,27 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:okAction];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+#pragma mark - Navigation
+
+//In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    
+    
+    
+    //TODO: figure how way to keep schedule object data consistent across multiple view controllers
+    /*self.schedule may have changed. need to update all schedule objects on local iphone. maybe with delegate
+     */
+    
+    if([segue.destinationViewController isKindOfClass:[StatsViewController class]]){
+        StatsViewController *svc = segue.destinationViewController;
+        svc.schedule = &_schedule;
+        
+    }
 }
 
 

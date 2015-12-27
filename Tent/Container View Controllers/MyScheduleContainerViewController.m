@@ -267,7 +267,7 @@
     // Time Slots
     else if ([newVC isKindOfClass:[IntervalsTableViewController class]]){
         IntervalsTableViewController *itvc = (IntervalsTableViewController *)newVC;
-        itvc.schedule = self.schedule;
+        itvc.schedule = self.schedule ;
         self.navigationItem.rightBarButtonItems = @[];
         
     }

@@ -571,10 +571,10 @@
             </objects>
             <point key="canvasLocation" x="4723" y="-1946"/>
         </scene>
-        <!--View Controller-->
+        <!--Stats View Controller-->
         <scene sceneID="wIY-83-Tm8">
             <objects>
-                <viewController id="iTC-xJ-ueu" sceneMemberID="viewController">
+                <viewController id="iTC-xJ-ueu" customClass="StatsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="SEf-5c-kMz"/>
                         <viewControllerLayoutGuide type="bottom" id="Gul-7x-khl"/>
