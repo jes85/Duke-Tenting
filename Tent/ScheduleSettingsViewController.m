@@ -15,6 +15,7 @@
 
 @interface ScheduleSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *deleteScheduleButton;
 
 @end
 
@@ -29,6 +30,7 @@
     if(self.isCreator){
         // display edit button in top right
         self.navigationItem.rightBarButtonItem = self.editButtonItem;
+        self.deleteScheduleButton.titleLabel.text = @"Delete Schedule";
     }
 
 }
@@ -84,11 +86,22 @@
     }else{
         MySettingsTableViewCell *cell = (MySettingsTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"SettingsCell" forIndexPath:indexPath];
         
+        
         //change use json serializer
         
-               NSArray *sectionData = [sectionDict objectForKey:@"sectionData"];
+        NSArray *sectionData = [sectionDict objectForKey:@"sectionData"];
         NSDictionary *settingData = sectionData[indexPath.row];
         cell.settingNameLabel.text = [settingData objectForKey:@"title"];
+        
+        if(self.isCreator && [[settingData objectForKey:@"isEditable"] boolValue] == YES){
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+        }
+        else{
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        
         
         if([[settingData objectForKey:@"value"] isKindOfClass:[NSDate class]]){
              cell.settingValueLabel.text = [Constants formatDateAndTime:[settingData objectForKey:@"value"] withDateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
@@ -101,29 +114,118 @@
     return cell;
     }
 }
-
+-(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if(cell.selectionStyle == UITableViewCellSelectionStyleNone){
+        return nil;
+    }
+    return indexPath;
+}
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    NSMutableDictionary *sectionDict = [self.settings objectForKey:[NSNumber numberWithInteger:indexPath.section]];
+    NSString *sectionHeader =[sectionDict objectForKey:@"sectionHeader"];
+    if([sectionHeader isEqualToString:@"General"]){
+        NSArray *sectionData = [sectionDict objectForKey:@"sectionData"];
+        NSMutableDictionary *settingData = sectionData[indexPath.row];
+        NSString *setting = [settingData objectForKey:@"title"];
+        if([setting isEqualToString:@"Group Name:"]){
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Change Group Name" message:@"Enter a new group name." preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                textField.placeholder = self.schedule.groupName;
+            }];
+            UIAlertAction *changeAction = [UIAlertAction actionWithTitle:@"Change" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                UITextField *textField = alert.textFields.firstObject;
+                //Change group name on parse
+                //Change UI
+                self.schedule.groupName = textField.text;
+                settingData[@"value"] = textField.text;
+                //Change this to only update desired cell
+                [tableView reloadData];
+            }];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+            [alert addAction:cancelAction];
+            [alert addAction:changeAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        }else if ([setting isEqualToString:@"Group Code:"]){
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Change Group Code" message:@"Enter a new group code." preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                textField.placeholder = self.schedule.groupCode;
+            }];
+            UIAlertAction *changeAction = [UIAlertAction actionWithTitle:@"Change" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                UITextField *textField = alert.textFields.firstObject;
+                //Change group Code on parse
+                //Change UI
+                self.schedule.groupCode = textField.text;
+                settingData[@"value"] = textField.text;
+                //Change this to only update desired cell
+                [tableView reloadData];
+            }];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+            [alert addAction:cancelAction];
+            [alert addAction:changeAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        //[self performSegueWithIdentifier:@"changeGroupNameOrCode" sender:cell];
+    }else if([sectionHeader isEqualToString:@"Dates"]){
+        NSArray *sectionData = [sectionDict objectForKey:@"sectionData"];
+        NSDictionary *settingData = sectionData[indexPath.row];
+        NSString *setting = [settingData objectForKey:@"title"];
+        if([setting isEqualToString:@"Start Date:"]){
+            
+        }else if ([setting isEqualToString:@"End Date:"]){
+            
+        }
+        //[self performSegueWithIdentifier:@"changeStartAndEndDateSegue" sender:cell];
+
+        
+    }
+
 }
-- (IBAction)deleteScheduleButtonPressed:(id)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete" message:@"Are you sure?" preferredStyle:UIAlertControllerStyleAlert];
+- (IBAction)deleteScheduleButtonPressed:(id)sender
+{
+    if(self.isCreator){
+        [self showAlertForDeleteEntireSchedule];
+    }else{
+        [self showAlertForRemoveCurrentUser];
+    }
+   
+}
+-(void)showAlertForDeleteEntireSchedule{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete Schedule" message:@"Are you sure you want to delete the entire schedule?" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
     }];
     UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-        if(self.isCreator){
             [self deleteEntireSchedule];
-        }else{
-            [self removeCurrentUserFromSchedule];
-        }
         
     }];
     [alert addAction:cancelAction];
     [alert addAction:deleteAction];
     [self presentViewController:alert animated:YES completion:nil];
-}
 
+}
+-(void)showAlertForRemoveCurrentUser
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Leave Schedule" message:@"Are you sure want to remove yourself from this schedule?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            [self removeCurrentUserFromSchedule];
+    }];
+    [alert addAction:cancelAction];
+    [alert addAction:deleteAction];
+    [self presentViewController:alert animated:YES completion:nil];
+
+    
+}
 -(void)removeCurrentUserFromSchedule
 {
     PFObject *parseSchedule = [PFObject objectWithoutDataWithClassName:kGroupScheduleClassName objectId:self.schedule.parseObjectID]; //might need data
