@@ -222,6 +222,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     IntervalTableViewCell *cell = (IntervalTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     NSMutableDictionary *sectionData = [self.schedule.intervalDataBySection objectForKey:[NSNumber numberWithInteger:indexPath.section]];
@@ -234,7 +235,6 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         [self updateStatusBeforeAssignmentsGeneratedForCell:cell AtIndex:index];
     }
     
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     
 }
@@ -249,8 +249,10 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         
         cell.assignedOrAvailableLabel.text = @"(Available)";
         //cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
+        
         cell.iconImageView.backgroundColor =[UIColor yellowColor];
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
+        
         
     }
     else if([self.updatedAvailabilitiesArray[index] isEqual:@1]) {
@@ -260,6 +262,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         //cell.iconImageView.image =[UIImage imageNamed:@"RedX"];
         cell.iconImageView.backgroundColor =[UIColor blueColor];
         cell.assignedOrAvailableLabel.textColor = [UIColor blueColor];
+
         
     }
 

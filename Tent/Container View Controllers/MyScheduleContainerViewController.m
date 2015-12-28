@@ -430,18 +430,18 @@
                                @"sectionHeader":@"General",
                                @"sectionData": @[
                                    [NSMutableDictionary dictionaryWithDictionary:@{
-                                       @"title": @"Group Name:",
+                                       @"title": @"Group Name",
                                        @"value": self.schedule.groupName,
                                        @"isEditable" : [NSNumber numberWithBool:YES]
                                        }],
                                    [NSMutableDictionary dictionaryWithDictionary:@{
-                                       @"title": @"Group Code:",
+                                       @"title": @"Group Code",
                                        @"value": self.schedule.groupCode,
                                        @"isEditable" : [NSNumber numberWithBool:YES]
                                        
                                        }],
                                    @{
-                                       @"title": @"Creator:",
+                                       @"title": @"Creator",
                                        @"value": [self.schedule.createdBy objectForKey:kUserPropertyFullName],
                                        @"isEditable" : [NSNumber numberWithBool:NO]
                                        }
@@ -452,23 +452,23 @@
                                @"sectionHeader":@"Dates",
                                @"sectionData": @[
                                        @{
-                                           @"title": @"Opponent:",
+                                           @"title": @"Opponent",
                                            @"value": hg.opponentName,
                                            @"isEditable" : [NSNumber numberWithBool:NO]
                                            },
 
                                        @{
-                                           @"title": @"Start Date:",
+                                           @"title": @"Start Date",
                                            @"value": self.schedule.startDate,
                                            @"isEditable" : [NSNumber numberWithBool:YES]
                                            },
                                        @{
-                                           @"title": @"End Date:",
+                                           @"title": @"End Date",
                                            @"value": self.schedule.endDate,
                                            @"isEditable" : [NSNumber numberWithBool:YES]
                                            },
                                        @{
-                                           @"title": @"Game Time:",
+                                           @"title": @"Game Time",
                                            @"value": hg.gameTime,
                                            @"isEditable" : [NSNumber numberWithBool:NO]
                                            

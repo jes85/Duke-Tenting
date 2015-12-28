@@ -340,7 +340,7 @@
         }
         NSMutableArray *assignmentsArray = parsePerson[kPersonPropertyAssignmentsArray]; //TODO: do i need mutable copy?
         Person *person = [[Person alloc]initWithUser:user assignmentsArray:assignmentsArray scheduleIndex:i  parseObjectID:parsePerson.objectId];
-        //OR, scheduleIndex = parseObject[scheduleIndexProperty]; forgot why I decided to store this property on Parse. might not be necessary
+        //OR, scheduleIndex = parseObject[scheduleIndexProperty]; forgot why I decided to store this property on Parse. might not be necessary //should do i so that it stays consistent after removal of people. should not store index on parse (i don't think i should. if i do, then i need to update it everytime i remove people)
         person.offlineName = offlineName;
         [personsArray addObject:person];
     }

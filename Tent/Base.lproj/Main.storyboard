@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
@@ -858,16 +859,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gwk-ft-lGs">
-                                <rect key="frame" x="0.0" y="518" width="320" height="50"/>
+                                <rect key="frame" x="0.0" y="528" width="320" height="40"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7z0-O4-0jg">
-                                        <rect key="frame" x="8" y="29" width="120" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7z0-O4-0jg">
+                                        <rect key="frame" x="8" y="23" width="156" height="12"/>
                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="10"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Tv-G2-t3G">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
                                         <state key="normal">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -875,28 +876,40 @@
                                             <segue destination="vRs-Og-BJU" kind="modal" identifier="MyScheduleSettingsSegue" id="vO3-Ub-4pO"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Countdown To Craziness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jur-dS-06h">
-                                        <rect key="frame" x="8" y="14" width="162" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Countdown To Craziness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jur-dS-06h">
+                                        <rect key="frame" x="8" y="8" width="156" height="15"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Icon_Gear" translatesAutoresizingMaskIntoConstraints="NO" id="CEb-AS-PpM">
-                                        <rect key="frame" x="272" y="5" width="40" height="40"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon_Gear" translatesAutoresizingMaskIntoConstraints="NO" id="CEb-AS-PpM">
+                                        <rect key="frame" x="276" y="2" width="36" height="36"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="CEb-AS-PpM" secondAttribute="height" multiplier="1:1" id="d9r-lZ-WBA"/>
+                                        </constraints>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.84673648002588453" green="0.84870472842847799" blue="0.8787399334380952" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="0ac-hs-axo"/>
+                                    <constraint firstItem="7z0-O4-0jg" firstAttribute="trailing" secondItem="Jur-dS-06h" secondAttribute="trailing" id="0Rj-tK-dKX"/>
+                                    <constraint firstAttribute="height" constant="40" id="0ac-hs-axo"/>
+                                    <constraint firstItem="CEb-AS-PpM" firstAttribute="leading" secondItem="Jur-dS-06h" secondAttribute="trailing" constant="112" id="8r5-Sb-cXM"/>
+                                    <constraint firstItem="Jur-dS-06h" firstAttribute="leading" secondItem="Gwk-ft-lGs" secondAttribute="leading" constant="8" id="CWc-Og-k5Q"/>
+                                    <constraint firstAttribute="trailing" secondItem="CEb-AS-PpM" secondAttribute="trailing" constant="8" id="CaP-xT-iYx"/>
                                     <constraint firstItem="2Tv-G2-t3G" firstAttribute="height" secondItem="Gwk-ft-lGs" secondAttribute="height" id="Hlk-JH-Xh2"/>
+                                    <constraint firstItem="CEb-AS-PpM" firstAttribute="height" secondItem="Gwk-ft-lGs" secondAttribute="height" multiplier="0.9" id="S54-Vh-tFu"/>
                                     <constraint firstItem="2Tv-G2-t3G" firstAttribute="width" secondItem="Gwk-ft-lGs" secondAttribute="width" id="WVo-gO-xDC"/>
+                                    <constraint firstItem="7z0-O4-0jg" firstAttribute="leading" secondItem="Jur-dS-06h" secondAttribute="leading" id="Xi8-NR-FFA"/>
+                                    <constraint firstItem="7z0-O4-0jg" firstAttribute="top" secondItem="Jur-dS-06h" secondAttribute="bottom" id="ZEr-Nd-Rul"/>
                                     <constraint firstAttribute="width" constant="320" id="bLa-qd-Xb8"/>
+                                    <constraint firstAttribute="centerY" secondItem="CEb-AS-PpM" secondAttribute="centerY" id="idb-Ug-ma6"/>
                                     <constraint firstItem="2Tv-G2-t3G" firstAttribute="top" secondItem="Gwk-ft-lGs" secondAttribute="top" id="jgq-x9-OtC"/>
                                     <constraint firstAttribute="centerX" secondItem="2Tv-G2-t3G" secondAttribute="centerX" id="utW-hW-4GJ"/>
+                                    <constraint firstAttribute="centerY" secondItem="Jur-dS-06h" secondAttribute="centerY" constant="5" id="xnI-KN-l4f"/>
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IbX-KH-RhN">
-                                <rect key="frame" x="0.0" y="108" width="320" height="410"/>
+                                <rect key="frame" x="0.0" y="108" width="320" height="420"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="320" id="TPZ-nW-QOM"/>
                                 </constraints>
@@ -2024,7 +2037,7 @@
                         <viewControllerLayoutGuide type="bottom" id="gH8-xC-TeO"/>
                     </layoutGuides>
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="DdC-nI-ZRD">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="410"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="420"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -2505,6 +2518,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="67X-S0-SzK"/>
+        <segue reference="2r9-Jy-6GB"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -23,6 +23,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self testChangeEmail];
     PFUser *currentUser = [PFUser currentUser];
 
     self.settings = @[@"Username:", @"Password:", @"Email:", @"Full Name:"];
@@ -33,6 +34,20 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)testChangeEmail{
+    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+    [query getObjectInBackgroundWithId:[[PFUser currentUser] objectId] block:^(PFObject *object, NSError *error) {
+        if(!error){
+                object[@"email"] = @"test@gmail.com";
+                [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    if(error){
+                        
+                    }
+                }];
+        }
+    }];
 }
 
 #pragma mark - UITableViewDataSource methods

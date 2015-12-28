@@ -28,8 +28,6 @@
     self.tableView.dataSource = self;
     
     if(self.isCreator){
-        // display edit button in top right
-        self.navigationItem.rightBarButtonItem = self.editButtonItem;
         self.deleteScheduleButton.titleLabel.text = @"Delete Schedule";
     }
 
@@ -133,7 +131,7 @@
         NSArray *sectionData = [sectionDict objectForKey:@"sectionData"];
         NSMutableDictionary *settingData = sectionData[indexPath.row];
         NSString *setting = [settingData objectForKey:@"title"];
-        if([setting isEqualToString:@"Group Name:"]){
+        if([setting isEqualToString:@"Group Name"]){
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Change Group Name" message:@"Enter a new group name." preferredStyle:UIAlertControllerStyleAlert];
             
             [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
@@ -164,7 +162,7 @@
             [alert addAction:cancelAction];
             [alert addAction:changeAction];
             [self presentViewController:alert animated:YES completion:nil];
-        }else if ([setting isEqualToString:@"Group Code:"]){
+        }else if ([setting isEqualToString:@"Group Code"]){
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Change Group Code" message:@"Enter a new group code." preferredStyle:UIAlertControllerStyleAlert];
             
             [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {

@@ -26,7 +26,7 @@
     NSInteger overallRow = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
     if(overallRow < 0) return; //schedule hasn't started
     NSIndexPath *indexPath = [Constants indexPathForOverallRow:overallRow tableView:self.tableView];
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    //[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 #pragma mark - Table view data source
