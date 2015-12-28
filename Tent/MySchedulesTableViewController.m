@@ -277,10 +277,17 @@
                 [self.tableView reloadData];
                 return;
             }
+            NSMutableArray *scheduleIdsToRemove = [[NSMutableArray alloc]init];
             for(PFObject *parseSchedule in schedulesForThisUser){
                 Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
-                [self addSchedule:scheduleObject];
+                //TODO: maybe figure out better way to check to make sure user has not been removed from schedule. maybe implement callback in above method
+                if(scheduleObject.currentUserWasRemoved){
+                    [scheduleIdsToRemove addObject:scheduleObject.parseObjectID];
+                }else{
+                    [self addSchedule:scheduleObject];
+                }
             }
+            [self removeSchedulesFromCurrentUser:scheduleIdsToRemove];
             [self.loadingWheel stopAnimating];
             [self.tableView reloadData];
         }
@@ -295,6 +302,20 @@
 
 }
 
+-(void)removeSchedulesFromCurrentUser:(NSArray *)scheduleIds
+{
+    PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
+    for(NSString *scheduleId in scheduleIds){
+        [relation removeObject:[PFObject objectWithoutDataWithClassName:kGroupScheduleClassName objectId:scheduleId]];
+
+    }
+    [[PFUser currentUser] saveInBackground];
+    if(scheduleIds.count > 0){
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message:@"You have been removed from one or more groups by the group creator." preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
 -(void)addSchedule:(Schedule *)schedule
 {
     [self.schedules addObject:schedule];
@@ -327,7 +348,10 @@
     PFObject *creator = parseSchedule[kGroupSchedulePropertyCreatedBy];
      
     NSArray *personsInGroup = parseSchedule[kGroupSchedulePropertyPersonsInGroup];
+    //TODO: does this order by CreatedAtAscending?  [query orderByAscending:kParsePropertyCreatedAt];
+
     NSMutableArray *personsArray = [[NSMutableArray alloc]initWithCapacity:personsInGroup.count];
+    BOOL currentUserStillInSchedule = false;
     for(int i = 0; i < personsInGroup.count; i++){
         PFObject *parsePerson = (PFObject *)personsInGroup[i];
         //PFUser *user = parsePerson[kPersonPropertyAssociatedUser];
@@ -337,6 +361,7 @@
             offlineName = parsePerson[kPersonPropertyOfflineName];
         }else{
             user = parsePerson[kPersonPropertyAssociatedUser];
+            if([user.objectId isEqualToString:[[PFUser currentUser] objectId]]) currentUserStillInSchedule = true;
         }
         NSMutableArray *assignmentsArray = parsePerson[kPersonPropertyAssignmentsArray]; //TODO: do i need mutable copy?
         Person *person = [[Person alloc]initWithUser:user assignmentsArray:assignmentsArray scheduleIndex:i  parseObjectID:parsePerson.objectId];
@@ -345,8 +370,12 @@
         [personsArray addObject:person];
     }
     
+    
     Schedule *schedule = [[Schedule alloc]initWithGroupName:groupName groupCode:groupCode startDate:startDate endDate:endDate intervalLengthInMinutes:60 personsArray:personsArray homeGame:homeGame createdBy:creator assignmentsGenerated:assignmentsGenerated parseObjectID:parseObjectID] ;
-     
+    
+    if(!currentUserStillInSchedule){
+        schedule.currentUserWasRemoved = true;
+    }
     return schedule;
     
 }
@@ -466,10 +495,10 @@
         if(!error){
             NSLog(@"Retrieved schedule to join from parse");
             Person *newPerson = [[Person alloc]initWithUser:[PFUser currentUser] numIntervals:self.scheduleToJoin.numIntervals];
+            newPerson.scheduleIndex = self.scheduleToJoin.personsArray.count;
             PFObject *personObject = [PFObject objectWithClassName:kPersonClassName];
             personObject[kPersonPropertyAssignmentsArray] = newPerson.assignmentsArray;
             personObject[kPersonPropertyAssociatedUser] = newPerson.user;
-            personObject[kPersonPropertyIndex] = [NSNumber numberWithInteger: self.scheduleToJoin.personsArray.count];
 
     
             [personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -487,6 +516,8 @@
                          PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
                          [relation addObject:parseSchedule];
                          [[PFUser currentUser] saveInBackground];
+                         
+                         [self.scheduleToJoin.personsArray addObject:newPerson];
                          [self addSchedule:self.scheduleToJoin];
                          [self.tableView reloadData];
                      }
@@ -534,7 +565,6 @@
     PFObject *personObject = [PFObject objectWithClassName:kPersonClassName];
     personObject[kPersonPropertyAssignmentsArray] = person.assignmentsArray;
     personObject[kPersonPropertyAssociatedUser] = person.user;
-    personObject[kPersonPropertyIndex] = @0;
     
     /*
     [personObject saveInBackground];

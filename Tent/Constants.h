@@ -16,7 +16,6 @@
 
 #define kPersonPropertyAssignmentsArray                 @"assignmentsArray"
 #define kPersonPropertyAssociatedUser                   @"associatedUser"
-#define kPersonPropertyIndex                            @"index"
 #define kPersonPropertyOfflineName                      @"offlineName"
 
 // GroupSchedule ParseObject
@@ -38,6 +37,11 @@
  */
 
 // User ParseObject
+#define kParsePropertyObjectId                  @"objectId"
+#define kParsePropertyCreatedAt                 @"createdAt"
+
+#define kUserPropertyClassName                  @"_User" //use [PFUser query] instead
+
 #define kUserPropertyGroupSchedules                     @"groupSchedules"
 #define kUserPropertyFullName                           @"additional"
 

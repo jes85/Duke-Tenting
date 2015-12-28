@@ -107,10 +107,14 @@
     PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
     
     [query whereKey:@"objectId" containedIn:objectIds];
+    [query orderByAscending:kParsePropertyCreatedAt];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if(!error){
-            for(PFObject *parsePerson in objects){
-                parsePerson[kPersonPropertyAssignmentsArray] = assignments[[parsePerson[kPersonPropertyIndex] integerValue]];
+            for(int i = 0; i<objects.count; i++){
+                PFObject *parsePerson = objects[i];
+                parsePerson[kPersonPropertyAssignmentsArray] = assignments[i];//assignments[[parsePerson[kPersonPropertyIndex] integerValue]];
+                //TODO: make sure ith index is conisistent. might need to update Person indices on local after removing someone
+
                 
             }
             [PFObject saveAllInBackground:objects block:^(BOOL succeeded, NSError *error) {
@@ -243,6 +247,8 @@
 +(void)updateParsePersons:(NSMutableArray *)parsePersonIds WithNewAssignmentsArrays:(NSMutableArray *)assignmentsArrays completion:(void(^)(void))callback
 {
     PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
+    //TODO: does it return objects in same order as parsePersonIds?
+    // might need     [query orderByAscending:kParsePropertyCreatedAt];
     [query whereKey:@"objectId" containedIn:parsePersonIds];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if(!error){

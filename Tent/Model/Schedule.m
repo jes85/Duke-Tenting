@@ -64,7 +64,8 @@
         self.createdBy = createdBy;
         self.assignmentsGenerated = assignmentsGenerated;
         self.parseObjectID = parseObjectID;
-        self.currentUserPersonIndex = [self findCurrentUserPersonIndex];
+        //self.currentUserPersonIndex = [self findCurrentUserPersonIndex];
+        self.currentUserWasRemoved = false;
         [self calculateNumIntervals];
         [self createIntervalDataArrays];
     
@@ -74,9 +75,13 @@
 
 -(NSUInteger)findCurrentUserPersonIndex
 {
+    NSLog(@"%@, %d", self.groupName, self.personsArray.count);
     for(int i = 0; i<self.personsArray.count; i++){
         Person *person = self.personsArray[i];
-        if([person.user.objectId isEqualToString:[[PFUser currentUser] objectId]]){
+        NSLog(@"%@", person.user.objectId);
+        NSLog(@"%@", [[PFUser currentUser] objectId]);
+
+        if(person.user && [person.user.objectId isEqualToString:[[PFUser currentUser] objectId]]){
             return i;
         }
     }
