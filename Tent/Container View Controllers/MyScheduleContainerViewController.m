@@ -212,6 +212,7 @@
     UIViewController *vc;
     for (NSString *identifier in viewControllerIdentifiers) {
         vc = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+        vc.view.frame = [self frameForContentController];
         [array addObject:vc];
     }
     
@@ -243,8 +244,8 @@
     }
     
     // Current
-    else if ([newVC isKindOfClass:[NowPersonsInIntervalViewController class]]){
-        NowPersonsInIntervalViewController *piivc = (NowPersonsInIntervalViewController *)newVC;
+    else if ([newVC isKindOfClass:[PersonsInIntervalViewController class]]){
+        PersonsInIntervalViewController *piivc = (PersonsInIntervalViewController *)newVC;
         piivc.schedule = self.schedule;
         piivc.displayCurrent = YES;
         self.navigationItem.rightBarButtonItems = @[];
@@ -274,25 +275,30 @@
 
     CGRect frame = CGRectMake(-self.containerView.bounds.size.width, self.containerView.bounds.origin.y, self.containerView.bounds.size.width, self.containerView.bounds.size.height);
     newVC.view.frame = frame;
+    //CGRect endFrame = CGRectMake(2*self.containerView.bounds.size.width, self.containerView.bounds.origin.y, self.containerView.bounds.size.width, self.containerView.bounds.size.height);
 
     [self transitionFromViewController:oldVC toViewController:newVC duration:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
         [oldVC.view removeFromSuperview];
         [self.containerView addSubview:newVC.view];
+        //newVC.view.frame = oldVC.view.frame;
+        //oldVC.view.frame = endFrame;
 
     } completion:^(BOOL finished) {
         newVC.view.frame = [self frameForContentController];
+        
         [oldVC removeFromParentViewController];
         [newVC didMoveToParentViewController:self];
+
     }];
     
 }
 
 - (IBAction)segmentChanged:(UISegmentedControl *)sender {
     UIViewController *newVC = [self viewControllerForSegmentIndex:sender.selectedSegmentIndex];
-    
+
     [self cycleFromViewController:self.currentViewController toViewController:newVC];
-    
     self.currentViewController = newVC;
+
 }
 
 

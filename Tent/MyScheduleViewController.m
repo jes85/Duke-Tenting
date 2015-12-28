@@ -59,7 +59,12 @@
     NSInteger overallRow = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
     if(overallRow < 0) return; //schedule hasn't started
     NSIndexPath *indexPath = [Constants indexPathForOverallRow:overallRow tableView:self.tableView];
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    NSUInteger index = indexPath.row;
+    NSUInteger section = indexPath.section;
+    NSUInteger rows = [self.tableView numberOfRowsInSection:section];
+    NSUInteger sections = self.tableView.numberOfSections;
+    //TODO: there is an edge case where indexPathForOverallRow is wrong (index 24 when there are only 24 rows)
+    //[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 #pragma mark - Accessor Methods
 

@@ -271,8 +271,6 @@
 				3F13043A1BD300A400243C29 /* ScheduleSettingsViewController.m */,
 				3F0A86661C2FA11800CA0BA1 /* StatsViewController.h */,
 				3F0A86671C2FA11800CA0BA1 /* StatsViewController.m */,
-				3FEAEB131989B07D00E3218F /* HomeBaseTableViewController.h */,
-				3FEAEB141989B07D00E3218F /* HomeBaseTableViewController.m */,
 				3FDE355B19809CC400CE47D8 /* PickPersonTableViewController.h */,
 				3FDE355C19809CC400CE47D8 /* PickPersonTableViewController.m */,
 				3FD6963A1996A7DB00D9C5C4 /* AddPersonViewController.h */,
@@ -281,16 +279,12 @@
 				3FA97F9A1C2E6EDB000B5920 /* MyScheduleViewController.m */,
 				3FA97F9C1C2E74A8000B5920 /* MeScheduleViewController.h */,
 				3FA97F9D1C2E74A8000B5920 /* MeScheduleViewController.m */,
-				3F552A411BC72D440095ADCA /* MyScheduleTableViewController.h */,
-				3F552A421BC72D440095ADCA /* MyScheduleTableViewController.m */,
 				3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */,
 				3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */,
 				3F2AC3DA1BF526BF007C694C /* PersonsInIntervalViewController.h */,
 				3F2AC3DB1BF526BF007C694C /* PersonsInIntervalViewController.m */,
 				3F89A9961C2BD7FF00882F5F /* NowPersonsInIntervalViewController.h */,
 				3F89A9971C2BD7FF00882F5F /* NowPersonsInIntervalViewController.m */,
-				3F439670198364CF00C27E6D /* GenerateScheduleViewController.h */,
-				3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */,
 				3FD5CFBC1C2CB79500A28630 /* AdminToolsViewController.h */,
 				3FD5CFBD1C2CB79500A28630 /* AdminToolsViewController.m */,
 			);
@@ -313,6 +307,12 @@
 		3F3B0C3C1BFBF5B10056E378 /* Old Unused View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3F552A411BC72D440095ADCA /* MyScheduleTableViewController.h */,
+				3F552A421BC72D440095ADCA /* MyScheduleTableViewController.m */,
+				3F439670198364CF00C27E6D /* GenerateScheduleViewController.h */,
+				3F439671198364CF00C27E6D /* GenerateScheduleViewController.m */,
+				3FEAEB131989B07D00E3218F /* HomeBaseTableViewController.h */,
+				3FEAEB141989B07D00E3218F /* HomeBaseTableViewController.m */,
 				3FDE3558198094C700CE47D8 /* EnterScheduleTableViewController.h */,
 				3FDE3559198094C700CE47D8 /* EnterScheduleTableViewController.m */,
 				3F71811D199D117200737662 /* DefaultSettingsViewController.h */,

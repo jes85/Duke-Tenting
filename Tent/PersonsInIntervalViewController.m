@@ -22,13 +22,13 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     if(self.displayCurrent == NO) {
         self.dateTimeLabel.text = self.dateTimeText;
         [self.view addSubview:self.dateTimeLabel];
     }
-    NSLog(self.dateTimeLabel.text);
 }
 
 -(void)viewDidAppear:(BOOL)animated
