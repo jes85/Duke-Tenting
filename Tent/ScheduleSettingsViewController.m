@@ -141,12 +141,24 @@
             }];
             UIAlertAction *changeAction = [UIAlertAction actionWithTitle:@"Change" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
                 UITextField *textField = alert.textFields.firstObject;
-                //Change group name on parse
-                //Change UI
-                self.schedule.groupName = textField.text;
-                settingData[@"value"] = textField.text;
-                //Change this to only update desired cell
-                [tableView reloadData];
+                NSString *newGroupName = textField.text;
+                //Update group name on parse
+                PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
+                [query getObjectInBackgroundWithId:self.schedule.parseObjectID block:^(PFObject *parseSchedule, NSError *error) {
+                    if(!error){
+                        parseSchedule[kGroupSchedulePropertyGroupName] = newGroupName;
+                        [parseSchedule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                            if(succeeded){
+                                //Update UI
+                                self.schedule.groupName = newGroupName;
+                                settingData[@"value"] = newGroupName;
+                                //Change this to only update desired cell
+                                [tableView reloadData];
+                            }
+                        }];
+                    }
+                }];
+
             }];
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
             [alert addAction:cancelAction];
@@ -160,12 +172,25 @@
             }];
             UIAlertAction *changeAction = [UIAlertAction actionWithTitle:@"Change" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
                 UITextField *textField = alert.textFields.firstObject;
-                //Change group Code on parse
-                //Change UI
-                self.schedule.groupCode = textField.text;
-                settingData[@"value"] = textField.text;
-                //Change this to only update desired cell
-                [tableView reloadData];
+                NSString *newGroupCode = textField.text;
+                //Update group Code on parse
+                PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
+                [query getObjectInBackgroundWithId:self.schedule.parseObjectID block:^(PFObject *parseSchedule, NSError *error) {
+                    if(!error){
+                        parseSchedule[kGroupSchedulePropertyGroupCode] = newGroupCode;
+                        [parseSchedule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                            if(succeeded){
+                                //Update UI
+                                //consider updating UI before updating parse. it will look appear faster, and if it fails to save it's not a huge deal. Probably still safer to do this though
+                                self.schedule.groupCode = newGroupCode;
+                                settingData[@"value"] = newGroupCode;
+                                //Change this to only update desired cell
+                                [tableView reloadData];
+                            }
+                        }];
+                    }
+                }];
+                
             }];
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
             [alert addAction:cancelAction];
@@ -174,14 +199,7 @@
         }
         //[self performSegueWithIdentifier:@"changeGroupNameOrCode" sender:cell];
     }else if([sectionHeader isEqualToString:@"Dates"]){
-        NSArray *sectionData = [sectionDict objectForKey:@"sectionData"];
-        NSDictionary *settingData = sectionData[indexPath.row];
-        NSString *setting = [settingData objectForKey:@"title"];
-        if([setting isEqualToString:@"Start Date:"]){
-            
-        }else if ([setting isEqualToString:@"End Date:"]){
-            
-        }
+        //TODO: implement date segue
         //[self performSegueWithIdentifier:@"changeStartAndEndDateSegue" sender:cell];
 
         
