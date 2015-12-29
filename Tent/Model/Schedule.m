@@ -290,6 +290,32 @@
     }
 }
 
+//interval index is overall index
+-(NSUInteger)numPeopleAssignedInIntervalIndex:(NSUInteger)intervalIndex
+{
+    NSUInteger numPeopleAssigned = 0;
+    for(int i = 0; i < self.numPeople; i++){
+        Person *person = self.personsArray[i];
+        if([person.assignmentsArray[intervalIndex] integerValue] == 2){
+            numPeopleAssigned++;
+        }
+    }
+    
+    return numPeopleAssigned;
+}
+-(NSUInteger)numPeopleAvailableInIntervalIndex:(NSUInteger)intervalIndex
+{
+    NSUInteger numPeopleAvailable = 0;
+    for(int i = 0; i < self.numPeople; i++){
+        Person *person = self.personsArray[i];
+        NSUInteger status =[person.assignmentsArray[intervalIndex] integerValue];
+        if(status == 1 | status == 2){
+            numPeopleAvailable++;
+        }
+    }
+    
+    return numPeopleAvailable;
+}
 
 #pragma mark - Equality
 - (BOOL)isEqual:(id)other {

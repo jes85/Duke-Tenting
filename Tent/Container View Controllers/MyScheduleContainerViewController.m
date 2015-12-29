@@ -239,7 +239,7 @@
         msvc.schedule = self.schedule;
         
         
-        self.navigationItem.rightBarButtonItems = self.schedule.assignmentsGenerated ? nil : @[self.editButton];
+        self.navigationItem.rightBarButtonItems = self.schedule.assignmentsGenerated & !self.isCreator ? nil : @[self.editButton];
         
     }
     

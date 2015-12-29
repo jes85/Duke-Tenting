@@ -57,7 +57,7 @@
     NSUInteger rowCount = 0;
     NSUInteger section = 0;
     
-    while(rowCount + [tableView numberOfRowsInSection:section] - 1 < overallRow){
+    while(rowCount + [tableView numberOfRowsInSection:section] < overallRow + 1){
         rowCount += [tableView numberOfRowsInSection:section];
         section = section + 1;
     }

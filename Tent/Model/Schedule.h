@@ -91,6 +91,8 @@
 -(NSMutableArray *)numPeopleAvailableInEachInterval;
 -(NSMutableArray *)numPeopleAssignedInEachInterval;
 
+-(NSUInteger)numPeopleAvailableInIntervalIndex:(NSUInteger)intervalIndex;
+-(NSUInteger)numPeopleAssignedInIntervalIndex:(NSUInteger)intervalIndex;
 
 
 

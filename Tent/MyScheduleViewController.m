@@ -46,13 +46,18 @@
         [self changeNavBarToShowEditButton];
     }else{
     }
-    [self scrollToCurrentInterval];
+    //[self scrollToCurrentInterval];
+    
+    //TODO: note: this is called in MeSchedule before prepareForSegue stuff in container vc. Maybe subclass twice and override viewDidAppear and viewDidLoad appropriately
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    //[self scrollToCurrentInterval];
+    if([self.schedule.startDate timeIntervalSinceNow] < 0 && [self.schedule.endDate timeIntervalSinceNow] > 0){
+        [self scrollToCurrentInterval];
+
+    }
 }
 -(void)scrollToCurrentInterval
 {
@@ -64,7 +69,8 @@
     NSUInteger rows = [self.tableView numberOfRowsInSection:section];
     NSUInteger sections = self.tableView.numberOfSections;
     //TODO: there is an edge case where indexPathForOverallRow is wrong (index 24 when there are only 24 rows)
-    //[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    //think i might have fixed it
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 #pragma mark - Accessor Methods
 
@@ -174,9 +180,23 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     
     NSUInteger index = [sectionData[@"intervalStartIndex"] integerValue] + indexPath.row;
     
-    Interval *interval = self.schedule.intervalDataByOverallRow[index];
+    Interval *interval = self.schedule.intervalDataByOverallRow[index]; //might need to update this locally when updating people's schedules
     
-    cell.textLabel.text =interval.timeString;
+    // TODO: decide whether to do this for each cell use or array
+    NSUInteger numPeopleAssigned = [self.schedule numPeopleAssignedInIntervalIndex:index];
+    NSUInteger numPeopleAvailable = [self.schedule numPeopleAvailableInIntervalIndex:index];
+    NSString *warningText;
+    if(self.schedule.assignmentsGenerated){
+        warningText = [NSString stringWithFormat:@"%lu assigned out of %lu required", (unsigned long)numPeopleAssigned, (unsigned long)interval.requiredPersons];
+        cell.warningLabel.textColor = [UIColor redColor];
+    }else{
+        warningText = [NSString stringWithFormat:@"%lu available out of %lu needed", (unsigned long)numPeopleAvailable, (unsigned long) interval.requiredPersons];
+        cell.warningLabel.textColor = [UIColor orangeColor];
+    }
+    
+    cell.warningLabel.text = warningText;
+    //cell.textLabel.text =interval.timeString;
+    cell.timeLabel.text = interval.timeString;
     
     
     //NSString *interval = self.schedule.hourIntervalsDisplayArray[indexPath.row];

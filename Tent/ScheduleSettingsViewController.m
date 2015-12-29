@@ -248,7 +248,7 @@
     PFObject *personToDelete;
     for(int i = 0; i<self.schedule.personsArray.count; i++){
         Person *person = self.schedule.personsArray[i];
-        //TODO: maybe do it by index instead. Consider case where person is not associated with a user
+        //TODO: maybe do it by index instead. Consider case where person is not associated with a user (but in that case this method would never be called?)
         if([[[PFUser currentUser] objectId] isEqual: person.user.objectId]){
             [self.schedule.personsArray removeObjectAtIndex:i];
             personToDelete = [PFObject objectWithoutDataWithClassName:kPersonClassName objectId:person.parseObjectID];

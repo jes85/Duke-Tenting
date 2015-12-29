@@ -13,5 +13,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *assignedOrAvailableLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
 
+@property (weak, nonatomic) IBOutlet UILabel *warningLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
 @end
