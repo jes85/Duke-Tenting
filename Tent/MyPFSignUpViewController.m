@@ -25,7 +25,11 @@
     }
     return self;
 }
-
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    NSLog(@"%f, %f", self.signUpView.dismissButton.frame.origin.y, self.signUpView.frame.origin.y);
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -118,7 +122,13 @@
                                                     fieldFrame.size.width - 10.0f,
                                                     fieldFrame.size.height)];
     }
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    NSLog(@"%f, %f", self.signUpView.dismissButton.frame.origin.y, self.signUpView.frame.origin.y);
 
+    
+}
+ 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
