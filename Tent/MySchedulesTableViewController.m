@@ -30,6 +30,8 @@
 
 @property (nonatomic) NSMutableSet *mySchedulesHomeGameIndexes;
 
+@property (nonatomic) NSIndexPath *updatedScheduleIndexPath; //only update this if parts of schedule that are visible are updated (name, start date, end date)
+
 @end
 
 
@@ -69,6 +71,51 @@
     
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:@"ScheduleChanged" object:nil];
+    
+}
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    //[super dealloc];
+}
+-(void)scheduleChanged:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    Schedule *schedule = userInfo[@"schedule"];
+    [self updateLocalSchedule:schedule];
+    
+}
+
+-(void)updateLocalSchedule: (Schedule *)updatedSchedule
+{
+    for(int i = 0; i <self.schedules.count; i++){
+        Schedule *localSchedule = (Schedule *)self.schedules[i];
+        if([localSchedule.parseObjectID isEqualToString:updatedSchedule.parseObjectID]){
+            self.schedules[i] = updatedSchedule;
+        
+            //test
+            //this works (don't need to save a bool and then wait for viewDidAppear to change view. can do it when notification is received.
+            //is there a performance improvement if i wait until viewDidAppear?
+            //when do vcs get deallocated? if its deallocated, will it ever receive the notification?
+            //i bet since its part of navigation vc, it's not deallocated. but if its a modal (i.e. settings view), when its closed it is deallocated UPDATE: this is true. i tested it
+            //but if its deallocated, then viewDidLoad will be called, and as long as the vc that calls it has had its schedule updated, the new vc will be updated in prepareForSegue and will update its UI in viewDidLoad
+            /*
+            updatedSchedule.groupName = @"Test";
+            self.schedules[i] = updatedSchedule;
+            [self updateTableViewRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+             */
+            //self.updatedScheduleIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
+        }
+    }
+}
+-(void)updateTableViewRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.tableView beginUpdates];
+    
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -87,6 +134,12 @@
         [self.tableView reloadData];
         [self getMySchedules];
         
+    }else{
+        //currentUser
+        if(self.updatedScheduleIndexPath){
+            [self updateTableViewRowAtIndexPath:self.updatedScheduleIndexPath];
+            self.updatedScheduleIndexPath = nil;
+        }
     }
 }
 
@@ -631,6 +684,9 @@
             MyScheduleContainerViewController *mscvc = [segue destinationViewController];
             NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
             if(indexPath){
+                //TODO: Note: because this is in an array, it is pass by reference. so i don't really need to notify this view controller. probably still should, and maybe should pass this as a mutable copy to prevent coupling across vcs (even though in effect i want coupling)
+                //this also means a workaround could probably be to put all self.schedules in an array
+                //but i should use notifications so i know when to update ui
                 Schedule *schedule = self.schedules[indexPath.row];
                 mscvc.schedule = schedule;
             }

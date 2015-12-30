@@ -242,6 +242,9 @@
 
     
 }
+-(void)dealloc{
+    
+}
 -(void)removeCurrentUserFromSchedule
 {
     PFObject *parseSchedule = [PFObject objectWithoutDataWithClassName:kGroupScheduleClassName objectId:self.schedule.parseObjectID]; //might need data

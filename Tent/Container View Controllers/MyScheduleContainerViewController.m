@@ -72,6 +72,22 @@
     
     
     self.navigationItem.rightBarButtonItems = @[editButton];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:@"ScheduleChanged" object:nil];
+    
+}
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    //[super dealloc];
+}
+-(void)scheduleChanged:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    Schedule *schedule = userInfo[@"schedule"];
+    self.schedule = schedule;
+   
 }
 -(void)addPersonBarButtonItemPressed
 {

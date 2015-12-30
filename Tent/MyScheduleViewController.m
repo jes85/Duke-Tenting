@@ -377,17 +377,6 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     //if current person's availabilities array was changed, update Person and Schedule on current iPhone and on Parse
     if(![self.currentPerson.assignmentsArray isEqual:self.updatedAvailabilitiesArray]){
         
-        //update Person's availabilities array on local iPhone
-        self.currentPerson.assignmentsArray = self.updatedAvailabilitiesArray;
-        NSMutableArray *personsList = self.schedule.personsArray;
-        [personsList removeObjectAtIndex:self.currentPerson.scheduleIndex];
-        [personsList insertObject:self.currentPerson atIndex:self.currentPerson.scheduleIndex];
-        self.schedule.personsArray = personsList;
-        /*
-         can i just do this? pointers or values
-         Person *currentPerson = personsList[self.currentPerson.scheduleIndex];
-         currentPerson = self.currentPerson;
-         */
         
         //Update Person on Parse
         PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
@@ -397,8 +386,41 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
             }else{
                 //the find succeeded
                 NSLog(@"Find succeeded");
-                object[kPersonPropertyAssignmentsArray] = self.currentPerson.assignmentsArray;
-                [object saveInBackground];
+                object[kPersonPropertyAssignmentsArray] = self.updatedAvailabilitiesArray;
+                [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    if(succeeded){
+                        //update Person's availabilities array on local iPhone
+                        self.currentPerson.assignmentsArray = [self.updatedAvailabilitiesArray mutableCopy];
+                        NSMutableArray *personsList = self.schedule.personsArray;
+                        [personsList removeObjectAtIndex:self.currentPerson.scheduleIndex];
+                        [personsList insertObject:self.currentPerson atIndex:self.currentPerson.scheduleIndex];
+                        self.schedule.personsArray = personsList;
+                        /*
+                         can i just do this? pointers or values
+                         Person *currentPerson = personsList[self.currentPerson.scheduleIndex];
+                         currentPerson = self.currentPerson;
+                         or currentPerson.assignmentsArray = self.currentPerson.assignmentsArray
+                         */
+                        //update Intervals offline
+                        for(int i = 0; i<[self.currentPerson.assignmentsArray count]; i++){
+                            Interval *interval = (Interval *)self.schedule.intervalDataByOverallRow[i];
+                            if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
+                                if(![interval.availablePersons containsObject:self.currentPerson]){
+                                    [interval.availablePersons addObject: self.currentPerson];
+                                }
+                            }
+                            if([self.currentPerson.assignmentsArray[i] isEqual:@2]) {
+                                if(![interval.assignedPersons containsObject:self.currentPerson]){
+                                    [interval.assignedPersons addObject:self.currentPerson];
+                                }
+                            }
+                        }
+                        //notify other vcs
+                        NSDictionary *userInfo = @{@"schedule":self.schedule};
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"ScheduleChanged" object:self userInfo:userInfo];
+                    }
+                }];
+               
             }
         }];
         
@@ -424,20 +446,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
          */
         
         
-        //update Intervals offline
-        for(int i = 0; i<[self.currentPerson.assignmentsArray count]; i++){
-            Interval *interval = (Interval *)self.schedule.intervalDataByOverallRow[i];
-            if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
-                if(![interval.availablePersons containsObject:self.currentPerson]){
-                    [interval.availablePersons addObject: self.currentPerson];
-                }
-            }
-            if([self.currentPerson.assignmentsArray[i] isEqual:@2]) {
-                if(![interval.assignedPersons containsObject:self.currentPerson]){
-                    [interval.assignedPersons addObject:self.currentPerson];
-                }
-            }
-        }
+        
     }
     
     
