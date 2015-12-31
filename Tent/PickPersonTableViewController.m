@@ -139,8 +139,27 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:@"ScheduleChanged" object:nil];
     
 }
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    //[super dealloc];
+}
+-(void)scheduleChanged:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    Schedule *schedule = userInfo[@"schedule"];
+    [self updateLocalSchedule:schedule];
+    
+}
+-(void)updateLocalSchedule: (Schedule *)updatedSchedule
+{
+    self.schedule = updatedSchedule;
+    [self.tableView reloadData];
+}
+
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];

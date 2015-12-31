@@ -7,8 +7,9 @@
 //
 
 #import "MyScheduleContainerViewController.h"
-#import "Constants.h"
+
 #import <Parse/Parse.h>
+#import "Constants.h"
 #import "Person.h"
 #import "Interval.h"
 #import "MySchedulesTableViewController.h"
@@ -87,6 +88,7 @@
     NSDictionary *userInfo = notification.userInfo;
     Schedule *schedule = userInfo[@"schedule"];
     self.schedule = schedule;
+    //maybe update self.viewcontrollers' schedules too and update them. instead of each of them having a notification
    
 }
 -(void)addPersonBarButtonItemPressed

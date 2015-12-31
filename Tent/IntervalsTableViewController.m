@@ -19,6 +19,27 @@
 {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:@"ScheduleChanged" object:nil];
+    
+}
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    //[super dealloc];
+}
+-(void)scheduleChanged:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    if(!(notification.object == self)){
+        Schedule *schedule = userInfo[@"schedule"];
+        [self updateLocalSchedule:schedule];
+    }
+    
+}
+-(void)updateLocalSchedule: (Schedule *)updatedSchedule
+{
+    self.schedule = updatedSchedule;
+    //[self.tableView reloadData]; //unnecessary for now
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -105,6 +126,8 @@
         //i'll do calculation for now
         NSUInteger overallRow = [Constants overallRowForIndexPath:indexPath tableView:self.tableView];
         
+        
+        //TODO: subclass and make it different for Persons vs nowPersons
         Interval *interval = self.schedule.intervalDataByOverallRow[overallRow];
         piivc.availablePersonsArray = interval.availablePersons;
         piivc.assignedPersonsArray = interval.assignedPersons;

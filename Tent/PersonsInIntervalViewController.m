@@ -25,10 +25,38 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
     if(self.displayCurrent == NO) {
         self.dateTimeLabel.text = self.dateTimeText;
         [self.view addSubview:self.dateTimeLabel];
     }
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:@"ScheduleChanged" object:nil];
+    
+}
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    //[super dealloc];
+}
+-(void)scheduleChanged:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    if(!(notification.object == self)){
+        Schedule *schedule = userInfo[@"schedule"];
+        [self updateLocalSchedule:schedule];
+    }
+    
+}
+-(void)updateLocalSchedule: (Schedule *)updatedSchedule
+{
+    self.schedule = updatedSchedule;
+    //TODO: updateAvailable and assignedPersons arrays. do subclass thing
+    [self.tableView reloadData];
+    [self.tableView beginUpdates];
+    
+    [self.tableView endUpdates];
 }
 
 -(void)viewDidAppear:(BOOL)animated

@@ -48,7 +48,30 @@
     }
     //[self scrollToCurrentInterval];
     
-    //TODO: note: this is called in MeSchedule before prepareForSegue stuff in container vc. Maybe subclass twice and override viewDidAppear and viewDidLoad appropriately
+    //TODO: note: viewDidLoad is called in MeSchedule before prepareForSegue stuff in container vc. Maybe subclass twice and override viewDidAppear and viewDidLoad appropriately
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:@"ScheduleChanged" object:nil];
+    
+}
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    //[super dealloc];
+}
+-(void)scheduleChanged:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    if(!(notification.object == self)){
+        Schedule *schedule = userInfo[@"schedule"];
+        [self updateLocalSchedule:schedule];
+    }
+    
+}
+-(void)updateLocalSchedule: (Schedule *)updatedSchedule
+{
+    self.schedule = updatedSchedule;
+    [self.tableView reloadData];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -402,14 +425,27 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
                          or currentPerson.assignmentsArray = self.currentPerson.assignmentsArray
                          */
                         //update Intervals offline
+                        //instead of this, can just compare currentPerson and updated and only update intervals that were changed
+                        //TODO: or can keep track of changed intervals as they occur so we don't have to loop through all intervals here
                         for(int i = 0; i<[self.currentPerson.assignmentsArray count]; i++){
                             Interval *interval = (Interval *)self.schedule.intervalDataByOverallRow[i];
-                            if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
+                            if([self.currentPerson.assignmentsArray[i] isEqual:@0]) {
+                                if([interval.availablePersons containsObject:self.currentPerson]){
+                                    [interval.availablePersons removeObject: self.currentPerson];
+                                }
+                                if([interval.assignedPersons containsObject:self.currentPerson]){
+                                    [interval.assignedPersons removeObject:self.currentPerson];
+                                }
+                            }
+                            else if([self.currentPerson.assignmentsArray[i] isEqual:@1]) {
                                 if(![interval.availablePersons containsObject:self.currentPerson]){
                                     [interval.availablePersons addObject: self.currentPerson];
                                 }
                             }
-                            if([self.currentPerson.assignmentsArray[i] isEqual:@2]) {
+                            else if([self.currentPerson.assignmentsArray[i] isEqual:@2]) {
+                                if(![interval.availablePersons containsObject:self.currentPerson]){
+                                    [interval.availablePersons addObject: self.currentPerson];
+                                }
                                 if(![interval.assignedPersons containsObject:self.currentPerson]){
                                     [interval.assignedPersons addObject:self.currentPerson];
                                 }

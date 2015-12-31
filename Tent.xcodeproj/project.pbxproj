@@ -23,7 +23,6 @@
 		3F1107E419903FDB0063ED9B /* Interval.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1107E319903FDB0063ED9B /* Interval.m */; };
 		3F1304351BD2EF0900243C29 /* MySchedulesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1304341BD2EF0900243C29 /* MySchedulesTableViewCell.m */; };
 		3F13043B1BD300A400243C29 /* ScheduleSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F13043A1BD300A400243C29 /* ScheduleSettingsViewController.m */; };
-		3F28B37019C7A214006E9C97 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F28B36F19C7A214006E9C97 /* Parse.framework */; };
 		3F296DB4199131A20059E19E /* PersonsInIntervalTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */; };
 		3F2AC3DC1BF526BF007C694C /* PersonsInIntervalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F2AC3DB1BF526BF007C694C /* PersonsInIntervalViewController.m */; };
 		3F3B0C371BFBEB2A0056E378 /* AlgorithmSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F3B0C361BFBEB2A0056E378 /* AlgorithmSchedule.m */; };
@@ -33,6 +32,7 @@
 		3F4CA9BB19B2ABD500EA5BDE /* PasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4CA9BA19B2ABD500EA5BDE /* PasswordTableViewCell.m */; };
 		3F4CDA971B857A6000D6C2B0 /* dukeschedule.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3F4CDA961B857A6000D6C2B0 /* dukeschedule.txt */; };
 		3F552A431BC72D440095ADCA /* MyScheduleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F552A421BC72D440095ADCA /* MyScheduleTableViewController.m */; };
+		3F5AAA4B1C35279700531F09 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F5AAA4A1C35279700531F09 /* libsqlite3.tbd */; };
 		3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F616050198DA61E006EF048 /* IntervalTableViewCell.m */; };
 		3F71811F199D117200737662 /* DefaultSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F71811E199D117200737662 /* DefaultSettingsViewController.m */; };
 		3F738C2919B401880089878F /* JoinScheduleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F738C2819B401880089878F /* JoinScheduleTableViewController.m */; };
@@ -42,6 +42,7 @@
 		3F87220E19A2627A005F12DD /* AlgorithmTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F87220D19A2627A005F12DD /* AlgorithmTest.m */; };
 		3F89A9981C2BD7FF00882F5F /* NowPersonsInIntervalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F89A9971C2BD7FF00882F5F /* NowPersonsInIntervalViewController.m */; };
 		3F8A32F619AEC1CC00C63E65 /* HomeGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8A32F519AEC1CC00C63E65 /* HomeGame.m */; };
+		3F9269A71C352E780096F5B7 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F9269A61C352E780096F5B7 /* Launch Screen.storyboard */; };
 		3F94B853199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */; };
 		3F96F6CB1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F96F6CA1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m */; };
 		3F9B3E081989DEAA0041EFCC /* IntervalsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */; };
@@ -65,6 +66,11 @@
 		3FC432B519A056DD00B560F1 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC432B419A056DD00B560F1 /* Accounts.framework */; };
 		3FC432B919A0581A00B560F1 /* MyPFLogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC432B819A0581A00B560F1 /* MyPFLogInViewController.m */; };
 		3FC432BC19A0583700B560F1 /* MyPFSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC432BB19A0583700B560F1 /* MyPFSignUpViewController.m */; };
+		3FC5296C1C35256C003F9B9D /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC5296B1C35256C003F9B9D /* Bolts.framework */; };
+		3FC529711C3525C2003F9B9D /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC5296D1C3525C2003F9B9D /* ParseFacebookUtils.framework */; };
+		3FC529721C3525C2003F9B9D /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC5296E1C3525C2003F9B9D /* ParseFacebookUtilsV4.framework */; };
+		3FC529731C3525C2003F9B9D /* ParseTwitterUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC5296F1C3525C2003F9B9D /* ParseTwitterUtils.framework */; };
+		3FC529741C3525C2003F9B9D /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC529701C3525C2003F9B9D /* ParseUI.framework */; };
 		3FCB16C419AE5BAF004E1BF3 /* NewScheduleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCB16C319AE5BAF004E1BF3 /* NewScheduleTableViewController.m */; };
 		3FD5CFBE1C2CB79500A28630 /* AdminToolsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD5CFBD1C2CB79500A28630 /* AdminToolsViewController.m */; };
 		3FD6963C1996A7DB00D9C5C4 /* AddPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6963B1996A7DB00D9C5C4 /* AddPersonViewController.m */; };
@@ -75,6 +81,7 @@
 		3FE8449119AFB05000BAFB78 /* HomeGamesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE8449019AFB05000BAFB78 /* HomeGamesTableViewCell.m */; };
 		3FEAEB151989B07D00E3218F /* HomeBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FEAEB141989B07D00E3218F /* HomeBaseTableViewController.m */; };
 		3FF4D30F19B4F24500D09EC6 /* ScheduleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF4D30E19B4F24500D09EC6 /* ScheduleTableViewCell.m */; };
+		3FF70F911C3522300042C7D6 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF70F901C3522300042C7D6 /* Parse.framework */; };
 		3FF75E9119985BBB005D7857 /* MySchedulesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */; };
 		3FF75E9419985DF2005D7857 /* CreateScheduleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF75E9319985DF2005D7857 /* CreateScheduleTableViewController.m */; };
 		3FFC43DF1BCC523E003333E7 /* CreateScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FFC43DE1BCC523E003333E7 /* CreateScheduleViewController.m */; };
@@ -92,7 +99,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3F0294551982BF680016845A /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		3F0294571982BFCD0016845A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		3F0294591982BFD20016845A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		3F02945B1982BFDF0016845A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -116,7 +122,6 @@
 		3F1304341BD2EF0900243C29 /* MySchedulesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySchedulesTableViewCell.m; sourceTree = "<group>"; };
 		3F1304391BD300A400243C29 /* ScheduleSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleSettingsViewController.h; sourceTree = "<group>"; };
 		3F13043A1BD300A400243C29 /* ScheduleSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleSettingsViewController.m; sourceTree = "<group>"; };
-		3F28B36F19C7A214006E9C97 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = "../AnyWall-master/Parse.framework"; sourceTree = "<group>"; };
 		3F296DB2199131A20059E19E /* PersonsInIntervalTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonsInIntervalTableViewController.h; sourceTree = "<group>"; };
 		3F296DB3199131A20059E19E /* PersonsInIntervalTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonsInIntervalTableViewController.m; sourceTree = "<group>"; };
 		3F2AC3DA1BF526BF007C694C /* PersonsInIntervalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonsInIntervalViewController.h; sourceTree = "<group>"; };
@@ -134,6 +139,7 @@
 		3F4CDA961B857A6000D6C2B0 /* dukeschedule.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dukeschedule.txt; sourceTree = "<group>"; };
 		3F552A411BC72D440095ADCA /* MyScheduleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyScheduleTableViewController.h; sourceTree = "<group>"; };
 		3F552A421BC72D440095ADCA /* MyScheduleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyScheduleTableViewController.m; sourceTree = "<group>"; };
+		3F5AAA4A1C35279700531F09 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		3F61604F198DA61E006EF048 /* IntervalTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntervalTableViewCell.h; sourceTree = "<group>"; };
 		3F616050198DA61E006EF048 /* IntervalTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntervalTableViewCell.m; sourceTree = "<group>"; };
 		3F71811D199D117200737662 /* DefaultSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DefaultSettingsViewController.h; path = ../DefaultSettingsViewController.h; sourceTree = "<group>"; };
@@ -152,6 +158,7 @@
 		3F89A9971C2BD7FF00882F5F /* NowPersonsInIntervalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NowPersonsInIntervalViewController.m; sourceTree = "<group>"; };
 		3F8A32F419AEC1CC00C63E65 /* HomeGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeGame.h; sourceTree = "<group>"; };
 		3F8A32F519AEC1CC00C63E65 /* HomeGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeGame.m; sourceTree = "<group>"; };
+		3F9269A61C352E780096F5B7 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		3F94B851199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameOfScheduleTableViewCell.h; sourceTree = "<group>"; };
 		3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameOfScheduleTableViewCell.m; sourceTree = "<group>"; };
 		3F96F6C91BFA1F6F00636737 /* JoinedHomeGameTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinedHomeGameTableViewCell.h; sourceTree = "<group>"; };
@@ -189,6 +196,11 @@
 		3FC432B819A0581A00B560F1 /* MyPFLogInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPFLogInViewController.m; sourceTree = "<group>"; };
 		3FC432BA19A0583700B560F1 /* MyPFSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPFSignUpViewController.h; sourceTree = "<group>"; };
 		3FC432BB19A0583700B560F1 /* MyPFSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPFSignUpViewController.m; sourceTree = "<group>"; };
+		3FC5296B1C35256C003F9B9D /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Tent/Bolts.framework; sourceTree = "<group>"; };
+		3FC5296D1C3525C2003F9B9D /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtils.framework; path = Tent/ParseFacebookUtils.framework; sourceTree = "<group>"; };
+		3FC5296E1C3525C2003F9B9D /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtilsV4.framework; path = Tent/ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
+		3FC5296F1C3525C2003F9B9D /* ParseTwitterUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseTwitterUtils.framework; path = Tent/ParseTwitterUtils.framework; sourceTree = "<group>"; };
+		3FC529701C3525C2003F9B9D /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = Tent/ParseUI.framework; sourceTree = "<group>"; };
 		3FCB16C219AE5BAF004E1BF3 /* NewScheduleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewScheduleTableViewController.h; sourceTree = "<group>"; };
 		3FCB16C319AE5BAF004E1BF3 /* NewScheduleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewScheduleTableViewController.m; sourceTree = "<group>"; };
 		3FD5CFBC1C2CB79500A28630 /* AdminToolsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdminToolsViewController.h; sourceTree = "<group>"; };
@@ -209,6 +221,7 @@
 		3FEAEB141989B07D00E3218F /* HomeBaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeBaseTableViewController.m; path = ../HomeBaseTableViewController.m; sourceTree = "<group>"; };
 		3FF4D30D19B4F24500D09EC6 /* ScheduleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScheduleTableViewCell.h; path = ../ScheduleTableViewCell.h; sourceTree = "<group>"; };
 		3FF4D30E19B4F24500D09EC6 /* ScheduleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScheduleTableViewCell.m; path = ../ScheduleTableViewCell.m; sourceTree = "<group>"; };
+		3FF70F901C3522300042C7D6 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = Tent/Parse.framework; sourceTree = "<group>"; };
 		3FF75E8F19985BBB005D7857 /* MySchedulesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySchedulesTableViewController.h; sourceTree = "<group>"; };
 		3FF75E9019985BBB005D7857 /* MySchedulesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySchedulesTableViewController.m; sourceTree = "<group>"; };
 		3FF75E9219985DF2005D7857 /* CreateScheduleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateScheduleTableViewController.h; sourceTree = "<group>"; };
@@ -224,19 +237,25 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F28B37019C7A214006E9C97 /* Parse.framework in Frameworks */,
+				3F5AAA4B1C35279700531F09 /* libsqlite3.tbd in Frameworks */,
+				3FC5296C1C35256C003F9B9D /* Bolts.framework in Frameworks */,
 				3FC432B519A056DD00B560F1 /* Accounts.framework in Frameworks */,
 				3FC432B319A0565100B560F1 /* Social.framework in Frameworks */,
 				3F0294681982C0200016845A /* SystemConfiguration.framework in Frameworks */,
+				3FC529731C3525C2003F9B9D /* ParseTwitterUtils.framework in Frameworks */,
 				3F0294661982C01A0016845A /* StoreKit.framework in Frameworks */,
 				3F0294641982C0120016845A /* Security.framework in Frameworks */,
 				3F0294621982C0080016845A /* QuartzCore.framework in Frameworks */,
 				3F0294601982C0010016845A /* MobileCoreServices.framework in Frameworks */,
 				3F02945E1982BFF70016845A /* libz.dylib in Frameworks */,
+				3FC529741C3525C2003F9B9D /* ParseUI.framework in Frameworks */,
 				3F02945C1982BFDF0016845A /* CoreLocation.framework in Frameworks */,
 				3FA6D50A1965E7A50043087B /* CoreGraphics.framework in Frameworks */,
+				3FF70F911C3522300042C7D6 /* Parse.framework in Frameworks */,
 				3F02945A1982BFD20016845A /* CFNetwork.framework in Frameworks */,
 				3F0294581982BFCD0016845A /* AudioToolbox.framework in Frameworks */,
+				3FC529721C3525C2003F9B9D /* ParseFacebookUtilsV4.framework in Frameworks */,
+				3FC529711C3525C2003F9B9D /* ParseFacebookUtils.framework in Frameworks */,
 				3FA6D50C1965E7A50043087B /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -375,8 +394,14 @@
 		3FA6D5061965E7A50043087B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3F28B36F19C7A214006E9C97 /* Parse.framework */,
+				3F5AAA4A1C35279700531F09 /* libsqlite3.tbd */,
+				3FC5296B1C35256C003F9B9D /* Bolts.framework */,
+				3FF70F901C3522300042C7D6 /* Parse.framework */,
 				3FC432B419A056DD00B560F1 /* Accounts.framework */,
+				3FC5296D1C3525C2003F9B9D /* ParseFacebookUtils.framework */,
+				3FC5296E1C3525C2003F9B9D /* ParseFacebookUtilsV4.framework */,
+				3FC5296F1C3525C2003F9B9D /* ParseTwitterUtils.framework */,
+				3FC529701C3525C2003F9B9D /* ParseUI.framework */,
 				3FC432B219A0565100B560F1 /* Social.framework */,
 				3F0294671982C0200016845A /* SystemConfiguration.framework */,
 				3F0294651982C01A0016845A /* StoreKit.framework */,
@@ -387,7 +412,6 @@
 				3F02945B1982BFDF0016845A /* CoreLocation.framework */,
 				3F0294591982BFD20016845A /* CFNetwork.framework */,
 				3F0294571982BFCD0016845A /* AudioToolbox.framework */,
-				3F0294551982BF680016845A /* Parse.framework */,
 				3FA6D5071965E7A50043087B /* Foundation.framework */,
 				3FA6D5091965E7A50043087B /* CoreGraphics.framework */,
 				3FA6D50B1965E7A50043087B /* UIKit.framework */,
@@ -409,6 +433,7 @@
 				3FA6D50E1965E7A50043087B /* Supporting Files */,
 				3F3B0C3B1BFBF58F0056E378 /* Container Tests */,
 				3F3B0C3C1BFBF5B10056E378 /* Old Unused View Controllers */,
+				3F9269A61C352E780096F5B7 /* Launch Screen.storyboard */,
 			);
 			path = Tent;
 			sourceTree = "<group>";
@@ -550,7 +575,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = Schedule;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = Jeremy;
 				TargetAttributes = {
 					3FA6D5241965E7A50043087B = {
@@ -585,6 +610,7 @@
 				3F4CDA971B857A6000D6C2B0 /* dukeschedule.txt in Resources */,
 				3FA6D5201965E7A50043087B /* Images.xcassets in Resources */,
 				3FA6D5121965E7A50043087B /* InfoPlist.strings in Resources */,
+				3F9269A71C352E780096F5B7 /* Launch Screen.storyboard in Resources */,
 				3FA6D51B1965E7A50043087B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -721,6 +747,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jeremy Schreck (WE8935L77H)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jeremy Schreck (WE8935L77H)";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -737,7 +764,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "C943E99D-1D37-45B0-9D7A-7B249EA2CF0E";
+				PROVISIONING_PROFILE = "0e18a948-00d7-44eb-a5ac-a271aec7e6cf";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -770,7 +797,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE = "C943E99D-1D37-45B0-9D7A-7B249EA2CF0E";
+				PROVISIONING_PROFILE = "0e18a948-00d7-44eb-a5ac-a271aec7e6cf";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -785,15 +812,18 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jeremy Schreck (WE8935L77H)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/jeremy/Downloads,
+					"$(PROJECT_DIR)/Tent",
 					"$(PROJECT_DIR)",
 					"/Users/jeremy/Developer/Xcode/AnyWall-master",
+					"$(PROJECT_DIR)/Tent",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tent/Tent-Prefix.pch";
 				INFOPLIST_FILE = "Tent/Tent-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = R7XU5D6ZWZ.;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "0e18a948-00d7-44eb-a5ac-a271aec7e6cf";
 				SWIFT_OBJC_BRIDGING_HEADER = "Tent/Tent-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
@@ -808,15 +838,18 @@
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/jeremy/Downloads,
+					"$(PROJECT_DIR)/Tent",
 					"$(PROJECT_DIR)",
 					"/Users/jeremy/Developer/Xcode/AnyWall-master",
+					"$(PROJECT_DIR)/Tent",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tent/Tent-Prefix.pch";
 				INFOPLIST_FILE = "Tent/Tent-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = R7XU5D6ZWZ.;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "0e18a948-00d7-44eb-a5ac-a271aec7e6cf";
 				SWIFT_OBJC_BRIDGING_HEADER = "Tent/Tent-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};
@@ -838,6 +871,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "TentTests/TentTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "jes85.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -856,6 +890,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tent/Tent-Prefix.pch";
 				INFOPLIST_FILE = "TentTests/TentTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "jes85.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;

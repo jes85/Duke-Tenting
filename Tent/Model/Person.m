@@ -86,13 +86,17 @@
 - (BOOL)isEqualToPerson:(Person *)aPerson {
     if (self == aPerson)
         return YES;
+    /*
     if (![[(id)[self user] objectId] isEqual:[[aPerson user] objectId]])
         return NO;
     if (!([self scheduleIndex] == [aPerson scheduleIndex]))
         return NO;
     if (![(id)[self assignmentsArray] isEqual:[aPerson assignmentsArray]])
         return NO;
-    if (![(id)[self parseObjectID] isEqual:[aPerson parseObjectID]])
+     */
+    
+    //TODO: implement and check. make sure it works for offline people
+    if (![(id)[self parseObjectID] isEqual:[aPerson parseObjectID]] | ![(id)[self offlineName] isEqual:[aPerson offlineName]])
         return NO;
     // NSLog(@"Test equality");
     return YES;

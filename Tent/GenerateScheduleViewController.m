@@ -23,7 +23,7 @@ static NSString *kGenerateScheduleErrorID = @"Error";
 @end
 
 @implementation GenerateScheduleViewController
-
+/*
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if(buttonIndex == 0) return;
@@ -122,5 +122,5 @@ static NSString *kGenerateScheduleErrorID = @"Error";
 {
     //EDIT: write method to clear all availabilities
 }
-
+*/
 @end

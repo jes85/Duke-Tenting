@@ -94,7 +94,6 @@
         Schedule *localSchedule = (Schedule *)self.schedules[i];
         if([localSchedule.parseObjectID isEqualToString:updatedSchedule.parseObjectID]){
             self.schedules[i] = updatedSchedule;
-        
             //test
             //this works (don't need to save a bool and then wait for viewDidAppear to change view. can do it when notification is received.
             //is there a performance improvement if i wait until viewDidAppear?
