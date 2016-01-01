@@ -204,7 +204,7 @@
     [logInViewController setSignUpController:signUpViewController];
     
     //present the log in view controller
-    [self presentViewController:logInViewController animated:YES completion:NULL];
+    [self presentViewController:logInViewController animated:YES completion:nil];
     
 }
 #pragma mark - Log In View Controller Delegate
@@ -244,9 +244,11 @@
 }
 
 // Sent to the delegate when the log in screen is dismissed.
+/*
 - (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController {
     [self.navigationController popViewControllerAnimated:YES];
 }
+ */
 
 
 #pragma mark - Sign Up View Controller Delegate

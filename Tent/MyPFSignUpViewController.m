@@ -28,7 +28,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSLog(@"%f, %f", self.signUpView.dismissButton.frame.origin.y, self.signUpView.frame.origin.y);
+   
 }
 - (void)viewDidLoad
 {
@@ -37,17 +37,17 @@
     
     [self.signUpView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"DukeBlueBG"]]];
     
-    UIView *logoView = [[UIView alloc]init];
+    
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 300, 100)];
     label.text = @"DUKE K-VILLE PLANNER";
     label.textColor = [UIColor whiteColor];
-    [logoView insertSubview:label atIndex:0];
     
-    [self.signUpView setLogo:logoView];
+    [self.signUpView setLogo:label];
     //[self.signUpView setLogo: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Krzyzewskiville"]]];
     
     
     // Add login field background
+    /*
     self.fieldsBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginFieldBG.png"]];
     self.fieldsBackgroundTest = [[UIView alloc]init];
     self.fieldsBackgroundTest.backgroundColor = [UIColor whiteColor];
@@ -80,7 +80,7 @@
     [self.signUpView.dismissButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
 
     [self.signUpView.dismissButton setImage:nil forState:UIControlStateNormal];
-
+*/
     self.signUpView.additionalField.placeholder = @"Full Name";
 }
 
@@ -88,6 +88,7 @@
 -(void) viewDidLayoutSubviews //fix to be dependent on platform
 {
     [super viewDidLayoutSubviews];
+    /*
     // Move all fields down on smaller screen sizes
     float yOffset = [UIScreen mainScreen].bounds.size.height <= 480.0f ? 30.0f : 0.0f;
     
@@ -121,10 +122,12 @@
                                                     fieldFrame.origin.y + yOffset,
                                                     fieldFrame.size.width - 10.0f,
                                                     fieldFrame.size.height)];
-    }
+     
+     */
+}
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    NSLog(@"%f, %f", self.signUpView.dismissButton.frame.origin.y, self.signUpView.frame.origin.y);
+    
 
     
 }
