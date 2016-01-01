@@ -299,11 +299,12 @@
 }
 
 # pragma mark - Properties - Lazy Instanstiation
-
+/*
 -(NSMutableArray *)schedules{
     if(!_schedules)_schedules = [[NSMutableArray alloc]init];
     return _schedules;
 }
+ */
 
 /*!
  *  Query Parse to retrieve schedules that current user is a part of
@@ -322,7 +323,7 @@
     //[self.loadingWheel startAnimating];
     [query findObjectsInBackgroundWithBlock:^(NSArray *schedulesForThisUser, NSError *error) {
         if(!error){
-            self.schedules = nil; //TODO: in v2, compare retreived schedules to current and only update ones that have changed
+            self.schedules = [[NSMutableArray alloc]initWithCapacity:schedulesForThisUser.count]; //TODO: in v2, compare retreived schedules to current and only update ones that have changed
             if([schedulesForThisUser count] == 0){
                 //TODO: update view to say "You are not in any group schedules. Tap the plus button in the top right to create or join one".
                 [self.loadingWheel stopAnimating];
@@ -346,6 +347,8 @@
         else{
             [self.loadingWheel stopAnimating];
             NSLog(@"error retrieving user's schedules from parse");
+            self.schedules = nil;
+            [self.tableView reloadData];
             //TODO: update view to say "Error retrieving schedules"
         }
         
@@ -438,7 +441,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 
-    if (self.schedules==nil | self.schedules.count == 0) {
+    if (!self.schedules | (self.schedules.count == 0)) {
         
         //TODO: display appropriate message
         if(self.loadingWheel.isAnimating){
@@ -449,23 +452,25 @@
             [messageLbl addSubview:self.loadingWheel];
             self.tableView.backgroundView = messageLbl;
         }else{
-            /*
+            
             //create a lable size to fit the Table View
             UILabel *messageLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,
-                                                                            self.tableView.bounds.size.width,
-                                                                            self.tableView.bounds.size.height)];
+                                                                            self.view.bounds.size.width,
+                                                                            self.view.bounds.size.height)];
             //set the message
-            messageLbl.text = @"Tap the + button in the top right to create or join a schedule. Your schedules will show up here.";
+            messageLbl.text = !self.schedules ? @"Unable to load schedules. Pull down to refresh." : @"Tap the + button in the top right to create or join a schedule. Your schedules will show up here.";
             //center the text
             messageLbl.textAlignment = NSTextAlignmentCenter;
+            messageLbl.numberOfLines = 0;
             //auto size the text
             [messageLbl sizeToFit];
             
             //set back to label view
             self.tableView.backgroundView = messageLbl;
+            NSLog(@"height %f", self.tableView.frame.size.height);
             //no separator
             
-            */
+            
 
         }
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
