@@ -194,16 +194,60 @@
     
 }
 
-
--(void)refreshData
-{
-    //update My Schedule
-    //update Current People
-    //update Persons
-    //update time intervals
+- (IBAction)refreshButtonPressed:(id)sender {
+    PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
+    [query includeKey:kGroupSchedulePropertyPersonsInGroup];
+    [query includeKey:kGroupSchedulePropertyHomeGame];
+    [query includeKey:kGroupSchedulePropertyCreatedBy];
+    [query includeKey:[NSString stringWithFormat:@"%@.%@", kGroupSchedulePropertyPersonsInGroup, kPersonPropertyAssociatedUser]];
     
+    [query getObjectInBackgroundWithId:self.schedule.parseObjectID block:^(PFObject * _Nullable parseSchedule, NSError * _Nullable error) {
+        if(!error){
+            Schedule *schedule = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
+            if(schedule.currentUserWasRemoved){
+                [self removeUserFromCurrentScheduleAndSegueBack];
+            }else{
+                //Can check if updated schedule is different first if i want
+                [self refreshDataWithUpdatedSchedule:schedule];
+            }
+            
+        }
+    }];
 }
 
+-(void)refreshDataWithUpdatedSchedule:(Schedule *)updatedSchedule
+{
+    self.schedule = updatedSchedule;
+
+    //update My Schedule, Current People, Persons, and Time intervals vcs
+    //TODO: did this fast and it works, but can probably do it in a better way
+    self.viewControllers = [self instantiateViewControllers];
+    
+    NSUInteger index;
+    if([self.currentViewController isKindOfClass:[MeScheduleViewController class]]){
+        index = 0;
+    }else if([self.currentViewController isKindOfClass:[PersonsInIntervalViewController class]]){
+        index = 1;
+    }else if([self.currentViewController isKindOfClass:[PickPersonTableViewController class]]){
+        index = 2;
+    }else if([self.currentViewController isKindOfClass:[IntervalsTableViewController class]]){
+        index = 3;
+    }
+    [self cycleFromViewController:self.currentViewController toViewController:self.viewControllers[index]];
+    self.currentViewController = self.viewControllers[index];
+    
+    self.navigationItem.title = self.schedule.groupName;
+   
+    
+}
+-(void)removeUserFromCurrentScheduleAndSegueBack
+{
+    [MySchedulesTableViewController removeSchedulesFromCurrentUser:@[self.schedule.parseObjectID]];
+    //TODO: test this
+    [self.navigationController popViewControllerAnimated:YES];
+
+    
+}
 - (void) displayViewControllerForSegmentIndex: (NSInteger) index
 {
     UIViewController *vc = [self viewControllerForSegmentIndex:index];

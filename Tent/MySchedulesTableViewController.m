@@ -350,14 +350,19 @@
             NSMutableArray *scheduleIdsToRemove = [[NSMutableArray alloc]init];
             for(PFObject *parseSchedule in schedulesForThisUser){
                 Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
-                //TODO: maybe figure out better way to check to make sure user has not been removed from schedule. maybe implement callback in above method
+                //TODO: maybe figure out better way to check to make sure user has not been removed from schedule. maybe implement callback in above method. note: this is also called in ContainerVC
                 if(scheduleObject.currentUserWasRemoved){
                     [scheduleIdsToRemove addObject:scheduleObject.parseObjectID];
                 }else{
                     [self addSchedule:scheduleObject];
                 }
             }
-            [self removeSchedulesFromCurrentUser:scheduleIdsToRemove];
+            if(scheduleIdsToRemove.count > 0){
+                [MySchedulesTableViewController removeSchedulesFromCurrentUser:scheduleIdsToRemove];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message:@"You have been removed from one or more groups by the group creator." preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
             [self.loadingWheel stopAnimating];
             [self.tableView reloadData];
         }
@@ -374,20 +379,16 @@
 
 }
 
--(void)removeSchedulesFromCurrentUser:(NSArray *)scheduleIds
++(void)removeSchedulesFromCurrentUser:(NSArray *)scheduleIds
 {
     PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
     for(NSString *scheduleId in scheduleIds){
         [relation removeObject:[PFObject objectWithoutDataWithClassName:kGroupScheduleClassName objectId:scheduleId]];
-
     }
-    [[PFUser currentUser] saveInBackground];
-    if(scheduleIds.count > 0){
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message:@"You have been removed from one or more groups by the group creator." preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        [self presentViewController:alert animated:YES completion:nil];
-    }
+    [[PFUser currentUser] saveInBackground]; //TODO: maybe do saveInBackgroundWithBlock
+   
 }
+
 -(void)addSchedule:(Schedule *)schedule
 {
     [self.schedules addObject:schedule];

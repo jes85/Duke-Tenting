@@ -875,24 +875,37 @@
                                 </connections>
                             </containerView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="wp4-dF-pJV">
-                                <rect key="frame" x="16" y="72" width="288" height="29"/>
+                                <rect key="frame" x="23" y="72" width="275" height="29"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="288" id="900-lL-H7y"/>
+                                    <constraint firstAttribute="width" constant="275" id="900-lL-H7y"/>
                                     <constraint firstAttribute="height" constant="28" id="Kfs-NJ-nri"/>
                                 </constraints>
                                 <segments>
                                     <segment title="Me"/>
                                     <segment title="Now"/>
                                     <segment title="Group"/>
-                                    <segment title="Time Slots"/>
+                                    <segment title="Times"/>
                                 </segments>
                                 <connections>
                                     <action selector="segmentChanged:" destination="YtB-Ha-6cr" eventType="valueChanged" id="yfq-VI-Ibm"/>
                                 </connections>
                             </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KdR-vM-hQd">
+                                <rect key="frame" x="0.0" y="76" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="20" id="c4C-nL-72O"/>
+                                    <constraint firstAttribute="height" constant="20" id="ppo-AJ-hD7"/>
+                                </constraints>
+                                <state key="normal" backgroundImage="Refresh-50"/>
+                                <connections>
+                                    <action selector="refreshButtonPressed:" destination="YtB-Ha-6cr" eventType="touchUpInside" id="XIP-ks-9bm"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="wp4-dF-pJV" firstAttribute="leading" secondItem="KdR-vM-hQd" secondAttribute="trailing" constant="3" id="0nb-8Y-FeB"/>
+                            <constraint firstItem="KdR-vM-hQd" firstAttribute="centerY" secondItem="wp4-dF-pJV" secondAttribute="centerY" id="5GZ-mF-XiB"/>
                             <constraint firstItem="M9y-7U-IUi" firstAttribute="top" secondItem="Gwk-ft-lGs" secondAttribute="bottom" id="6Er-mP-2yd"/>
                             <constraint firstItem="Gwk-ft-lGs" firstAttribute="top" secondItem="IbX-KH-RhN" secondAttribute="bottom" id="9PP-fU-h2k"/>
                             <constraint firstItem="wp4-dF-pJV" firstAttribute="top" secondItem="Af9-WG-Vkj" secondAttribute="bottom" constant="8" id="CaQ-vn-fD0"/>
@@ -1985,6 +1998,7 @@
     <resources>
         <image name="Icon_Gear" width="29" height="29"/>
         <image name="Rectangle" width="114" height="76"/>
+        <image name="Refresh-50" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="67X-S0-SzK"/>

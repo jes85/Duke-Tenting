@@ -29,4 +29,6 @@
 -(IBAction)closeSettings:(UIStoryboardSegue *)segue;
 -(IBAction)scheduleDeleted:(UIStoryboardSegue *)segue;
 
++(void)removeSchedulesFromCurrentUser:(NSArray *)scheduleIds;
+
 @end
