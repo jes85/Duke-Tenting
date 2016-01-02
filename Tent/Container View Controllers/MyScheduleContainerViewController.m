@@ -15,7 +15,6 @@
 #import "MySchedulesTableViewController.h"
 #import "PickPersonTableViewController.h"
 #import "IntervalsTableViewController.h"
-#import "PersonsInIntervalViewController.h"
 #import "MeScheduleViewController.h"
 #import "ScheduleSettingsViewController.h"
 #import "NowPersonsInIntervalViewController.h"
@@ -226,7 +225,7 @@
     NSUInteger index;
     if([self.currentViewController isKindOfClass:[MeScheduleViewController class]]){
         index = 0;
-    }else if([self.currentViewController isKindOfClass:[PersonsInIntervalViewController class]]){
+    }else if([self.currentViewController isKindOfClass:[NowPersonsInIntervalViewController class]]){
         index = 1;
     }else if([self.currentViewController isKindOfClass:[PickPersonTableViewController class]]){
         index = 2;
@@ -332,10 +331,9 @@
     }
     
     // Current
-    else if ([newVC isKindOfClass:[PersonsInIntervalViewController class]]){
-        PersonsInIntervalViewController *piivc = (PersonsInIntervalViewController *)newVC;
+    else if ([newVC isKindOfClass:[NowPersonsInIntervalViewController class]]){
+        NowPersonsInIntervalViewController *piivc = (NowPersonsInIntervalViewController *)newVC;
         piivc.schedule = self.schedule;
-        piivc.displayCurrent = YES;
         self.navigationItem.rightBarButtonItems = @[];
         
         
@@ -381,7 +379,21 @@
     
 }
 
+-(void)alertUserToSaveOrCancelEditsBeforeChangingSegments
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Wait!" message:@"Please save or cancel your edits first." preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
 - (IBAction)segmentChanged:(UISegmentedControl *)sender {
+    if([self.currentViewController isKindOfClass:[MeScheduleViewController class]]){
+        MeScheduleViewController *msvc = (MeScheduleViewController *)self.currentViewController;
+        if(msvc.tableView.editing){
+            sender.selectedSegmentIndex = 0;
+            [self alertUserToSaveOrCancelEditsBeforeChangingSegments];
+            return;
+        }
+    }
     UIViewController *newVC = [self viewControllerForSegmentIndex:sender.selectedSegmentIndex];
 
     [self cycleFromViewController:self.currentViewController toViewController:newVC];

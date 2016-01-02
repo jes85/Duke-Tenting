@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Jeremy. All rights reserved.
 //
 
-#import "PersonsInIntervalViewController.h"
+#import "SuperPersonsInIntervalViewController.h"
 
-@interface NowPersonsInIntervalViewController : PersonsInIntervalViewController
-
+@interface NowPersonsInIntervalViewController : SuperPersonsInIntervalViewController
+@property (nonatomic) Schedule *schedule;
 @end

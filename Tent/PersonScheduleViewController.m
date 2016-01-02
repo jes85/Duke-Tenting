@@ -249,8 +249,11 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         labelColor = [UIColor orangeColor];
         count = interval.availablePersons.count;
     }
-    NSString *warningText = [NSString stringWithFormat:@"%lu %@ out of %lu required", (unsigned long)count, assignedOrAvailable, (unsigned long)self.schedule.requiredPersonsPerInterval];
-    
+    NSString *warningText;
+    if(count < interval.requiredPersons){
+        warningText = [NSString stringWithFormat:@"Warning: %lu %@ out of %lu required", (unsigned long)count, assignedOrAvailable, (unsigned long)interval.requiredPersons];
+        
+    }
     cell.warningLabel.text = warningText;
     cell.warningLabel.textColor = labelColor;
 

@@ -43,6 +43,7 @@
 		3F89A9981C2BD7FF00882F5F /* NowPersonsInIntervalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F89A9971C2BD7FF00882F5F /* NowPersonsInIntervalViewController.m */; };
 		3F8A32F619AEC1CC00C63E65 /* HomeGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8A32F519AEC1CC00C63E65 /* HomeGame.m */; };
 		3F90BC821C3773060091E8DC /* PersonScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F90BC811C3773060091E8DC /* PersonScheduleViewController.m */; };
+		3F90BC851C37BF920091E8DC /* SuperPersonsInIntervalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F90BC841C37BF920091E8DC /* SuperPersonsInIntervalViewController.m */; };
 		3F9269A71C352E780096F5B7 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F9269A61C352E780096F5B7 /* Launch Screen.storyboard */; };
 		3F94B853199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */; };
 		3F96F6CB1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F96F6CA1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m */; };
@@ -161,6 +162,8 @@
 		3F8A32F519AEC1CC00C63E65 /* HomeGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeGame.m; sourceTree = "<group>"; };
 		3F90BC801C3773060091E8DC /* PersonScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonScheduleViewController.h; sourceTree = "<group>"; };
 		3F90BC811C3773060091E8DC /* PersonScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonScheduleViewController.m; sourceTree = "<group>"; };
+		3F90BC831C37BF920091E8DC /* SuperPersonsInIntervalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperPersonsInIntervalViewController.h; sourceTree = "<group>"; };
+		3F90BC841C37BF920091E8DC /* SuperPersonsInIntervalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuperPersonsInIntervalViewController.m; sourceTree = "<group>"; };
 		3F9269A61C352E780096F5B7 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		3F94B851199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameOfScheduleTableViewCell.h; sourceTree = "<group>"; };
 		3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameOfScheduleTableViewCell.m; sourceTree = "<group>"; };
@@ -305,6 +308,8 @@
 				3FA97F9D1C2E74A8000B5920 /* MeScheduleViewController.m */,
 				3F9B3E061989DEAA0041EFCC /* IntervalsTableViewController.h */,
 				3F9B3E071989DEAA0041EFCC /* IntervalsTableViewController.m */,
+				3F90BC831C37BF920091E8DC /* SuperPersonsInIntervalViewController.h */,
+				3F90BC841C37BF920091E8DC /* SuperPersonsInIntervalViewController.m */,
 				3F2AC3DA1BF526BF007C694C /* PersonsInIntervalViewController.h */,
 				3F2AC3DB1BF526BF007C694C /* PersonsInIntervalViewController.m */,
 				3F89A9961C2BD7FF00882F5F /* NowPersonsInIntervalViewController.h */,
@@ -669,6 +674,7 @@
 				3F13043B1BD300A400243C29 /* ScheduleSettingsViewController.m in Sources */,
 				3F09B1D81BC2D59000AB27CD /* Test.m in Sources */,
 				3F3B0C3A1BFBEC180056E378 /* User.m in Sources */,
+				3F90BC851C37BF920091E8DC /* SuperPersonsInIntervalViewController.m in Sources */,
 				3FDE35631980A5DA00CE47D8 /* Person.m in Sources */,
 				3F296DB4199131A20059E19E /* PersonsInIntervalTableViewController.m in Sources */,
 				3F2AC3DC1BF526BF007C694C /* PersonsInIntervalViewController.m in Sources */,

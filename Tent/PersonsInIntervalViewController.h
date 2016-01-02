@@ -6,20 +6,9 @@
 //  Copyright (c) 2015 Jeremy. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "Schedule.h"
+#import "SuperPersonsInIntervalViewController.h"
 
-@interface PersonsInIntervalViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface PersonsInIntervalViewController : SuperPersonsInIntervalViewController
 
-@property (nonatomic) NSArray *availablePersonsArray;
-@property (nonatomic) NSArray *assignedPersonsArray;
-@property (nonatomic) NSString *dateTimeText;
-@property (nonatomic) NSUInteger requiredPersons;
-
-@property (nonatomic) BOOL displayCurrent;
-@property (nonatomic) Schedule *schedule;
-
-
-+(NSInteger)findCurrentTimeIntervalIndexForSchedule:(Schedule *)schedule;
 
 @end

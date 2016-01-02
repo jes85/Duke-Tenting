@@ -147,6 +147,7 @@
         NSMutableArray *availablePersons = array[0];
         NSMutableArray *assignedPersons = array[1];
         Interval *interval = [[Interval alloc]initWithStartDate:currentStartInterval endDate:currentEndInterval section:sectionNumber availablePersons:availablePersons assignedPersons:assignedPersons];
+        interval.requiredPersons = self.requiredPersonsPerInterval;
         [intervalDataByOverallRow addObject:interval];
         [sectionIntervals addObject:interval];
         
@@ -161,6 +162,7 @@
             NSMutableArray *availablePersons = array[0];
             NSMutableArray *assignedPersons = array[1];
             Interval *interval = [[Interval alloc]initWithStartDate:currentStartInterval endDate:self.endDate section:sectionNumber availablePersons:availablePersons assignedPersons:assignedPersons];
+            interval.requiredPersons = self.requiredPersonsPerInterval;
             [intervalDataByOverallRow addObject:interval];
             [sectionIntervals addObject:interval];
             

@@ -8,6 +8,7 @@
 
 #import "IntervalsTableViewController.h"
 #import "PersonsInIntervalViewController.h"
+#import "SuperPersonsInIntervalViewController.h"
 #import "Interval.h"
 #import "Constants.h"
 @interface IntervalsTableViewController ()
@@ -45,7 +46,7 @@
 {
     [super viewWillAppear:animated];
     if(self.firstTimeAppearing){
-        NSInteger overallRow = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
+        NSInteger overallRow = [SuperPersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
         if(overallRow < 0) return; //schedule hasn't started or is over
         NSIndexPath *indexPath = [Constants indexPathForOverallRow:overallRow tableView:self.tableView];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
@@ -131,12 +132,10 @@
         NSUInteger overallRow = [Constants overallRowForIndexPath:indexPath tableView:self.tableView];
         
         
-        //TODO: subclass and make it different for Persons vs nowPersons
         Interval *interval = self.schedule.intervalDataByOverallRow[overallRow];
-        piivc.availablePersonsArray = interval.availablePersons;
-        piivc.assignedPersonsArray = interval.assignedPersons;
-        piivc.requiredPersons = self.schedule.requiredPersonsPerInterval;
-        
+        piivc.interval = interval;
+        //piivc.dateTimeText = [self.schedule dateTimeStringForIndexPath:indexPath];
+
         /*
         NSArray *intervalData = [self.schedule.intervalsDisplayData objectForKey:[NSNumber numberWithInteger:indexPath.section]];
         NSString *day = intervalData[0];
@@ -145,10 +144,8 @@
          */
         
         
-        piivc.dateTimeText = [self.schedule dateTimeStringForIndexPath:indexPath];
         piivc.navigationItem.title = @"Time Slot";
         
-        //do i have to set piivc.displayCurrent to false?
 
 
     }
