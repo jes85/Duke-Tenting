@@ -663,6 +663,7 @@
             person.scheduleIndex = 0;
             NSMutableArray *personsArray = [[NSMutableArray alloc]initWithArray:@[person]];
             newSchedule.personsArray = personsArray;
+            [newSchedule createIntervalDataArrays];
             NSArray *parsePersonsArray = @[personObject];
             scheduleObject[kGroupSchedulePropertyPersonsInGroup] = parsePersonsArray;
             

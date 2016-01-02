@@ -39,7 +39,7 @@
 
 // UI Helper Arrays
 -(void)resetIntervalArray;
--(void)createIntervalDataArrays;
+-(void)createIntervalDataArrays; //Add KVO for self.intervalDataArrays to update every time personsArrays are changed
 @property (nonatomic) NSMutableArray *intervalDataByOverallRow; // [Interval, Interval,...]
 @property (nonatomic) NSMutableDictionary *intervalDataBySection;
 
