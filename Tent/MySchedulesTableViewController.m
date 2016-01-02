@@ -72,7 +72,7 @@
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:@"ScheduleChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
     
 }
 -(void)dealloc
@@ -83,17 +83,27 @@
 -(void)scheduleChanged:(NSNotification *)notification
 {
     NSDictionary *userInfo = notification.userInfo;
-    Schedule *schedule = userInfo[@"schedule"];
-    [self updateLocalSchedule:schedule];
+    Schedule *schedule = userInfo[kUserInfoLocalScheduleKey];
+    NSArray *changedProperties = userInfo[kUserInfoLocalScheduleChangedPropertiesKey];
+    BOOL UIUpdateNeeded =[changedProperties containsObject:kUserInfoLocalSchedulePropertyGroupName];
     
+    [self updateLocalSchedule:schedule updateUI:UIUpdateNeeded];
+
 }
 
--(void)updateLocalSchedule: (Schedule *)updatedSchedule
+-(void)updateLocalSchedule: (Schedule *)updatedSchedule updateUI:(BOOL)UIUpdateNeeded
 {
     for(int i = 0; i <self.schedules.count; i++){
         Schedule *localSchedule = (Schedule *)self.schedules[i];
         if([localSchedule.parseObjectID isEqualToString:updatedSchedule.parseObjectID]){
+            //update data
             self.schedules[i] = updatedSchedule;
+            if(UIUpdateNeeded){
+                //update UI
+                [self updateTableViewRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+
+            }
+            return;
             //test
             //this works (don't need to save a bool and then wait for viewDidAppear to change view. can do it when notification is received.
             //is there a performance improvement if i wait until viewDidAppear?
@@ -111,6 +121,7 @@
 }
 -(void)updateTableViewRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //do i need to dispatch get main queue first?
     [self.tableView beginUpdates];
     
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -128,6 +139,7 @@
         [self displayLoginAndSignUpViews];
     }else if(currentUser!=self.user){
         self.user = currentUser;
+        //maybe move to didLogIn
         [self.loadingWheel startAnimating];
         [self resetUserScheduleData];
         [self.tableView reloadData];
@@ -226,7 +238,10 @@
 
 // Sent to the delegate when a PFUser is logged in.
 // (customize this later)
-- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
+- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user
+{
+    self.schedules = [[NSMutableArray alloc]init];
+    [self.tableView reloadData];
     [self dismissViewControllerAnimated:YES completion:NULL];
     
     
@@ -413,7 +428,7 @@
         PFObject *parsePerson = (PFObject *)personsInGroup[i];
         //PFUser *user = parsePerson[kPersonPropertyAssociatedUser];
         PFObject *user = nil;
-        NSString *offlineName = parsePerson[kPersonPropertyOfflineName];
+        NSString *offlineName;
         if(![parsePerson objectForKey: kPersonPropertyAssociatedUser]){
             offlineName = parsePerson[kPersonPropertyOfflineName];
         }else{
@@ -671,6 +686,7 @@
 
 -(IBAction)closeSettings:(UIStoryboardSegue *)segue
 {
+    
 }
 -(IBAction)scheduleDeleted:(UIStoryboardSegue *)segue
 {

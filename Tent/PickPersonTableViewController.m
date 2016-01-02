@@ -139,7 +139,7 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:@"ScheduleChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
     
 }
 -(void)dealloc
@@ -150,15 +150,20 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 -(void)scheduleChanged:(NSNotification *)notification
 {
     NSDictionary *userInfo = notification.userInfo;
-    Schedule *schedule = userInfo[@"schedule"];
-    [self updateLocalSchedule:schedule];
+    Schedule *schedule = userInfo[kUserInfoLocalScheduleKey];
+    
+    //don't think i need to update UI here since it will always call viewDidLoad for next vc, and people can only be removed in this schedule
+    self.schedule = schedule;
+    //[self updateLocalSchedule:schedule];
     
 }
+/*
 -(void)updateLocalSchedule: (Schedule *)updatedSchedule
 {
     self.schedule = updatedSchedule;
     [self.tableView reloadData];
 }
+ */
 
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -215,6 +220,9 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
                         [self.schedule.personsArray addObject:newPerson];
                         self.addPersonName = nil;
                         [self.tableView reloadData];
+                        
+                        NSDictionary *userInfo = @{kUserInfoLocalScheduleKey: self.schedule, kUserInfoLocalScheduleChangedPropertiesKey:@[kUserInfoLocalSchedulePropertyOther]};//personsArray is changed but it doesn't alter other vcs' views so no need to tell them to update their UI (which is what the kUserInfo...PropertyPersonsArray is for)
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNameScheduleChanged object:self userInfo:userInfo];
                     }
                 }];
 

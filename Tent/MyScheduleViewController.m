@@ -51,7 +51,7 @@
     //TODO: note: viewDidLoad is called in MeSchedule before prepareForSegue stuff in container vc. Maybe subclass twice and override viewDidAppear and viewDidLoad appropriately
     
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:@"ScheduleChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
     
 }
 -(void)dealloc
@@ -63,16 +63,22 @@
 {
     NSDictionary *userInfo = notification.userInfo;
     if(!(notification.object == self)){
-        Schedule *schedule = userInfo[@"schedule"];
-        [self updateLocalSchedule:schedule];
+        Schedule *schedule = userInfo[kUserInfoLocalScheduleKey];
+        //update data
+        self.schedule = schedule;
+        self.currentPerson = self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]];
+        self.updatedAvailabilitiesArray = [[NSMutableArray alloc]initWithArray:self.currentPerson.assignmentsArray];//maybe merge updatedAvailabilitiesArray to just use self.currentPerson
+        //update UI if needed
+        NSArray *changedProperties = userInfo[kUserInfoLocalScheduleChangedPropertiesKey];
+        if([changedProperties containsObject:kUserInfoLocalSchedulePropertyPersonsArray]){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+        }
     }
     
 }
--(void)updateLocalSchedule: (Schedule *)updatedSchedule
-{
-    self.schedule = updatedSchedule;
-    [self.tableView reloadData];
-}
+
 
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -427,6 +433,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
                         //update Intervals offline
                         //instead of this, can just compare currentPerson and updated and only update intervals that were changed
                         //TODO: or can keep track of changed intervals as they occur so we don't have to loop through all intervals here
+                        /*
                         for(int i = 0; i<[self.currentPerson.assignmentsArray count]; i++){
                             Interval *interval = (Interval *)self.schedule.intervalDataByOverallRow[i];
                             if([self.currentPerson.assignmentsArray[i] isEqual:@0]) {
@@ -450,10 +457,12 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
                                     [interval.assignedPersons addObject:self.currentPerson];
                                 }
                             }
-                        }
+                        }*/
+                        [self.schedule createIntervalDataArrays]; //ineffient but works for now
+
                         //notify other vcs
-                        NSDictionary *userInfo = @{@"schedule":self.schedule};
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"ScheduleChanged" object:self userInfo:userInfo];
+                        NSDictionary *userInfo = @{kUserInfoLocalScheduleKey:self.schedule, kUserInfoLocalScheduleChangedPropertiesKey:@[kUserInfoLocalSchedulePropertyPersonsArray]};
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNameScheduleChanged object:self userInfo:userInfo];
                     }
                 }];
                

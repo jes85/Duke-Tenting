@@ -66,6 +66,13 @@
 #define kChildViewControllerOthers              @"ChildViewControllerOthers"
 #define kChildViewControllerTimeSlots           @"ChildViewControllerTimeSlots"
 
+// Notifications to keep schedule object consistent across vcs
+#define kNotificationNameScheduleChanged        @"scheduleChanged"
+#define kUserInfoLocalScheduleKey                       @"schedule"
+#define kUserInfoLocalScheduleChangedPropertiesKey             @"changedProperties"
+#define kUserInfoLocalSchedulePropertyPersonsArray      @"personsArray"
+#define kUserInfoLocalSchedulePropertyGroupName         @"groupName"
+#define kUserInfoLocalSchedulePropertyOther             @"other"
 
 +(NSString *)formatDate:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
 +(NSString *)formatTime:(NSDate *)date withStyle:(NSDateFormatterStyle)style;

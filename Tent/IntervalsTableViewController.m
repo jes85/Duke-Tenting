@@ -19,7 +19,7 @@
 {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:@"ScheduleChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
     
 }
 -(void)dealloc
@@ -31,16 +31,14 @@
 {
     NSDictionary *userInfo = notification.userInfo;
     if(!(notification.object == self)){
-        Schedule *schedule = userInfo[@"schedule"];
-        [self updateLocalSchedule:schedule];
+        Schedule *schedule = userInfo[kUserInfoLocalScheduleKey];
+        //update data
+        self.schedule = schedule;
+        //no need to update UI
     }
     
 }
--(void)updateLocalSchedule: (Schedule *)updatedSchedule
-{
-    self.schedule = updatedSchedule;
-    //[self.tableView reloadData]; //unnecessary for now
-}
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];

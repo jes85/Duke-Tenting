@@ -32,7 +32,7 @@
     }
     
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:@"ScheduleChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
     
 }
 -(void)dealloc
@@ -44,20 +44,22 @@
 {
     NSDictionary *userInfo = notification.userInfo;
     if(!(notification.object == self)){
-        Schedule *schedule = userInfo[@"schedule"];
-        [self updateLocalSchedule:schedule];
+        Schedule *schedule = userInfo[kUserInfoLocalScheduleKey];
+        //update data
+        self.schedule = schedule;
+        //update UI if needed
+        NSArray *changedProperties = userInfo[kUserInfoLocalScheduleChangedPropertiesKey];
+        if([changedProperties containsObject:kUserInfoLocalSchedulePropertyPersonsArray]){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+            
+        }
     }
+
     
 }
--(void)updateLocalSchedule: (Schedule *)updatedSchedule
-{
-    self.schedule = updatedSchedule;
-    //TODO: updateAvailable and assignedPersons arrays. do subclass thing
-    [self.tableView reloadData];
-    [self.tableView beginUpdates];
-    
-    [self.tableView endUpdates];
-}
+
 
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -119,12 +121,7 @@
     if(self.displayCurrent==YES){
         [self updatePersonsArraysForCurrentTimeInterval];
     }else{
-        NSString *test1 = self.dateTimeLabel.text;
-        NSString *test2 = self.dateTimeText;
-
         self.dateTimeLabel.text = self.dateTimeText; //why doesn't this work in view did load?
-        NSString *test3 = self.dateTimeLabel.text;
-        NSString *test4 = self.dateTimeText;
 
     }
     // Return the number of sections.

@@ -38,6 +38,7 @@
 
 // UI Helper Arrays
 -(void)resetIntervalArray;
+-(void)createIntervalDataArrays;
 @property (nonatomic) NSMutableArray *intervalDataByOverallRow; // [Interval, Interval,...]
 @property (nonatomic) NSMutableDictionary *intervalDataBySection;
 

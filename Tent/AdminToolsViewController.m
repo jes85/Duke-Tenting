@@ -114,8 +114,6 @@
                 PFObject *parsePerson = objects[i];
                 parsePerson[kPersonPropertyAssignmentsArray] = assignments[i];//assignments[[parsePerson[kPersonPropertyIndex] integerValue]];
                 //TODO: make sure ith index is conisistent. might need to update Person indices on local after removing someone
-
-                
             }
             [PFObject saveAllInBackground:objects block:^(BOOL succeeded, NSError *error) {
                 if(succeeded){
@@ -124,8 +122,20 @@
                         object[kGroupSchedulePropertyAssignmentsGenerated] = [NSNumber numberWithBool:YES];
                         [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                             if(succeeded){
-                                //TODO: update local iphone
-                                
+                                //update local schedule
+                                self.schedule.assignmentsGenerated = YES;
+                                for(int i = 0; i<self.schedule.personsArray.count; i++){
+                                    Person *person = self.schedule.personsArray[i];
+                                    person.assignmentsArray = assignments[i];//assignments[[parsePerson[kPersonPropertyIndex] integerValue]];
+                                    //TODO: make sure ith index is conisistent. might need to update Person indices on local after removing someone
+                                    
+                                    
+                                }
+                                [self.schedule createIntervalDataArrays]; //ineffient but works for now
+
+                                //Notify other vcs of schedule change
+                                NSDictionary *userInfo = @{kUserInfoLocalScheduleKey: self.schedule, kUserInfoLocalScheduleChangedPropertiesKey: @[kUserInfoLocalSchedulePropertyPersonsArray]};
+                                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNameScheduleChanged object:self userInfo:userInfo];
                                 //Alert success message
                                 [self alertSuccessWithMessage:@"Assignments were successfully generated."];
                             }
@@ -154,12 +164,18 @@
     [AdminToolsViewController updateParsePersons:parsePersonIds WithNewAssignmentsArrays:clearedAssignmentsArrays completion:^{
         NSDictionary *dictionary = @{kGroupSchedulePropertyAssignmentsGenerated: [NSNumber numberWithBool:NO]};
         [AdminToolsViewController updateParseSchedule:self.schedule.parseObjectID WithDictionary: dictionary completion:^{
-            //update UI
+            //update local schedule
+            self.schedule.assignmentsGenerated = false;
             for(int i = 0; i<self.schedule.personsArray.count;i++){
                 Person *person = self.schedule.personsArray[i];
                 person.assignmentsArray = clearedAssignmentsArrays[i];
                 
             }
+            [self.schedule createIntervalDataArrays]; //ineffient but works for now
+
+            //Notify other vcs of schedule change
+            NSDictionary *userInfo = @{kUserInfoLocalScheduleKey: self.schedule, kUserInfoLocalScheduleChangedPropertiesKey: @[kUserInfoLocalSchedulePropertyPersonsArray]};
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNameScheduleChanged object:self userInfo:userInfo];
             //Alert success message
             [self alertSuccessWithMessage:@"Successfully cleared availabilities"];
             
@@ -192,12 +208,20 @@
         if(self.schedule.assignmentsGenerated){
             NSDictionary *dictionary = @{kGroupSchedulePropertyAssignmentsGenerated: [NSNumber numberWithBool:NO]};
             [AdminToolsViewController updateParseSchedule:self.schedule.parseObjectID WithDictionary: dictionary completion:^{
-                //update UI
+                //update local schedule
+                self.schedule.assignmentsGenerated = false;
                 for(int i = 0; i<self.schedule.personsArray.count;i++){
                     Person *person = self.schedule.personsArray[i];
                     person.assignmentsArray = clearedAssignmentsArrays[i];
                     
                 }
+                [self.schedule createIntervalDataArrays]; //ineffient but works for now
+
+            
+                //Notify other vcs of schedule change
+                NSDictionary *userInfo = @{kUserInfoLocalScheduleKey: self.schedule, kUserInfoLocalScheduleChangedPropertiesKey: @[kUserInfoLocalSchedulePropertyPersonsArray]};
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNameScheduleChanged object:self userInfo:userInfo];
+                
                 //Alert success message
                 [self alertSuccessWithMessage:@"Successfully cleared availabilities"];
 

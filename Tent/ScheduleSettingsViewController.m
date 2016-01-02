@@ -152,6 +152,10 @@
                                 settingData[@"value"] = newGroupName;
                                 //Change this to only update desired cell
                                 [tableView reloadData];
+                                
+                                //Notify other vcs of schedule change
+                                NSDictionary *userInfo = @{kUserInfoLocalScheduleKey: self.schedule, kUserInfoLocalScheduleChangedPropertiesKey: @[kUserInfoLocalSchedulePropertyGroupName]};
+                                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNameScheduleChanged object:self userInfo:userInfo];
                             }
                         }];
                     }
@@ -184,6 +188,10 @@
                                 settingData[@"value"] = newGroupCode;
                                 //Change this to only update desired cell
                                 [tableView reloadData];
+                                
+                                //Notify other vcs of schedule change
+                                NSDictionary *userInfo = @{kUserInfoLocalScheduleKey: self.schedule, kUserInfoLocalScheduleChangedPropertiesKey: @[kUserInfoLocalSchedulePropertyOther]};
+                                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNameScheduleChanged object:self userInfo:userInfo];
                             }
                         }];
                     }
