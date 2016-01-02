@@ -106,7 +106,9 @@
 -(void)cancelButtonPressed
 {
     //do cancel button things
-    
+    self.updatedIntervalDataByOverallRowArray = nil;//[self.schedule.intervalDataByOverallRow copy];
+    self.updatedAvailabilitiesArray = nil;//[self.currentPerson.assignmentsArray copy];
+    [self.tableView reloadData];
     [self changeNavBarToShowEditButton];
     [self.tableView setEditing:false animated:YES];
 }

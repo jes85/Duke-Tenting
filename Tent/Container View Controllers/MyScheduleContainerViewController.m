@@ -148,6 +148,9 @@
     self.navigationItem.leftBarButtonItem = nil;
     MeScheduleViewController *msvc = (MeScheduleViewController *)self.currentViewController;
     [msvc.tableView setEditing:false animated:YES];
+    msvc.updatedIntervalDataByOverallRowArray = nil;//msvc.schedule.intervalDataByOverallRow;
+    msvc.updatedAvailabilitiesArray = nil;//msvc.currentPerson.assignmentsArray;
+    [msvc.tableView reloadData];
 
 }
 -(void)settingsBarButtonItemPressed

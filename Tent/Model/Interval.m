@@ -70,6 +70,20 @@
     self.dateTimeString = [[dateString stringByAppendingString:@" "]stringByAppendingString:timeString];
 }
 
+-(id)copyWithZone:(NSZone *)zone
+{
+    Interval *copy  = [[self class]allocWithZone:zone];
+    if(copy){
+        copy.assignedPersons = [self.assignedPersons mutableCopy];
+        copy.availablePersons = [self.availablePersons mutableCopy];
+        copy.startDate = self.startDate;
+        copy.endDate = self.endDate;
+        copy.timeString = self.timeString;
+        copy.dateTimeString = self.dateTimeString;
+        copy.requiredPersons = self.requiredPersons;
+    }
+    return copy;
+}
 
 @end
 

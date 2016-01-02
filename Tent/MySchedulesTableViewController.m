@@ -668,6 +668,7 @@
             
             [scheduleObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if(!error){
+                    newSchedule.parseObjectID = scheduleObject.objectId;
                     PFRelation *userRelation = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
                     [userRelation addObject:scheduleObject];
                     [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {

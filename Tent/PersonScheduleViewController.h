@@ -17,6 +17,8 @@
 @property (nonatomic) Schedule *schedule;
 @property (nonatomic) Person *currentPerson;
 @property(nonatomic, strong) NSMutableArray *updatedAvailabilitiesArray;
+@property (nonatomic) NSMutableArray *updatedIntervalDataByOverallRowArray;
+//have updated interval array too
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic) BOOL isMe;

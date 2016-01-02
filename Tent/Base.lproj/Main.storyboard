@@ -843,16 +843,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gwk-ft-lGs">
-                                <rect key="frame" x="0.0" y="528" width="320" height="40"/>
+                                <rect key="frame" x="0.0" y="508" width="320" height="60"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7z0-O4-0jg">
-                                        <rect key="frame" x="8" y="23" width="156" height="12"/>
+                                        <rect key="frame" x="8" y="33" width="138" height="12"/>
                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="10"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Tv-G2-t3G">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                                         <state key="normal">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -861,13 +861,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Countdown To Craziness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jur-dS-06h">
-                                        <rect key="frame" x="8" y="8" width="156" height="15"/>
+                                        <rect key="frame" x="8" y="18" width="138" height="15"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon_Gear" translatesAutoresizingMaskIntoConstraints="NO" id="CEb-AS-PpM">
-                                        <rect key="frame" x="276" y="2" width="36" height="36"/>
+                                        <rect key="frame" x="258" y="3" width="54" height="54"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="CEb-AS-PpM" secondAttribute="height" multiplier="1:1" id="d9r-lZ-WBA"/>
                                         </constraints>
@@ -876,7 +876,7 @@
                                 <color key="backgroundColor" red="0.84673648002588453" green="0.84870472842847799" blue="0.8787399334380952" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="7z0-O4-0jg" firstAttribute="trailing" secondItem="Jur-dS-06h" secondAttribute="trailing" id="0Rj-tK-dKX"/>
-                                    <constraint firstAttribute="height" constant="40" id="0ac-hs-axo"/>
+                                    <constraint firstAttribute="height" constant="60" id="0ac-hs-axo"/>
                                     <constraint firstItem="CEb-AS-PpM" firstAttribute="leading" secondItem="Jur-dS-06h" secondAttribute="trailing" constant="112" id="8r5-Sb-cXM"/>
                                     <constraint firstItem="Jur-dS-06h" firstAttribute="leading" secondItem="Gwk-ft-lGs" secondAttribute="leading" constant="8" id="CWc-Og-k5Q"/>
                                     <constraint firstAttribute="trailing" secondItem="CEb-AS-PpM" secondAttribute="trailing" constant="8" id="CaP-xT-iYx"/>
@@ -892,7 +892,7 @@
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IbX-KH-RhN">
-                                <rect key="frame" x="0.0" y="108" width="320" height="420"/>
+                                <rect key="frame" x="0.0" y="108" width="320" height="400"/>
                                 <connections>
                                     <segue destination="6FI-Dv-9a1" kind="embed" id="qrs-Wf-ipQ"/>
                                 </connections>
@@ -1578,7 +1578,7 @@
                         <viewControllerLayoutGuide type="bottom" id="gH8-xC-TeO"/>
                     </layoutGuides>
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="DdC-nI-ZRD">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="420"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>

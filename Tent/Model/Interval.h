@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Interval : NSObject
+@interface Interval : NSObject <NSCopying>
 
 @property (nonatomic) NSMutableArray *availablePersons;
 @property (nonatomic) NSMutableArray *assignedPersons;
