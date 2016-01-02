@@ -6,16 +6,7 @@
 //  Copyright (c) 2015 Jeremy. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "Person.h"
-#import "Schedule.h"
+#import "PersonScheduleViewController.h"
 
-@interface MyScheduleViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
-
-@property (nonatomic) Person *currentPerson;
-@property (nonatomic) Schedule *schedule;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-
-
--(void)saveEdits;
+@interface MyScheduleViewController : PersonScheduleViewController
 @end

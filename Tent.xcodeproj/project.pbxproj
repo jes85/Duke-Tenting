@@ -42,6 +42,7 @@
 		3F87220E19A2627A005F12DD /* AlgorithmTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F87220D19A2627A005F12DD /* AlgorithmTest.m */; };
 		3F89A9981C2BD7FF00882F5F /* NowPersonsInIntervalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F89A9971C2BD7FF00882F5F /* NowPersonsInIntervalViewController.m */; };
 		3F8A32F619AEC1CC00C63E65 /* HomeGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8A32F519AEC1CC00C63E65 /* HomeGame.m */; };
+		3F90BC821C3773060091E8DC /* PersonScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F90BC811C3773060091E8DC /* PersonScheduleViewController.m */; };
 		3F9269A71C352E780096F5B7 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F9269A61C352E780096F5B7 /* Launch Screen.storyboard */; };
 		3F94B853199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */; };
 		3F96F6CB1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F96F6CA1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m */; };
@@ -158,6 +159,8 @@
 		3F89A9971C2BD7FF00882F5F /* NowPersonsInIntervalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NowPersonsInIntervalViewController.m; sourceTree = "<group>"; };
 		3F8A32F419AEC1CC00C63E65 /* HomeGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeGame.h; sourceTree = "<group>"; };
 		3F8A32F519AEC1CC00C63E65 /* HomeGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeGame.m; sourceTree = "<group>"; };
+		3F90BC801C3773060091E8DC /* PersonScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonScheduleViewController.h; sourceTree = "<group>"; };
+		3F90BC811C3773060091E8DC /* PersonScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonScheduleViewController.m; sourceTree = "<group>"; };
 		3F9269A61C352E780096F5B7 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		3F94B851199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameOfScheduleTableViewCell.h; sourceTree = "<group>"; };
 		3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameOfScheduleTableViewCell.m; sourceTree = "<group>"; };
@@ -294,6 +297,8 @@
 				3FDE355C19809CC400CE47D8 /* PickPersonTableViewController.m */,
 				3FD6963A1996A7DB00D9C5C4 /* AddPersonViewController.h */,
 				3FD6963B1996A7DB00D9C5C4 /* AddPersonViewController.m */,
+				3F90BC801C3773060091E8DC /* PersonScheduleViewController.h */,
+				3F90BC811C3773060091E8DC /* PersonScheduleViewController.m */,
 				3FA97F991C2E6EDB000B5920 /* MyScheduleViewController.h */,
 				3FA97F9A1C2E6EDB000B5920 /* MyScheduleViewController.m */,
 				3FA97F9C1C2E74A8000B5920 /* MeScheduleViewController.h */,
@@ -630,6 +635,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F90BC821C3773060091E8DC /* PersonScheduleViewController.m in Sources */,
 				3F3B0C371BFBEB2A0056E378 /* AlgorithmSchedule.m in Sources */,
 				3FC432BC19A0583700B560F1 /* MyPFSignUpViewController.m in Sources */,
 				3F0A86681C2FA11900CA0BA1 /* StatsViewController.m in Sources */,

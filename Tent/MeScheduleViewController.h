@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Jeremy. All rights reserved.
 //
 
-#import "MyScheduleViewController.h"
+#import "PersonScheduleViewController.h"
 
-@interface MeScheduleViewController : MyScheduleViewController
+@interface MeScheduleViewController : PersonScheduleViewController
 
 @end

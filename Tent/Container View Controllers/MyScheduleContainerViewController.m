@@ -30,7 +30,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelOpponent;
 
 
-@property (nonatomic) UIBarButtonItem *editButton;
+@property (nonatomic) UIBarButtonItem *editMeScheduleButton;
 @property (nonatomic) UIBarButtonItem *editPeopleButton;
 @property (nonatomic) UIBarButtonItem *settingsButton;
 @property (nonatomic) UIBarButtonItem *addPersonButton;
@@ -45,35 +45,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    if([[[PFUser currentUser] objectId] isEqual: self.schedule.createdBy.objectId]){
-        self.isCreator = true;
-    }else{
-        self.isCreator = false;
-    }
 
-    //[self drawBorders];
-    [self updateGameLabels];
-    //[self updatePersonsForSchedule];
-    //[self updateSchedule];
-    [self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
     
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editBarButtonItemPressed)];
-    self.editButton = editButton;
-    UIBarButtonItem *editPeopleButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editPeopleBarButtonItemPressed)];
-    self.editPeopleButton = editPeopleButton;
-    //UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(settingsBarButtonItemPressed)];
-    //settingsButton.image = [UIImage imageNamed:@"Icon_Gear"];
-    //self.settingsButton = settingsButton;
     
-    UIBarButtonItem *addPersonButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addPersonBarButtonItemPressed)];
-    self.addPersonButton = addPersonButton;
-    
-    
-    self.navigationItem.rightBarButtonItems = @[editButton];
-    
+    //[self drawBorders];
+    //[self updatePersonsForSchedule];
+    //[self updateSchedule];
+    [self updateGameLabels];
+
+    [self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
     
@@ -108,8 +90,25 @@
     [self performSegueWithIdentifier:@"AddPersonWithoutAppSegue" sender:self];
     
 }
+-(UIBarButtonItem *)editMeScheduleButton{
+    if(!_editMeScheduleButton) _editMeScheduleButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editMeScheduleButtonPressed)];
+    return _editMeScheduleButton;
+}
+-(UIBarButtonItem *)editPeopleButton{
+    if(!_editPeopleButton) _editPeopleButton =[[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editPeopleBarButtonItemPressed)];
+    return _editPeopleButton;
+}
+-(UIBarButtonItem *)addPersonButton
+{
+    if(!_addPersonButton)_addPersonButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addPersonBarButtonItemPressed)];
+    return _addPersonButton;
+    
+}
 
--(void)editBarButtonItemPressed
+-(BOOL)isCreator{
+    return [[[PFUser currentUser] objectId] isEqual: self.schedule.createdBy.objectId];
+}
+-(void)editMeScheduleButtonPressed
 {
     if(self.schedule.assignmentsGenerated){
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Assignments Already Generated" message:@"Are you sure you want to edit?" preferredStyle:UIAlertControllerStyleAlert];
@@ -138,7 +137,7 @@
 }
 -(void)doneEditingMyScheduleButtonPressed
 {
-    self.navigationItem.rightBarButtonItem = self.editButton;
+    self.navigationItem.rightBarButtonItem = self.editMeScheduleButton;
     self.navigationItem.leftBarButtonItem = nil;
     MeScheduleViewController *msvc = (MeScheduleViewController *)self.currentViewController;
     [msvc.tableView setEditing:false animated:YES];
@@ -146,7 +145,7 @@
 }
 -(void)cancelEditingMyScheduleButtonPressed
 {
-    self.navigationItem.rightBarButtonItem = self.editButton;
+    self.navigationItem.rightBarButtonItem = self.editMeScheduleButton;
     self.navigationItem.leftBarButtonItem = nil;
     MeScheduleViewController *msvc = (MeScheduleViewController *)self.currentViewController;
     [msvc.tableView setEditing:false animated:YES];
@@ -172,6 +171,7 @@
     self.navigationItem.leftBarButtonItem = nil;
     
 }
+/*
 -(void)drawBorders
 {
     CGFloat borderWidth = 1.0f;
@@ -182,6 +182,7 @@
     [self.viewGameInfo.layer addSublayer:bottomBorder];
     
 }
+ */
 -(void)updateGameLabels
 {
 
@@ -192,6 +193,7 @@
     self.navigationItem.title = self.schedule.groupName;
     
 }
+
 
 -(void)refreshData
 {
@@ -215,15 +217,6 @@
 
 - (UIViewController *) viewControllerForSegmentIndex: (NSInteger)index
 {
-    if([self.viewControllers[index] isKindOfClass:[MeScheduleViewController class]] && (self.schedule.personsArray.count > 0)){
-        
-        //TODO: this gets called every time segment index is switched. should really only happen once, or once every time there's an update to current user's schedule
-        MeScheduleViewController *msvc = self.viewControllers[index];
-        msvc.currentPerson = self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]]; //TODO: there's an error here when someone first joins a schedule
-        msvc.schedule = self.schedule;
-        
-    }
-    
     return self.viewControllers[index];
 }
 
@@ -243,12 +236,26 @@
     for (NSString *identifier in viewControllerIdentifiers) {
         vc = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
         vc.view.frame = [self frameForContentController];
+        if([vc isKindOfClass:[MeScheduleViewController class]] && (self.schedule.personsArray.count > 0)){
+            [self initializeFirstViewController:(MeScheduleViewController*)vc];
+        }
+
         [array addObject:vc];
     }
     
     return array;
 }
+-(void)initializeFirstViewController:(MeScheduleViewController *)msvc
+{
 
+    msvc.currentPerson = self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]]; //TODO: there's an error here when someone first joins a schedule
+    msvc.schedule = self.schedule;
+    msvc.isCreator = self.isCreator;
+    self.navigationItem.rightBarButtonItems = msvc.canEdit ? @[self.editMeScheduleButton] : nil;
+
+    
+
+}
 -(CGRect)frameForContentController
 {
     return self.containerView.bounds;
@@ -266,10 +273,12 @@
     // Me
     if([newVC isKindOfClass:[MeScheduleViewController class]]){
         MeScheduleViewController *msvc = (MeScheduleViewController *)newVC;
+        msvc.currentPerson = self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]]; //TODO: there's an error here when someone first joins a schedule (there was, i may have fixe it
         msvc.schedule = self.schedule;
+        msvc.isCreator = self.isCreator;
         
         
-        self.navigationItem.rightBarButtonItems = self.schedule.assignmentsGenerated & !self.isCreator ? nil : @[self.editButton];
+        self.navigationItem.rightBarButtonItems = msvc.canEdit ? @[self.editMeScheduleButton] : nil;
         
     }
     
