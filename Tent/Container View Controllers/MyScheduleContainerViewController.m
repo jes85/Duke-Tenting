@@ -220,7 +220,7 @@
     self.schedule = updatedSchedule;
 
     //update My Schedule, Current People, Persons, and Time intervals vcs
-    //TODO: did this fast and it works, but can probably do it in a better way
+    //TODO: did this fast and it works, but can probably do it in a better way (i.e. just update current vc and then notify others
     self.viewControllers = [self instantiateViewControllers];
     
     NSUInteger index;
@@ -237,6 +237,8 @@
     self.currentViewController = self.viewControllers[index];
     
     self.navigationItem.title = self.schedule.groupName;
+    
+    //TODO: notify other vcs
    
     
 }
@@ -295,6 +297,10 @@
     msvc.currentPerson = self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]]; //TODO: there's an error here when someone first joins a schedule
     msvc.schedule = self.schedule;
     msvc.isCreator = self.isCreator;
+    if([self.schedule.startDate timeIntervalSinceNow] < 0 && [self.schedule.endDate timeIntervalSinceNow] > 0){
+        [msvc scrollToCurrentInterval];
+        
+    }
     self.navigationItem.rightBarButtonItems = msvc.canEdit ? @[self.editMeScheduleButton] : nil;
 
     

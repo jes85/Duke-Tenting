@@ -17,10 +17,12 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    /*
     if([self.schedule.startDate timeIntervalSinceNow] < 0 && [self.schedule.endDate timeIntervalSinceNow] > 0){
         [self scrollToCurrentInterval];
         
     }
+     */
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,6 +30,8 @@
    
     // Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
+   
+    
     
 }
 -(void)dealloc

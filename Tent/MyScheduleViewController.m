@@ -36,7 +36,8 @@
     }else{
     }
     if([self.schedule.startDate timeIntervalSinceNow] < 0 && [self.schedule.endDate timeIntervalSinceNow] > 0){
-        [super scrollToCurrentInterval];
+        [self scrollToCurrentInterval];
+        //maybe keep track off last offset and scroll to that one instead
         
     }
     
