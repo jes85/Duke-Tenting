@@ -69,10 +69,13 @@
     }
 }
 /*
- only valid if schedule has started and is not over
+ only valid if schedule has started and is not over. returns -1 for invalid
  */
 +(NSInteger)findCurrentTimeIntervalIndexForSchedule:(Schedule *)schedule
 {
+    if([schedule.startDate timeIntervalSinceNow] > 0 | [schedule.endDate timeIntervalSinceNow] < 0){
+        return -1; //method not valid if schedule hasn't started yet or is over
+    }
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *datedifferenceComponents = [calendar components:NSCalendarUnitHour|NSCalendarUnitMinute fromDate:schedule.startDate toDate:[NSDate date] options:0];
     

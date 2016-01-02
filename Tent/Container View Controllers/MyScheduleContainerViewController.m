@@ -285,7 +285,6 @@
         if([vc isKindOfClass:[MeScheduleViewController class]] && (self.schedule.personsArray.count > 0)){
             [self initializeFirstViewController:(MeScheduleViewController*)vc];
         }
-
         [array addObject:vc];
     }
     

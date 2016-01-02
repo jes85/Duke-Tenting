@@ -11,6 +11,7 @@
 #import "Interval.h"
 #import "Constants.h"
 @interface IntervalsTableViewController ()
+@property (nonatomic) BOOL firstTimeAppearing;
 @end
 
 @implementation IntervalsTableViewController
@@ -20,6 +21,7 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
+    self.firstTimeAppearing = YES;
     
 }
 -(void)dealloc
@@ -42,10 +44,14 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSInteger overallRow = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
-    if(overallRow < 0) return; //schedule hasn't started
-    NSIndexPath *indexPath = [Constants indexPathForOverallRow:overallRow tableView:self.tableView];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    if(self.firstTimeAppearing){
+        NSInteger overallRow = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
+        if(overallRow < 0) return; //schedule hasn't started or is over
+        NSIndexPath *indexPath = [Constants indexPathForOverallRow:overallRow tableView:self.tableView];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        self.firstTimeAppearing = NO;
+    }
+    
 }
 
 #pragma mark - Table view data source
