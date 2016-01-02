@@ -87,7 +87,11 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
             
             //Update UI
             [self.schedule.personsArray removeObjectAtIndex:indexPath.row];
+            [self.schedule createIntervalDataArrays];
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            //Notify other vcs
+            NSDictionary *userInfo = @{kUserInfoLocalScheduleKey: self.schedule, kUserInfoLocalScheduleChangedPropertiesKey:@[kUserInfoLocalSchedulePropertyPersonsArray]};
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNameScheduleChanged object:self userInfo:userInfo];
             
         }];
     }
@@ -216,7 +220,8 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
                     if(!error){
                         NSLog(@"Saved schedule to join to parse");
                         // Update person and schedule on current iphone (offline)
-
+                        newPerson.scheduleIndex = self.schedule.personsArray.count;
+                        newPerson.parseObjectID = personObject.objectId;
                         [self.schedule.personsArray addObject:newPerson];
                         self.addPersonName = nil;
                         [self.tableView reloadData];
