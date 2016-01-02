@@ -133,27 +133,15 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     
     NSUInteger index = [sectionData[@"intervalStartIndex"] integerValue] + indexPath.row;
     
-    Interval *interval = self.schedule.intervalDataByOverallRow[index]; //might need to update this locally when updating people's schedules
+    // TODO: decide whether to do this for each cell or use array
+    //NSUInteger numPeopleAssigned = [self.schedule numPeopleAssignedInIntervalIndex:index];
+    //NSUInteger numPeopleAvailable = [self.schedule numPeopleAvailableInIntervalIndex:index];
+    //I changed this
+    Interval *interval = self.schedule.intervalDataByOverallRow[index]; //might need to update this locally when updating people's schedules. //i think i do
+    [self changeWarningTextForCell:cell intervalIndex:index assignmentsGenerated:self.schedule.assignmentsGenerated];
     
-    // TODO: decide whether to do this for each cell use or array
-    NSUInteger numPeopleAssigned = [self.schedule numPeopleAssignedInIntervalIndex:index];
-    NSUInteger numPeopleAvailable = [self.schedule numPeopleAvailableInIntervalIndex:index];
-    NSString *warningText;
-    if(self.schedule.assignmentsGenerated){
-        warningText = [NSString stringWithFormat:@"%lu assigned out of %lu required", (unsigned long)numPeopleAssigned, (unsigned long)interval.requiredPersons];
-        cell.warningLabel.textColor = [UIColor redColor];
-    }else{
-        warningText = [NSString stringWithFormat:@"%lu available out of %lu needed", (unsigned long)numPeopleAvailable, (unsigned long) interval.requiredPersons];
-        cell.warningLabel.textColor = [UIColor orangeColor];
-    }
-    
-    cell.warningLabel.text = warningText;
-    //cell.textLabel.text =interval.timeString;
     cell.timeLabel.text = interval.timeString;
     
-    
-    //NSString *interval = self.schedule.hourIntervalsDisplayArray[indexPath.row];
-    //cell.textLabel.text = interval;
     
     
     if([self.updatedAvailabilitiesArray[index] isEqual:@2]){
@@ -227,6 +215,10 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
         
         
+        Interval *interval = self.schedule.intervalDataByOverallRow[index];
+        [interval.availablePersons addObject:self.currentPerson];
+        [self changeWarningTextForCell:cell intervalIndex:index assignmentsGenerated:self.schedule.assignmentsGenerated];
+        
     }
     else if([self.updatedAvailabilitiesArray[index] isEqual:@1]) {
         self.updatedAvailabilitiesArray[index] = @0;
@@ -236,11 +228,33 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         cell.iconImageView.backgroundColor =[UIColor blueColor];
         cell.assignedOrAvailableLabel.textColor = [UIColor blueColor];
         
-        
+        Interval *interval = self.schedule.intervalDataByOverallRow[index];
+        [interval.availablePersons removeObject:self.currentPerson];
+        [self changeWarningTextForCell:cell intervalIndex:index assignmentsGenerated:self.schedule.assignmentsGenerated];
     }
     
 }
+-(void)changeWarningTextForCell:(IntervalTableViewCell *)cell intervalIndex:(NSUInteger)index assignmentsGenerated:(BOOL)assignmentsGenerated
+{
+    Interval *interval = self.schedule.intervalDataByOverallRow[index];
+    NSString *assignedOrAvailable;
+    UIColor *labelColor;
+    NSUInteger count;
+    if(assignmentsGenerated){
+        assignedOrAvailable = @"assigned";
+        labelColor = [UIColor redColor];
+        count = interval.assignedPersons.count;
+    }else{
+        assignedOrAvailable = @"available";
+        labelColor = [UIColor orangeColor];
+        count = interval.availablePersons.count;
+    }
+    NSString *warningText = [NSString stringWithFormat:@"%lu %@ out of %lu required", (unsigned long)count, assignedOrAvailable, (unsigned long)self.schedule.requiredPersonsPerInterval];
+    
+    cell.warningLabel.text = warningText;
+    cell.warningLabel.textColor = labelColor;
 
+}
 -(void)updateStatusAfterAssignmentsGeneratedForCell:(IntervalTableViewCell *)cell AtIndex:(NSUInteger)index
 {
     if([self.updatedAvailabilitiesArray[index] isEqual:@2]){
@@ -252,6 +266,12 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         cell.iconImageView.backgroundColor =[UIColor blueColor];
         cell.assignedOrAvailableLabel.textColor = [UIColor blueColor];
         
+        Interval *interval = self.schedule.intervalDataByOverallRow[index];
+        [interval.assignedPersons removeObject:self.currentPerson];
+        [interval.availablePersons removeObject:self.currentPerson];
+        [self changeWarningTextForCell:cell intervalIndex:index assignmentsGenerated:self.schedule.assignmentsGenerated];
+
+        
     }
     else if([self.updatedAvailabilitiesArray[index] isEqual:@1]) {
         self.updatedAvailabilitiesArray[index] = @2;
@@ -259,6 +279,11 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         cell.assignedOrAvailableLabel.text = @"(Assigned)";
         cell.iconImageView.backgroundColor =[UIColor greenColor];
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:0 green:.3 blue:0 alpha:1.0];
+        
+        Interval *interval = self.schedule.intervalDataByOverallRow[index];
+        [interval.assignedPersons addObject:self.currentPerson];
+        [self changeWarningTextForCell:cell intervalIndex:index assignmentsGenerated:self.schedule.assignmentsGenerated];
+
     }else if([self.updatedAvailabilitiesArray[index] isEqual:@0]){
         //Save data in updatedAvailabilities array (will save/ignore this in Done/Cancel button action later)
         
@@ -268,6 +293,11 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         //cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
         cell.iconImageView.backgroundColor =[UIColor yellowColor];
         cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
+        
+        Interval *interval = self.schedule.intervalDataByOverallRow[index];
+        [interval.availablePersons addObject:self.currentPerson];
+        [self changeWarningTextForCell:cell intervalIndex:index assignmentsGenerated:self.schedule.assignmentsGenerated];
+
     }
     
 }

@@ -16,7 +16,7 @@
 @property (nonatomic) NSDate *endDate;
 @property (nonatomic) NSString *timeString;
 @property (nonatomic) NSString *dateTimeString;
-@property (nonatomic) NSUInteger requiredPersons;
+@property (nonatomic) NSUInteger requiredPersons; //for UNC //make UNCInterval subclass
 
 @property (nonatomic) NSUInteger section;
 

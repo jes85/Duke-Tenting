@@ -135,7 +135,7 @@
         Interval *interval = self.schedule.intervalDataByOverallRow[overallRow];
         piivc.availablePersonsArray = interval.availablePersons;
         piivc.assignedPersonsArray = interval.assignedPersons;
-        piivc.requiredPersons = ceil([self.schedule.personsArray count]/3.0); //TODO: implement property of Inteval.h
+        piivc.requiredPersons = self.schedule.requiredPersonsPerInterval;
         
         /*
         NSArray *intervalData = [self.schedule.intervalsDisplayData objectForKey:[NSNumber numberWithInteger:indexPath.section]];

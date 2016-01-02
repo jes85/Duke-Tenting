@@ -95,7 +95,11 @@
     NSUInteger numIntervals =  minutes / self.intervalLengthInMinutes;
     self.numIntervals = minutes % self.intervalLengthInMinutes == 0 ? numIntervals : numIntervals + 1;
 }
-
+-(NSUInteger)requiredPersonsPerInterval
+{
+    return ceil(self.personsArray.count / 3.0);
+    
+}
 #pragma mark - UI Helpers and Formatting
 
 
