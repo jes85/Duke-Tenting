@@ -47,7 +47,8 @@
         //update data
         self.schedule = schedule;
         self.currentPerson = self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]];
-        self.updatedAvailabilitiesArray = [[NSMutableArray alloc]initWithArray:self.currentPerson.assignmentsArray];//maybe merge updatedAvailabilitiesArray to just use self.currentPerson
+        self.updatedAvailabilitiesArray = nil;
+        self.updatedIntervalDataByOverallRowArray = nil;
         //update UI if needed
         NSArray *changedProperties = userInfo[kUserInfoLocalScheduleChangedPropertiesKey];
         if([changedProperties containsObject:kUserInfoLocalSchedulePropertyPersonsArray]){

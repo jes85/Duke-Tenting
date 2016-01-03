@@ -68,14 +68,26 @@
         self.currentUserWasRemoved = false;
         [self calculateNumIntervals];
         [self createIntervalDataArrays];
-    
+        
+        //KVO to update interval data arrays every time personsArray is updated
+        /*
+        [self addObserver:self forKeyPath:kUserInfoLocalSchedulePropertyPersonsArray options:NSKeyValueObservingOptionNew context:nil];
+         */
     }
     return self;
 }
-
+/*
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+    if(object == self && [keyPath isEqualToString:@"personsArray"]){
+        [self createIntervalDataArrays];
+    }
+    
+}
+ */
 -(NSUInteger)findCurrentUserPersonIndex
 {
-    NSLog(@"%@, %d", self.groupName, self.personsArray.count);
+    NSLog(@"%@, %lu", self.groupName, (unsigned long)self.personsArray.count);
     for(int i = 0; i<self.personsArray.count; i++){
         Person *person = self.personsArray[i];
         NSLog(@"%@", person.user.objectId);
