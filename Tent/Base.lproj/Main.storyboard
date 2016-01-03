@@ -1181,6 +1181,7 @@
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="logOutButtonPressed:" destination="tb2-Ux-EBH" eventType="touchUpInside" id="0bp-bU-Lso"/>
+                                    <segue destination="fvd-5w-IYA" kind="unwind" unwindAction="didPressLogOut:" id="V1N-fr-uVy"/>
                                 </connections>
                             </button>
                         </subviews>

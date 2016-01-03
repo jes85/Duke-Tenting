@@ -28,20 +28,13 @@
 @property PFUser *user;
 @property (nonatomic) UIActivityIndicatorView *loadingWheel;
 
-@property (nonatomic) NSMutableSet *mySchedulesHomeGameIndexes;
 
-@property (nonatomic) NSIndexPath *updatedScheduleIndexPath; //only update this if parts of schedule that are visible are updated (name, start date, end date)
+
 
 @end
 
 
 @implementation MySchedulesTableViewController
-
--(NSMutableSet *)mySchedulesHomeGameIndexes
-{
-    if(!_mySchedulesHomeGameIndexes) _mySchedulesHomeGameIndexes = [[NSMutableSet alloc]init];
-    return _mySchedulesHomeGameIndexes;
-}
 
 #pragma mark - View Controller Lifecycle
 
@@ -50,31 +43,60 @@
 {
     [super viewDidLoad];
     
-    [self getHomeGamesDataFromUserDefaults];
     
     PFUser *currentUser = [PFUser currentUser];
     if(currentUser){
+        //self.user = currentUser;
         self.loadingWheel.center = self.tableView.center;
         [self.loadingWheel startAnimating];
         [self getMySchedules];
-        self.user = currentUser;
+        UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
+        refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Reload Data"];
+        [refresh addTarget:self action:@selector(refreshSchedules) forControlEvents:UIControlEventValueChanged];
+        self.refreshControl = refresh;
+        
+        UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem = back;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
     }
     else{ //No user logged in
-        //[self displayLoginAndSignUpViews];
+        [self displayLoginAndSignUpViews];
     }
-    
-    
-    UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
-    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Reload Data"];
-    [refresh addTarget:self action:@selector(refreshSchedules) forControlEvents:UIControlEventValueChanged];
-    self.refreshControl = refresh;
-    
-    UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem = back;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
-    
 }
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    PFUser *currentUser = [PFUser currentUser];
+    if(!currentUser){
+        /*
+        [self resetUserScheduleData];
+        [self.tableView setNeedsDisplay];
+        [self displayLoginAndSignUpViews];
+         */
+    }else if(currentUser!=self.user){
+        /*
+        self.user = currentUser;
+        //maybe move to didLogIn
+        [self.loadingWheel startAnimating];
+        [self resetUserScheduleData];
+        [self.tableView reloadData];
+        [self getMySchedules];
+         */
+        
+    }else{
+        //currentUser
+        /*
+        if(self.updatedScheduleIndexPath){
+            [self updateTableViewRowAtIndexPath:self.updatedScheduleIndexPath];
+            self.updatedScheduleIndexPath = nil;
+        }
+         */
+    }
+}
+
+
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -128,32 +150,6 @@
     [self.tableView endUpdates];
 }
 
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    PFUser *currentUser = [PFUser currentUser];
-    if(!currentUser){
-        [self resetUserScheduleData];
-        [self.tableView setNeedsDisplay];
-        [self displayLoginAndSignUpViews];
-    }else if(currentUser!=self.user){
-        self.user = currentUser;
-        //maybe move to didLogIn
-        [self.loadingWheel startAnimating];
-        [self resetUserScheduleData];
-        [self.tableView reloadData];
-        [self getMySchedules];
-        
-    }else{
-        //currentUser
-        if(self.updatedScheduleIndexPath){
-            [self updateTableViewRowAtIndexPath:self.updatedScheduleIndexPath];
-            self.updatedScheduleIndexPath = nil;
-        }
-    }
-}
-
 -(void)refreshSchedules
 {
     [self getMySchedules];
@@ -167,26 +163,8 @@
 -(void)resetUserScheduleData
 {
     self.schedules = nil;
-    self.mySchedulesHomeGameIndexes = nil;
 }
-//TODO: Review the process of retreiving home games.
--(void)getHomeGamesDataFromUserDefaults
-{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:nil forKey:kUserDefaultsHomeGamesData]; //testing
-    NSData *currentData = [userDefaults objectForKey:kUserDefaultsHomeGamesData];
-    if(!currentData){
-        [NewScheduleTableViewController loadHomeGameScheduleDataFromParseWithBlock:^(NSArray *updatedHomeGamesArray, NSError *error) {
-            NSData *updatedData = [NSKeyedArchiver archivedDataWithRootObject:updatedHomeGamesArray];
-            [userDefaults setObject:updatedData forKey:kUserDefaultsHomeGamesData];
-            self.homeGames = updatedHomeGamesArray;
-        }];
-    }else{
-        NSArray *currentHomeGameDataArray = (NSArray *)[NSKeyedUnarchiver unarchiveObjectWithData:currentData];
-        self.homeGames = currentHomeGameDataArray;
 
-    }
-}
 
 -(UIActivityIndicatorView *)loadingWheel
 {
@@ -240,11 +218,12 @@
 // (customize this later)
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user
 {
-    self.schedules = [[NSMutableArray alloc]init];
+    [self.loadingWheel startAnimating];
+    [self resetUserScheduleData];
     [self.tableView reloadData];
     [self dismissViewControllerAnimated:YES completion:NULL];
-    
-    
+    [self getMySchedules];
+
 }
 
 // Sent to the delegate when the log in attempt fails.
@@ -294,8 +273,10 @@
 
 // Sent to the delegate when a PFUser is signed up.
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user {
+    self.schedules = [[NSMutableArray alloc]init];
+    [self.tableView reloadData];
     [self dismissViewControllerAnimated:YES completion:NULL]; // Dismiss the PFSignUpViewController
-    
+
     
     
     
@@ -396,7 +377,6 @@
     //TODO: only create this set on prepareforsegue. that way you don't have to update this set every time you update self.schedules
         // is creating this set on prepareForSEgue too slow?
     HomeGame *hg = schedule.homeGame;
-    [self.mySchedulesHomeGameIndexes addObject:[NSNumber numberWithInteger:hg.index]];
 }
 
 
@@ -485,7 +465,6 @@
             
             //set back to label view
             self.tableView.backgroundView = messageLbl;
-            NSLog(@"height %f", self.tableView.frame.size.height);
             //no separator
             
             
@@ -686,7 +665,11 @@
     
      
 }
-
+-(IBAction)didPressLogOut:(UIStoryboardSegue *)segue
+{
+    [PFUser logOut];
+    [self displayLoginAndSignUpViews];
+}
 -(IBAction)closeSettings:(UIStoryboardSegue *)segue
 {
     
@@ -720,35 +703,21 @@
     else if([[segue destinationViewController] isKindOfClass:[NewScheduleTableViewController class]]){
         if(sender==self.addScheduleButton){
             NewScheduleTableViewController *nstvc = [segue destinationViewController];
-            //TODO: Possible changes heres
-            nstvc.mySchedulesHomeGameIndexes = self.mySchedulesHomeGameIndexes;
-            nstvc.homeGames = self.homeGames;
-            nstvc.scrollRow = [self calculateScrollRowForNewSchedulesTVC];
-            
-            
-            // Pointer testing
-            self.test = @"hey";
-            nstvc.test = self.test;
+            nstvc.mySchedulesHomeGameIndexes = [self mySchedulesHomeGameIndexes];
+    
         }
     }
 }
 
-
--(NSUInteger)calculateScrollRowForNewSchedulesTVC
+-(NSMutableSet *)mySchedulesHomeGameIndexes
 {
-    NSUInteger scrollRow = 0;
-    HomeGame *lastGame = self.homeGames[self.homeGames.count-1];
-    if([lastGame.gameTime timeIntervalSinceNow] < 0) return 0; //if all games have occurred, just show all of them
-    for(int i=0;i<self.homeGames.count - 1;i++){ //don't need to check the last game twice
-        HomeGame *game = self.homeGames[i];
-        if([game.gameTime timeIntervalSinceNow] < 0){
-            scrollRow = i+1;
-            
-        }
+    NSMutableSet *set = [[NSMutableSet alloc]initWithCapacity:self.schedules.count];
+    for(Schedule *schedule in self.schedules){
+        HomeGame *hg = schedule.homeGame;
+        [set addObject:[NSNumber numberWithInteger:hg.index]];
     }
-    return scrollRow;
+    return set;
 }
-
 
 
 

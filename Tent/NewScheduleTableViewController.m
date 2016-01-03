@@ -29,14 +29,20 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.test = @"no";
-    //[self loadHomeGameScheduleData];
+
+    //[self getHomeGamesDataFromUserDefaults];
     
+    
+    [self loadHomeGameScheduleData];
+    [self calculateScrollRow];
+    
+    /*
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [calendar components:(NSCalendarUnitDay) fromDate:[NSDate date]];
     if(components.day == 16){ //change to only do it once a month or something and make sure it does it that month (maybe push notification is better)
         [self checkForUpdatedHomeGameData];
     }
+     */
     
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
@@ -48,6 +54,41 @@
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
+-(NSUInteger)calculateScrollRow
+{
+    NSUInteger scrollRow = 0;
+    HomeGame *lastGame = self.homeGames[self.homeGames.count-1];
+    if([lastGame.gameTime timeIntervalSinceNow] < 0) return 0; //if all games have occurred, just show all of them
+    for(int i=0;i<self.homeGames.count - 1;i++){ //don't need to check the last game twice
+        HomeGame *game = self.homeGames[i];
+        if([game.gameTime timeIntervalSinceNow] < 0){
+            scrollRow = i+1;
+            
+        }
+    }
+    return scrollRow;
+}
+//TODO: Review the process of retreiving home games.
+//don't do user defaults. only check parse on push notification and update local file instead of user defaults
+-(void)getHomeGamesDataFromUserDefaults
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:nil forKey:kUserDefaultsHomeGamesData]; //testing
+    NSData *currentData = [userDefaults objectForKey:kUserDefaultsHomeGamesData];
+    if(!currentData){
+        [NewScheduleTableViewController loadHomeGameScheduleDataFromParseWithBlock:^(NSArray *updatedHomeGamesArray, NSError *error) {
+            NSData *updatedData = [NSKeyedArchiver archivedDataWithRootObject:updatedHomeGamesArray];
+            [userDefaults setObject:updatedData forKey:kUserDefaultsHomeGamesData];
+            self.homeGames = updatedHomeGamesArray;
+            [self calculateScrollRow];
+        }];
+    }else{
+        NSArray *currentHomeGameDataArray = (NSArray *)[NSKeyedUnarchiver unarchiveObjectWithData:currentData];
+        self.homeGames = currentHomeGameDataArray;
+        [self calculateScrollRow];
+        
+    }
+}
 #pragma mark - Update Home Games Data from Parse
 // TODO: Review the process of retreiving home games.
 -(void)checkForUpdatedHomeGameData
@@ -130,6 +171,7 @@
 /*!
  *  Load Duke Basketball's home game schedule into self.homeGames
  */
+
 -(void)loadHomeGameScheduleData
 {
     NSError *error;
@@ -230,25 +272,38 @@
 -(void)disableCell:(UITableViewCell *)cell IfGameAlreadyOccured:(NSDate *)gametime
 {
     if([gametime timeIntervalSinceNow] < 0){ //could save this calculation when calculate scroll row to save some time
-        cell.userInteractionEnabled = NO;
+        //cell.userInteractionEnabled = NO
         //cell.joinButton.userInteractionEnabled = NO;
         //cell.createButton.userInteractionEnabled = NO;
+        if([cell isKindOfClass:[HomeGamesTableViewCell class]]) [self changeJoinCreateButtonsOnCell:(HomeGamesTableViewCell *)cell toUserInteractionEnabled:NO];
         cell.backgroundColor = [UIColor grayColor];
     }else{
-        cell.userInteractionEnabled = YES;
+        //cell.userInteractionEnabled = YES;
         //cell.joinButton.userInteractionEnabled = YES;
         //cell.createButton.userInteractionEnabled = YES;
+        if([cell isKindOfClass:[HomeGamesTableViewCell class]]) [self changeJoinCreateButtonsOnCell:(HomeGamesTableViewCell *)cell toUserInteractionEnabled:YES];
         cell.backgroundColor = [UIColor whiteColor];
         
     }
 
     
 }
+-(void)changeJoinCreateButtonsOnCell:(HomeGamesTableViewCell *)cell toUserInteractionEnabled:(BOOL)userInteractionEnabled
+{
+    cell.joinButton.userInteractionEnabled = userInteractionEnabled;
+    cell.createButton.userInteractionEnabled = userInteractionEnabled;
+}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UIAlertController *alert;
     HomeGame *hg = self.homeGames[indexPath.row];
+    if([hg.gameTime timeIntervalSinceNow] < 0){
+        alert = [UIAlertController alertControllerWithTitle:@"Game Over" message:@"You cannot create or join a schedule for this game because the game already occurred." preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
 
     if([self.mySchedulesHomeGameIndexes containsObject:[NSNumber numberWithInteger:indexPath.row]]){
         NSString *title = hg.opponentName;
@@ -270,10 +325,10 @@
 
         alert = [UIAlertController alertControllerWithTitle:title
                                                     message: message
-                                             preferredStyle:UIAlertControllerStyleActionSheet];
+                                             preferredStyle:UIAlertControllerStyleAlert];
         
         
-        UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         }];
         UIAlertAction* joinAction = [UIAlertAction actionWithTitle:@"Join" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
