@@ -36,6 +36,10 @@
     [self loadHomeGameScheduleData];
     [self calculateScrollRow];
     
+    UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Reload Home Game Data"];
+    [refresh addTarget:self action:@selector(refreshHomeGames) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refresh;
     /*
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [calendar components:(NSCalendarUnitDay) fromDate:[NSDate date]];
@@ -68,6 +72,17 @@
     }
     return scrollRow;
 }
+
+-(void)refreshHomeGames
+{
+    [self checkForUpdatedHomeGameData];
+    [self performSelector:@selector(stopRefresh) withObject:nil afterDelay:0];
+    
+}
+-(void)stopRefresh
+{
+    [self.refreshControl endRefreshing];
+}
 //TODO: Review the process of retreiving home games.
 //don't do user defaults. only check parse on push notification and update local file instead of user defaults
 -(void)getHomeGamesDataFromUserDefaults
@@ -95,6 +110,8 @@
 {
     [NewScheduleTableViewController loadHomeGameScheduleDataFromParseWithBlock:^(NSArray *updatedHomeGamesArray, NSError *error) {
         if(!error){
+            //update file
+            /*
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSData *currentData = [userDefaults objectForKey:kUserDefaultsHomeGamesData];
             NSArray *currentHomeGameDataArray = (NSArray *)[NSKeyedUnarchiver unarchiveObjectWithData:currentData];
@@ -109,7 +126,12 @@
                 //maybe don't automatically reload. but have button for them to load 2015-16 data
                 mstvc.homeGames = self.homeGames;
                 [self.tableView reloadData];
-            }
+            }*/
+            //update self.homeGames
+            //check first to see if they are different
+            //should store myScheduleHomeGameParseIds instead of myScheduleHomeGameIndices
+            self.homeGames = updatedHomeGamesArray;
+            [self.tableView reloadData];
             
 
         }
