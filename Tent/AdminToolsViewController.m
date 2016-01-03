@@ -11,6 +11,9 @@
 #import "Person.h"
 #import "AlgorithmSchedule.h"
 #import <Parse/Parse.h>
+
+
+
 @interface AdminToolsViewController ()
 
 @end
@@ -20,9 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem = back;
-}
+    }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -128,8 +129,11 @@
                                 self.schedule.assignmentsGenerated = YES;
                                 [self updateLocalSchedulesAfterChangingPersonsArraysWithNewAssignmentsArrays:assignments];
                                 
+                                
                                 //Alert success message
                                 [self alertSuccessWithMessage:@"Assignments were successfully generated."];
+                                
+                                
                             }
                         }];
                     }];
@@ -140,6 +144,7 @@
     }];
     
 }
+
 -(void)clearAssignments
 {
     //update parse
@@ -162,7 +167,7 @@
             [self updateLocalSchedulesAfterChangingPersonsArraysWithNewAssignmentsArrays:clearedAssignmentsArrays];
 
             //Alert success message
-            [self alertSuccessWithMessage:@"Successfully cleared availabilities"];
+            [self alertSuccessWithMessage:@"Successfully cleared assignments."];
             
         }];
     }];
@@ -198,7 +203,7 @@
                 [self updateLocalSchedulesAfterChangingPersonsArraysWithNewAssignmentsArrays:clearedAssignmentsArrays];
                 
                 //Alert success message
-                [self alertSuccessWithMessage:@"Successfully cleared availabilities"];
+                [self alertSuccessWithMessage:@"Successfully cleared availabilities."];
 
             }];
         }else{

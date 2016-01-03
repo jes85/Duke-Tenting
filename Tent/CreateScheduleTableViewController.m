@@ -12,6 +12,7 @@
 #import "PasswordTableViewCell.h"
 #import "MySchedulesTableViewController.h"
 #import "Schedule.h"
+#import "Constants.h"
 
 #import "IntervalsDisplayData.h"
 
@@ -83,15 +84,17 @@ static NSString *kGroupCodeCellID = @"groupCodeCell"; //the groupCode cell
     //NSDate *roundedDate = [NSDate dateWithTimeInterval:secondsTo15min sinceDate:currentDate];
 
     self.intervalLengthInMinutes = 60; //later this will be set depending on the desired interval length
-    NSInteger secondsToRoundedDate = (self.intervalLengthInMinutes - (currentDateMinute%self.intervalLengthInMinutes))*60 - currentDateSecond;
+    //NSInteger secondsToRoundedDate = (self.intervalLengthInMinutes - (currentDateMinute%self.intervalLengthInMinutes))*60 - currentDateSecond;
+    //round to 15 regardless of intervalLengthInMinutes
+    NSInteger secondsToRoundedDate = (15 - (currentDateMinute%15))*60 - currentDateSecond;
     NSDate *roundedDate = [NSDate dateWithTimeInterval:secondsToRoundedDate sinceDate:currentDate];
 
     self.roundedStartDateAtViewDidLoad = roundedDate;
-    //self.roundedEndDateAtViewDidLoad = [self.gameTime copy];
+    self.roundedEndDateAtViewDidLoad = [self.gameTime copy];
     
     // maybe incorporate these into the model somehow (if I get rid of mutableCopy do I no longer have to update the model if I update startdate and enddate?)
     self.startDate = roundedDate;
-    self.endDate = self.gameTime; //maybe change to 1.5 hours earlier
+    self.endDate = [NSDate dateWithTimeInterval:-90*60 sinceDate: self.gameTime]; //maybe change to 1.5 hours earlier
    
     // setup our data source
     NSMutableDictionary *itemOne = [@{ kTitleKey : @"Tap a cell to change its date:" } mutableCopy]; //delete this later or change it to Name label
@@ -186,11 +189,12 @@ static NSString *kGroupCodeCellID = @"groupCodeCell"; //the groupCode cell
             if([[itemData valueForKey:kTitleKey ] isEqual:@"Start Date"]){
                 [targetedDatePicker setMinimumDate:self.roundedStartDateAtViewDidLoad];
             }
-            /* had a maximum end date, but decided to get rid of it
+            // had a maximum end date, but decided to get rid of it
+             
             else if([[itemData valueForKey:kTitleKey ] isEqual:@"End Date"]){
                 [targetedDatePicker setMaximumDate:self.roundedEndDateAtViewDidLoad];
             }
-            */
+            
         }
     }
 }
@@ -235,21 +239,25 @@ static NSString *kGroupCodeCellID = @"groupCodeCell"; //the groupCode cell
 {
 
     // Return the number of sections.
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if(section == 0){
 
-    // Return the number of rows in the section.
-    if ([self hasInlineDatePicker])
-    {
-        // we have a date picker, so allow for it in the number of rows in this section
-        NSInteger numRows = self.dataArray.count;
-        return ++numRows;
+        // Return the number of rows in the section.
+        if ([self hasInlineDatePicker])
+        {
+            // we have a date picker, so allow for it in the number of rows in this section
+            NSInteger numRows = self.dataArray.count;
+            return ++numRows;
+        }
+        
+        return self.dataArray.count;
+    }else {// (section == 1){
+        return 2;
     }
-    
-    return self.dataArray.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -260,7 +268,19 @@ static NSString *kGroupCodeCellID = @"groupCodeCell"; //the groupCode cell
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    if(indexPath.section == 1){
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OpponentCell"];
+        if(indexPath.row == 0) {
+            cell.textLabel.text = @"Opponent";
+            cell.detailTextLabel.text = self.homeGame.opponentName;
+        }
+        else if (indexPath.row == 1){
+            cell.textLabel.text = @"Game Time";
+            cell.detailTextLabel.text = [Constants formatDateAndTime:self.homeGame.gameTime  withDateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+        }
+
+        return cell;
+    }
     NSUInteger numCells = [self.dataArray count];
     if([self hasInlineDatePicker]) numCells++;
     

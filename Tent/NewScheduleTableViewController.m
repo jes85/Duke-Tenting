@@ -50,6 +50,8 @@
     
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
+    
+       
 }
 
 -(void)viewWillAppear:(BOOL)animated

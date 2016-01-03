@@ -63,6 +63,7 @@
     else{ //No user logged in
         [self displayLoginAndSignUpViews];
     }
+    
 }
 -(void)viewDidAppear:(BOOL)animated
 {

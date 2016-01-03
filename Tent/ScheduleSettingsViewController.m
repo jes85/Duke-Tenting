@@ -28,8 +28,12 @@
     self.tableView.dataSource = self;
     
     if(self.isCreator){
-        self.deleteScheduleButton.titleLabel.text = @"Delete Schedule";
+        [self.deleteScheduleButton setTitle:@"Delete Schedule" forState:UIControlStateNormal];
+        
     }
+    UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem = back;
+
 
 }
 
@@ -217,7 +221,12 @@
     if(self.isCreator){
         [self showAlertForDeleteEntireSchedule];
     }else{
-        [self showAlertForRemoveCurrentUser];
+        if(self.schedule.assignmentsGenerated){
+            [self showAlertToTellUserTheyAreNotAllowedToLeaveAfterAssignmentsGenerated];
+        }else{
+            [self showAlertForRemoveCurrentUser];
+
+        }
     }
    
 }
@@ -234,6 +243,13 @@
     [alert addAction:deleteAction];
     [self presentViewController:alert animated:YES completion:nil];
 
+}
+-(void)showAlertToTellUserTheyAreNotAllowedToLeaveAfterAssignmentsGenerated
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sorry" message:@"You are not allowed to leave the schedule after assignments have been generated. Ask the group creator to remove you" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+    [alert addAction:okAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 -(void)showAlertForRemoveCurrentUser
 {

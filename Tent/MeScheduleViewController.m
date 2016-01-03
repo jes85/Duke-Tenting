@@ -8,6 +8,8 @@
 
 #import "MeScheduleViewController.h"
 
+#import "Interval.h"
+#import <EventKit/EventKit.h>
 @interface MeScheduleViewController ()
 
 @end
@@ -68,6 +70,59 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+- (IBAction)exportToCalendarButtonPressed:(id)sender {
+    [self exportScheduleToCalendar];
+}
+-(void)exportScheduleToCalendar
+{
+    Person *person =self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]];
+    NSDate *startDate;
+    NSDate *endDate;
+    BOOL streakInProgress = false;
+    NSString *title = [NSString stringWithFormat:@"K-Ville: %@", self.schedule.homeGame.opponentName];
+    for(int i = 0; i<person.assignmentsArray.count; i++){
+        if([person.assignmentsArray[i] integerValue] == 2){ //beginning of streak or continue streak
+            if(!streakInProgress){ //start new streak
+                Interval *interval = self.schedule.intervalDataByOverallRow[i];
+                startDate = interval.startDate;
+                streakInProgress = true;
+            }
+            
+        }else{ //end of streak or continue non-streak
+            if(streakInProgress){ //end streak
+                Interval *interval = self.schedule.intervalDataByOverallRow[i-1];
+                endDate = interval.endDate;
+                streakInProgress = false;
+                [self createEventWithTitle:title startDate:startDate endDate:endDate];
+                startDate = nil; // to catch errors in my code
+                endDate = nil;
+                
+            }
+        }
+    }
+    if(streakInProgress){ //last streak includes last interval
+        Interval *interval = self.schedule.intervalDataByOverallRow[person.assignmentsArray.count-1];
+        endDate = interval.endDate;
+        [self createEventWithTitle:title startDate:startDate endDate:endDate];
+    }
+}
+-(void)createEventWithTitle:(NSString *)title startDate:(NSDate *)startDate endDate: (NSDate *)endDate
+{
+    EKEventStore *store = [EKEventStore new];
+    [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+        if (!granted) { return; }
+        EKEvent *event = [EKEvent eventWithEventStore:store];
+        event.title = title;
+        event.startDate = startDate;
+        event.endDate = endDate;
+        event.calendar = [store defaultCalendarForNewEvents];
+        NSError *err = nil;
+        [store saveEvent:event span:EKSpanThisEvent commit:YES error:&err];
+        //self.savedEventId = event.eventIdentifier;  //save the event id if you want to access this later
+    }];
+    
+}
+
 
 /*
 #pragma mark - Navigation
