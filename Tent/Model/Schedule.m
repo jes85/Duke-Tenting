@@ -66,7 +66,7 @@
         self.parseObjectID = parseObjectID;
         //self.currentUserPersonIndex = [self findCurrentUserPersonIndex];
         self.currentUserWasRemoved = false;
-        [self calculateNumIntervals];
+        //[self calculateNumIntervals];
         [self createIntervalDataArrays];
         
         //KVO to update interval data arrays every time personsArray is updated
@@ -100,6 +100,7 @@
     return -1; //helps catch errors: will throw a bug if it returns -1 because it will try to access an array index -1
     
 }
+/*
 -(void)calculateNumIntervals
 {
     NSTimeInterval timeInterval = [self.endDate timeIntervalSinceDate:self.startDate];
@@ -107,6 +108,7 @@
     NSUInteger numIntervals =  minutes / self.intervalLengthInMinutes;
     self.numIntervals = minutes % self.intervalLengthInMinutes == 0 ? numIntervals : numIntervals + 1;
 }
+ */
 -(NSUInteger)requiredPersonsPerInterval
 {
     return ceil(self.personsArray.count / 3.0);
@@ -114,8 +116,221 @@
 }
 #pragma mark - UI Helpers and Formatting
 
+//{endDate:date, night: bool}
+-(NSDictionary *)intervalEndDateForIntervalStartDate:(NSDate *)intervalStartDate
+{
+   
+
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSTimeZone *timeZone = calendar.timeZone;
+    NSDateComponents *intervalStartDateComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear  ) fromDate:intervalStartDate];
+   
+    NSDateComponents *nightStartDateComponents = [[NSDateComponents alloc]init];
+    [nightStartDateComponents setHour:23];
+    [nightStartDateComponents setMinute :0];
+    [nightStartDateComponents setYear:intervalStartDateComponents.year];
+    [nightStartDateComponents setMonth: intervalStartDateComponents.month];
+    [nightStartDateComponents setDay: intervalStartDateComponents.day];
+    NSDateComponents *test = intervalStartDateComponents;
+    [test setHour:23];
+    //NSDate *nightStartDate = [calendar dateFromComponents:test];
+    NSDate *nightStartDate = [calendar dateBySettingHour:23 minute:0 second:0 ofDate:intervalStartDate options:0];
+    NSDateComponents *nightTest = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear  ) fromDate:nightStartDate];
+    NSUInteger hour = nightTest.hour;
+    NSUInteger year = intervalStartDateComponents.year;
+    NSUInteger month = intervalStartDateComponents.month;
+    NSUInteger day = intervalStartDateComponents.day;
+    NSUInteger startHour = intervalStartDateComponents.hour;
+    NSDate *nightEndDate = [NSDate dateWithTimeInterval:60*60*8 sinceDate:nightStartDate];
+    
+    NSDate *intervalEndDateIfNormalLengthInterval = [NSDate dateWithTimeInterval:60*self.intervalLengthInMinutes sinceDate:intervalStartDate];
+    // Cases
+    
+    NSDate *intervalEndDate;
+    BOOL night;
+    //Night Interval
+    //if(intervalStartDateComponents.hour == nightStartHour & intervalStartDateComponents.minute == nightStartMinute){//11:00 pm - 7:00 AM
+    if([intervalStartDate timeIntervalSinceDate: nightStartDate] == 0){
+        NSLog(@"Start Date: %@", [Constants formatDateAndTime:intervalStartDate withDateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterLongStyle] );
+        //NSDate *intervalEndDate = [NSDate dateWithTimeInterval:60*60*8 sinceDate:intervalStartDate]; // 8 hours
+        NSLog(@"End Date: %@", [Constants formatDateAndTime:nightEndDate withDateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterLongStyle] );
+        
+        intervalEndDate = nightEndDate;
+        night = YES;
+    }
+    
+    //Short Interval Before Night Interval
+    else if([nightStartDate timeIntervalSinceDate:intervalEndDateIfNormalLengthInterval] < 0 ){
+        intervalEndDate = nightStartDate;
+        night = NO;
+    }
+    
+    //Normal Interval
+    else{
+        intervalEndDate = intervalEndDateIfNormalLengthInterval;
+        night = NO;
+        
+    }
+    intervalEndDate = [intervalEndDate timeIntervalSinceDate:self.endDate] < 0 ? intervalEndDate : self.endDate;
+    return @{@"endDate":intervalEndDate, @"night":[NSNumber numberWithBool:night]};
+
+}
 
 -(void)createIntervalDataArrays
+{
+    
+    self.intervalDataByOverallRow = [[NSMutableArray alloc]init];
+    self.intervalDataBySection = [[NSMutableDictionary alloc]init];
+
+    NSDate *currentIntervalStartDate = [self.startDate copy];
+
+    //Initialize first section
+    NSString *sectionHeader = [Constants formatDate:currentIntervalStartDate withStyle:NSDateFormatterShortStyle];
+    NSDate *sectionDate = [currentIntervalStartDate copy];
+    NSUInteger sectionNumber = 0;
+    NSUInteger intervalStartIndex = 0;
+    
+    //Initialize first interval
+    NSArray *array = [self availableAndAssignedPersonsForOverallInterval:0];
+    NSMutableArray *availablePersons = array[0];
+    NSMutableArray *assignedPersons = array[1];
+    NSDictionary *endDateAndNight = [self intervalEndDateForIntervalStartDate:currentIntervalStartDate];
+    NSDate *currentIntervalEndDate = endDateAndNight[@"endDate"];
+    BOOL night = [endDateAndNight[@"night"] boolValue];
+    Interval *currentInterval = [[Interval alloc]initWithStartDate:currentIntervalStartDate endDate:currentIntervalEndDate section:0 availablePersons:availablePersons assignedPersons:assignedPersons];
+    currentInterval.night = night;
+    currentInterval.requiredPersons = self.requiredPersonsPerInterval;
+    [self.intervalDataByOverallRow addObject:currentInterval];
+    int numIntervals = 1; //save as interval index
+    
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *previousIntervalStartDate = currentIntervalStartDate;
+    NSDateComponents *dateComponentsPrevious;
+    NSDateComponents *dateComponentsCurrent;
+    while ([currentIntervalEndDate timeIntervalSinceDate:self.endDate] < 0) {
+        // Check if Next Section
+        dateComponentsPrevious = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:previousIntervalStartDate];
+        dateComponentsCurrent = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:currentIntervalStartDate];
+        
+        if(dateComponentsPrevious.day != dateComponentsCurrent.day) { // New day = new section
+
+        //if([currentIntervalStartDate )//if(night){
+            //new section
+            //Add current section data to dict and initialize new section
+            NSMutableDictionary *sectionData = [self sectionDictForDay:sectionDate sectionHeader:sectionHeader intervalStartIndex:intervalStartIndex intervalEndIndex:numIntervals - 1];
+            [self.intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]]; //why not just use an array where sectioNumber is the index?
+            
+            //Initialize next section
+            sectionHeader = [Constants formatDate:currentIntervalStartDate withStyle:NSDateFormatterShortStyle];
+            sectionDate = [currentIntervalStartDate copy];
+            intervalStartIndex = numIntervals - 1;
+            sectionNumber++;
+
+        }
+        
+        // Create Next Interval
+        NSArray *array = [self availableAndAssignedPersonsForOverallInterval:numIntervals];
+        NSMutableArray *availablePersons = array[0];
+        NSMutableArray *assignedPersons = array[1];
+        previousIntervalStartDate = currentIntervalStartDate;
+        currentIntervalStartDate = currentIntervalEndDate;
+        endDateAndNight = [self intervalEndDateForIntervalStartDate:currentIntervalStartDate];
+        currentIntervalEndDate = endDateAndNight[@"endDate"];
+        night = [endDateAndNight[@"night"] boolValue];
+        Interval *currentInterval = [[Interval alloc]initWithStartDate:currentIntervalStartDate endDate:currentIntervalEndDate section:0 availablePersons:availablePersons assignedPersons:assignedPersons];
+        currentInterval.night = night;
+        currentInterval.requiredPersons = self.requiredPersonsPerInterval;
+        [self.intervalDataByOverallRow addObject:currentInterval];
+        numIntervals++;
+    }
+    //Add last section data to dict
+    NSMutableDictionary *sectionData = [self sectionDictForDay:sectionDate sectionHeader:sectionHeader intervalStartIndex:intervalStartIndex intervalEndIndex:numIntervals];
+    [self.intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]]; //why not just use an array where sectioNumber is the index?
+
+    self.numIntervals = numIntervals;
+    NSMutableArray *intervalDataByOverallRow = self.intervalDataByOverallRow;
+    NSLog(@"%lu", (unsigned long)intervalDataByOverallRow.count);
+
+    
+    /*
+    NSMutableArray *intervalDataByOverallRow = [[NSMutableArray alloc]init];
+    NSMutableDictionary *intervalDataBySection = [[NSMutableDictionary alloc]init];
+    
+    NSMutableArray *sectionIntervals = [[NSMutableArray alloc]init];
+    
+    NSDate *currentIntervalStartDate = [self.startDate copy];
+    NSDate *previousIntervalStartDate = currentStartInterval;
+    NSDate *currentIntervalEndDate = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:currentStartInterval];
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *dateComponentsCurrent;
+    NSDateComponents *dateComponentsPrevious;
+    
+    NSString *sectionHeader = [Constants formatDate:currentStartInterval withStyle:NSDateFormatterShortStyle];
+    NSDate *sectionDate = [currentStartInterval copy];
+    NSUInteger sectionNumber = 0;
+    NSUInteger intervalStartIndex = 0;
+    
+    
+    
+    for(int i = 0; i<self.numIntervals;i++){
+        dateComponentsPrevious = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:previousStartInterval];
+        dateComponentsCurrent = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:currentStartInterval];
+        
+        if(dateComponentsPrevious.day != dateComponentsCurrent.day) { // New day = new section
+            
+            //Add current section data to dict and initialize new section
+            NSMutableDictionary *sectionData = [self sectionDictForDay:sectionDate sectionHeader:sectionHeader intervalStartIndex:intervalStartIndex intervalEndIndex:i];
+            [intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]];
+            
+            //Initialize next section
+            sectionHeader = [Constants formatDate:currentStartInterval withStyle:NSDateFormatterShortStyle];
+            sectionDate = [currentStartInterval copy];
+            sectionIntervals = [[NSMutableArray alloc]init];
+            intervalStartIndex = i;
+            sectionNumber++;
+            
+        }
+        
+        NSArray *array = [self availableAndAssignedPersonsForOverallInterval:i];
+        NSMutableArray *availablePersons = array[0];
+        NSMutableArray *assignedPersons = array[1];
+        Interval *interval = [[Interval alloc]initWithStartDate:currentStartInterval endDate:currentEndInterval section:sectionNumber availablePersons:availablePersons assignedPersons:assignedPersons];
+        interval.requiredPersons = self.requiredPersonsPerInterval;
+        [intervalDataByOverallRow addObject:interval];
+        [sectionIntervals addObject:interval];
+        
+        previousStartInterval = currentStartInterval;
+        currentStartInterval = currentEndInterval;
+        currentEndInterval = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:currentStartInterval];
+        NSTimeInterval timeUntilEnd = [self.endDate timeIntervalSinceDate:currentEndInterval];
+        
+        
+        if(timeUntilEnd <= 0 ){
+            NSArray *array = [self availableAndAssignedPersonsForOverallInterval:i];
+            NSMutableArray *availablePersons = array[0];
+            NSMutableArray *assignedPersons = array[1];
+            Interval *interval = [[Interval alloc]initWithStartDate:currentStartInterval endDate:self.endDate section:sectionNumber availablePersons:availablePersons assignedPersons:assignedPersons];
+            interval.requiredPersons = self.requiredPersonsPerInterval;
+            [intervalDataByOverallRow addObject:interval];
+            [sectionIntervals addObject:interval];
+            
+            NSMutableDictionary *sectionData = [self sectionDictForDay:sectionDate sectionHeader:sectionHeader intervalStartIndex:intervalStartIndex intervalEndIndex:i+1];
+            
+            [intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]];
+            
+        }
+        
+    }
+    
+    self.intervalDataBySection = [intervalDataBySection copy];
+    self.intervalDataByOverallRow = [intervalDataByOverallRow copy];
+    */
+    
+}
+
+-(void)createIntervalDataArrays2
 {
     
     NSMutableArray *intervalDataByOverallRow = [[NSMutableArray alloc]init];

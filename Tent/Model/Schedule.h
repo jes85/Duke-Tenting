@@ -41,7 +41,7 @@
 -(void)resetIntervalArray;
 -(void)createIntervalDataArrays; //Add KVO for self.intervalDataArrays to update every time personsArrays are changed
 @property (nonatomic) NSMutableArray *intervalDataByOverallRow; // [Interval, Interval,...]
-@property (nonatomic) NSMutableDictionary *intervalDataBySection;
+@property (nonatomic) NSMutableDictionary *intervalDataBySection; //TODO: see if i need both of these
 
 /*
  { 

@@ -154,6 +154,23 @@
 
 -(void)loadHomeGameScheduleDataFromLocalFile
 {
+    /*
+    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[[NSBundle mainBundle] bundlePath] error:NULL];
+    for (NSString *fileName in files) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
+        NSURL *url = [NSURL fileURLWithPath:path];
+        // do something with `url`
+    }
+     */
+    /*
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"HomeGames" ofType:@"json"];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    
+    NSString *docsDir = [NSSearchForDirectoriesInDomains(NSDocumentsDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *plistPath = [docsDir stringByAppendingPathComponent:@"Files.plist"];
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[url absoluteString] forKey:@"SomeFile.jpeg"];
+    [dict writeToFile:plistPath atomically:YES];
+    */
     NSError *error;
     NSData *data = [NSData dataWithContentsOfFile:kHomeGamesJSONLocalFilePath options:0 error:&error];
     NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];

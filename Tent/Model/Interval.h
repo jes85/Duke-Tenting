@@ -17,7 +17,7 @@
 @property (nonatomic) NSString *timeString;
 @property (nonatomic) NSString *dateTimeString;
 @property (nonatomic) NSUInteger requiredPersons; //for UNC //make UNCInterval subclass
-
+@property (nonatomic) BOOL night;
 @property (nonatomic) NSUInteger section;
 
 //-(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate section:(NSUInteger) section;

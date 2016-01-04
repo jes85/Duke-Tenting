@@ -81,6 +81,7 @@
         copy.timeString = self.timeString;
         copy.dateTimeString = self.dateTimeString;
         copy.requiredPersons = self.requiredPersons;
+        copy.night = self.night;
     }
     return copy;
 }

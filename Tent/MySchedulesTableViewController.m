@@ -379,7 +379,7 @@
             }
             [self.loadingWheel stopAnimating];
             [self.tableView reloadData];
-            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            //[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
             //[self scrollToCurrentInterval]; why doesn't this work?
 
         }
@@ -458,7 +458,8 @@
     
     
     Schedule *schedule = [[Schedule alloc]initWithGroupName:groupName groupCode:groupCode startDate:startDate endDate:endDate intervalLengthInMinutes:60 personsArray:personsArray homeGame:homeGame createdBy:creator assignmentsGenerated:assignmentsGenerated parseObjectID:parseObjectID] ;
-    
+    NSMutableArray *array = schedule.intervalDataByOverallRow;
+
     if(!currentUserStillInSchedule){
         schedule.currentUserWasRemoved = true;
     }

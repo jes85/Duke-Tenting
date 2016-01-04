@@ -155,8 +155,11 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     
     cell.timeLabel.text = interval.timeString;
     
-    
-    
+    if(interval.night){
+        
+    }
+    cell.backgroundColor = interval.night ? [UIColor grayColor] : [UIColor clearColor];
+    NSMutableArray *array = self.schedule.intervalDataByOverallRow;
     if([self.updatedAvailabilitiesArray[index] isEqual:@2]){
         cell.assignedOrAvailableLabel.text = @"(Assigned)";
         //cell.iconImageView.image =[UIImage imageNamed:@"GreenCircle"];

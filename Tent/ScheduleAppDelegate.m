@@ -17,6 +17,8 @@
                   clientKey:@"X8Iw87xOJAetK8agrPdMX3frjFa9Z09eFEJm9ytP"];
     
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    
+    [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"EST"]];
     // Override point for customization after application launch.
     return YES;
 }
