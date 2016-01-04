@@ -29,6 +29,8 @@
 @property (nonatomic) UIActivityIndicatorView *loadingWheel;
 
 
+@property (nonatomic) NSUInteger scrollRow;
+
 
 
 @end
@@ -97,6 +99,32 @@
     }
 }
 
+-(void)scrollToCurrentInterval
+{
+    CGPoint point = self.tableView.contentOffset;
+    point.y = [self calculateContentOffset];
+    self.tableView.contentOffset = point;
+}
+-(NSUInteger)scrollRow
+{
+    NSUInteger scrollRow = 0;
+    Schedule *lastSchedule = self.schedules.lastObject;
+    HomeGame *lastHomeGame = lastSchedule.homeGame;
+    if([lastHomeGame.gameTime timeIntervalSinceNow] < 0) return 0; //if all games have occurred, just show all of them
+    for(int i=0;i<self.schedules.count - 1;i++){ //don't need to check the last game twice
+        Schedule *schedule = self.schedules[i];
+        HomeGame *game = schedule.homeGame;
+        if([game.gameTime timeIntervalSinceNow] < 0){
+            scrollRow = i+1;
+        }
+    }
+    return scrollRow;
+}
+-(NSUInteger)calculateContentOffset
+{
+    CGRect rect = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0]];
+    return rect.origin.y;
+}
 
 -(void)dealloc
 {
@@ -318,7 +346,11 @@
     [query includeKey:kGroupSchedulePropertyCreatedBy];
     [query includeKey:[NSString stringWithFormat:@"%@.%@", kGroupSchedulePropertyPersonsInGroup, kPersonPropertyAssociatedUser]];
     
-  
+    // Only include this season's schedules
+    PFQuery *hgQuery = [PFQuery queryWithClassName:kHomeGameClassName];
+    [hgQuery whereKey:kHomeGamePropertyCurrentSeason equalTo:[NSNumber numberWithBool:YES]];
+    [query whereKey:kGroupSchedulePropertyHomeGame matchesQuery:hgQuery];
+    
     //[self.loadingWheel startAnimating];
     [query findObjectsInBackgroundWithBlock:^(NSArray *schedulesForThisUser, NSError *error) {
         if(!error){
@@ -347,6 +379,9 @@
             }
             [self.loadingWheel stopAnimating];
             [self.tableView reloadData];
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            //[self scrollToCurrentInterval]; why doesn't this work?
+
         }
         else{
             [self.loadingWheel stopAnimating];
@@ -374,10 +409,7 @@
 -(void)addSchedule:(Schedule *)schedule
 {
     [self.schedules addObject:schedule];
-    
-    //TODO: only create this set on prepareforsegue. that way you don't have to update this set every time you update self.schedules
-        // is creating this set on prepareForSEgue too slow?
-    HomeGame *hg = schedule.homeGame;
+    //had other things here before but decided to move them
 }
 
 
@@ -396,8 +428,8 @@
     NSDate * gameTime = parseHomeGame[kHomeGamePropertyGameTime];
     BOOL isConferenceGame = parseHomeGame[kHomeGamePropertyConferenceGame];
     BOOL isExhibition = parseHomeGame[kHomeGamePropertyExhibition];
-    NSUInteger index = [parseHomeGame[kHomeGamePropertyIndex] unsignedIntegerValue];
-    HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame index:index parseObjectID:parseHomeGame.objectId];
+    BOOL currentSeason = parseHomeGame[kHomeGamePropertyCurrentSeason];
+    HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame currentSeason:currentSeason parseObjectID:parseHomeGame.objectId];
      
     PFObject *creator = parseSchedule[kGroupSchedulePropertyCreatedBy];
      
@@ -704,18 +736,18 @@
     else if([[segue destinationViewController] isKindOfClass:[NewScheduleTableViewController class]]){
         if(sender==self.addScheduleButton){
             NewScheduleTableViewController *nstvc = [segue destinationViewController];
-            nstvc.mySchedulesHomeGameIndexes = [self mySchedulesHomeGameIndexes];
+            nstvc.mySchedulesHomeGameParseIds = [self mySchedulesHomeGameParseIds];
     
         }
     }
 }
 
--(NSMutableSet *)mySchedulesHomeGameIndexes
+-(NSMutableSet *)mySchedulesHomeGameParseIds
 {
     NSMutableSet *set = [[NSMutableSet alloc]initWithCapacity:self.schedules.count];
     for(Schedule *schedule in self.schedules){
         HomeGame *hg = schedule.homeGame;
-        [set addObject:[NSNumber numberWithInteger:hg.index]];
+        [set addObject:hg.parseObjectID];
     }
     return set;
 }

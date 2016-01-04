@@ -29,24 +29,13 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-
-    //[self getHomeGamesDataFromUserDefaults];
     
-    
-    [self loadHomeGameScheduleData];
-    [self calculateScrollRow];
+    [self loadHomeGameScheduleDataFromLocalFile];
     
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Reload Home Game Data"];
     [refresh addTarget:self action:@selector(refreshHomeGames) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refresh;
-    /*
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [calendar components:(NSCalendarUnitDay) fromDate:[NSDate date]];
-    if(components.day == 16){ //change to only do it once a month or something and make sure it does it that month (maybe push notification is better)
-        [self checkForUpdatedHomeGameData];
-    }
-     */
     
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
@@ -57,10 +46,19 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    //[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    
+    [self scrollToCurrentInterval];
+    
 }
 
--(NSUInteger)calculateScrollRow
+-(void)scrollToCurrentInterval
+{
+    CGPoint point = self.tableView.contentOffset;
+    point.y = [self calculateContentOffset];
+    self.tableView.contentOffset = point;
+}
+-(NSUInteger)scrollRow
 {
     NSUInteger scrollRow = 0;
     HomeGame *lastGame = self.homeGames[self.homeGames.count-1];
@@ -69,15 +67,18 @@
         HomeGame *game = self.homeGames[i];
         if([game.gameTime timeIntervalSinceNow] < 0){
             scrollRow = i+1;
-            
         }
     }
     return scrollRow;
 }
-
+-(NSUInteger)calculateContentOffset
+{
+    CGRect rect = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0]];
+    return rect.origin.y;
+}
 -(void)refreshHomeGames
 {
-    [self checkForUpdatedHomeGameData];
+    [self checkParseForUpdatedHomeGamesData];
     [self performSelector:@selector(stopRefresh) withObject:nil afterDelay:0];
     
 }
@@ -85,109 +86,64 @@
 {
     [self.refreshControl endRefreshing];
 }
-//TODO: Review the process of retreiving home games.
-//don't do user defaults. only check parse on push notification and update local file instead of user defaults
--(void)getHomeGamesDataFromUserDefaults
-{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:nil forKey:kUserDefaultsHomeGamesData]; //testing
-    NSData *currentData = [userDefaults objectForKey:kUserDefaultsHomeGamesData];
-    if(!currentData){
-        [NewScheduleTableViewController loadHomeGameScheduleDataFromParseWithBlock:^(NSArray *updatedHomeGamesArray, NSError *error) {
-            NSData *updatedData = [NSKeyedArchiver archivedDataWithRootObject:updatedHomeGamesArray];
-            [userDefaults setObject:updatedData forKey:kUserDefaultsHomeGamesData];
-            self.homeGames = updatedHomeGamesArray;
-            [self calculateScrollRow];
-        }];
-    }else{
-        NSArray *currentHomeGameDataArray = (NSArray *)[NSKeyedUnarchiver unarchiveObjectWithData:currentData];
-        self.homeGames = currentHomeGameDataArray;
-        [self calculateScrollRow];
-        
-    }
-}
+
 #pragma mark - Update Home Games Data from Parse
 // TODO: Review the process of retreiving home games.
--(void)checkForUpdatedHomeGameData
+-(void)checkParseForUpdatedHomeGamesData
 {
-    [NewScheduleTableViewController loadHomeGameScheduleDataFromParseWithBlock:^(NSArray *updatedHomeGamesArray, NSError *error) {
+    [NewScheduleTableViewController loadHomeGameScheduleDataFromParseWithBlock:^(NSArray *parseHomeGames, NSArray *updatedHomeGamesArray, NSError *error) {
         if(!error){
-            //update file
-            /*
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            NSData *currentData = [userDefaults objectForKey:kUserDefaultsHomeGamesData];
-            NSArray *currentHomeGameDataArray = (NSArray *)[NSKeyedUnarchiver unarchiveObjectWithData:currentData];
-            
-            if(![currentHomeGameDataArray isEqual:updatedHomeGamesArray]){
-                NSData *updatedData = [NSKeyedArchiver archivedDataWithRootObject:updatedHomeGamesArray];
-                [userDefaults setObject:updatedData forKey:kUserDefaultsHomeGamesData];
+            if(![self.homeGames isEqual:updatedHomeGamesArray]){ //maybe only check parseIds and updatedAt
+                //update file
+                NSDictionary *jsonObject = [self jsonHomeGamesDictionaryFromArrayOfParseHomeGames:parseHomeGames];
+                NSError *errorConvertingJSONToData;
+                NSData *data = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:&errorConvertingJSONToData];
+                NSError *errorWritingDataToFile;
+                [data writeToFile:kHomeGamesJSONLocalFilePath options:0 error:&errorWritingDataToFile];
+                
+                //update self.homeGames
                 self.homeGames = updatedHomeGamesArray;
-                MySchedulesTableViewController *mstvc = (MySchedulesTableViewController *)self.parentViewController.childViewControllers[0]; // change to delegate
-                //recalculate scroll position
-                //maybe give loading wheel notice that it's loading something
-                //maybe don't automatically reload. but have button for them to load 2015-16 data
-                mstvc.homeGames = self.homeGames;
                 [self.tableView reloadData];
-            }*/
-            //update self.homeGames
-            //check first to see if they are different
-            //should store myScheduleHomeGameParseIds instead of myScheduleHomeGameIndices
-            self.homeGames = updatedHomeGamesArray;
-            [self.tableView reloadData];
+                //[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+                //[self scrollToCurrentInterval]; //why doesn't this work?
+
+            }
             
 
         }
     }];
 }
-
-+(void)loadHomeGameScheduleDataFromParseWithBlock:(void (^) (NSArray *updatedHomeGamesArray, NSError *error))completionHander
++(void)loadHomeGameScheduleDataFromParseWithBlock:(void (^) (NSArray *parseHomeGames, NSArray *updatedHomeGamesArray, NSError *error))completionHandler
 {
     PFQuery *query = [PFQuery queryWithClassName:kHomeGameClassName];
     [query orderByAscending:kHomeGamePropertyGameTime];
+    [query whereKey:kHomeGamePropertyCurrentSeason equalTo:[NSNumber numberWithBool:YES]];
     [query findObjectsInBackgroundWithBlock:^(NSArray *parseHomeGames, NSError *error) {
         if (!error) {
             // The find succeeded.
             NSLog(@"Successfully retrieved %lu home games.", (unsigned long)parseHomeGames.count);
             
-            // Do something with the found objects
+            // Create array of Home Games
             NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:parseHomeGames.count];
-            NSCalendar *calendar = [NSCalendar currentCalendar];
-            NSDateComponents *components = [[NSDateComponents alloc]init];
             for (PFObject *parseHomeGame in parseHomeGames) {
                 NSLog(@"%@", parseHomeGame.objectId);
                 
-                /*
-                [components setYear:[parseHomeGame[@"date_year"] integerValue]];
-                [components setMonth: [parseHomeGame[@"date_month"] integerValue]];
-                [components setDay:[parseHomeGame[@"date_day"] integerValue]];
-                [components setHour:[parseHomeGame[@"time_hour"]integerValue]];
-                [components setMinute:[parseHomeGame[@"time_minutes"]integerValue]];
-                [components setWeekday:[parseHomeGame[@"date_weekday"]integerValue]];
-                NSDate *gameTime = [calendar dateFromComponents:components];
-                 */
-                //TODO: uncomment this line and comment lines above once change scraper to put dates in date format on parse
                 NSDate *gameTime = parseHomeGame[kHomeGamePropertyGameTime];
                 NSString *opponent = parseHomeGame[kHomeGamePropertyOpponent];
                 BOOL isExhibition = [parseHomeGame[kHomeGamePropertyExhibition] boolValue];
                 BOOL isConferenceGame = [parseHomeGame[kHomeGamePropertyConferenceGame] boolValue];
-                NSUInteger index = [parseHomeGame[kHomeGamePropertyIndex] unsignedIntegerValue];
-                
-                HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame index:index parseObjectID:parseHomeGame.objectId];
+                BOOL currentSeason = [parseHomeGame[kHomeGamePropertyCurrentSeason] boolValue];
+                HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame currentSeason:currentSeason parseObjectID:parseHomeGame.objectId];
                 [homeGamesTemp addObject: homeGame];
             }
             
-            /*
-            NSSortDescriptor *sortByStartDate = [NSSortDescriptor sortDescriptorWithKey:@"gameTime" ascending:YES];
-            NSArray *homeGamesData = (NSArray *)[homeGamesTemp sortedArrayUsingDescriptors:@[sortByStartDate]];
-             */
-            
             NSArray *homeGamesArray = (NSArray *)homeGamesTemp;
-            completionHander(homeGamesArray, error);
+            completionHandler(parseHomeGames,homeGamesArray, error);
             
         } else {
             // Log details of the failure
             NSLog(@"Error: %@ %@", error, [error userInfo]);
-            completionHander(nil, error);
+            completionHandler(nil, nil, error);
         }
     }];
 }
@@ -196,38 +152,74 @@
  *  Load Duke Basketball's home game schedule into self.homeGames
  */
 
--(void)loadHomeGameScheduleData
+-(void)loadHomeGameScheduleDataFromLocalFile
 {
     NSError *error;
-    NSData *data = [NSData dataWithContentsOfFile:@"/Users/jeremy/Developer/Xcode/Tent/Tent/dukeschedule.txt" options:0 error:&error];
-    NSArray *jsonHomeGames = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-    NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:jsonHomeGames.count];
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [[NSDateComponents alloc]init];
+    NSData *data = [NSData dataWithContentsOfFile:kHomeGamesJSONLocalFilePath options:0 error:&error];
+    NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    self.homeGames = [self homeGamesArrayFromJSONHomeGamesDictionary:jsonObject];
     
+}
+-(NSDictionary *)jsonHomeGamesDictionaryFromArrayOfParseHomeGames:(NSArray *)parseHomeGames
+{
+    NSMutableArray *results = [[NSMutableArray alloc]initWithCapacity:parseHomeGames.count];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
+
+    for(PFObject *parseHomeGame in parseHomeGames){
+        [results addObject:@{
+                            kHomeGamePropertyConferenceGame: parseHomeGame[kHomeGamePropertyConferenceGame],
+                            kParsePropertyCreatedAt: [dateFormatter stringFromDate:parseHomeGame.createdAt],
+                            kHomeGamePropertyCurrentSeason: parseHomeGame[kHomeGamePropertyCurrentSeason],
+                            kHomeGamePropertyExhibition: parseHomeGame[kHomeGamePropertyExhibition],
+                            kHomeGamePropertyGameTime: @{
+                                @"__type": @"Date",
+                                @"iso": [dateFormatter stringFromDate:parseHomeGame[kHomeGamePropertyGameTime]]
+                            },
+                            kParsePropertyObjectId: parseHomeGame.objectId,
+                            kHomeGamePropertyOpponent: parseHomeGame[kHomeGamePropertyOpponent],
+                            kParsePropertyUpdatedAt: [dateFormatter stringFromDate:parseHomeGame.updatedAt]
+                            }];
+    }
+    return @{@"results":results};
+}
+-(NSArray *)homeGamesArrayFromJSONHomeGamesDictionary:(NSDictionary *)jsonObject
+{
+    NSArray *jsonHomeGames = jsonObject[@"results"];
+    
+    NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:jsonHomeGames.count];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
     
     for(int i = 0; i<jsonHomeGames.count; i++){
+        
         NSDictionary *gameInfo = jsonHomeGames[i];
-        [components setYear:[gameInfo[@"date_year"] integerValue]];
-        [components setMonth: [gameInfo[@"date_month"] integerValue]];
-        [components setDay:[gameInfo[@"date_day"] integerValue]];
-        [components setHour:[gameInfo[@"time_hour"]integerValue]];
-        [components setMinute:[gameInfo[@"time_minutes"]integerValue]];
-        [components setWeekday:[gameInfo[@"date_weekday"]integerValue]];
-        NSDate *gameTime = [calendar dateFromComponents:components];
-        NSString *opponent = gameInfo[@"opponent"];
-        BOOL isExhibition = [gameInfo[@"exhibition"] boolValue];
-        BOOL isConferenceGame = [gameInfo[@"conference_game"] boolValue];
+        NSDictionary *gameTimeObject =gameInfo[kHomeGamePropertyGameTime];
+        NSString *gameTimeString = gameTimeObject[@"iso"];
+        NSDate *gameTime = [dateFormatter dateFromString:gameTimeString];
         
-        if([gameTime timeIntervalSinceNow] < 0){
-            self.scrollRow=i+1;
-        }
+        NSString *opponent = gameInfo[kHomeGamePropertyOpponent];
+        BOOL isExhibition = [gameInfo[kHomeGamePropertyExhibition] boolValue];
+        BOOL isConferenceGame = [gameInfo[kHomeGamePropertyConferenceGame] boolValue];
+        BOOL currentSeason = [gameInfo[kHomeGamePropertyCurrentSeason] boolValue];
+        NSString *parseObjectId = gameInfo[kHomeGamePropertyParseObjectId];
         
-        HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame index:i parseObjectID:nil];
+        /* doesn't work here because they aren't in sorted order
+         if([gameTime timeIntervalSinceNow] < 0){
+         self.scrollRow=i+1;
+         }
+         */
+        
+        HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame currentSeason:currentSeason parseObjectID:parseObjectId];
         [homeGamesTemp addObject: homeGame];
     }
     
-    self.homeGames = [homeGamesTemp copy]; // is copy necessary?
+    // only have to sort because Parse exports data by object Id instead of gameTime. maybe there's an option I can't find to export by game time
+    NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:kHomeGamePropertyGameTime ascending:YES];
+    return [homeGamesTemp sortedArrayUsingDescriptors:@[sd]];
+    //return homeGamesTemp;
+
+
 }
 
 #pragma mark - Table view data source
@@ -253,14 +245,14 @@
     // Opponent name
     NSString *opponentNameLabelText = homeGame.opponentName;
     if(homeGame.isExhibition) opponentNameLabelText = [opponentNameLabelText stringByAppendingString:@" (Ex.)"];
-    if(homeGame.isConferenceGame) opponentNameLabelText = [opponentNameLabelText stringByAppendingString:@" *"];
+    //if(homeGame.isConferenceGame) opponentNameLabelText = [opponentNameLabelText stringByAppendingString:@" *"];
     
     
     // Gametime
     NSString *dateLabelText = [Constants formatDate:homeGame.gameTime withStyle:NSDateFormatterShortStyle];
     NSString *timeLabelText = [Constants formatTime:homeGame.gameTime withStyle:NSDateFormatterShortStyle];
     
-    if(![self.mySchedulesHomeGameIndexes containsObject:[NSNumber numberWithInteger:indexPath.row]]){
+    if(![self.mySchedulesHomeGameParseIds containsObject:homeGame.parseObjectID]){
         // User has not joined a group schedule for this home game
         
         HomeGamesTableViewCell *cell = (HomeGamesTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"HomeGameTVC" forIndexPath:indexPath];
@@ -324,12 +316,14 @@
     HomeGame *hg = self.homeGames[indexPath.row];
     if([hg.gameTime timeIntervalSinceNow] < 0){
         alert = [UIAlertController alertControllerWithTitle:@"Game Over" message:@"You cannot create or join a schedule for this game because the game already occurred." preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        }]];
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
 
-    if([self.mySchedulesHomeGameIndexes containsObject:[NSNumber numberWithInteger:indexPath.row]]){
+    if([self.mySchedulesHomeGameParseIds containsObject:hg.parseObjectID]){
         NSString *title = hg.opponentName;
        
         NSString *message = @"You have already created or joined a schedule for this game. Remove yourself from that schedule if you wish to join another schedule for this game.";

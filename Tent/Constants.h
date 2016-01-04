@@ -39,8 +39,7 @@
 // User ParseObject
 #define kParsePropertyObjectId                  @"objectId"
 #define kParsePropertyCreatedAt                 @"createdAt"
-
-#define kUserPropertyClassName                  @"_User" //use [PFUser query] instead
+#define kParsePropertyUpdatedAt                 @"updatedAt"
 
 #define kUserPropertyGroupSchedules                     @"groupSchedules"
 #define kUserPropertyFullName                           @"additional"
@@ -52,7 +51,11 @@
 #define kHomeGamePropertyGameTime                       @"gameTime"
 #define kHomeGamePropertyConferenceGame                 @"conferenceGame"
 #define kHomeGamePropertyExhibition                     @"exhibition"
-#define kHomeGamePropertyIndex                          @"index"
+#define kHomeGamePropertyCurrentSeason                  @"currentSeason"
+#define kHomeGamePropertyParseObjectId                  @"objectId"
+//#define kHomeGamePropertyIndex                          @"index"
+
+#define kHomeGamesJSONLocalFilePath                      @"/Users/jeremy/Developer/Xcode/Tent/Tent/HomeGames.json"
 
 
 #define kUserDefaultsHomeGamesData                      @"homeGamesData"
