@@ -99,7 +99,10 @@
                 NSError *errorConvertingJSONToData;
                 NSData *data = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:&errorConvertingJSONToData];
                 NSError *errorWritingDataToFile;
-                [data writeToFile:kHomeGamesJSONLocalFilePath options:0 error:&errorWritingDataToFile];
+                //[data writeToFile:kHomeGamesJSONLocalFilePath options:0 error:&errorWritingDataToFile];
+                NSURL *documentsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+                NSURL *url = [documentsDirectory URLByAppendingPathComponent:@"HomeGames"];
+                [data writeToFile:url.path atomically:YES];
                 
                 //update self.homeGames
                 self.homeGames = updatedHomeGamesArray;
@@ -171,8 +174,24 @@
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[url absoluteString] forKey:@"SomeFile.jpeg"];
     [dict writeToFile:plistPath atomically:YES];
     */
+    
+    NSFileManager *defaultFileManager = [NSFileManager defaultManager];
+    NSURL *documentsDirectory = [[defaultFileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+    NSURL *url = [documentsDirectory URLByAppendingPathComponent:@"HomeGames"];
+    if(![defaultFileManager fileExistsAtPath:url.path]){
+        //NSError *fileCreationError;
+        //[defaultFileManager createDirectoryAtPath:url.path withIntermediateDirectories:false attributes:nil error:&fileCreationError];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"HomeGames" ofType:@"json"];
+        NSData *dataFromBundle = [NSData dataWithContentsOfFile:path];
+        [defaultFileManager createFileAtPath:url.path contents:dataFromBundle attributes:nil];
+        
+
+    }
+    
+    
     NSError *error;
-    NSData *data = [NSData dataWithContentsOfFile:kHomeGamesJSONLocalFilePath options:0 error:&error];
+    //NSData *data = [NSData dataWithContentsOfFile:kHomeGamesJSONLocalFilePath options:0 error:&error];
+    NSData *data = [NSData dataWithContentsOfFile:url.path];
     NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
     self.homeGames = [self homeGamesArrayFromJSONHomeGamesDictionary:jsonObject];
     
