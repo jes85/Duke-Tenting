@@ -89,11 +89,11 @@ static NSString *kGroupCodeCellID = @"groupCodeCell"; //the groupCode cell
     NSDate *roundedDate = [NSDate dateWithTimeInterval:secondsToRoundedDate sinceDate:currentDate];
 
     self.roundedStartDateAtViewDidLoad = roundedDate;
-    self.roundedEndDateAtViewDidLoad = [self.gameTime copy];
+    self.roundedEndDateAtViewDidLoad = [self.homeGame.gameTime copy];
     
     // maybe incorporate these into the model somehow (if I get rid of mutableCopy do I no longer have to update the model if I update startdate and enddate?)
     self.startDate = roundedDate;
-    self.endDate = [NSDate dateWithTimeInterval:-90*60 sinceDate: self.gameTime]; //maybe change to 1.5 hours earlier
+    self.endDate = [NSDate dateWithTimeInterval:-90*60 sinceDate: self.homeGame.gameTime]; //maybe change to 1.5 hours earlier
    
     // setup our data source
     NSMutableDictionary *itemOne = [@{ kTitleKey : @"Tap a cell to change its date:" } mutableCopy]; //delete this later or change it to Name label
