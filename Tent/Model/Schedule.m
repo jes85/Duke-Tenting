@@ -173,39 +173,6 @@
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
-    
-    NSDateComponents *tentingPeriodsStartDateComponents = [[NSDateComponents alloc]init];
-    [tentingPeriodsStartDateComponents setYear:2016];
-    
-    //black tenting
-    [tentingPeriodsStartDateComponents setMonth:1];
-    [tentingPeriodsStartDateComponents setDay:17];
-    [tentingPeriodsStartDateComponents setHour:23];
-    
-    NSDate *blackTentingStartDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
-    
-    
-    
-    //buetenting
-    [tentingPeriodsStartDateComponents setMonth:1];
-    [tentingPeriodsStartDateComponents setDay:31];
-    [tentingPeriodsStartDateComponents setHour:23];
-    
-    NSDate *blueTentingStartDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
-    //black tenting
-    [tentingPeriodsStartDateComponents setMonth:2];
-    [tentingPeriodsStartDateComponents setDay:17];
-    [tentingPeriodsStartDateComponents setHour:23];
-    
-    NSDate *whiteTentingStartDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
-    
-    [tentingPeriodsStartDateComponents setMonth:3];
-    [tentingPeriodsStartDateComponents setDay:2];
-    [tentingPeriodsStartDateComponents setHour:12];
-    
-    NSDate *uncTentingEndDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
-
-    
     NSDateComponents *intervalStartDateComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear | NSCalendarUnitWeekday ) fromDate:intervalStartDate];
     
     NSDateComponents *nightStartDateComponents = [[NSDateComponents alloc]init];
@@ -300,6 +267,59 @@
     return @{@"endDate":intervalEndDate, @"night":[NSNumber numberWithBool:night]};
     
 }
+-(NSUInteger)requiredPersonsForUNCInterval:(Interval *)interval
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *tentingPeriodsStartDateComponents = [[NSDateComponents alloc]init];
+    [tentingPeriodsStartDateComponents setYear:2016];
+    
+    //black tenting
+    [tentingPeriodsStartDateComponents setMonth:1];
+    [tentingPeriodsStartDateComponents setDay:17];
+    [tentingPeriodsStartDateComponents setHour:23];
+    
+    NSDate *blackTentingStartDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
+    
+    
+    
+    //buetenting
+    [tentingPeriodsStartDateComponents setMonth:1];
+    [tentingPeriodsStartDateComponents setDay:31];
+    [tentingPeriodsStartDateComponents setHour:23];
+    
+    NSDate *blueTentingStartDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
+    //black tenting
+    [tentingPeriodsStartDateComponents setMonth:2];
+    [tentingPeriodsStartDateComponents setDay:17];
+    [tentingPeriodsStartDateComponents setHour:23];
+    
+    NSDate *whiteTentingStartDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
+    
+    [tentingPeriodsStartDateComponents setMonth:3];
+    [tentingPeriodsStartDateComponents setDay:2];
+    [tentingPeriodsStartDateComponents setHour:12];
+    
+    NSDate *uncTentingEndDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
+    
+    
+    // Start Date is earlier than Black Tent Start Date
+    if([interval.startDate timeIntervalSinceDate:blackTentingStartDate] < 0){
+        return 0; //unc tenting has not started yet
+    }else if([interval.startDate timeIntervalSinceDate:blueTentingStartDate] < 0){
+        //black tenting: start date is equal to or greater than black tent start date and earlier than blue tent start date
+        return interval.night ? 10 : 2;
+    }else if([interval.startDate timeIntervalSinceDate:whiteTentingStartDate] < 0){
+        // blue tenting
+        return interval.night ? 6 : 1;
+    }else if([interval.startDate timeIntervalSinceDate:uncTentingEndDate] < 0){
+        // white tenting
+        return interval.night ? 2 : 1;
+    }else{
+        //p checks or tenting over
+        return 0;
+    }
+
+}
 -(void)createIntervalDataArraysUNC
 {
     
@@ -324,7 +344,7 @@
     BOOL night = [endDateAndNight[@"night"] boolValue];
     Interval *currentInterval = [[Interval alloc]initWithStartDate:currentIntervalStartDate endDate:currentIntervalEndDate section:0 availablePersons:availablePersons assignedPersons:assignedPersons];
     currentInterval.night = night;
-    currentInterval.requiredPersons = self.requiredPersonsPerInterval; //unc
+    currentInterval.requiredPersons = [self requiredPersonsForUNCInterval:currentInterval];//unc
     [self.intervalDataByOverallRow addObject:currentInterval];
     int numIntervals = 1; //save as interval index
     
@@ -365,7 +385,7 @@
         night = [endDateAndNight[@"night"] boolValue];
         Interval *currentInterval = [[Interval alloc]initWithStartDate:currentIntervalStartDate endDate:currentIntervalEndDate section:0 availablePersons:availablePersons assignedPersons:assignedPersons];
         currentInterval.night = night;
-        currentInterval.requiredPersons = self.requiredPersonsPerInterval; //unc
+        currentInterval.requiredPersons = [self requiredPersonsForUNCInterval:currentInterval]; //unc
         [self.intervalDataByOverallRow addObject:currentInterval];
         numIntervals++;
     }

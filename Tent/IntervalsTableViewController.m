@@ -91,6 +91,7 @@
     Interval *interval = self.schedule.intervalDataByOverallRow[index];
     cell.textLabel.text = interval.timeString;
     
+    cell.backgroundColor = interval.night ? [UIColor grayColor] : [UIColor clearColor];
 
     
     
