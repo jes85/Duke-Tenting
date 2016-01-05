@@ -19,6 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.dataSource = @[@"Schedule Name", @"Creator Name", @"Start Date"];

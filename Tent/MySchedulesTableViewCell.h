@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface MySchedulesTableViewCell : UITableViewCell
+
 @property (weak, nonatomic) IBOutlet UILabel *opponentLabel;
 @property (weak, nonatomic) IBOutlet UILabel *scheduleNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gameTimeLabel;

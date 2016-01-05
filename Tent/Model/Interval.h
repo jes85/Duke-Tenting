@@ -20,6 +20,5 @@
 @property (nonatomic) BOOL night;
 @property (nonatomic) NSUInteger section;
 
-//-(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate section:(NSUInteger) section;
 -(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate section:(NSUInteger)section availablePersons:(NSMutableArray *)available assignedPersons:(NSMutableArray *)assigned;
 @end

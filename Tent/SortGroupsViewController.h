@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface SortGroupsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+
 @property (nonatomic) NSUInteger selectedRow;
 
 @end

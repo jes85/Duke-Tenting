@@ -398,9 +398,11 @@
     
 
 }
+
 -(void)createIntervalDataArrays
 {
-    if([@[@"UNC", @"University of North Carolina", @"North Carolina"] containsObject:self.homeGame.opponentName]){        [self createIntervalDataArraysUNC];
+    if(self.homeGame.isUNC){
+        [self createIntervalDataArraysUNC];
         return;
     }
     

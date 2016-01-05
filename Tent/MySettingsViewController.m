@@ -23,6 +23,7 @@
 
 @implementation MySettingsViewController
 
+#pragma mark - View Controller Lifecylce
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -31,6 +32,7 @@
     self.tableView.dataSource = self;
     
     PFUser *currentUser = [PFUser currentUser];
+    // Change to dictionary
     self.settings = @[@"Username", @"Password", @"Email", @"Full Name"];
     self.settingValues = [[NSMutableArray alloc]initWithArray:@[currentUser.username, @"Change Password", currentUser.email, [currentUser objectForKey:kUserPropertyFullName]]];
 }
@@ -40,7 +42,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - UITableViewDataSource methods
+#pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -78,6 +80,9 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
 }
+
+#pragma mark - Change User settings
+// Username
 -(void)changeUsername
 {
     [self showChangeUsernameAlertWithMessage:@"Enter a new username."];
@@ -119,6 +124,8 @@
     
     [self presentViewController:alert animated:YES completion:nil];
 }
+
+// Password
 -(void)changePassword
 {
     [self showChangePasswordAlert];
@@ -151,6 +158,7 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+// Email
 -(void)changeEmail
 {
     [self showChangeEmailAlertWithMessage:@"Enter a new email."];
@@ -190,6 +198,8 @@
     [alert addAction:changeAction];
     [self presentViewController:alert animated:YES completion:nil];
 }
+
+// Full Name
 -(void)changeFullName
 {
     UIAlertController *alert = [self changeSettingAlertWithTitle:@"Change Name" message:@"Enter a new name." placeholder:[[PFUser currentUser] objectForKey:kUserPropertyFullName]];
@@ -215,6 +225,8 @@
     [self presentViewController:alert animated:YES completion:nil];
 
 }
+
+// Convenience method for alert with cancel action
 -(UIAlertController *)changeSettingAlertWithTitle:(NSString *)title message:(NSString *)message placeholder:(NSString *)placeholder
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
@@ -228,20 +240,25 @@
     return alert;
 }
 
+#pragma mark - Delete Account
 - (IBAction)deleteAccountButtonPressed:(id)sender {
+    
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete Account" message:@"Are you sure? You will be removed from every schedule you joined, and any schedules you created will be deleted." preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [self deleteAccount];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
-    
-    
+
 }
 
+
+/*
+ * Delete all schedules that user created. Remove user from all schedules that user joined. Then delete user's account and log out
+ */
 -(void)deleteAccount
 {
-    //get my schedules
+    // Get my schedules
     PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
     PFQuery *query = [relation query];
     [query orderByAscending:@"endDate"];
@@ -258,10 +275,12 @@
             for(PFObject *parseSchedule in schedulesForThisUser){
                 PFObject *creator = parseSchedule[kGroupSchedulePropertyCreatedBy];
                 if([creator.objectId isEqualToString:currentUser.objectId ]){
+                    
                     //Delete Schedule
                     [schedulesToDelete addObject:parseSchedule];
                 }else{
-                    //remove person from schedule
+                    
+                    // Remove person from schedule
                     NSMutableArray *parsePersons = [[NSMutableArray alloc]initWithArray: parseSchedule[kGroupSchedulePropertyPersonsInGroup]];
                     for(PFObject *parsePerson in parsePersons ){
                         if([[parsePerson[kPersonPropertyAssociatedUser] objectId] isEqualToString:currentUser.objectId]){
@@ -278,7 +297,8 @@
                 if(succeeded){
                     [PFObject deleteAllInBackground:schedulesToDelete block:^(BOOL succeeded, NSError * _Nullable error) {
                         if(succeeded){
-                            //delete user
+                            
+                            // Delete user
                             [[PFUser currentUser] deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                                 if(!error){
                                     [self performSegueWithIdentifier:@"userDeletedAccountSegue" sender:self];

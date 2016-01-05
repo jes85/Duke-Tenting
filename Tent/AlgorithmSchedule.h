@@ -9,8 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @interface AlgorithmSchedule : NSObject
+
+
+-(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate intervalLengthInMinutes: (NSUInteger)intervalLength assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numIntervals:(NSUInteger)numIntervals;
+
 -(NSMutableArray *)generateAssignments;
 -(BOOL)checkForError;
--(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate intervalLengthInMinutes: (NSUInteger)intervalLength assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numIntervals:(NSUInteger)numIntervals;
 
 @end

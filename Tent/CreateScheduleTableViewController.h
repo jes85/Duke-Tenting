@@ -12,4 +12,5 @@
 @interface CreateScheduleTableViewController : UITableViewController <UITextFieldDelegate>
 
 @property (nonatomic) HomeGame *homeGame;
+
 @end

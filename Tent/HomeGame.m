@@ -24,6 +24,14 @@
     return self;
 }
 
+// UNC
+-(BOOL)isUNC
+{
+    return [@[@"UNC", @"University of North Carolina", @"North Carolina"] containsObject:self.opponentName];
+}
+
+
+// Don't think I need coding anymore because I'm not saving to User Defaults
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super init];

@@ -55,7 +55,6 @@
 		3FA6D5331965E7A50043087B /* TentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6D5321965E7A50043087B /* TentTests.m */; };
 		3FA97F9B1C2E6EDB000B5920 /* MyScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA97F9A1C2E6EDB000B5920 /* MyScheduleViewController.m */; };
 		3FA97F9E1C2E74A8000B5920 /* MeScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA97F9D1C2E74A8000B5920 /* MeScheduleViewController.m */; };
-		3FB42F5019B2A54B0079EDE1 /* PrivacyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB42F4F19B2A54B0079EDE1 /* PrivacyTableViewCell.m */; };
 		3FB9388D1BC713CD00834159 /* MyScheduleContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB9388C1BC713CD00834159 /* MyScheduleContainerViewController.m */; };
 		3FC432B319A0565100B560F1 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC432B219A0565100B560F1 /* Social.framework */; };
 		3FC432B519A056DD00B560F1 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC432B419A056DD00B560F1 /* Accounts.framework */; };
@@ -167,8 +166,6 @@
 		3FA97F9A1C2E6EDB000B5920 /* MyScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyScheduleViewController.m; sourceTree = "<group>"; };
 		3FA97F9C1C2E74A8000B5920 /* MeScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeScheduleViewController.h; sourceTree = "<group>"; };
 		3FA97F9D1C2E74A8000B5920 /* MeScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeScheduleViewController.m; sourceTree = "<group>"; };
-		3FB42F4E19B2A54B0079EDE1 /* PrivacyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivacyTableViewCell.h; sourceTree = "<group>"; };
-		3FB42F4F19B2A54B0079EDE1 /* PrivacyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrivacyTableViewCell.m; sourceTree = "<group>"; };
 		3FB9388B1BC713CD00834159 /* MyScheduleContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyScheduleContainerViewController.h; path = "Container View Controllers/MyScheduleContainerViewController.h"; sourceTree = "<group>"; };
 		3FB9388C1BC713CD00834159 /* MyScheduleContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyScheduleContainerViewController.m; path = "Container View Controllers/MyScheduleContainerViewController.m"; sourceTree = "<group>"; };
 		3FC432B219A0565100B560F1 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -457,8 +454,6 @@
 				3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */,
 				3F4CA9B919B2ABD500EA5BDE /* PasswordTableViewCell.h */,
 				3F4CA9BA19B2ABD500EA5BDE /* PasswordTableViewCell.m */,
-				3FB42F4E19B2A54B0079EDE1 /* PrivacyTableViewCell.h */,
-				3FB42F4F19B2A54B0079EDE1 /* PrivacyTableViewCell.m */,
 				3F61604F198DA61E006EF048 /* IntervalTableViewCell.h */,
 				3F616050198DA61E006EF048 /* IntervalTableViewCell.m */,
 				3F7527F61BD1749000748ED8 /* MySettingsTableViewCell.h */,
@@ -590,7 +585,6 @@
 				3F71811F199D117200737662 /* DefaultSettingsViewController.m in Sources */,
 				3F738C2919B401880089878F /* JoinScheduleTableViewController.m in Sources */,
 				3F44CE5F19CCE6A500271D3E /* Constants.m in Sources */,
-				3FB42F5019B2A54B0079EDE1 /* PrivacyTableViewCell.m in Sources */,
 				3F7527F81BD1749000748ED8 /* MySettingsTableViewCell.m in Sources */,
 				3F7527F51BD1730000748ED8 /* MySettingsViewController.m in Sources */,
 				3FA97F9B1C2E6EDB000B5920 /* MyScheduleViewController.m in Sources */,

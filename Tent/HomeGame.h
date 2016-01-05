@@ -11,6 +11,7 @@
 @interface HomeGame : NSObject <NSCoding>
 
 @property (nonatomic) NSString *opponentName;
+@property (nonatomic) BOOL isUNC; //maybe make subclass UNCHomeGame
 @property (nonatomic) NSDate *gameTime;
 @property (nonatomic) BOOL isExhibition;
 @property (nonatomic) BOOL isConferenceGame;
@@ -19,6 +20,6 @@
 
 -(instancetype)initWithOpponentName:(NSString *)name gameTime:(NSDate *)date isExhibition:(BOOL)isExhibition isConferenceGame:(BOOL)isConferenceGame currentSeason:(BOOL)currentSeason parseObjectID: (NSString *)parseObjectID;
 
-// TODO: In V2, maybe add schedulesAssociatedWithThisHomeGame to cache results
+// In V2, maybe add schedulesAssociatedWithThisHomeGame to cache results
 
 @end

@@ -35,17 +35,6 @@
     return self;
 }
 
--(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate section:(NSUInteger)section
-{
-    self = [super init];
-    if(self){
-        self.startDate = startDate;
-        self.endDate = endDate;
-        self.section =  section;
-        [self createIntervalDateTimeStrings];
-    }
-    return self;
-}
 -(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate section:(NSUInteger)section availablePersons:(NSMutableArray *)available assignedPersons:(NSMutableArray *)assigned
 {
     self = [super init];

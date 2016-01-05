@@ -14,7 +14,7 @@
 #import "Constants.h"
 #import "SortGroupsViewController.h"
 
-#define kEnterGroupCodeAlertViewTitle           @"Enter Group Code: "
+#define kEnterGroupCodeAlertViewTitle           @"Enter Group Code"
 #define kCancelButtonTitle                      @"Cancel"
 #define kEnterButtonTitle                       @"Enter"
 
@@ -25,45 +25,31 @@
 
 @property (nonatomic) Schedule *scheduleToJoin;
 @property (nonatomic) NSArray *searchResults;
-@property (nonatomic) UIAlertAction *cancelAlertAction;
 
 @end
 
 @implementation JoinScheduleTableViewController
 
--(UIAlertAction *)cancelAlertAction
-{
-    if(!_cancelAlertAction){
-        _cancelAlertAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {}];
-    }
-    return _cancelAlertAction;
-}
+
+#pragma mark - View Controller Lifecycle
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    [self getSchedulesAssociatedWithHomeGameIndex];
+    [self getSchedulesAssociatedWithThisHomeGame];
 
-}
-#pragma mark - View Controller Lifecycle
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    //[self getSchedulesAssociatedWithHomeGameIndex];
-    
-    
 }
 
 /*!
  * Query Parse to get all the schedules that have been created for the selected home game
  */
--(void)getSchedulesAssociatedWithHomeGameIndex
+-(void)getSchedulesAssociatedWithThisHomeGame
 {
     
     PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
     PFObject *homeGame = [PFObject objectWithoutDataWithClassName:kHomeGameClassName objectId:self.homeGame.parseObjectID];
     [query whereKey:kGroupSchedulePropertyHomeGame equalTo:homeGame];
-    [query includeKey:kGroupSchedulePropertyPersonsInGroup];
+    [query includeKey:kGroupSchedulePropertyPersonsInGroup]; //probably don't need to include this for all schedules. just query for it after user chooses a schedule to join
     [query includeKey:kGroupSchedulePropertyHomeGame];
     [query includeKey:kGroupSchedulePropertyCreatedBy];
     [query includeKey:[NSString stringWithFormat:@"%@.%@", kGroupSchedulePropertyPersonsInGroup, kPersonPropertyAssociatedUser]];
@@ -72,9 +58,9 @@
         if(!schedules){
             NSLog(@"Find failed");
         }else if ([schedules count]<1){
-            NSLog(@"No schedules associated with home game %@ in Parse", self.homeGame.opponentName);
+            // No schedules associated with this home game in parse
         }else{
-            NSLog(@"Find schedules associated with home game %@ succeeded", self.homeGame.opponentName);
+            // Schedules found
             NSMutableArray *array = [[NSMutableArray alloc]init];
             for(PFObject *parseSchedule in schedules){
                 Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule] ;
@@ -87,51 +73,20 @@
         }
     }];
     
-    
 }
-
--(NSArray *)getSortDescriptors
-{
-   //TODO: 2nd sort descriptor not working to break ties
-    NSArray *sortDescriptors;
-    NSSortDescriptor *sortByScheduleName = [NSSortDescriptor sortDescriptorWithKey:@"groupName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-    NSSortDescriptor *sortByCreatorName = [NSSortDescriptor sortDescriptorWithKey:@"createdBy.additional" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-;
-    NSSortDescriptor *sortByStartDate = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];
-    
-    switch (self.filterBy) {
-        case 0: //schedule name
-            sortDescriptors = @[sortByScheduleName, sortByCreatorName, sortByStartDate];
-            
-            break;
-        case 1: //creator name
-            sortDescriptors = @[sortByCreatorName, sortByScheduleName, sortByStartDate];
-            break;
-        case 2: //start date
-            sortDescriptors = @[sortByStartDate, sortByScheduleName, sortByCreatorName];
-            break;
-            
-        default:
-            sortDescriptors = @[sortByScheduleName, sortByStartDate, sortByCreatorName];
-            break;
-    }
-    return sortDescriptors;
-}
-
-
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-
+    
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-
+    
     // Return the number of rows in the section.
     if(tableView == self.searchDisplayController.searchResultsTableView){
         return [self.searchResults count];
@@ -142,7 +97,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    
     NSString *reuseIdentifier = @"joinScheduleCell";
     ScheduleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
     
@@ -161,7 +116,7 @@
     // Configure the cell...
     cell.nameLabel.text = schedule.groupName;
     cell.startDate.text = [[[Constants formatDate:schedule.startDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "]stringByAppendingString:[Constants formatTime:schedule.startDate withStyle:NSDateFormatterShortStyle]];
-     cell.endDate.text = [[[Constants formatDate:schedule.endDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "]stringByAppendingString:[Constants formatTime:schedule.endDate withStyle:NSDateFormatterShortStyle]];
+    cell.endDate.text = [[[Constants formatDate:schedule.endDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "]stringByAppendingString:[Constants formatTime:schedule.endDate withStyle:NSDateFormatterShortStyle]];
     
     cell.creatorLabel.text = [schedule.createdBy objectForKey:kUserPropertyFullName];
     
@@ -202,7 +157,6 @@
     [alert addAction:joinAction];
     [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         textField.placeholder = @"Group Code";
-        //textField.secureTextEntry = YES; // TODO: probably don't need it secure since its a group code, not a password
     }];
     [self presentViewController:alert animated:YES completion:nil];
     
@@ -218,10 +172,10 @@
     }else{
         alert.title = kWrongGroupCodeAlertViewTitle;
         alert.message = kWrongGroupCodeAlertViewMessage;
-        groupCodeTextField.text = nil; // TODO: maybe keep texts
+        groupCodeTextField.text = nil; // maybe keep texts
         [self presentViewController:alert animated:YES completion:nil];
     }
-
+    
 }
 
 #pragma mark - Search Bar
@@ -259,6 +213,35 @@
 
 }
 
+#pragma mark - Sorting
+-(NSArray *)getSortDescriptors
+{
+    NSArray *sortDescriptors;
+    NSSortDescriptor *sortByScheduleName = [NSSortDescriptor sortDescriptorWithKey:@"groupName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+    NSSortDescriptor *sortByCreatorName = [NSSortDescriptor sortDescriptorWithKey:@"createdBy.additional" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+    ;
+    NSSortDescriptor *sortByStartDate = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];
+    
+    // 2nd sort descriptor not working to break ties for some reason
+    switch (self.filterBy) {
+        case 0: //schedule name
+            sortDescriptors = @[sortByScheduleName, sortByCreatorName, sortByStartDate];
+            
+            break;
+        case 1: //creator name
+            sortDescriptors = @[sortByCreatorName, sortByScheduleName, sortByStartDate];
+            break;
+        case 2: //start date
+            sortDescriptors = @[sortByStartDate, sortByScheduleName, sortByCreatorName];
+            break;
+            
+        default:
+            sortDescriptors = @[sortByScheduleName, sortByStartDate, sortByCreatorName];
+            break;
+    }
+    return sortDescriptors;
+}
+
 -(IBAction)doneFilter:(UIStoryboardSegue *)segue
 {
     self.schedulesAssociatedWithThisHomeGame = [self.schedulesAssociatedWithThisHomeGame sortedArrayUsingDescriptors:[self getSortDescriptors]];
@@ -280,14 +263,18 @@
     // Pass the selected object to the new view controller.
     
     if([[segue destinationViewController] isKindOfClass:[MySchedulesTableViewController class]]){
+        
         MySchedulesTableViewController *mstvc = [segue destinationViewController];
         mstvc.scheduleToJoin = self.scheduleToJoin;
+        
     }else if([[segue destinationViewController] isKindOfClass:[UINavigationController class]]){
         UINavigationController *nc = [segue destinationViewController];
         if([nc.childViewControllers[0] isKindOfClass:[SortGroupsViewController class]]){
+            
             SortGroupsViewController *sgvc = nc.childViewControllers[0];
             sgvc.selectedRow = self.filterBy;
         }
+        
     }
 }
 

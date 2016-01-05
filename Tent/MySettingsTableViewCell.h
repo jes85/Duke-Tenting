@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface MySettingsTableViewCell : UITableViewCell
+
 @property (weak, nonatomic) IBOutlet UILabel *settingNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *settingValueLabel;
 
