@@ -465,7 +465,6 @@
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.selectedIndexPathRow = indexPath.row;
-    NSLog(@"index: %ld", (long)indexPath.row);
     
 }
 
