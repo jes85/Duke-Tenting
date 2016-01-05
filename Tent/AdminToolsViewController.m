@@ -82,6 +82,9 @@
     AlgorithmSchedule *algorithmSchedule = [self createAlgorithmScheduleFromScheduleObject];
     if([algorithmSchedule checkForError]){
         //deal with error
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error!" message:@"At least one time slot has less than the required number of people available. Please fix that and then try again." preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
         return;
     }
     NSMutableArray *assignments = [algorithmSchedule generateAssignments];

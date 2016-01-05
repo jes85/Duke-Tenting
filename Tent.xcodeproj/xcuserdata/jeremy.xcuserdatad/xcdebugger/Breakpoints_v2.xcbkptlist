@@ -666,11 +666,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/StatsViewController.m"
-            timestampString = "473680243.130245"
+            timestampString = "473680591.596563"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
             landmarkName = "-calculateMinutesAvailableAndAssigned"
             landmarkType = "5">
          </BreakpointContent>

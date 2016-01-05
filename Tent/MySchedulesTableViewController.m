@@ -84,7 +84,7 @@
                                                                             self.view.bounds.size.width,
                                                                             self.view.bounds.size.height)];
             //set the message
-            messageLbl.text = !self.schedules ? @"Unable to load schedules. Pull down to refresh." : @"Tap the + button in the top right to create or join a schedule. Your schedules will show up here.";
+            messageLbl.text = !self.schedules ? @"Unable to load schedules. Pull down to refresh." : @"Your schedules will show up here. Tap the + button in the top right to create or join a schedule.";
             //center the text
             messageLbl.textAlignment = NSTextAlignmentCenter;
             messageLbl.numberOfLines = 0;

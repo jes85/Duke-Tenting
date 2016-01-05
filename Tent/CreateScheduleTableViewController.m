@@ -275,7 +275,7 @@ static NSString *kGroupCodeCellID = @"groupCodeCell"; //the groupCode cell
         }
         else if (indexPath.row == 1){
             cell.textLabel.text = @"Game Time";
-            cell.detailTextLabel.text = [Constants formatDateAndTime:self.homeGame.gameTime  withDateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+            cell.detailTextLabel.text = [Constants formatDateAndTime:self.homeGame.gameTime  withDateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
         }
 
         return cell;

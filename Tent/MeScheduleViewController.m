@@ -71,7 +71,12 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)exportToCalendarButtonPressed:(id)sender {
-    [self exportScheduleToCalendar];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export To Calendar" message:@"Would you like to export your assignments to the calendar on your phone?" preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self exportScheduleToCalendar];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 -(void)exportScheduleToCalendar
 {
@@ -105,6 +110,10 @@
         endDate = interval.endDate;
         [self createEventWithTitle:title startDate:startDate endDate:endDate];
     }
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success!" message:@"Your assignments are now in your calendar." preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 -(void)createEventWithTitle:(NSString *)title startDate:(NSDate *)startDate endDate: (NSDate *)endDate
 {
