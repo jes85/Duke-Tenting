@@ -288,23 +288,10 @@
     NSString *dateLabelText = [Constants formatDate:homeGame.gameTime withStyle:NSDateFormatterShortStyle];
     NSString *timeLabelText = [Constants formatTime:homeGame.gameTime withStyle:NSDateFormatterShortStyle];
     
-    if(![self.mySchedulesHomeGameParseIds containsObject:homeGame.parseObjectID]){
-        // User has not joined a group schedule for this home game
+    BOOL gameAlreadyOccurred = [homeGame.gameTime timeIntervalSinceNow] < 0;
+    
+    if(gameAlreadyOccurred || [self.mySchedulesHomeGameParseIds containsObject:homeGame.parseObjectID]){
         
-        HomeGamesTableViewCell *cell = (HomeGamesTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"HomeGameTVC" forIndexPath:indexPath];
-        
-        // Set text of labels
-        cell.opponentNameLabel.text = opponentNameLabelText;
-        cell.gametimeLabel.text = [[dateLabelText stringByAppendingString:@" "] stringByAppendingString:timeLabelText];
-        
-        // Disable Cell If Game Has Occurred
-        [self disableCell:cell IfGameAlreadyOccured:homeGame.gameTime];
-        
-        // Configure join button
-        cell.delegate = self;
-
-        return cell;
-    }else{
         // User already joined a group schedule for this home game.
         JoinedHomeGameTableViewCell *cell = (JoinedHomeGameTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"JoinedHomeGameTVC" forIndexPath:indexPath];
         
@@ -312,38 +299,38 @@
         cell.opponentNameLabel.text = opponentNameLabelText;
         cell.gametimeLabel.text = [[dateLabelText stringByAppendingString:@" "] stringByAppendingString:timeLabelText];
         
+        
         // Disable Cell If Game Has Occurred
-        [self disableCell:cell IfGameAlreadyOccured:homeGame.gameTime];
+        if(gameAlreadyOccurred){
+            cell.messageLabel.text = @"Game Over";
+            cell.backgroundColor = [UIColor lightGrayColor];
+            cell.messageLabel.textColor = [UIColor redColor];
+
+        }else{
+            cell.messageLabel.text = @"Already Joined";
+            cell.messageLabel.textColor = [UIColor blueColor];
+            cell.backgroundColor = [UIColor whiteColor];
+        }
+        
+        return cell;
+    }else{
+       
+        // User has not joined a group schedule for this home game
+        
+        HomeGamesTableViewCell *cell = (HomeGamesTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"HomeGameTVC" forIndexPath:indexPath];
+        
+        // Set text of labels
+        cell.opponentNameLabel.text = opponentNameLabelText;
+        cell.gametimeLabel.text = [[dateLabelText stringByAppendingString:@" "] stringByAppendingString:timeLabelText];
+        cell.backgroundColor = [UIColor whiteColor];
+
+        // Configure join button
+        cell.delegate = self;
         
         return cell;
 
     }
 
-}
-
--(void)disableCell:(UITableViewCell *)cell IfGameAlreadyOccured:(NSDate *)gametime
-{
-    if([gametime timeIntervalSinceNow] < 0){ //could save this calculation when calculate scroll row to save some time
-        //cell.userInteractionEnabled = NO
-        //cell.joinButton.userInteractionEnabled = NO;
-        //cell.createButton.userInteractionEnabled = NO;
-        if([cell isKindOfClass:[HomeGamesTableViewCell class]]) [self changeJoinCreateButtonsOnCell:(HomeGamesTableViewCell *)cell toUserInteractionEnabled:NO];
-        cell.backgroundColor = [UIColor grayColor];
-    }else{
-        //cell.userInteractionEnabled = YES;
-        //cell.joinButton.userInteractionEnabled = YES;
-        //cell.createButton.userInteractionEnabled = YES;
-        if([cell isKindOfClass:[HomeGamesTableViewCell class]]) [self changeJoinCreateButtonsOnCell:(HomeGamesTableViewCell *)cell toUserInteractionEnabled:YES];
-        cell.backgroundColor = [UIColor whiteColor];
-        
-    }
-
-    
-}
--(void)changeJoinCreateButtonsOnCell:(HomeGamesTableViewCell *)cell toUserInteractionEnabled:(BOOL)userInteractionEnabled
-{
-    cell.joinButton.userInteractionEnabled = userInteractionEnabled;
-    cell.createButton.userInteractionEnabled = userInteractionEnabled;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -353,7 +340,7 @@
     if([hg.gameTime timeIntervalSinceNow] < 0){
         alert = [UIAlertController alertControllerWithTitle:@"Game Over" message:@"You cannot create or join a schedule for this game because the game already occurred." preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [tableView deselectRowAtIndexPath:indexPath animated:NO];
         }]];
         [self presentViewController:alert animated:YES completion:nil];
         return;
@@ -367,7 +354,7 @@
                                                     message:message
                                              preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
         }];
         [alert addAction:okAction];
 
@@ -383,17 +370,17 @@
         
         
         UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
         }];
         UIAlertAction* joinAction = [UIAlertAction actionWithTitle:@"Join" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             self.selectedIndexPathRow = indexPath.row;
-            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
             [self joinSchedule];
 
         }];
         UIAlertAction* createAction = [UIAlertAction actionWithTitle:@"Create" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             self.selectedIndexPathRow = indexPath.row;
-            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
             [self createSchedule];
             
         }];

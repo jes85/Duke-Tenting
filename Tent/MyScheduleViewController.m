@@ -7,7 +7,6 @@
 //
 
 #import "MyScheduleViewController.h"
-#import "EnterScheduleTableViewController.h"
 #import "PickPersonTableViewController.h"
 #import "Person.h"
 #import "IntervalTableViewCell.h"

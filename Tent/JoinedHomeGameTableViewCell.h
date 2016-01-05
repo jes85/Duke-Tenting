@@ -12,5 +12,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *opponentNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gametimeLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
 
 @end

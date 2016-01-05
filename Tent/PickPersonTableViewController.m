@@ -7,7 +7,6 @@
 //
 
 #import "PickPersonTableViewController.h"
-#import "EnterScheduleTableViewController.h"
 #import "Person.h"
 #import "Schedule.h"
 #import <Parse/Parse.h>

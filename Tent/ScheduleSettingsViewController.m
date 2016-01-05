@@ -86,34 +86,34 @@
         UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"statsCell"];
         return cell;
     }else{
-        MySettingsTableViewCell *cell = (MySettingsTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"SettingsCell" forIndexPath:indexPath];
-        
-        
-        //change use json serializer
-        
+       
         NSArray *sectionData = [sectionDict objectForKey:@"sectionData"];
         NSDictionary *settingData = sectionData[indexPath.row];
-        cell.settingNameLabel.text = [settingData objectForKey:@"title"];
+        NSString *settingName = [settingData objectForKey:@"title"];
+        NSString *settingValue;
+        if([[settingData objectForKey:@"value"] isKindOfClass:[NSDate class]]){
+            settingValue = [Constants formatDateAndTime:[settingData objectForKey:@"value"] withDateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+        }else{
+            settingValue = [settingData objectForKey:@"value"];
+        }
         
         if(self.isCreator && [[settingData objectForKey:@"isEditable"] boolValue] == YES){
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"editableSettingCell"];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            cell.textLabel.text = settingName;
+            cell.detailTextLabel.text = settingValue;
+            return cell;
         }
         else{
+             MySettingsTableViewCell *cell = (MySettingsTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"uneditableSettingCell" forIndexPath:indexPath];
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.settingNameLabel.text = settingName;
+            cell.settingValueLabel.text = settingValue;
+            return cell;
         }
-        
-        
-        if([[settingData objectForKey:@"value"] isKindOfClass:[NSDate class]]){
-             cell.settingValueLabel.text = [Constants formatDateAndTime:[settingData objectForKey:@"value"] withDateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
-        }else{
-             cell.settingValueLabel.text = [settingData objectForKey:@"value"];
-        }
-        
     
-    
-    return cell;
     }
 }
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -126,7 +126,6 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     NSMutableDictionary *sectionDict = [self.settings objectForKey:[NSNumber numberWithInteger:indexPath.section]];
@@ -214,6 +213,9 @@
 
         
     }
+    
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+
 
 }
 - (IBAction)deleteScheduleButtonPressed:(id)sender

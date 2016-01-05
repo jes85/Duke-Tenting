@@ -8,7 +8,6 @@
 
 #import "PersonScheduleViewController.h"
 
-#import "EnterScheduleTableViewController.h"
 #import "PickPersonTableViewController.h"
 #import "Person.h"
 #import "IntervalTableViewCell.h"
@@ -41,10 +40,6 @@
     NSInteger overallRow = [PersonsInIntervalViewController findCurrentTimeIntervalIndexForSchedule:self.schedule];
     if(overallRow < 0) return; //schedule hasn't started
     NSIndexPath *indexPath = [Constants indexPathForOverallRow:overallRow tableView:self.tableView];
-    NSUInteger index = indexPath.row;
-    NSUInteger section = indexPath.section;
-    NSUInteger rows = [self.tableView numberOfRowsInSection:section];
-    NSUInteger sections = self.tableView.numberOfSections;
     //TODO: there is an edge case where indexPathForOverallRow is wrong (index 24 when there are only 24 rows)
     //think i might have fixed it
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
@@ -169,8 +164,9 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     else if([self.updatedAvailabilitiesArray[index] isEqual:@1]) { //self.updatedAvailabilitiesArray instead of currentPerson.availabilitiesArray because the screen should show the updates as the user is making them. If they then hit cancel, those updates are not saved. UpdatedAvailabilitiesArray is reinitialized to currentPerson.availabilitiesArray every time the view loads
         cell.assignedOrAvailableLabel.text = @"(Available)";
         //cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
-        cell.iconImageView.backgroundColor =[UIColor yellowColor];
-        cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
+        cell.iconImageView.backgroundColor =[UIColor orangeColor];
+        //cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
+        cell.assignedOrAvailableLabel.textColor = [UIColor orangeColor];
         
     }
     else {
@@ -226,8 +222,8 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         cell.assignedOrAvailableLabel.text = @"(Available)";
         //cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
         
-        cell.iconImageView.backgroundColor =[UIColor yellowColor];
-        cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
+        cell.iconImageView.backgroundColor =[UIColor orangeColor];
+        cell.assignedOrAvailableLabel.textColor = [UIColor orangeColor];
         
         
         Interval *interval = self.updatedIntervalDataByOverallRowArray[index];
@@ -261,7 +257,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         count = interval.assignedPersons.count;
     }else{
         assignedOrAvailable = @"available";
-        labelColor = [UIColor orangeColor];
+        labelColor = [UIColor redColor];
         count = interval.availablePersons.count;
     }
     NSString *warningText;
@@ -309,8 +305,8 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         
         cell.assignedOrAvailableLabel.text = @"(Available)";
         //cell.iconImageView.image =[UIImage imageNamed:@"YellowSquare"];
-        cell.iconImageView.backgroundColor =[UIColor yellowColor];
-        cell.assignedOrAvailableLabel.textColor = [UIColor colorWithRed:.7 green:.5 blue:0 alpha:1.0];
+        cell.iconImageView.backgroundColor =[UIColor orangeColor];
+        cell.assignedOrAvailableLabel.textColor = [UIColor orangeColor];
         
         Interval *interval = self.updatedIntervalDataByOverallRowArray[index];
         [interval.availablePersons addObject:self.currentPerson];
@@ -471,7 +467,8 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     
     if([segue.destinationViewController isKindOfClass:[StatsViewController class]]){
         StatsViewController *svc = segue.destinationViewController;
-        svc.schedule = &_schedule;
+        svc.schedule = self.schedule;
+        svc.person = self.currentPerson;
         
     }
 }

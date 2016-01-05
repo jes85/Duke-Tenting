@@ -26,6 +26,7 @@
 
 +(Schedule *)createScheduleObjectFromParseInfo: (PFObject *)parseSchedule; //TODO: maybe method move to another class
 
+-(IBAction)userDeletedAccount:(UIStoryboardSegue *)segue;
 -(IBAction)closeSettings:(UIStoryboardSegue *)segue;
 -(IBAction)scheduleDeleted:(UIStoryboardSegue *)segue;
 

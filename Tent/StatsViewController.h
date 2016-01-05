@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "Schedule.h"
+#import "Person.h"
 @interface StatsViewController : UIViewController
 
-@property (nonatomic) Schedule *__strong *schedule;
-@property (nonatomic) NSString *__strong *testString;
+@property (nonatomic) Schedule *schedule;
+@property (nonatomic) Person *person;
 
 @end

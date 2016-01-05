@@ -31,7 +31,6 @@
 
 @property (nonatomic) UIBarButtonItem *editMeScheduleButton;
 @property (nonatomic) UIBarButtonItem *editPeopleButton;
-@property (nonatomic) UIBarButtonItem *settingsButton;
 @property (nonatomic) UIBarButtonItem *addPersonButton;
 
 
@@ -152,10 +151,6 @@
     msvc.updatedAvailabilitiesArray = nil;//msvc.currentPerson.assignmentsArray;
     [msvc.tableView reloadData];
 
-}
--(void)settingsBarButtonItemPressed
-{
-    [self performSegueWithIdentifier:@"MyScheduleSettingsSegue" sender:self];
 }
 
 -(void)editPeopleBarButtonItemPressed
@@ -563,12 +558,12 @@
                                        @{
                                            @"title": @"Start Date",
                                            @"value": self.schedule.startDate,
-                                           @"isEditable" : [NSNumber numberWithBool:YES]
+                                           @"isEditable" : [NSNumber numberWithBool:NO]
                                            },
                                        @{
                                            @"title": @"End Date",
                                            @"value": self.schedule.endDate,
-                                           @"isEditable" : [NSNumber numberWithBool:YES]
+                                           @"isEditable" : [NSNumber numberWithBool:NO]
                                            },
                                        @{
                                            @"title": @"Game Time",
@@ -578,12 +573,8 @@
                                            }
                                        ],
                                };
-    NSDictionary *sectionStats = @{
-                                   @"sectionHeader":@"Stats",
-                                   @"sectionData": @[]
-                                   };
     
-    return self.isCreator ? @{@0:sectionAdmin,@1:sectionGeneral, @2:sectionDates, @3:sectionStats} : @{@0:sectionGeneral, @1:sectionDates, @3:sectionStats};
+    return self.isCreator ? @{@0:sectionAdmin,@1:sectionGeneral, @2:sectionDates} : @{@0:sectionGeneral, @1:sectionDates};
 }
 
 

@@ -14,7 +14,6 @@
 #import "Schedule.h"
 #import "Constants.h"
 
-#import "IntervalsDisplayData.h"
 
 #define kDatePickerTag              99     // view tag identifiying the date picker view
 

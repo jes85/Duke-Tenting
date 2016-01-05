@@ -7,6 +7,7 @@
 //
 
 #import "MySettingsViewController.h"
+
 #import "MySettingsTableViewCell.h"
 #import "Constants.h"
 
@@ -22,13 +23,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Do any additional setup after loading the view.
+
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
     PFUser *currentUser = [PFUser currentUser];
-
     self.settings = @[@"Username", @"Password", @"Email", @"Full Name"];
     self.settingValues = [[NSMutableArray alloc]initWithArray:@[currentUser.username, @"Change Password", currentUser.email, [currentUser objectForKey:kUserPropertyFullName]]];
-    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
@@ -49,17 +51,15 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MySettingsTableViewCell *cell = (MySettingsTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"SettingsCell" forIndexPath:indexPath];
-    
-    
-    cell.settingNameLabel.text = self.settings[indexPath.row];
-    cell.settingValueLabel.text = self.settingValues[indexPath.row];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserSettingsCell"];
+    cell.textLabel.text = self.settings[indexPath.row];
+    cell.detailTextLabel.text = self.settingValues[indexPath.row];
     
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     if([self.settings[indexPath.row] isEqualToString:@"Username"]){
         [self changeUsername];
         
@@ -72,6 +72,9 @@
     }else if ([self.settings[indexPath.row] isEqualToString:@"Full Name"]){
         [self changeFullName];
     }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
 }
 -(void)changeUsername
 {
@@ -85,19 +88,28 @@
         PFUser *currentUser = [PFUser currentUser];
         NSString *oldSettingValue = currentUser.username;
         NSString *newSettingValue = textField.text;
+        
         //Update current user on parse
         currentUser.username = newSettingValue;
         [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if(succeeded){
-                self.settingValues[0] = newSettingValue;
                 
-                //Change this to only update desired cell
+                // Update table view with new data //Change this to only update desired cell
+                self.settingValues[0] = newSettingValue;
                 [self.tableView reloadData];
             }else{
+                // Display error alert and change local current user back to what it was before change attempt.
+                
+                NSString *errorMessage;
                 if(error.code == 202){
-                    currentUser.username = oldSettingValue;
-                    [self showChangeUsernameAlertWithMessage:[NSString stringWithFormat:@"Username %@ has already been taken. Try again", newSettingValue]];
+                    errorMessage = [NSString stringWithFormat:@"Username %@ has already been taken. Try again", newSettingValue];
+                }else{
+                    errorMessage = @"Something went wrong. Check your internet connection and try again.";
                 }
+                
+                currentUser.username = oldSettingValue;
+                [self showChangeUsernameAlertWithMessage:errorMessage];
+
             }
         }];
     }];
@@ -106,6 +118,10 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 -(void)changePassword
+{
+    [self showChangePasswordAlert];
+}
+-(void)showChangePasswordAlert
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Change Password" message:@"We will send you an email with a link to change your password." preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
@@ -118,14 +134,21 @@
                 [successAlert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
                 [self presentViewController:successAlert animated:YES completion:nil];
                 
+            }else{
+                //show error alert
+                UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"Error!" message:@"Unable to send email." preferredStyle:UIAlertControllerStyleAlert];
+                [errorAlert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+                [self presentViewController:errorAlert animated:YES completion:nil];
+
             }
         }];
-
+        
     }];
     [alert addAction:sendAction];
     
     [self presentViewController:alert animated:YES completion:nil];
-    }
+}
+
 -(void)changeEmail
 {
     [self showChangeEmailAlertWithMessage:@"Enter a new email."];
@@ -147,16 +170,18 @@
                 self.settingValues[2] = newSettingValue;
                 [self.tableView reloadData];
             }else{
+                
+                NSString *errorMessage;
                 if(error.code == 125){
-                    //alert.message = @"Invalid email address. Try again";
-                    currentUser.email = oldSettingValue;
-                    [self showChangeEmailAlertWithMessage:@"Invalid email address. Try again"];
+                    errorMessage = @"Invalid email address. Try again";
+                   
                 }else if (error.code == 203){
-                    //alert.message = [NSString stringWithFormat:@"Email address %@ has already been taken. Try again", newSettingValue];
-                    currentUser.email = oldSettingValue;
-                    [self showChangeEmailAlertWithMessage:[NSString stringWithFormat:@"Email address %@ has already been taken. Try again", newSettingValue]];
-                    
+                    errorMessage = [NSString stringWithFormat:@"Email address %@ has already been taken. Try again", newSettingValue];
+                }else{
+                    errorMessage = @"Unable to change email. Please try again";
                 }
+                currentUser.email = oldSettingValue;
+                [self showChangeEmailAlertWithMessage:errorMessage];
             }
         }];
     }];
@@ -174,9 +199,13 @@
         [currentUser setValue:newSettingValue forKey:kUserPropertyFullName];
         [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if(succeeded){
-                self.settingValues[3] = newSettingValue;
                 //Change this to only update desired cell
+                self.settingValues[3] = newSettingValue;
                 [self.tableView reloadData];
+            }else{
+                UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"Error!" message:@"Unable to change name." preferredStyle:UIAlertControllerStyleAlert];
+                [errorAlert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+                [self presentViewController:errorAlert animated:YES completion:nil];
             }
         }];
     }];
@@ -197,10 +226,19 @@
     return alert;
 }
 
-- (IBAction)logOutButtonPressed:(id)sender {
-    [PFUser logOut];
-    [self performSegueWithIdentifier:@"closeSettingsSegue" sender:self];
+- (IBAction)deleteAccountButtonPressed:(id)sender {
+    //get my schedules
+    
+    //remove user from all my schedules
+    
+    //delete user
+    [[PFUser currentUser] deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        if(!error){
+            [self performSegueWithIdentifier:@"userDeletedAccountSegue" sender:self];
+        }
+    }];
 }
+
 
 #pragma mark - Navigation
 
