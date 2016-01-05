@@ -39,7 +39,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem = back;
     
     PFUser *currentUser = [PFUser currentUser];
     if(currentUser){
@@ -51,8 +52,7 @@
         [refresh addTarget:self action:@selector(refreshSchedules) forControlEvents:UIControlEventValueChanged];
         self.refreshControl = refresh;
         
-        UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-        self.navigationItem.backBarButtonItem = back;
+        
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
     }

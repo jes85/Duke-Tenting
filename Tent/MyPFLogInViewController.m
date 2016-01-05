@@ -30,7 +30,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    [self.logInView setBackgroundColor:[UIColor blueColor]];
+    
+    [self.logInView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:(100/255.0f) alpha:1.0f]];
     
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 300, 100)];
     label.text = @"DUKE K-VILLE PLANNER";

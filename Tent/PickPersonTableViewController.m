@@ -82,7 +82,7 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //Remove person on Parse
         Person *person = self.schedule.personsArray[indexPath.row];
-        [PickPersonTableViewController deletePersons:@[person] fromParseSchedule:self.schedule.parseObjectID completion:^{
+        [PickPersonTableViewController deletePersons:@[person.parseObjectID] fromParseSchedule:self.schedule.parseObjectID completion:^{
             
             //Update UI
             [self.schedule.personsArray removeObjectAtIndex:indexPath.row];
@@ -96,15 +96,11 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
     }
 }
 
-+(void)deletePersons:(NSArray *)persons fromParseSchedule:(NSString *)scheduleId completion:(void(^)(void))callback
++(void)deletePersons:(NSArray *)personIds fromParseSchedule:(NSString *)scheduleId completion:(void(^)(void))callback
 {
-    NSMutableArray *userIds = [[NSMutableArray alloc]initWithCapacity:persons.count];
-    NSMutableArray *parsePersons = [[NSMutableArray alloc]initWithCapacity:persons.count];
-    for(Person *person in persons){
-        if(person.user){
-            [userIds addObject:person.user.objectId];
-        }
-        [parsePersons addObject:[PFObject objectWithoutDataWithClassName:kPersonClassName objectId:person.parseObjectID]];
+    NSMutableArray *parsePersons = [[NSMutableArray alloc]initWithCapacity:personIds.count];
+    for(NSString *personId in personIds){
+        [parsePersons addObject:[PFObject objectWithoutDataWithClassName:kPersonClassName objectId:personId]];
     }
     
     PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
@@ -113,21 +109,6 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
             [parseSchedule removeObjectsInArray:parsePersons forKey:kGroupSchedulePropertyPersonsInGroup];
             [parseSchedule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if(succeeded){
-                    /* this didn't work because don't have access to edit a different user's properties
-                    PFQuery *query = [PFUser query];
-                    [query whereKey:kParsePropertyObjectId containedIn:userIds];
-                    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                        for(PFObject *user in objects){
-                            PFRelation *relation = [user relationForKey:kUserPropertyGroupSchedules];
-                            [relation removeObject:[PFObject objectWithoutDataWithClassName:kGroupScheduleClassName objectId:scheduleId]];
-                        }
-                        [PFObject saveAllInBackground:objects block:^(BOOL succeeded, NSError *error) {
-                            if(succeeded){
-                     
-                            }
-                        }];
-                    }];
-                     */
                     [PFObject deleteAllInBackground:parsePersons];
                     callback();
 

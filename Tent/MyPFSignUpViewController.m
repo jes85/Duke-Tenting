@@ -29,7 +29,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self.signUpView setBackgroundColor:[UIColor blueColor]];
+    [self.signUpView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:(100.0/255.0) alpha:1.0]];
     
     
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 300, 100)];

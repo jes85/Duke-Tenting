@@ -20,4 +20,7 @@
 -(IBAction)cancelAddPerson:(UIStoryboardSegue *)segue;
 
 -(IBAction)editAvailabilitiesReturn:(UIStoryboardSegue *)segue;
+
+
++(void)deletePersons:(NSArray *)persons fromParseSchedule:(NSString *)scheduleId completion:(void(^)(void))callback;
 @end

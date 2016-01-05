@@ -11,11 +11,13 @@
 #import "MySettingsTableViewCell.h"
 #import "Constants.h"
 
+#import "PickPersonTableViewController.h"
 
 @interface MySettingsViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic) NSArray *settings;
 @property (nonatomic) NSMutableArray *settingValues;
+
 
 @end
 
@@ -227,16 +229,70 @@
 }
 
 - (IBAction)deleteAccountButtonPressed:(id)sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete Account" message:@"Are you sure? You will be removed from every schedule you joined, and any schedules you created will be deleted." preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self deleteAccount];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
+    
+    
+}
+
+-(void)deleteAccount
+{
     //get my schedules
+    PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
+    PFQuery *query = [relation query];
+    [query orderByAscending:@"endDate"];
+    [query includeKey:kGroupSchedulePropertyPersonsInGroup];
+    [query includeKey:kGroupSchedulePropertyHomeGame];
+    [query includeKey:kGroupSchedulePropertyCreatedBy];
+    [query includeKey:[NSString stringWithFormat:@"%@.%@", kGroupSchedulePropertyPersonsInGroup, kPersonPropertyAssociatedUser]];
     
-    //remove user from all my schedules
-    
-    //delete user
-    [[PFUser currentUser] deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+    PFUser *currentUser = [PFUser currentUser];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *schedulesForThisUser, NSError *error) {
         if(!error){
-            [self performSegueWithIdentifier:@"userDeletedAccountSegue" sender:self];
+            NSMutableArray *schedulesToDelete = [[NSMutableArray alloc]init];
+            NSMutableArray *schedulesToRemoveUser = [[NSMutableArray alloc]init];
+            for(PFObject *parseSchedule in schedulesForThisUser){
+                PFObject *creator = parseSchedule[kGroupSchedulePropertyCreatedBy];
+                if([creator.objectId isEqualToString:currentUser.objectId ]){
+                    //Delete Schedule
+                    [schedulesToDelete addObject:parseSchedule];
+                }else{
+                    //remove person from schedule
+                    NSMutableArray *parsePersons = [[NSMutableArray alloc]initWithArray: parseSchedule[kGroupSchedulePropertyPersonsInGroup]];
+                    for(PFObject *parsePerson in parsePersons ){
+                        if([[parsePerson[kPersonPropertyAssociatedUser] objectId] isEqualToString:currentUser.objectId]){
+                            [parsePersons removeObject:parsePerson];
+                            break;
+                        }
+                    }
+                    parseSchedule[kGroupSchedulePropertyPersonsInGroup] = parsePersons;
+                    [schedulesToRemoveUser addObject:parseSchedule];
+                }
+                
+            }
+            [PFObject saveAllInBackground:schedulesToRemoveUser block:^(BOOL succeeded, NSError * _Nullable error) {
+                if(succeeded){
+                    [PFObject deleteAllInBackground:schedulesToDelete block:^(BOOL succeeded, NSError * _Nullable error) {
+                        if(succeeded){
+                            //delete user
+                            [[PFUser currentUser] deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                                if(!error){
+                                    [self performSegueWithIdentifier:@"userDeletedAccountSegue" sender:self];
+                                }
+                            }];
+                        }
+                    }];
+                }
+            }];
+
         }
     }];
+    
+    
 }
 
 
