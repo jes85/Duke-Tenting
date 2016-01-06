@@ -1,12 +1,13 @@
 //
-//  MyScheduleViewController.m
+//  OtherPersonScheduleViewController.m
 //  Tent
 //
-//  Created by Jeremy on 12/25/15.
-//  Copyright (c) 2015 Jeremy. All rights reserved.
+//  Created by Jeremy on 1/5/16.
+//  Copyright © 2016 Jeremy. All rights reserved.
 //
 
-#import "MyScheduleViewController.h"
+#import "OtherPersonScheduleViewController.h"
+
 #import "PickPersonTableViewController.h"
 #import "Person.h"
 #import "IntervalTableViewCell.h"
@@ -14,12 +15,13 @@
 #import "Constants.h"
 #import "PersonsInIntervalViewController.h"
 #import "StatsViewController.h"
-@interface MyScheduleViewController ()
+
+@interface OtherPersonScheduleViewController ()
 
 
 @end
 
-@implementation MyScheduleViewController
+@implementation OtherPersonScheduleViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,7 +31,7 @@
     self.tableView.allowsSelection = NO;
     self.navigationItem.leftBarButtonItem = nil;
     //[self decideIfEditingIsAllowed];
-   
+    
     if(self.canEdit){
         [self changeNavBarToShowEditButton];
     }else{
@@ -41,7 +43,7 @@
     }
     
     //TODO: note: viewDidLoad is called in MeSchedule before prepareForSegue stuff in container vc. Maybe subclass twice and override viewDidAppear and viewDidLoad appropriately
-
+    
 }
 
 
@@ -124,13 +126,13 @@
 }
 
 /*
--(void)decideIfEditingIsAllowed
-{
-    self.isMe = [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]];
-    self.isCreator = [self.schedule.createdBy.objectId isEqualToString: [[PFUser currentUser] objectId]];
-    self.canEdit =  (self.isMe && !self.schedule.assignmentsGenerated) | self.isCreator ;
-}
-*/
+ -(void)decideIfEditingIsAllowed
+ {
+ self.isMe = [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]];
+ self.isCreator = [self.schedule.createdBy.objectId isEqualToString: [[PFUser currentUser] objectId]];
+ self.canEdit =  (self.isMe && !self.schedule.assignmentsGenerated) | self.isCreator ;
+ }
+ */
 
 
 @end

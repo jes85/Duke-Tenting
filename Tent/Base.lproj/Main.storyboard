@@ -243,10 +243,10 @@
             </objects>
             <point key="canvasLocation" x="1278" y="1550"/>
         </scene>
-        <!--My Schedule View Controller-->
+        <!--Other Person Schedule View Controller-->
         <scene sceneID="GMi-m8-v84">
             <objects>
-                <viewController storyboardIdentifier="OtherPersonScheduleVC" id="or4-nQ-8X3" customClass="MyScheduleViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OtherPersonScheduleVC" id="or4-nQ-8X3" customClass="OtherPersonScheduleViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Lqk-ze-6qR"/>
                         <viewControllerLayoutGuide type="bottom" id="kfB-ZG-RSd"/>
