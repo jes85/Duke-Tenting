@@ -924,7 +924,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="HMu-Wi-huW">
-                        <barButtonItem key="rightBarButtonItem" title="Edit" id="vgP-QZ-nZX"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="vgP-QZ-nZX"/>
                     </navigationItem>
                     <connections>
                         <outlet property="containerView" destination="IbX-KH-RhN" id="c4J-mI-8rh"/>
@@ -1569,7 +1569,7 @@
                                 <segue destination="bce-eR-KWM" kind="unwind" unwindAction="cancelFilter:" id="AoB-fG-ljh"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Item" systemItem="done" id="Lpa-Ba-JYb">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="Lpa-Ba-JYb">
                             <connections>
                                 <segue destination="bce-eR-KWM" kind="unwind" unwindAction="doneFilter:" id="7Zh-MB-lf4"/>
                             </connections>

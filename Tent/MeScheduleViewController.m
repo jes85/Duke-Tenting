@@ -71,12 +71,19 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)exportToCalendarButtonPressed:(id)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export To Calendar" message:@"Would you like to export your assignments to the calendar on your phone?" preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        [self exportScheduleToCalendar];
-    }]];
-    [self presentViewController:alert animated:YES completion:nil];
+    if(self.schedule.assignmentsGenerated){
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export To Calendar" message:@"Would you like to export your assignments to the calendar on your phone?" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            [self exportScheduleToCalendar];
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }else{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export To Calendar" message:@"You do not have any assignments to export because they have not been generated yet." preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    
 }
 -(void)exportScheduleToCalendar
 {

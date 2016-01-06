@@ -298,6 +298,8 @@
         
     }
     self.navigationItem.rightBarButtonItems = msvc.canEdit ? @[self.editMeScheduleButton] : nil;
+    self.navigationItem.leftBarButtonItem = nil;
+
 
     
 
@@ -325,6 +327,8 @@
         
         
         self.navigationItem.rightBarButtonItems = msvc.canEdit ? @[self.editMeScheduleButton] : nil;
+        self.navigationItem.leftBarButtonItem = nil;
+
         
     }
     
@@ -333,6 +337,8 @@
         NowPersonsInIntervalViewController *piivc = (NowPersonsInIntervalViewController *)newVC;
         piivc.schedule = self.schedule;
         self.navigationItem.rightBarButtonItems = @[];
+        self.navigationItem.leftBarButtonItem = nil;
+
         
         
     }
@@ -343,10 +349,18 @@
         pptvc.schedule = self.schedule;
         
         if(self.isCreator){
-            self.navigationItem.rightBarButtonItems = @[self.editPeopleButton];
+            if(pptvc.tableView.isEditing){
+                [self editPeopleBarButtonItemPressed];
+            }else{
+                [self doneEditingPeopleButtonPressed];
+            }
         }else{
             self.navigationItem.rightBarButtonItems = @[];
+            self.navigationItem.leftBarButtonItem = nil;
+
         }
+        
+
     }
     
     // Time Slots
@@ -354,6 +368,8 @@
         IntervalsTableViewController *itvc = (IntervalsTableViewController *)newVC;
         itvc.schedule = self.schedule ;
         self.navigationItem.rightBarButtonItems = @[];
+        self.navigationItem.leftBarButtonItem = nil;
+
         
     }
 

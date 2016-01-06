@@ -443,7 +443,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         if(self.isMe) message = @"Assignments have already been generated. Only the creator can edit the schedule now.";
         else message = @"You do not have access to edit this person's schedule. Only this person and the group creator have access.";
     }else{
-        message = @"Press edit and tap a cell to change the availability status for that time interval";
+        message = @"Press edit and tap a cell to change the availability status for that time interval.";
     }
     UIAlertController *alert =[UIAlertController alertControllerWithTitle:@"Help" message:message preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];

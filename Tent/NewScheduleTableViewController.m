@@ -275,8 +275,14 @@
                 
                 // Scroll to current interval
                 //why doesn't this work?
+
                 //[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
                 //[self scrollToCurrentInterval];
+                /*
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                 [self scrollToCurrentInterval];
+                 });
+                 */
 
             }
             
@@ -299,7 +305,6 @@
             // Create array of Home Games
             NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:parseHomeGames.count];
             for (PFObject *parseHomeGame in parseHomeGames) {
-                NSLog(@"%@", parseHomeGame.objectId);
                 
                 NSDate *gameTime = parseHomeGame[kHomeGamePropertyGameTime];
                 NSString *opponent = parseHomeGame[kHomeGamePropertyOpponent];

@@ -14,8 +14,6 @@
 @property (nonatomic) Schedule *schedule;
 @property (nonatomic) BOOL isCreator;
 
-
--(void)refreshData;
 -(IBAction)closeSettings:(UIStoryboardSegue *)segue;
 
 
