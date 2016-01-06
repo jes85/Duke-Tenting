@@ -180,7 +180,7 @@ static NSString *kGroupCodeCellID = @"groupCodeCell"; //the groupCode cell
     if (indexPath.row == 0)
      {
          NameOfScheduleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kNameCellID forIndexPath:indexPath];
-         cell.nameOfScheduleLabel.text = @"Name";
+         cell.nameOfScheduleLabel.text = @"Group Name";
          self.nameOfScheduleTextField = cell.nameOfScheduleTextField;
          [self.nameOfScheduleTextField becomeFirstResponder];
          self.nameOfScheduleTextField.delegate = self;
@@ -585,12 +585,12 @@ static NSString *kGroupCodeCellID = @"groupCodeCell"; //the groupCode cell
 #pragma mark - Alert Views
 
 - (IBAction)nameDetailDisclosureTapped:(id)sender {
-    [self presentAlertViewWithTitle:@"Schedule Name" message:@"Enter a unique name for your group schedule. Tell your group members to look for this name when finding your group."];
+    [self presentAlertViewWithTitle:@"Group Name" message:@"Enter a unique name for your group schedule. Tell your group members to look for this name when finding your group."];
 
 }
 
 - (IBAction)groupCodeDetailDisclosureTapped:(id)sender {
-    [self presentAlertViewWithTitle:@"Group code" message:@"Share this code with your group members only. It gives them access to join your group."];
+    [self presentAlertViewWithTitle:@"Group Code" message:@"Share this code with your group members only. It gives them access to join your group."];
 }
 
 -(void)presentAlertViewWithTitle:(NSString *)title message:(NSString *)message

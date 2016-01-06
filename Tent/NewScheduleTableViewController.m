@@ -235,6 +235,9 @@
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.selectedIndexPathRow = indexPath.row;
+    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES ];
+
     
 }
 

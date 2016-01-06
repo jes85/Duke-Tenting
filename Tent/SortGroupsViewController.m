@@ -9,9 +9,11 @@
 #import "SortGroupsViewController.h"
 #import "JoinScheduleTableViewController.h"
 @interface SortGroupsViewController ()
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;
 @property NSArray *dataSource;
+
 @end
 
 @implementation SortGroupsViewController
@@ -22,7 +24,7 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.dataSource = @[@"Schedule Name", @"Creator Name", @"Start Date"];
+    self.dataSource = @[@"Group Name", @"Creator Name", @"Start Date"];
 }
 
 - (void)didReceiveMemoryWarning {

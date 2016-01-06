@@ -134,6 +134,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self displayEnterGroupCodeAlertForScheduleIndex:indexPath.row];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 -(void)displayEnterGroupCodeAlertForScheduleIndex:(NSInteger)scheduleIndex
@@ -209,8 +210,10 @@
         indexPath = [self.tableView indexPathForCell:cell];
     }
     
+    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     [self displayEnterGroupCodeAlertForScheduleIndex:indexPath.row];
-
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
 }
 
 #pragma mark - Sorting

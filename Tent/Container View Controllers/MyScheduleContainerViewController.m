@@ -142,7 +142,7 @@
 
 -(void)changeMyScheduleTableViewToEditMode
 {
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditingMyScheduleButtonPressed)];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(doneEditingMyScheduleButtonPressed)];
     self.navigationItem.rightBarButtonItem = doneButton;
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelEditingMyScheduleButtonPressed)];
     self.navigationItem.leftBarButtonItem = cancelButton;
@@ -176,7 +176,7 @@
 {
     [self.viewControllers[2] setEditing:YES animated:YES];
     self.navigationItem.leftBarButtonItem = self.addPersonButton;
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneEditingPeopleButtonPressed)];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(doneEditingPeopleButtonPressed)];
     self.navigationItem.rightBarButtonItem = doneButton;
     
 }
