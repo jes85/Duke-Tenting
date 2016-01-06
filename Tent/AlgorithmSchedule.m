@@ -132,7 +132,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     for(int c = 0; c<self.numIntervals;c++){
         int sum = [self.availIntervalSums[c] intValue];
         if(sum<self.requiredPersonsPerInterval){
-            NSLog(@"Not enough people in interval %d", c);
+            //NSLog(@"Not enough people in interval %d", c);
             error = true;
         }
         

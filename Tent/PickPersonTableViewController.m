@@ -23,8 +23,35 @@
 
 @implementation PickPersonTableViewController
 
+#pragma mark - View Controller Lifecycle
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
+    
+}
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    //[super dealloc];
+}
+-(void)scheduleChanged:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    Schedule *schedule = userInfo[kUserInfoLocalScheduleKey];
+    
+    //don't think i need to update UI here since it will always call viewDidLoad for next vc, and any changes that would result in this vc needing to update UI would occur in this vc
+    self.schedule = schedule;
+    [self updateLocalSchedule:schedule];
+    
+}
 
-#pragma mark - Properties - Lazy Instantiation
+ -(void)updateLocalSchedule: (Schedule *)updatedSchedule
+{
+     self.schedule = updatedSchedule;
+     [self.tableView reloadData];
+}
 
 
 #pragma mark - Table view data source
@@ -63,6 +90,7 @@
 }
 
 #pragma mark - UITableViewDelegate
+
 - (NSString *)tableView:(UITableView *)tableView
 titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -119,60 +147,9 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
     }];
 }
 
-#pragma mark - Load data
--(void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
-    
-}
--(void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    //[super dealloc];
-}
--(void)scheduleChanged:(NSNotification *)notification
-{
-    NSDictionary *userInfo = notification.userInfo;
-    Schedule *schedule = userInfo[kUserInfoLocalScheduleKey];
-    
-    //don't think i need to update UI here since it will always call viewDidLoad for next vc, and people can only be removed in this schedule
-    self.schedule = schedule;
-    //[self updateLocalSchedule:schedule];
-    
-}
-/*
--(void)updateLocalSchedule: (Schedule *)updatedSchedule
-{
-    self.schedule = updatedSchedule;
-    [self.tableView reloadData];
-}
- */
-
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    /*
-    if(!self.personsArray){
-        [self updatePersonsForSchedule];
-    }
-    if(!self.schedule){
-        [self updateSchedule];
-    }
-     */
-    /*
-    [self updatePersonsForSchedule];
-    [self updateSchedule];
-    */
-}
 
 
-
-#pragma mark - Add Person
-//TODO: implement add offline person
-
+#pragma mark - Add Offline Person
 -(IBAction)addPerson:(UIStoryboardSegue *)segue
 {
     Person *newPerson = [[Person alloc]initWithUser:nil  numIntervals:self.schedule.numIntervals];
@@ -190,16 +167,15 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
         //query for schedule and update
         PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
         [query getObjectInBackgroundWithId:self.schedule.parseObjectID block:^(PFObject *parseSchedule, NSError *error) {
-            if(!error){
-                NSLog(@"Saved new person object to parse");
+            if(!error){ // Saved new person object to parse
                 
                 NSMutableArray *personsArray = (NSMutableArray *)parseSchedule[kGroupSchedulePropertyPersonsInGroup];
                 [personsArray addObject:personObject];
                 parseSchedule[kGroupSchedulePropertyPersonsInGroup] = (NSArray *)personsArray;
                 
                 [parseSchedule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    if(!error){
-                        NSLog(@"Saved schedule to join to parse");
+                    if(!error){ // Saved schedule to parse
+                        
                         // Update person and schedule on current iphone (offline)
                         newPerson.scheduleIndex = self.schedule.personsArray.count;
                         newPerson.parseObjectID = personObject.objectId;
@@ -262,7 +238,7 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
             
         }
     }else{
-        NSLog(@"Bar button add");
+        // Bar button add segue
     }
 }
 

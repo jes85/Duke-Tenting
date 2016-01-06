@@ -65,7 +65,7 @@
 }
 - (IBAction)clearAvailabilitiesButtonPressed:(id)sender {
     NSString *title = @"Clear Availabilities";
-    NSString *message = self.schedule.assignmentsGenerated ? @"Are you sure? Both the assignments and availabilties will be deleted." : @"Are you sure?";
+    NSString *message = self.schedule.assignmentsGenerated ? @"Are you sure? Both the assignments and availabilties will be deleted." : @"Are you sure? Every group member's schedule will be reset.";
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *proceedAction = [UIAlertAction actionWithTitle:@"Proceed" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         [self clearAvailabilities];

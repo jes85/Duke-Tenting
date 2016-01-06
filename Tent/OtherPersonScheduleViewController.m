@@ -30,28 +30,23 @@
     
     self.tableView.allowsSelection = NO;
     self.navigationItem.leftBarButtonItem = nil;
-    //[self decideIfEditingIsAllowed];
     
     if(self.canEdit){
         [self changeNavBarToShowEditButton];
     }else{
     }
+    
     if([self.schedule.startDate timeIntervalSinceNow] < 0 && [self.schedule.endDate timeIntervalSinceNow] > 0){
         [self scrollToCurrentInterval];
         //maybe keep track off last offset and scroll to that one instead
         
     }
-    
-    //TODO: note: viewDidLoad is called in MeSchedule before prepareForSegue stuff in container vc. Maybe subclass twice and override viewDidAppear and viewDidLoad appropriately
-    
+
+}
+-(BOOL)isMe{
+    return [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]];
 }
 
-
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-}
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
     
@@ -120,19 +115,6 @@
     
     self.navigationItem.leftBarButtonItem = nil;
 }
-
--(BOOL)isMe{
-    return [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]];
-}
-
-/*
- -(void)decideIfEditingIsAllowed
- {
- self.isMe = [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]];
- self.isCreator = [self.schedule.createdBy.objectId isEqualToString: [[PFUser currentUser] objectId]];
- self.canEdit =  (self.isMe && !self.schedule.assignmentsGenerated) | self.isCreator ;
- }
- */
 
 
 @end

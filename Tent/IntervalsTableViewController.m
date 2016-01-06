@@ -12,11 +12,14 @@
 #import "Interval.h"
 #import "Constants.h"
 @interface IntervalsTableViewController ()
+
 @property (nonatomic) BOOL firstTimeAppearing;
+
 @end
 
 @implementation IntervalsTableViewController
 
+#pragma mark - View Controller Lifecycle
 -(void)viewDidLoad
 {
     [super viewDidLoad];
@@ -25,11 +28,13 @@
     self.firstTimeAppearing = YES;
     
 }
+
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     //[super dealloc];
 }
+
 -(void)scheduleChanged:(NSNotification *)notification
 {
     NSDictionary *userInfo = notification.userInfo;

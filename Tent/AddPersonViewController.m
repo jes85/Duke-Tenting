@@ -32,6 +32,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.enterNameTextField];
     self.doneButton.enabled = NO;
     [self.enterNameTextField becomeFirstResponder];
+    
 }
 
 -(void)dealloc

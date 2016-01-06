@@ -16,6 +16,7 @@
 
 @implementation MeScheduleViewController
 
+#pragma mark - View Controller Lifecycle
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -26,8 +27,10 @@
     }
      */
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.currentPerson = self.schedule.personsArray[[self.schedule findCurrentUserPersonIndex]]; //TODO: there was an error here when someone first joins a schedule. I think i may have fixed it
    
     // Do any additional setup after loading the view.
@@ -41,6 +44,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     //[super dealloc];
 }
+
 -(void)scheduleChanged:(NSNotification *)notification
 {
     NSDictionary *userInfo = notification.userInfo;
@@ -66,10 +70,8 @@
 -(BOOL)isMe{
     return YES;
 }
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+
+#pragma mark - Export to Calendar
 - (IBAction)exportToCalendarButtonPressed:(id)sender {
     if(self.schedule.assignmentsGenerated){
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Export To Calendar" message:@"Would you like to export your assignments to the calendar on your phone?" preferredStyle:UIAlertControllerStyleAlert];
@@ -122,6 +124,7 @@
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
+
 -(void)createEventWithTitle:(NSString *)title startDate:(NSDate *)startDate endDate: (NSDate *)endDate
 {
     EKEventStore *store = [EKEventStore new];

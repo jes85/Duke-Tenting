@@ -212,8 +212,8 @@
             
         }
         else{
+            // Error retreiving schedules from Parse
             [self.loadingWheel stopAnimating];
-            NSLog(@"error retrieving user's schedules from parse");
             self.schedules = nil;
             [self.tableView reloadData];
             //TODO: update view to say "Error retrieving schedules"
@@ -407,34 +407,36 @@
     //TODO: Maybe display loading wheel
     //TODO: deal with errors
     [query getObjectInBackgroundWithId: self.scheduleToJoin.parseObjectID block:^(PFObject *parseSchedule, NSError *error) {
-        if(!error){
-            NSLog(@"Retrieved schedule to join from parse");
+        if(!error){// Retrieved schedule to join from parse
             Person *newPerson = [[Person alloc]initWithUser:[PFUser currentUser] numIntervals:self.scheduleToJoin.numIntervals];
-            newPerson.scheduleIndex = self.scheduleToJoin.personsArray.count;
+            
             PFObject *personObject = [PFObject objectWithClassName:kPersonClassName];
             personObject[kPersonPropertyAssignmentsArray] = newPerson.assignmentsArray;
             personObject[kPersonPropertyAssociatedUser] = newPerson.user;
 
     
             [personObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if(!error){
-                    NSLog(@"Saved new person object to parse");
-
+                if(!error){ // Saved new person object to parse
+                    
                     NSMutableArray *personsArray = (NSMutableArray *)parseSchedule[kGroupSchedulePropertyPersonsInGroup]; //TODO: might need mutable copy
                     [personsArray addObject:personObject];
                     parseSchedule[kGroupSchedulePropertyPersonsInGroup] = (NSArray *)personsArray;
                     
                     [parseSchedule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                     if(!error){
-                         NSLog(@"Saved schedule to join to parse");
+                     if(!error){ //Saved schedule to join to parse
 
                          PFRelation *relation = [[PFUser currentUser] relationForKey:kUserPropertyGroupSchedules];
                          [relation addObject:parseSchedule];
-                         [[PFUser currentUser] saveInBackground];
+                         [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                             newPerson.scheduleIndex = self.scheduleToJoin.personsArray.count;
+                             newPerson.parseObjectID = personObject.objectId;
+                             [self.scheduleToJoin.personsArray addObject:newPerson];
+                             [self addSchedule:self.scheduleToJoin];
+                             [self.tableView reloadData];
+                         }];
                          
-                         [self.scheduleToJoin.personsArray addObject:newPerson];
-                         [self addSchedule:self.scheduleToJoin];
-                         [self.tableView reloadData];
+                         
+                         
                      }
                  }];
                 }
@@ -603,7 +605,6 @@
 
 // Sent to the delegate when the log in attempt fails.
 - (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error {
-    NSLog(@"Failed to log in...");
     [[[UIAlertView alloc] initWithTitle:@"Login unsuccessful"
                                 message:@"Please re-enter your information"
                                delegate:nil
@@ -656,12 +657,10 @@
 
 // Sent to the delegate when the sign up attempt fails.
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didFailToSignUpWithError:(NSError *)error {
-    NSLog(@"Failed to sign up...");
 }
 
 // Sent to the delegate when the sign up screen is dismissed.
 - (void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController {
-    NSLog(@"User dismissed the signUpViewController");
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

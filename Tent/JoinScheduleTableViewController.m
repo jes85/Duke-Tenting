@@ -56,7 +56,7 @@
 
     [query findObjectsInBackgroundWithBlock:^(NSArray *schedules, NSError *error) {
         if(!schedules){
-            NSLog(@"Find failed");
+           // Find failed 
         }else if ([schedules count]<1){
             // No schedules associated with this home game in parse
         }else{

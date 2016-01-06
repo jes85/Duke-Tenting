@@ -320,7 +320,7 @@
             
         } else {
             // Log details of the failure
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
+            // NSLog(@"Error: %@ %@", error, [error userInfo]);
             completionHandler(nil, nil, error);
         }
     }];

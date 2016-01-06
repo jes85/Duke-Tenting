@@ -348,10 +348,9 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
         [query getObjectInBackgroundWithId:self.currentPerson.parseObjectID block:^(PFObject *object, NSError *error) {
             if(!object){
-                NSLog(@"Find failed");
-            }else{
-                //the find succeeded
-                NSLog(@"Find succeeded");
+                //Find failed
+                NSLog(@"%@", [error userInfo]);
+            }else{ // Find succeeded
                 object[kPersonPropertyAssignmentsArray] = self.updatedAvailabilitiesArray;
                 [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     if(succeeded){

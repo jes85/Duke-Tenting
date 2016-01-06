@@ -10,7 +10,9 @@
 #import "Schedule.h"
 
 @interface ScheduleSettingsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+
 @property (nonatomic) NSDictionary *settings;
 @property (nonatomic) BOOL isCreator;
 @property (nonatomic) Schedule *schedule;
+
 @end

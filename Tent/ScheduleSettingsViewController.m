@@ -14,6 +14,7 @@
 #import "AdminToolsViewController.h"
 
 @interface ScheduleSettingsViewController ()
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *deleteScheduleButton;
 
@@ -21,6 +22,7 @@
 
 @implementation ScheduleSettingsViewController
 
+#pragma mark - View Controller Lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -41,15 +43,12 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-#pragma mark - UITableViewDataSource methods
+
+#pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    /*
-        if PFUser is admin
-            then return an extra cell (admin tools). or have this be brought up by a diff bar button item
-     */
     if(self.isCreator){
-        return self.settings.count + 1;
+        return self.settings.count + 1; // extra admin tools cell
     }
 
     return self.settings.count;
@@ -116,6 +115,7 @@
     
     }
 }
+
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
@@ -124,10 +124,9 @@
     }
     return indexPath;
 }
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     NSMutableDictionary *sectionDict = [self.settings objectForKey:[NSNumber numberWithInteger:indexPath.section]];
     NSString *sectionHeader =[sectionDict objectForKey:@"sectionHeader"];
     if([sectionHeader isEqualToString:@"General"]){
@@ -208,7 +207,7 @@
         }
         //[self performSegueWithIdentifier:@"changeGroupNameOrCode" sender:cell];
     }else if([sectionHeader isEqualToString:@"Dates"]){
-        //TODO: implement date segue
+        //TODO: implement ability to change start and end dates
         //[self performSegueWithIdentifier:@"changeStartAndEndDateSegue" sender:cell];
 
         
@@ -218,6 +217,7 @@
 
 
 }
+
 - (IBAction)deleteScheduleButtonPressed:(id)sender
 {
     if(self.isCreator){
@@ -232,6 +232,7 @@
     }
    
 }
+
 -(void)showAlertForDeleteEntireSchedule{
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete Schedule" message:@"Are you sure you want to delete the entire schedule?" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
@@ -246,6 +247,7 @@
     [self presentViewController:alert animated:YES completion:nil];
 
 }
+
 -(void)showAlertToTellUserTheyAreNotAllowedToLeaveAfterAssignmentsGenerated
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sorry" message:@"You are not allowed to leave the schedule after assignments have been generated. Ask the group creator to remove you" preferredStyle:UIAlertControllerStyleAlert];
@@ -253,6 +255,7 @@
     [alert addAction:okAction];
     [self presentViewController:alert animated:YES completion:nil];
 }
+
 -(void)showAlertForRemoveCurrentUser
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Leave Schedule" message:@"Are you sure want to remove yourself from this schedule?" preferredStyle:UIAlertControllerStyleAlert];
@@ -268,9 +271,11 @@
 
     
 }
+
 -(void)dealloc{
     
 }
+
 -(void)removeCurrentUserFromSchedule
 {
     PFObject *parseSchedule = [PFObject objectWithoutDataWithClassName:kGroupScheduleClassName objectId:self.schedule.parseObjectID]; //might need data

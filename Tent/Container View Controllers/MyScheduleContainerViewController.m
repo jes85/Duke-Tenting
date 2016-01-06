@@ -39,7 +39,7 @@
 @implementation MyScheduleContainerViewController
 
 
-
+#pragma mark - View Controller Lifecycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -47,12 +47,10 @@
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
     
-    
-    //[self drawBorders];
-    //[self updatePersonsForSchedule];
-    //[self updateSchedule];
+    // Update display
     [self updateGameLabels];
-
+    
+    // Display Me Schedule in Container view
     [self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scheduleChanged:) name:kNotificationNameScheduleChanged object:nil];
@@ -62,6 +60,18 @@
 {
     [super viewDidAppear:animated];
 }
+-(void)updateGameLabels
+{
+    
+    HomeGame *hg = self.schedule.homeGame;
+    self.labelOpponent.text = hg.opponentName;
+    self.labelDate.text = [[[Constants formatDate:self.schedule.endDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "] stringByAppendingString:[Constants formatTime:self.schedule.endDate withStyle:NSDateFormatterShortStyle]];
+    
+    self.navigationItem.title = self.schedule.groupName;
+    
+}
+
+#pragma mark - Local Schedule Changed Notification
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -83,19 +93,24 @@
     //maybe update self.viewcontrollers' schedules too and update them. instead of each of them having a notification
    
 }
+
+#pragma mark - Bar Button Items
 -(void)addPersonBarButtonItemPressed
 {
     [self performSegueWithIdentifier:@"AddPersonWithoutAppSegue" sender:self];
     
 }
+
 -(UIBarButtonItem *)editMeScheduleButton{
     if(!_editMeScheduleButton) _editMeScheduleButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editMeScheduleButtonPressed)];
     return _editMeScheduleButton;
 }
+
 -(UIBarButtonItem *)editPeopleButton{
     if(!_editPeopleButton) _editPeopleButton =[[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editPeopleBarButtonItemPressed)];
     return _editPeopleButton;
 }
+
 -(UIBarButtonItem *)addPersonButton
 {
     if(!_addPersonButton)_addPersonButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addPersonBarButtonItemPressed)];
@@ -106,6 +121,7 @@
 -(BOOL)isCreator{
     return [[[PFUser currentUser] objectId] isEqual: self.schedule.createdBy.objectId];
 }
+
 -(void)editMeScheduleButtonPressed
 {
     if(self.schedule.assignmentsGenerated){
@@ -123,6 +139,7 @@
     }
     
 }
+
 -(void)changeMyScheduleTableViewToEditMode
 {
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditingMyScheduleButtonPressed)];
@@ -133,6 +150,7 @@
     [msvc.tableView setEditing:true animated:YES];
     
 }
+
 -(void)doneEditingMyScheduleButtonPressed
 {
     self.navigationItem.rightBarButtonItem = self.editMeScheduleButton;
@@ -141,6 +159,7 @@
     [msvc.tableView setEditing:false animated:YES];
     [msvc saveEdits];
 }
+
 -(void)cancelEditingMyScheduleButtonPressed
 {
     self.navigationItem.rightBarButtonItem = self.editMeScheduleButton;
@@ -161,6 +180,7 @@
     self.navigationItem.rightBarButtonItem = doneButton;
     
 }
+
 -(void)doneEditingPeopleButtonPressed
 {
     [self.viewControllers[2] setEditing:NO animated:YES];
@@ -168,28 +188,10 @@
     self.navigationItem.leftBarButtonItem = nil;
     
 }
-/*
--(void)drawBorders
-{
-    CGFloat borderWidth = 1.0f;
-    CALayer *bottomBorder = [CALayer layer];
-    bottomBorder.frame = CGRectMake(self.viewGameInfo.frame.origin.x, self.viewGameInfo.frame.size.height - borderWidth, self.viewGameInfo.frame.size.width, borderWidth);
-    bottomBorder.backgroundColor = [UIColor blackColor].CGColor;
-    
-    [self.viewGameInfo.layer addSublayer:bottomBorder];
-    
-}
- */
--(void)updateGameLabels
-{
 
-    HomeGame *hg = self.schedule.homeGame;
-    self.labelOpponent.text = hg.opponentName;
-    self.labelDate.text = [[[Constants formatDate:self.schedule.endDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "] stringByAppendingString:[Constants formatTime:self.schedule.endDate withStyle:NSDateFormatterShortStyle]];
 
-    self.navigationItem.title = self.schedule.groupName;
-    
-}
+
+#pragma mark - Refresh Schedule
 
 - (IBAction)refreshButtonPressed:(id)sender {
     PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
@@ -239,6 +241,8 @@
    
     
 }
+
+// Caled if user was removed from the schedule by the creator
 -(void)removeUserFromCurrentScheduleAndSegueBack
 {
     [MySchedulesTableViewController removeSchedulesFromCurrentUser:@[self.schedule.parseObjectID]];
@@ -247,21 +251,8 @@
 
     
 }
-- (void) displayViewControllerForSegmentIndex: (NSInteger) index
-{
-    UIViewController *vc = [self viewControllerForSegmentIndex:index];
-    [self addChildViewController:vc];
-    vc.view.frame = [self frameForContentController];
-    [self.containerView addSubview:vc.view];
-    [vc didMoveToParentViewController:self];
-    self.currentViewController = vc;
-    
-}
 
-- (UIViewController *) viewControllerForSegmentIndex: (NSInteger)index
-{
-    return self.viewControllers[index];
-}
+#pragma mark - Container View
 
 -(NSArray *)viewControllers
 {
@@ -300,10 +291,24 @@
     self.navigationItem.rightBarButtonItems = msvc.canEdit ? @[self.editMeScheduleButton] : nil;
     self.navigationItem.leftBarButtonItem = nil;
 
-
-    
-
 }
+
+- (void) displayViewControllerForSegmentIndex: (NSInteger) index
+{
+    UIViewController *vc = [self viewControllerForSegmentIndex:index];
+    [self addChildViewController:vc];
+    vc.view.frame = [self frameForContentController];
+    [self.containerView addSubview:vc.view];
+    [vc didMoveToParentViewController:self];
+    self.currentViewController = vc;
+    
+}
+
+- (UIViewController *) viewControllerForSegmentIndex: (NSInteger)index
+{
+    return self.viewControllers[index];
+}
+
 -(CGRect)frameForContentController
 {
     return self.containerView.bounds;
@@ -393,12 +398,8 @@
     
 }
 
--(void)alertUserToSaveOrCancelEditsBeforeChangingSegments
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Wait!" message:@"Please save or cancel your edits first." preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
-}
+#pragma mark - Segmented Control
+
 - (IBAction)segmentChanged:(UISegmentedControl *)sender {
     if([self.currentViewController isKindOfClass:[MeScheduleViewController class]]){
         MeScheduleViewController *msvc = (MeScheduleViewController *)self.currentViewController;
@@ -415,123 +416,15 @@
 
 }
 
-
-
-
-/*
--(void)updatePersonsForSchedule
+-(void)alertUserToSaveOrCancelEditsBeforeChangingSegments
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    
-    self.schedule.personsArray = nil; //maybe change personsArray to be property of schedule too?
-    [self.schedule resetIntervalArray]; //get rid of this and just reload schedule from parse
-    
-    // Get person objects from Parse
-    PFQuery *query = [PFQuery queryWithClassName:@"Person"];
-    [query whereKey:@"scheduleName" equalTo:self.schedule.name];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if(!objects){
-            NSLog(@"Find failed");
-        }else if ([objects count]<1){
-            NSLog(@"No persons for schedule %@ in Parse", self.schedule.name);
-        }
-        else{
-            NSLog(@"Find persons for Schedule %@ succeeded %lu", self.schedule.name,(unsigned long)[objects count]);
-            //self.personsArray = [[NSMutableArray alloc]initWithCapacity:[Schedule testNumPeople]]; //take this out later
-            // NSLog(@"personsArray: %@", self.personsArray);
-            //[self.schedule createIntervalArray];
-            
-            
-            for(PFObject *object in objects){
-                
-                // Update personsArray
-                NSString *name = object[@"name"];
-                NSUInteger index = [object[@"index"] intValue];
-                NSMutableArray *availabilitiesArray = object[@"availabilitiesArray"];
-                NSMutableArray *assignmentsArray = object[@"assignmentsArray"];
-                
-                Person *person = [[Person alloc]initWithName:name index:index availabilitiesArray:availabilitiesArray assignmentsArray:assignmentsArray scheduleName:self.schedule.name];
-                
-                person.userObjectID = [object[kPersonPropertyUserPointer] objectId];
-                
-                if([person.userObjectID isEqualToString:[[PFUser currentUser] objectId]]){
-                    self.schedule.currentUserPersonIndex = self.schedule.personsArray.count; //TODO: check logic
-                }
-                
-                //Fix this to prevent adding duplicates. maybe clear array and readd (but i don't want to do this every time if I don't have to)
-                if(![self.schedule.personsArray containsObject:person]){
-                    [self.schedule.personsArray addObject:person];
-                }
-                
-                //self.personsArray[person.indexOfPerson] = person;
-                //[self.personsArray removeObjectAtIndex:person.indexOfPerson];
-                //[self.personsArray insertObject:person atIndex:person.indexOfPerson];
-                
-                // Update intervalsArray (change it later to save to Parse?)
-                //maybe move this to schedule.m
-                
-                for(int i = 0; i<[availabilitiesArray count]; i++){
-                    if([availabilitiesArray[i] isEqual:@1]){
-                        Interval *interval = (Interval *)self.schedule.intervalDataByOverallRow[i];
-                        if([assignmentsArray[i] isEqual:@1]){
-                            if (![interval.assignedPersons containsObject:person.name])
-                            {
-                                [interval.assignedPersons addObject:person.name];
-                                //minor optimization:
-                                //[interval.availablePersons addObject:person];
-                                //then make next if an else if
-                            }
-                        }
-                        
-                        if(![interval.availablePersons containsObject:person.name]){
-                            [interval.availablePersons addObject:person.name];//used to be array of persons, but then equality would change if person's availability or assigned array changed, and the same person would be added twice
-                        }
-                    }
-                }
-                
-                
-                
-                
-            }
-            
-            //update table view data of child view controllers
-            
-        }
-        [self displayViewControllerForSegmentIndex:self.segmentedControl.selectedSegmentIndex];
-
-    }];
-    
-}
- */
-//same as updateSchedule in HomeBase. Consolidate this
--(void)updateSchedule
-{
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    
-    
-    PFQuery *query = [PFQuery queryWithClassName:kGroupScheduleClassName];
-    [query includeKey:kGroupSchedulePropertyPersonsInGroup];
-    [query includeKey:kGroupSchedulePropertyHomeGame];
-    [query includeKey:kGroupSchedulePropertyCreatedBy];
-    [query includeKey:[NSString stringWithFormat:@"%@.%@", kGroupSchedulePropertyPersonsInGroup, kPersonPropertyAssociatedUser]];
-    [query getObjectInBackgroundWithId:self.schedule.parseObjectID block:^(PFObject *parseSchedule, NSError *error) {
-        if(error){
-            NSLog(@"Find failed");
-        }else{
-            NSLog(@"Find schedule for update succeeded");
-            
-            Schedule *scheduleObject = [MySchedulesTableViewController createScheduleObjectFromParseInfo:parseSchedule];
-            
-            self.schedule=scheduleObject;
-            //update table view data for views (or just do that in view did appear for each of them)
-            
-            
-        }
-
-    }];
-    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Wait!" message:@"Please save or cancel your edits first." preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
+#pragma mark - Settings Segue
+// Maybe move this to Schedule Settings VC
 -(NSDictionary *)createSettingsDictionary
 
 {
@@ -597,7 +490,9 @@
 -(IBAction)closeSettings:(UIStoryboardSegue *)segue
 {
 }
- #pragma mark - Navigation
+
+
+#pragma mark - Navigation
  
  // In a storyboard-based application, you will often want to do a little preparation before navigation
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
