@@ -102,19 +102,5 @@
     return YES;
 }
 
-#pragma mark - Copy
-
--(id)copyWithZone:(NSZone *)zone
-{
-    Person *copy  = [[self class]allocWithZone:zone];
-    if(copy){
-        copy.assignmentsArray = [self.assignmentsArray mutableCopy];
-        copy.parseObjectID = self.parseObjectID;
-        copy.user = self.user;
-        copy.offlineName = self.offlineName;
-    }
-    return copy;
-}
-
 
 @end

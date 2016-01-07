@@ -119,7 +119,7 @@
         
         
         // Display person's name
-        Person *person = self.interval.availablePersons[indexPath.row];
+        Person *person = self.interval.assignedPersons[indexPath.row];
         cell.textLabel.text = person.user ? [person.user objectForKey:kUserPropertyFullName] : person.offlineName;
     }
     

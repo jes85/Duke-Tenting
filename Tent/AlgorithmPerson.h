@@ -9,18 +9,21 @@
 #import <Foundation/Foundation.h>
 #import "Person.h"
 
-@interface AlgorithmPerson : NSObject
+@interface AlgorithmPerson : NSObject <NSCopying>
 
 // General
 @property (nonatomic) NSMutableArray *assignmentsArray;
 @property (nonatomic) NSUInteger scheduleIndex;
 
 // Initial Assignment Sort Descriptors
-@property (nonatomic) NSUInteger currentOverallIntervalIndex;
-@property (nonatomic) NSUInteger consecutivePreviousIntervalsAssigned;
-@property (nonatomic) NSUInteger consecutiveFutureIntervalsAvailable;
-@property (nonatomic) NSUInteger totalNumIntervalsAssigned;
-@property (nonatomic) BOOL lessThanIdealSlotsAvailable;
+@property (nonatomic) NSUInteger currentOverallIntervalIndexForInitialDayAssignments;
+@property (nonatomic) BOOL isAvailableInCurrentOverallInterval;
+@property (nonatomic) NSUInteger consecutivePreviousDayIntervalsAssigned;
+@property (nonatomic) NSUInteger consecutiveFutureDayIntervalsAvailable;
+
+@property (nonatomic) BOOL numNightIntervalsAvailableIsLessThanIdeal;
+@property (nonatomic) BOOL numDayIntervalsAvailableIsLessThanIdeal;
+
 
 // Sums
 @property (nonatomic) float idealNumNightIntervalsAssigned;

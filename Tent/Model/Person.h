@@ -10,14 +10,14 @@
 #import <Parse/Parse.h>
 
 
-@interface Person : NSObject <NSCopying>
+@interface Person : NSObject
 
 @property (nonatomic) NSMutableArray *assignmentsArray;
 @property (nonatomic) PFObject *user;
 @property (nonatomic) NSString *parseObjectID;
 @property (nonatomic) NSString *offlineName;
 
-@property (nonatomic) NSUInteger scheduleIndex; //for algorithm
+@property (nonatomic) NSUInteger scheduleIndex; //for algorithm. don't need it here
 
 -(instancetype)initWithUser:(PFObject *)user assignmentsArray:(NSMutableArray *)assignments scheduleIndex:(NSUInteger)index parseObjectID:(NSString *)parseObjectID;
 -(instancetype)initWithUser:(PFObject *)user numIntervals: (NSUInteger)numIntervals;

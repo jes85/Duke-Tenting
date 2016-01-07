@@ -12,7 +12,7 @@
 #import "AlgorithmInterval.h"
 #import "AlgorithmPerson.h"
 
-static const int kES = 1;
+static const int kES = 0; //maybe change to variable that changed with numSwapAttempts
 static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 
 @interface AlgorithmSchedule ()
@@ -125,7 +125,8 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 
 -(BOOL)setup
 {
-    [self convertAllIntervalsToNight:YES];
+    //For testing
+    //[self convertAllIntervalsToNight:NO];
     
     //[self initializePersonScheduleIndexes];
     [self createDayAndNightIntervalArrays];
@@ -169,7 +170,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     [self calculateIdealNumIntervalsEachPersonIsAssigned];
     
     [self generateNightAssignments];
-    //[self generateDayAssignments];
+    [self generateDayAssignments];
     
     return [self arrayOfAssignmentsArrays];
     
@@ -228,6 +229,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     [self assignDayIntervals];
     
     // Swap
+    //TODO: implement day swapping and swap solos
     //[self swapDayIntervalsUntilEqualityIsSufficient];
 
     
@@ -252,6 +254,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     
 }
 
+// Make sure it differentiates day and night appropriately
 -(NSMutableArray *)generateIdealSlotsArrayNight:(BOOL)night
 {
     NSUInteger numIntervals;
@@ -274,8 +277,14 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         changed = false;
         for(int p = 0; p<self.numPeople;p++){
             
-            if([idealSlotsArray[p] isEqual:@-1] && [numIntervalsEachPersonIsAvailable[p] intValue] <= idealSlotsPerRemainingPerson ){
+            if([idealSlotsArray[p] isEqual:@-1] && [numIntervalsEachPersonIsAvailable[p] intValue] < idealSlotsPerRemainingPerson ){ //TODO: it was <= before. is it not supposed to be < ?
                 
+                AlgorithmPerson *person = self.personsArray[p];
+                if(night){
+                    person.numNightIntervalsAvailableIsLessThanIdeal = YES; //make sure default is initialzed to NO
+                }else{
+                    person.numDayIntervalsAvailableIsLessThanIdeal = YES;
+                }
                 idealSlotsArray[p] = numIntervalsEachPersonIsAvailable[p];
                 numPeopleLeft--;
                 numSlotsLeft -= [idealSlotsArray[p] intValue];
@@ -288,7 +297,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
             idealSlotsPerRemainingPerson = numSlotsLeft/(numPeopleLeft);
         }
     }
-    return [self fillRemainingPersonsInIdealSlotsArray:idealSlotsArray WithValue:idealSlotsPerRemainingPerson];
+    return [self fillRemainingPersonsInIdealSlotsArray:idealSlotsArray WithValue:idealSlotsPerRemainingPerson night:night];
 }
 -(NSMutableArray *)initializeIdealSlotsArray
 {
@@ -299,11 +308,17 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return array;
     
 }
--(NSMutableArray *)fillRemainingPersonsInIdealSlotsArray:(NSMutableArray *)idealSlotsArray WithValue:(double)idealSlotsPerRemainingPerson
+-(NSMutableArray *)fillRemainingPersonsInIdealSlotsArray:(NSMutableArray *)idealSlotsArray WithValue:(double)idealSlotsPerRemainingPerson night:(BOOL)night
 {
-    for(int i = 0; i<idealSlotsArray.count;i++) {
-        if([idealSlotsArray[i] isEqual:@-1]){
-            idealSlotsArray[i]=[NSNumber numberWithDouble:idealSlotsPerRemainingPerson];
+    for(int p = 0; p <idealSlotsArray.count;p++) {
+        if([idealSlotsArray[p] isEqual:@-1]){
+            idealSlotsArray[p]=[NSNumber numberWithDouble:idealSlotsPerRemainingPerson];
+            AlgorithmPerson *person = self.personsArray[p];
+            if(night){
+                person.numNightIntervalsAvailableIsLessThanIdeal = NO;
+            }else{
+                person.numDayIntervalsAvailableIsLessThanIdeal = NO;
+            }
         }
     }
     return idealSlotsArray;
@@ -322,7 +337,6 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 -(void)assignNightIntervals
 {
     int assignCountInThisInterval;
-    NSMutableArray *personsQueue = [[NSMutableArray alloc]initWithArray:self.personsArray copyItems:YES];
     
     for(int i = 0; i<self.nightIntervalsArray.count;i++){
         AlgorithmInterval *interval = self.nightIntervalsArray[i];
@@ -339,26 +353,151 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
             
         }
     }
+    
+    //OR just use persons array and sort by schedule index here (or by createdAt).
 }
 
 // Change to to initial assignments in a better way
 -(void)assignDayIntervals
 {
     int assignCountInThisInterval;
+    NSMutableArray *personsQueue = [[NSMutableArray alloc]initWithArray:self.personsArray copyItems:NO];//just different ordered pointer? make sure thats the case
+
     for(int d = 0; d<self.arrayOfDayIntervalsArrays.count;d++){
         NSMutableArray *dayDIntervals = self.arrayOfDayIntervalsArrays[d];
         for(int i = 0; i<dayDIntervals.count; i++){
+            BOOL lastIntervalOfDay = (i == dayDIntervals.count-1);
             AlgorithmInterval *interval = dayDIntervals[i];
             assignCountInThisInterval = 0;
+            
+            
+            //Inefficient but easier to understand
+            for(AlgorithmPerson *p in personsQueue){
+                p.currentOverallIntervalIndexForInitialDayAssignments = interval.overallIndex;
+
+            }
+            //Change to selector for readability and reuseability
+            personsQueue = [[NSMutableArray alloc]initWithArray:[personsQueue sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+                
+                /*
+                 TODO: edit ranking to be a combo of these
+                 rank by
+                 a: if one is available for less than ideal, automatically assign them so that they are assigned to all of their available intervals
+                 1. Most consecutive previous intervals assigned (if less than 6 hours)
+                 2. Least current assigned intervals if consecutive future intervals is at least 2
+                 3. Most consecutive future intervals available (up to 6)
+                 4. Least current assigned intervals
+                 5. Least future available intervals
+                 6. Least total available intervals
+                 
+                 
+                 //Ascending means object 1 comes first?
+                 */
+                AlgorithmPerson *person1 = (AlgorithmPerson *)obj1;
+                AlgorithmPerson *person2 = (AlgorithmPerson *)obj2;
+                
+                //If one of them is not available, return the other one
+                if(person1.isAvailableInCurrentOverallInterval && !person2.isAvailableInCurrentOverallInterval){
+                    return (NSComparisonResult)NSOrderedAscending;
+                }
+                if(!person1.isAvailableInCurrentOverallInterval && person2.isAvailableInCurrentOverallInterval){
+                    return (NSComparisonResult)NSOrderedDescending;
+
+                }
+                
+                // If a person is available for less than the ideal number, assign interval to that person
+                if(person1.numDayIntervalsAvailableIsLessThanIdeal && !person2.numDayIntervalsAvailableIsLessThanIdeal) {
+                    return (NSComparisonResult)NSOrderedAscending;
+                }else if(!person1.numDayIntervalsAvailableIsLessThanIdeal && person2.numDayIntervalsAvailableIsLessThanIdeal){
+                    return (NSComparisonResult)NSOrderedDescending;
+                }else{
+                    // Both are available for at least ideal number
+                    
+                    
+                    // Sort by 1. consecutive previous intervals assigned
+                    if(person1.consecutivePreviousDayIntervalsAssigned != person2.consecutivePreviousDayIntervalsAssigned){
+                        // If one of them has a streak of more than 6, return other one
+                        if(person1.consecutivePreviousDayIntervalsAssigned >=6){
+                            return (NSComparisonResult)NSOrderedDescending;
+                        }
+                        if(person2.consecutivePreviousDayIntervalsAssigned >=6){
+                            return (NSComparisonResult)NSOrderedAscending;
+                        }
+                        
+                        // Otherwise sort by most consecutive previous intervals assigned
+                        if(person1.consecutivePreviousDayIntervalsAssigned > person2.consecutivePreviousDayIntervalsAssigned){
+                            return (NSComparisonResult)NSOrderedAscending;
+                        }else{
+                            return (NSComparisonResult)NSOrderedDescending;
+                        }
+                    }else{
+                        //Sort by 2. Least current assigned intervals if consecutive future intervals is at least 2
+                        if(person1.numDayIntervalsAssigned < person2.numDayIntervalsAssigned && person1.consecutiveFutureDayIntervalsAvailable >= 2){
+                            
+                            return (NSComparisonResult)NSOrderedAscending;
+
+                        }
+                        if(person1.numDayIntervalsAssigned > person2.numDayIntervalsAssigned && person2.consecutiveFutureDayIntervalsAvailable >= 2){
+                            
+                            return (NSComparisonResult)NSOrderedDescending;
+
+                        }
+                        
+                        //TODO: consecutive future intervals is not currently implemented
+                        //Sort By 3. Most consecutive future intervals available (up to 6)
+                        if(person1.consecutiveFutureDayIntervalsAvailable > person2.consecutiveFutureDayIntervalsAvailable && person2.consecutiveFutureDayIntervalsAvailable < 6){
+                            
+                            return (NSComparisonResult)NSOrderedAscending;
+
+                        }
+                        else if(person1.consecutiveFutureDayIntervalsAvailable < person2.consecutiveFutureDayIntervalsAvailable && person1.consecutiveFutureDayIntervalsAvailable < 6){
+                            
+                            return (NSComparisonResult)NSOrderedDescending;
+
+                        }
+                        
+                        //Sory by 4. Least current assigned intervals
+                        if(person1.numDayIntervalsAssigned < person2.numDayIntervalsAssigned){
+                            return (NSComparisonResult)NSOrderedAscending;
+
+                        }else if (person1.numDayIntervalsAssigned > person2.numDayIntervalsAssigned){
+                            return (NSComparisonResult)NSOrderedDescending;
+
+                        }else{
+                            //Same # current assigned intervals
+                            
+                            return (NSComparisonResult)NSOrderedSame;
+                            //TODO:Sort by 5. Least future available intervals
+                            //Sort by 6. Least total available intervals
+
+                            
+                            
+
+                        }
+
+                        
+                    }
+                    
+                }
+                
+            }]];
+
             //for now, just assign intervals to first people available and then swap
             for(int p = 0; p<self.numPeople;p++){
-                AlgorithmPerson *person = self.personsArray[p];
-                if([person.assignmentsArray[interval.overallIndex] isEqual:@1]){
+                AlgorithmPerson *person = personsQueue[p];
+                if(assignCountInThisInterval<interval.requiredPersons && [person.assignmentsArray[interval.overallIndex] isEqual:@1]){
                     person.assignmentsArray[interval.overallIndex] = @2;
                     person.numDayIntervalsAssigned++;
+                    person.consecutivePreviousDayIntervalsAssigned +=1;
                     assignCountInThisInterval++;
+                }else{
+                    person.consecutivePreviousDayIntervalsAssigned = 0;
                 }
-                if(assignCountInThisInterval==interval.requiredPersons) break;
+                
+                //If end of day, set all consecutives to 0
+                if(lastIntervalOfDay){
+                    person.consecutivePreviousDayIntervalsAssigned = 0;
+                }
                 
             }
         }
@@ -382,12 +521,10 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     
     personGainingInterval.assignmentsArray[interval.overallIndex] = @2;
     personLosingInterval.assignmentsArray[interval.overallIndex] = @1;
-   
-    self.numDayIntervalsEachPersonIsAssigned[personGainingInterval.scheduleIndex] = [NSNumber numberWithInteger:[self.numDayIntervalsEachPersonIsAssigned[personGainingInterval.scheduleIndex] integerValue]+1];
-        
-    self.numDayIntervalsEachPersonIsAssigned[personLosingInterval.scheduleIndex ] = [NSNumber numberWithInteger:[self.numDayIntervalsEachPersonIsAssigned[personLosingInterval.scheduleIndex] integerValue] - 1];
-        
     
+    personGainingInterval.numDayIntervalsAssigned ++;
+    personLosingInterval.numDayIntervalsAssigned --;
+   
     self.swapCountForCurrentPersonAttempt++;
 }
 
@@ -594,8 +731,8 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 -(void)calculateNumNightIntervalsEachPersonIsAvailableAndResetAssignments:(BOOL)reset{
     for(int p = 0;p<self.numPeople;p++){
         int availSums = 0;
+        AlgorithmPerson *person = self.personsArray[p];
         for(int n = 0; n<self.nightIntervalsArray.count;n++){
-            AlgorithmPerson *person = self.personsArray[p];
             AlgorithmInterval *interval = self.nightIntervalsArray[n];
             NSUInteger overallIndex = interval.overallIndex;
             if ([person.assignmentsArray[overallIndex] integerValue]== 1 || [person.assignmentsArray[overallIndex] integerValue] == 2){
