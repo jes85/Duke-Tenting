@@ -10,6 +10,7 @@
 #import "Interval.h"
 @interface AlgorithmInterval : NSObject
 
+@property (nonatomic) NSUInteger numPersonsAvailable;
 @property (nonatomic) NSUInteger requiredPersons; //for UNC //make UNCInterval subclass
 @property (nonatomic) BOOL night;
 @property (nonatomic) NSUInteger overallIndex; //only for Algorithm

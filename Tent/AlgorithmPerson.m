@@ -11,21 +11,6 @@
 
 @interface AlgorithmPerson()
 
-// Initial Assignment Sort Descriptors
-@property (nonatomic) NSUInteger consecutivePreviousIntervalsAssigned;
-@property (nonatomic) NSUInteger consecutiveFutureIntervalsAvailable;
-@property (nonatomic) NSUInteger totalNumIntervalsAssigned;
-@property (nonatomic) BOOL lessThanIdealSlotsAvailable;
-
-
-@property (nonatomic) float ideaNumlNightIntervalsAssigned;
-@property (nonatomic) float idealNumDayIntervalsAssigned;
-
-@property (nonatomic) NSUInteger numNightIntervalsAssigned;
-@property (nonatomic) NSUInteger numDayIntervalsAssigned;
-
-@property (nonatomic) NSUInteger currentOverallIntervalIndex;
-
 
 @end
 

@@ -79,6 +79,7 @@
 
 -(void)generateAssignments
 {
+    //TODO: sort persons by createdAt first just in case
     AlgorithmSchedule *algorithmSchedule = [[AlgorithmSchedule alloc]initWithSchedule:self.schedule]; //might need a copy
     if([algorithmSchedule checkForError]){
         //deal with error
@@ -87,24 +88,23 @@
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-    //NSMutableArray *assignments = [algorithmSchedule generateAssignments];
-    //[self updateScheduleWithAlgorithmScheduleAssignments:assignments];
-    NSMutableArray *newPersonsArray = [algorithmSchedule generateAssignments];
-    [self updateParseScheduleAfterGeneratingAssignmentsWithNewPersonsArray:newPersonsArray];
+    NSMutableArray *assignments = [algorithmSchedule generateAssignments];
+    if(assignments.count != self.schedule.personsArray.count) return; //error
+    [self updateParseScheduleAfterGeneratingAssignmentsWithArrayOfNewPersonAssignmentsArrays:assignments];
+    //NSMutableArray *newPersonsArray = [algorithmSchedule generateAssignments];
+    //[self updateParseScheduleAfterGeneratingAssignmentsWithNewPersonsArray:newPersonsArray];
 }
 
--(void)updateParseScheduleAfterGeneratingAssignmentsWithNewPersonsArray:(NSMutableArray *)newPersonsArray
+-(void)updateParseScheduleAfterGeneratingAssignmentsWithArrayOfNewPersonAssignmentsArrays:(NSMutableArray *)arrayOfNewPersonAssignmentsArrays
 {
     //update Parse Schedule
     //update persons arrays and assignmentsGenerated
     //update local schedule
     //update persons arrays and assignmentsGenerated
     
-    NSMutableArray *objectIds = [[NSMutableArray alloc]initWithCapacity:newPersonsArray.count];
-    NSMutableArray *newAssignmentsArrays = [[NSMutableArray alloc]initWithCapacity:newPersonsArray.count];
-    for(Person *person in newPersonsArray){
+    NSMutableArray *objectIds = [[NSMutableArray alloc]initWithCapacity:self.schedule.personsArray.count];
+    for(Person *person in self.schedule.personsArray){
         [objectIds addObject:person.parseObjectID];
-        [newAssignmentsArrays addObject:person.assignmentsArray];
     }
     PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
     
@@ -114,7 +114,7 @@
         if(!error){
             for(int i = 0; i<objects.count; i++){
                 PFObject *parsePerson = objects[i];
-                parsePerson[kPersonPropertyAssignmentsArray] = newAssignmentsArrays[i];//or newPersonsArray[i].assignmentsArray
+                parsePerson[kPersonPropertyAssignmentsArray] = arrayOfNewPersonAssignmentsArrays[i];
                 //TODO: make sure ith index is conisistent. might need to update Person indices on local after removing someone
             }
             [PFObject saveAllInBackground:objects block:^(BOOL succeeded, NSError *error) {
@@ -127,7 +127,7 @@
                                 //update local schedule and notify other vcs
                                 self.schedule.assignmentsGenerated = YES;
                                 
-                                [self updateLocalSchedulesAfterChangingPersonsArraysWithNewPersonsArray:newPersonsArray];
+                                [self updateLocalSchedulesAfterChangingPersonsArraysWithNewAssignmentsArrays:arrayOfNewPersonAssignmentsArrays];
                                 
                                 
                                 //Alert success message
@@ -144,87 +144,16 @@
     }];
     
 }
--(void)updateLocalSchedulesAfterChangingPersonsArraysWithNewPersonsArray:(NSMutableArray *)newPersonsArray
-{
-    self.schedule.personsArray = newPersonsArray;
-    [self.schedule createIntervalDataArrays]; //ineffient but works for now
-    
-    
-    //Notify other vcs of schedule change
-    NSDictionary *userInfo = @{kUserInfoLocalScheduleKey: self.schedule, kUserInfoLocalScheduleChangedPropertiesKey: @[kUserInfoLocalSchedulePropertyPersonsArray]};
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNameScheduleChanged object:self userInfo:userInfo];
-    
-    
-}
-/*
--(AlgorithmSchedule *)createAlgorithmScheduleFromScheduleObject
-{
-    NSMutableArray *assignmentsSchedule = [[NSMutableArray alloc]init];
-    for(Person *person in self.schedule.personsArray){
-        [assignmentsSchedule addObject:person.assignmentsArray];
-    }
-    AlgorithmSchedule *algorithmSchedule = [[AlgorithmSchedule alloc]initWithStartDate:self.schedule.startDate endDate:self.schedule.endDate intervalLengthInMinutes:self.schedule.intervalLengthInMinutes assignmentsSchedule:assignmentsSchedule numIntervals:self.schedule.numIntervals];
-    return algorithmSchedule;
-}
- */
-/*
--(void)updateScheduleWithAlgorithmScheduleAssignments:(NSMutableArray *)assignments
-{
-    //update Parse Schedule
-        //update persons arrays and assignmentsGenerated
-    //update local schedule
-        //update persons arrays and assignmentsGenerated
-    
-    NSMutableArray *objectIds = [[NSMutableArray alloc]initWithCapacity:self.schedule.personsArray.count];
-    for(Person *person in self.schedule.personsArray){
-        [objectIds addObject:person.parseObjectID];
-    }
-    PFQuery *query = [PFQuery queryWithClassName:kPersonClassName];
-    
-    [query whereKey:@"objectId" containedIn:objectIds];
-    [query orderByAscending:kParsePropertyCreatedAt];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if(!error){
-            for(int i = 0; i<objects.count; i++){
-                PFObject *parsePerson = objects[i];
-                parsePerson[kPersonPropertyAssignmentsArray] = assignments[i];//assignments[[parsePerson[kPersonPropertyIndex] integerValue]];
-                //TODO: make sure ith index is conisistent. might need to update Person indices on local after removing someone
-            }
-            [PFObject saveAllInBackground:objects block:^(BOOL succeeded, NSError *error) {
-                if(succeeded){
-                    PFQuery *scheduleQuery = [PFQuery queryWithClassName:kGroupScheduleClassName];
-                    [scheduleQuery getObjectInBackgroundWithId:self.schedule.parseObjectID block:^(PFObject *object, NSError *error) {
-                        object[kGroupSchedulePropertyAssignmentsGenerated] = [NSNumber numberWithBool:YES];
-                        [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                            if(succeeded){
-                                //update local schedule and notify other vcs
-                                self.schedule.assignmentsGenerated = YES;
-                                [self updateLocalSchedulesAfterChangingPersonsArraysWithNewAssignmentsArrays:assignments];
-                                
-                                
-                                //Alert success message
-                                [self alertSuccessWithMessage:@"Assignments were successfully generated."];
-                                
-                                
-                            }
-                        }];
-                    }];
 
-                }
-            }];
-        }
-    }];
-    
-}
- */
- -(void)updateLocalSchedulesAfterChangingPersonsArraysWithNewAssignmentsArrays:(NSMutableArray *)newAssignmentsArrays
+-(void)updateLocalSchedulesAfterChangingPersonsArraysWithNewAssignmentsArrays:(NSMutableArray *)newAssignmentsArrays
  {
      for(int i = 0; i<self.schedule.personsArray.count;i++){
-     Person *person = self.schedule.personsArray[i];
-     person.assignmentsArray = newAssignmentsArrays[i]; //assignments[[parsePerson[kPersonPropertyIndex] integerValue]];
-     //TODO: make sure ith index is conisistent. might need to update Person indices on local after removing someone
+         Person *person = self.schedule.personsArray[i];
+         person.assignmentsArray = newAssignmentsArrays[i]; //assignments[[parsePerson[kPersonPropertyIndex] integerValue]];
+         //TODO: make sure ith index is conisistent. might need to update Person indices on local after removing someone
      
      }
+     
      [self.schedule createIntervalDataArrays]; //ineffient but works for now
      
      

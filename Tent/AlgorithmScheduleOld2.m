@@ -174,7 +174,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     BOOL error = false;
     for(int i = 0; i<self.numTotalIntervals;i++){
         AlgorithmInterval *interval = self.intervalDataByOverallRow[i];
-        if(interval.availablePersons.count<interval.requiredPersons){
+        if(interval.numPersonsAvailable<interval.requiredPersons){
             //NSLog(@"Not enough people in interval %d", i);
             error = true;
         }

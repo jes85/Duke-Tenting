@@ -14,6 +14,7 @@
 {
     self = [super init];
     if(self){
+        self.numPersonsAvailable = interval.availablePersons.count;
         self.requiredPersons = interval.requiredPersons;
         self.night = interval.night;
         self.overallIndex = overallIndex;

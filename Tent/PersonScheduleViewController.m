@@ -399,6 +399,9 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
                         //notify other vcs
                         NSDictionary *userInfo = @{kUserInfoLocalScheduleKey:self.schedule, kUserInfoLocalScheduleChangedPropertiesKey:@[kUserInfoLocalSchedulePropertyPersonsArray]};
                         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNameScheduleChanged object:self userInfo:userInfo];
+                    }else{
+                        
+                        NSLog(@"Save Failed");
                     }
                 }];
                 
