@@ -140,12 +140,8 @@
     NSDate *intervalEndDate;
     BOOL night;
     //Night Interval
-    //if(intervalStartDateComponents.hour == nightStartHour & intervalStartDateComponents.minute == nightStartMinute){//11:00 pm - 7:00 AM
-    if([intervalStartDate timeIntervalSinceDate: nightStartDate] == 0){
-        //NSLog(@"Start Date: %@", [Constants formatDateAndTime:intervalStartDate withDateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterLongStyle] );
-        //NSDate *intervalEndDate = [NSDate dateWithTimeInterval:60*60*8 sinceDate:intervalStartDate]; // 8 hours
-        //NSLog(@"End Date: %@", [Constants formatDateAndTime:nightEndDate withDateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterLongStyle] );
-        
+    // 11:00 pm - 7:00 AM or 2:30 AM - 7 AM or 2:30 AM - 10 AM
+    if([intervalStartDate timeIntervalSinceDate: nightStartDate] >= 0 && [intervalStartDate timeIntervalSinceDate:nightEndDate] < 0){
         intervalEndDate = nightEndDate;
         night = YES;
     }
@@ -241,11 +237,8 @@
     NSDate *intervalEndDate;
     BOOL night;
     //Night Interval
-    //if(intervalStartDateComponents.hour == nightStartHour & intervalStartDateComponents.minute == nightStartMinute){//11:00 pm - 7:00 AM
-    if([intervalStartDate timeIntervalSinceDate: nightStartDate] == 0){
-        //NSLog(@"Start Date: %@", [Constants formatDateAndTime:intervalStartDate withDateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterLongStyle] );
-        //NSDate *intervalEndDate = [NSDate dateWithTimeInterval:60*60*8 sinceDate:intervalStartDate]; // 8 hours
-        //NSLog(@"End Date: %@", [Constants formatDateAndTime:nightEndDate withDateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterLongStyle] );
+    // 11:00 pm - 7:00 AM or 2:30 AM - 7 AM or 2:30 AM - 10 AM
+    if([intervalStartDate timeIntervalSinceDate: nightStartDate] >= 0 && [intervalStartDate timeIntervalSinceDate:nightEndDate] < 0){
         
         intervalEndDate = nightEndDate;
         night = YES;

@@ -71,6 +71,11 @@
 		3FDE355D19809CC400CE47D8 /* PickPersonTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE355C19809CC400CE47D8 /* PickPersonTableViewController.m */; };
 		3FDE35631980A5DA00CE47D8 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE35621980A5DA00CE47D8 /* Person.m */; };
 		3FDE35661980A6DA00CE47D8 /* Schedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE35651980A6DA00CE47D8 /* Schedule.m */; };
+		3FE810991C3DB76C002F4910 /* AlgorithmScheduleOld.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE810981C3DB76C002F4910 /* AlgorithmScheduleOld.m */; };
+		3FE8109C1C3DBEE1002F4910 /* UNCAlgorithmSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE8109B1C3DBEE1002F4910 /* UNCAlgorithmSchedule.m */; };
+		3FE8109F1C3E3513002F4910 /* AlgorithmPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE8109E1C3E3513002F4910 /* AlgorithmPerson.m */; };
+		3FE810A21C3E3526002F4910 /* AlgorithmInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE810A11C3E3526002F4910 /* AlgorithmInterval.m */; };
+		3FE810A51C3E3EC5002F4910 /* AlgorithmScheduleOld2.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE810A41C3E3EC5002F4910 /* AlgorithmScheduleOld2.m */; };
 		3FE8449119AFB05000BAFB78 /* HomeGamesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE8449019AFB05000BAFB78 /* HomeGamesTableViewCell.m */; };
 		3FF4D30F19B4F24500D09EC6 /* ScheduleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF4D30E19B4F24500D09EC6 /* ScheduleTableViewCell.m */; };
 		3FF70F911C3522300042C7D6 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF70F901C3522300042C7D6 /* Parse.framework */; };
@@ -191,6 +196,16 @@
 		3FDE35621980A5DA00CE47D8 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Person.m; path = Model/Person.m; sourceTree = "<group>"; };
 		3FDE35641980A6DA00CE47D8 /* Schedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Schedule.h; path = Model/Schedule.h; sourceTree = "<group>"; };
 		3FDE35651980A6DA00CE47D8 /* Schedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Schedule.m; path = Model/Schedule.m; sourceTree = "<group>"; };
+		3FE810971C3DB76C002F4910 /* AlgorithmScheduleOld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmScheduleOld.h; sourceTree = "<group>"; };
+		3FE810981C3DB76C002F4910 /* AlgorithmScheduleOld.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlgorithmScheduleOld.m; sourceTree = "<group>"; };
+		3FE8109A1C3DBEE1002F4910 /* UNCAlgorithmSchedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNCAlgorithmSchedule.h; sourceTree = "<group>"; };
+		3FE8109B1C3DBEE1002F4910 /* UNCAlgorithmSchedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNCAlgorithmSchedule.m; sourceTree = "<group>"; };
+		3FE8109D1C3E3513002F4910 /* AlgorithmPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmPerson.h; sourceTree = "<group>"; };
+		3FE8109E1C3E3513002F4910 /* AlgorithmPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlgorithmPerson.m; sourceTree = "<group>"; };
+		3FE810A01C3E3526002F4910 /* AlgorithmInterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmInterval.h; sourceTree = "<group>"; };
+		3FE810A11C3E3526002F4910 /* AlgorithmInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlgorithmInterval.m; sourceTree = "<group>"; };
+		3FE810A31C3E3EC5002F4910 /* AlgorithmScheduleOld2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmScheduleOld2.h; sourceTree = "<group>"; };
+		3FE810A41C3E3EC5002F4910 /* AlgorithmScheduleOld2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlgorithmScheduleOld2.m; sourceTree = "<group>"; };
 		3FE8448F19AFB05000BAFB78 /* HomeGamesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeGamesTableViewCell.h; sourceTree = "<group>"; };
 		3FE8449019AFB05000BAFB78 /* HomeGamesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeGamesTableViewCell.m; sourceTree = "<group>"; };
 		3FF4D30D19B4F24500D09EC6 /* ScheduleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScheduleTableViewCell.h; path = ../ScheduleTableViewCell.h; sourceTree = "<group>"; };
@@ -435,6 +450,16 @@
 				3FDE35651980A6DA00CE47D8 /* Schedule.m */,
 				3F3B0C351BFBEB2A0056E378 /* AlgorithmSchedule.h */,
 				3F3B0C361BFBEB2A0056E378 /* AlgorithmSchedule.m */,
+				3FE810A31C3E3EC5002F4910 /* AlgorithmScheduleOld2.h */,
+				3FE810A41C3E3EC5002F4910 /* AlgorithmScheduleOld2.m */,
+				3FE8109D1C3E3513002F4910 /* AlgorithmPerson.h */,
+				3FE8109E1C3E3513002F4910 /* AlgorithmPerson.m */,
+				3FE810A01C3E3526002F4910 /* AlgorithmInterval.h */,
+				3FE810A11C3E3526002F4910 /* AlgorithmInterval.m */,
+				3FE8109A1C3DBEE1002F4910 /* UNCAlgorithmSchedule.h */,
+				3FE8109B1C3DBEE1002F4910 /* UNCAlgorithmSchedule.m */,
+				3FE810971C3DB76C002F4910 /* AlgorithmScheduleOld.h */,
+				3FE810981C3DB76C002F4910 /* AlgorithmScheduleOld.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -581,6 +606,7 @@
 				3F3B0C371BFBEB2A0056E378 /* AlgorithmSchedule.m in Sources */,
 				3FC432BC19A0583700B560F1 /* MyPFSignUpViewController.m in Sources */,
 				3F807A2B1C3C965D00849EDF /* OtherPersonScheduleViewController.m in Sources */,
+				3FE8109F1C3E3513002F4910 /* AlgorithmPerson.m in Sources */,
 				3F0A86681C2FA11900CA0BA1 /* StatsViewController.m in Sources */,
 				3FF75E9119985BBB005D7857 /* MySchedulesTableViewController.m in Sources */,
 				3F71811F199D117200737662 /* DefaultSettingsViewController.m in Sources */,
@@ -589,6 +615,7 @@
 				3F7527F81BD1749000748ED8 /* MySettingsTableViewCell.m in Sources */,
 				3F7527F51BD1730000748ED8 /* MySettingsViewController.m in Sources */,
 				3F616051198DA61E006EF048 /* IntervalTableViewCell.m in Sources */,
+				3FE810991C3DB76C002F4910 /* AlgorithmScheduleOld.m in Sources */,
 				3FC432B919A0581A00B560F1 /* MyPFLogInViewController.m in Sources */,
 				3FFC43E21BCC60E4003333E7 /* SortGroupsViewController.m in Sources */,
 				3FD5CFBE1C2CB79500A28630 /* AdminToolsViewController.m in Sources */,
@@ -596,6 +623,8 @@
 				3FA97F9E1C2E74A8000B5920 /* MeScheduleViewController.m in Sources */,
 				3F1304351BD2EF0900243C29 /* MySchedulesTableViewCell.m in Sources */,
 				3FA6D5141965E7A50043087B /* main.m in Sources */,
+				3FE810A21C3E3526002F4910 /* AlgorithmInterval.m in Sources */,
+				3FE8109C1C3DBEE1002F4910 /* UNCAlgorithmSchedule.m in Sources */,
 				3FB9388D1BC713CD00834159 /* MyScheduleContainerViewController.m in Sources */,
 				3FDE35661980A6DA00CE47D8 /* Schedule.m in Sources */,
 				3F9B3E081989DEAA0041EFCC /* IntervalsTableViewController.m in Sources */,
@@ -608,6 +637,7 @@
 				3F1107E419903FDB0063ED9B /* Interval.m in Sources */,
 				3FA6D5181965E7A50043087B /* ScheduleAppDelegate.m in Sources */,
 				3F8A32F619AEC1CC00C63E65 /* HomeGame.m in Sources */,
+				3FE810A51C3E3EC5002F4910 /* AlgorithmScheduleOld2.m in Sources */,
 				3FF4D30F19B4F24500D09EC6 /* ScheduleTableViewCell.m in Sources */,
 				3FDE355D19809CC400CE47D8 /* PickPersonTableViewController.m in Sources */,
 				3F87220E19A2627A005F12DD /* AlgorithmTest.m in Sources */,

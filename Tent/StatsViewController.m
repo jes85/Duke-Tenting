@@ -19,7 +19,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    // Do any additional setup after loading the view.
+
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
     self.navigationItem.title = self.person.user ? [self.person.user objectForKey:kUserPropertyFullName] : self.person.offlineName;
@@ -31,7 +32,9 @@
     self.minutesAvailableLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)minutesAvailable];
     self.minutesAssignedLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)minutesAssigned];
     
-    // Do any additional setup after loading the view.
+    
+    // Testing
+    [self calculateTotalNightAndDayIntervalsAvailableAndAssigned];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -67,6 +70,50 @@
     
     return @[[NSNumber numberWithUnsignedInteger:minutesAvailable], [NSNumber numberWithUnsignedInteger:minutesAssigned]];
 }
+
+// For testing
+-(void)calculateTotalNightAndDayIntervalsAvailableAndAssigned
+{
+    NSUInteger dayIntervalsAvailable = 0;
+    NSUInteger dayIntervalsAssigned = 0;
+
+    NSUInteger nightIntervalsAvailable = 0;
+    NSUInteger nightIntervalsAssigned = 0;
+    
+    ;
+    for(int i = 0; i <self.person.assignmentsArray.count; i++){
+        
+        NSUInteger intervalStatus = [self.person.assignmentsArray[i] unsignedIntegerValue];
+        if(intervalStatus != 0){
+            Interval *interval = self.schedule.intervalDataByOverallRow[i];
+            if(intervalStatus == 2){
+                if(interval.night){
+                    nightIntervalsAssigned++;
+                    nightIntervalsAvailable++;
+                }else{
+                    dayIntervalsAssigned++;
+                    dayIntervalsAvailable++;
+                }
+            }
+            else if(intervalStatus == 1){
+                if(interval.night){
+                    nightIntervalsAvailable++;
+
+                }else{
+                    dayIntervalsAvailable++;
+
+                }
+                
+            }
+            
+        }
+    }
+    
+    //NSLog(@"Day Intervals Assigned: %d \nDay Intervals Available: %d \nNight Intervals Assigned %d \nNight Intervals Available: %d \nTotal Intervals Assigned:%d \nTotal Intervals Available: %d", dayIntervalsAssigned, dayIntervalsAvailable, nightIntervalsAssigned, nightIntervalsAvailable,dayIntervalsAssigned+nightIntervalsAssigned, dayIntervalsAvailable+nightIntervalsAvailable );
+    NSLog(@"Total Intervals Assigned:%d \nTotal Intervals Available: %d", dayIntervalsAssigned+nightIntervalsAssigned, dayIntervalsAvailable+nightIntervalsAvailable );
+
+}
+
 /*
 #pragma mark - Navigation
 

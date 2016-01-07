@@ -1,5 +1,5 @@
 //
-//  AlgorithmSchedule.h
+//  AlgorithmScheduleOld2.h
 //  Tent
 //
 //  Created by Jeremy on 11/17/15.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Schedule.h"
 
-@interface AlgorithmSchedule : NSObject
+@interface AlgorithmScheduleOld2 : NSObject
 
 -(instancetype)initWithSchedule:(Schedule *)schedule;
 
