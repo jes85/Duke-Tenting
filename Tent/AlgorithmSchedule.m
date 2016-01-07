@@ -229,10 +229,9 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     [self assignDayIntervals];
     
     // Swap
-    //TODO: implement day swapping and swap solos
-    //[self swapDayIntervalsUntilEqualityIsSufficient];
+    [self swapDayIntervalsUntilEqualityIsSufficient];
 
-    
+    //TODO: implement swap solos and check day swapping
     
     // Swap solos
     
@@ -562,7 +561,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
             while(self.swapCountForCurrentPersonAttempt > 0  && fabsf(person.idealNumDayIntervalsAssigned - person.numDayIntervalsAssigned) > kES){
                 self.swapCountForCurrentPersonAttempt = 0;
                 
-                [self attemptAllNightSwapsForPerson:person consecutiveParameter:1];
+                [self attemptAllDayIntervalSwapsForPerson:person consecutiveParameter:1];
             }
             
         }
@@ -584,6 +583,22 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         }
     }
 }
+-(void)attemptAllDayIntervalSwapsForPerson:(AlgorithmPerson *)person1 consecutiveParameter:(NSUInteger)consecutiveParameter
+{
+    for(int p2=0;p2<self.numPeople;p2++){
+        AlgorithmPerson *person2 = self.personsArray[p2];
+        if(person1.numDayIntervalsAssigned < person1.idealNumDayIntervalsAssigned && person2.numDayIntervalsAssigned > person2.idealNumDayIntervalsAssigned){
+            
+            [self swapDayIntervalsUsingConsecutiveParameter:consecutiveParameter assignIntervalsTo:person1 takeAwayFrom:person2];
+        }
+        else if(person1.numDayIntervalsAssigned > person1.idealNumDayIntervalsAssigned && person2.numDayIntervalsAssigned < person2.idealNumDayIntervalsAssigned){
+            
+            [self swapDayIntervalsUsingConsecutiveParameter:consecutiveParameter assignIntervalsTo:person2 takeAwayFrom:person1];
+        }
+    }
+    
+}
+
 
 -(void)swapNightsUsingConsecutiveParameter:(NSUInteger)consecutiveParameter assignIntervalsTo:(AlgorithmPerson *)personGainingIntervals takeAwayFrom:(AlgorithmPerson *)personLosingIntervals
 {
@@ -598,20 +613,44 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         // only swap from ends of consecutive assigned slots, and only swap if can swap minConsecInMinues
     }
 }
-
--(void)attemptAllDayIntervalSwapsForPerson:(AlgorithmPerson *)person1
+-(void)swapDayIntervalsUsingConsecutiveParameter:(NSUInteger)consecutiveParameter assignIntervalsTo:(AlgorithmPerson *)personGainingIntervals takeAwayFrom:(AlgorithmPerson *)personLosingIntervals
 {
-    for(int p2=0;p2<self.numPeople;p2++){
-        AlgorithmPerson *person2 = self.personsArray[p2];
-        if(person1.numDayIntervalsAssigned < person1.idealNumDayIntervalsAssigned && person2.numDayIntervalsAssigned >person2.idealNumDayIntervalsAssigned){
-            [self swapNightsFromBeginningIfPossibleAssignIntervalTo:person1 takeAwayFrom:person2];
-            [self swapNightsFromEndIfPossibleAssignIntervalTo:person1 takeAwayFrom:person2];
-        }
-        else if(person1.numDayIntervalsAssigned > person1.idealNumDayIntervalsAssigned && person2.numDayIntervalsAssigned < person1.idealNumDayIntervalsAssigned){
-            [self swapNightsFromBeginningIfPossibleAssignIntervalTo:person2 takeAwayFrom:person1];
-            [self swapNightsFromEndIfPossibleAssignIntervalTo:person2 takeAwayFrom:person1];
-        }
+    if(consecutiveParameter == 0){
+        //just care about equality
+        [self swapAnyDayIntervalsIfPossibleAssignIntervalTo:personGainingIntervals takeAwayFrom:personLosingIntervals];
+    }else if(consecutiveParameter == 1){
+        // only swap from ends of consecutive assigned slots
+        [self swapDayIntervalsFromBeginningIfPossibleAssignIntervalTo:personGainingIntervals takeAwayFrom:personLosingIntervals];
+        [self swapDayIntervalsFromEndIfPossibleAssignIntervalTo:personGainingIntervals takeAwayFrom:personLosingIntervals];
+    }else if (consecutiveParameter == 2){
+        // only swap from ends of consecutive assigned slots, and only swap if can swap minConsecInMinues
     }
+}
+
+
+-(void)swapAnyDayIntervalsIfPossibleAssignIntervalTo:(AlgorithmPerson *)personGainingInterval takeAwayFrom:(AlgorithmPerson *)personLosingInterval
+{
+    for(int d = 0; d<self.arrayOfDayIntervalsArrays.count;d++){
+        NSMutableArray *dayDIntervals = self.arrayOfDayIntervalsArrays[d];
+        for(int i = 0; i<dayDIntervals.count; i++){
+            AlgorithmInterval *interval = dayDIntervals[i];
+            
+            //changed condition to be less than ceil/floor int value of ideal slots array
+            if(personGainingInterval.numDayIntervalsAssigned >= ceil(personGainingInterval.idealNumDayIntervalsAssigned) || personLosingInterval.numDayIntervalsAssigned <= ceil(personLosingInterval.idealNumDayIntervalsAssigned)){
+                return;
+            }
+            
+            //if person1 is free but not assigned to this interval && person2 is assigned to this interval
+            if([personGainingInterval isAvailableButNotAssignedInIntervalOverallIndex:interval.overallIndex] && [personLosingInterval isAssignedInIntervalOverallIndex:interval.overallIndex]){
+                
+                //switch intervals
+                    [self swapSingleDayInterval:interval assignToPerson:personGainingInterval takeAwayFromPerson:personLosingInterval];
+            }
+        }
+        
+        
+    }
+
 }
 
 -(void)swapAnyNightIntervalsIfPossibleAssignIntervalTo:(AlgorithmPerson *)personGainingInterval takeAwayFrom:(AlgorithmPerson *)personLosingInterval
@@ -628,16 +667,17 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         if([personGainingInterval isAvailableButNotAssignedInIntervalOverallIndex:interval.overallIndex] && [personLosingInterval isAssignedInIntervalOverallIndex:interval.overallIndex]){
             
             //switch intervals
-                [self swapSingleNightInterval:interval assignToPerson:personGainingInterval takeAwayFromPerson:personLosingInterval];
+            [self swapSingleNightInterval:interval assignToPerson:personGainingInterval takeAwayFromPerson:personLosingInterval];
         }
         
         
     }
-
+    
 }
 
 -(void)swapNightsFromBeginningIfPossibleAssignIntervalTo:(AlgorithmPerson *)personGainingInterval takeAwayFrom:(AlgorithmPerson *)personLosingInterval
 {
+    
     for(int i = 0;i<self.nightIntervalsArray.count;i++){ // shouldn't it just by i < self.nightIntervalsArray.count? instead of .count - 1
         AlgorithmInterval *interval = self.nightIntervalsArray[i];
         AlgorithmInterval *previousNightInterval = (i - 1) >= 0 ? self.nightIntervalsArray[i-1] : nil;
@@ -696,11 +736,66 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 
 -(void)swapDayIntervalsFromBeginningIfPossibleAssignIntervalTo:(AlgorithmPerson *)personGainingInterval takeAwayFrom:(AlgorithmPerson *)personLosingInterval
 {
+    // Only count consecutive if its in the same day
     
+    for(int d = 0; d<self.arrayOfDayIntervalsArrays.count;d++){
+        NSMutableArray *dayDIntervals = self.arrayOfDayIntervalsArrays[d];
+        for(int i = 0; i<dayDIntervals.count; i++){
+            AlgorithmInterval *interval = dayDIntervals[i];
+            AlgorithmInterval *previousDayInterval = (i - 1) >= 0 ? dayDIntervals[i-1] : nil;
+            
+            
+            //changed condition to be less than ceil/floor int value of ideal slots array
+            if(personGainingInterval.numDayIntervalsAssigned >= ceil(personGainingInterval.idealNumDayIntervalsAssigned) || personLosingInterval.numDayIntervalsAssigned <= ceil(personLosingInterval.idealNumDayIntervalsAssigned)){
+                return;
+            }
+            
+            //if person1 is free but not assigned to this interval && person2 is assigned to this interval
+            if([personGainingInterval isAvailableButNotAssignedInIntervalOverallIndex:interval.overallIndex] && [personLosingInterval isAssignedInIntervalOverallIndex:interval.overallIndex]){
+                
+                //if person2 is not assigned to the previous interval or it's the first interval of a day
+                if(i == 0 || ![personLosingInterval isAssignedInIntervalOverallIndex:previousDayInterval.overallIndex]){
+                    
+                    //switch intervals
+                    [self swapSingleDayInterval:interval assignToPerson:personGainingInterval takeAwayFromPerson:personLosingInterval];
+                }
+                
+                
+            }
+        }
+    }
 }
 -(void)swapDayIntervalsFromEndIfPossibleAssignIntervalTo:(AlgorithmPerson *)personGainingInterval takeAwayFrom:(AlgorithmPerson *)personLosingInterval
 {
+    // Only count consecutive if its in the same day
     
+    for(NSInteger d = self.arrayOfDayIntervalsArrays.count - 1; d>=0;d--){
+        NSMutableArray *dayDIntervals = self.arrayOfDayIntervalsArrays[d];
+        for(NSInteger i = dayDIntervals.count -1; i>=0; i--){
+            BOOL lastIntervalOfDay = (i == dayDIntervals.count-1);
+            AlgorithmInterval *interval = dayDIntervals[i];
+            AlgorithmInterval *previousDayInterval = (i - 1) >= 0 ? dayDIntervals[i-1] : nil;
+            
+            
+            //changed condition to be less than ceil/floor int value of ideal slots array
+            if(personGainingInterval.numDayIntervalsAssigned >= ceil(personGainingInterval.idealNumDayIntervalsAssigned) || personLosingInterval.numDayIntervalsAssigned <= ceil(personLosingInterval.idealNumDayIntervalsAssigned)){
+                return;
+            }
+            
+            //if person1 is free but not assigned to this interval && person2 is assigned to this interval
+            if([personGainingInterval isAvailableButNotAssignedInIntervalOverallIndex:interval.overallIndex] && [personLosingInterval isAssignedInIntervalOverallIndex:interval.overallIndex]){
+                
+                //if person2 is not assigned to the previous (chronologically, next) interval or it's the last interval
+                if(lastIntervalOfDay || ![personLosingInterval isAssignedInIntervalOverallIndex:previousDayInterval.overallIndex]){
+                    
+                    //switch intervals
+                    [self swapSingleDayInterval:interval assignToPerson:personGainingInterval takeAwayFromPerson:personLosingInterval];
+                }
+                
+                
+            }
+        }
+    }
 }
 
 #pragma mark - Array Stuff
