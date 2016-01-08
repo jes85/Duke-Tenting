@@ -176,7 +176,7 @@
 {
     [self.viewControllers[2] setEditing:YES animated:YES];
     self.navigationItem.leftBarButtonItem = self.addPersonButton;
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(doneEditingPeopleButtonPressed)];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditingPeopleButtonPressed)];
     self.navigationItem.rightBarButtonItem = doneButton;
     
 }

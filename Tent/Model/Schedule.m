@@ -122,17 +122,38 @@
    
 
     NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSTimeZone *timeZone = calendar.timeZone;
     NSDateComponents *intervalStartDateComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear  ) fromDate:intervalStartDate];
    
+    
+    // Night Start Date = 11 AM on same day if start date is after 7 am and before 11:59 pm
+    // Night start Date = 11 AM on previous day if start date is after 12:00 am and before 7 am
+    // Night end date is always 8 hours after night start date
+    
+    // This number was 7, but I changed it. So if you start a schedule at 5 am - 7 am it doesn't make the first one a night interval. I can change this number depending on user feedback
+    NSUInteger lastHourToStartNightInterval = 5;
+    
     NSDateComponents *nightStartDateComponents = [[NSDateComponents alloc]init];
     [nightStartDateComponents setHour:23];
     [nightStartDateComponents setMinute :0];
-    [nightStartDateComponents setYear:intervalStartDateComponents.year];
-    [nightStartDateComponents setMonth: intervalStartDateComponents.month];
-    [nightStartDateComponents setDay: intervalStartDateComponents.day];
+    
+    if(intervalStartDateComponents.hour < lastHourToStartNightInterval && intervalStartDateComponents.hour >= 0){
+        NSDate *previousDay = [NSDate dateWithTimeInterval:-60*60*24 sinceDate:intervalStartDate];
+        NSDateComponents *previousDayDateComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear  ) fromDate:previousDay];
+        [nightStartDateComponents setYear:previousDayDateComponents.year];
+        [nightStartDateComponents setMonth:previousDayDateComponents.month];
+        [nightStartDateComponents setDay:previousDayDateComponents.day];
+        
+        
+    }else{
+        [nightStartDateComponents setYear:intervalStartDateComponents.year];
+        [nightStartDateComponents setMonth: intervalStartDateComponents.month];
+        [nightStartDateComponents setDay: intervalStartDateComponents.day];
+        
+    }
+    
+    
     NSDate *nightStartDate = [calendar dateFromComponents:nightStartDateComponents];
-    NSDate *nightEndDate = [NSDate dateWithTimeInterval:60*60*8 sinceDate:nightStartDate];
+    NSDate *nightEndDate = [NSDate dateWithTimeInterval:60*60*8 sinceDate:nightStartDate]; //always 8 hours after nightStartDate
     
     NSDate *intervalEndDateIfNormalLengthInterval = [NSDate dateWithTimeInterval:60*self.intervalLengthInMinutes sinceDate:intervalStartDate];
     // Cases
@@ -140,14 +161,14 @@
     NSDate *intervalEndDate;
     BOOL night;
     //Night Interval
-    // 11:00 pm - 7:00 AM or 2:30 AM - 7 AM or 2:30 AM - 10 AM
-    if([intervalStartDate timeIntervalSinceDate: nightStartDate] >= 0 && [intervalStartDate timeIntervalSinceDate:nightEndDate] < 0){
+    // 11:00 pm - 7:00 AM
+    if([intervalStartDate timeIntervalSinceDate: nightStartDate] >= 0 && [intervalStartDate timeIntervalSinceDate:nightEndDate] < 0){ //interval start date is during night
         intervalEndDate = nightEndDate;
         night = YES;
     }
     
     //Short Interval Before Night Interval
-    else if([nightStartDate timeIntervalSinceDate:intervalEndDateIfNormalLengthInterval] < 0 ){
+    else if([nightStartDate timeIntervalSinceDate:intervalEndDateIfNormalLengthInterval] < 0 ){ //night start date is earlier than intervalEndDate if its a normal length interval
         intervalEndDate = nightStartDate;
         night = NO;
     }
@@ -178,25 +199,39 @@
     
 
     //sunday, mon, tues 11 pm - 7 am
-    if((intervalStartDateComponents.weekday == 1 && intervalStartDateComponents.hour > 2) || intervalStartDateComponents.weekday == 2 || intervalStartDateComponents.weekday == 3){ //sunday after 2:30 am, monday, tuesday
+    if((intervalStartDateComponents.weekday == 1 && intervalStartDateComponents.hour >= 10) || intervalStartDateComponents.weekday == 2 || intervalStartDateComponents.weekday == 3){ //sunday after 10 am, all monday, all tuesday
         [nightStartDateComponents setHour:23];
         [nightStartDateComponents setMinute :0];
-        [nightStartDateComponents setYear:intervalStartDateComponents.year];
-        [nightStartDateComponents setMonth: intervalStartDateComponents.month];
-        [nightStartDateComponents setDay: intervalStartDateComponents.day];
+        
+        // If start date is between 12 and 7, night start is on previous day
+        if(intervalStartDateComponents.hour < 7 && intervalStartDateComponents.hour >= 0){
+            NSDate *previousDay = [NSDate dateWithTimeInterval:-60*60*24 sinceDate:intervalStartDate];
+            NSDateComponents *previousDayDateComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear  ) fromDate:previousDay];
+            [nightStartDateComponents setYear:previousDayDateComponents.year];
+            [nightStartDateComponents setMonth:previousDayDateComponents.month];
+            [nightStartDateComponents setDay:previousDayDateComponents.day];
+            
+            
+        }else{
+            [nightStartDateComponents setYear:intervalStartDateComponents.year];
+            [nightStartDateComponents setMonth: intervalStartDateComponents.month];
+            [nightStartDateComponents setDay: intervalStartDateComponents.day];
+            
+        }
+
         nightTimeInterval = 60*60*8; //8 hours
 
         
 
     }
     //wed, thurs 2:30 am - 7 am
-    else if( intervalStartDateComponents.weekday == 4 || intervalStartDateComponents.weekday == 5 || (intervalStartDateComponents.weekday == 6 && intervalStartDateComponents.hour < 3) ){ //wed, thurs, fri before 2:30 am
+    else if( intervalStartDateComponents.weekday == 4 || intervalStartDateComponents.weekday == 5 || (intervalStartDateComponents.weekday == 6 && intervalStartDateComponents.hour < 7) ){ //all wed, all thurs, fri before 7 am
         NSDate *nextDay = [NSDate dateWithTimeInterval:60*60*24 sinceDate:intervalStartDate];
         NSDateComponents *nextDayDateComponents = [calendar components:(NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear) fromDate:nextDay];
 
         [nightStartDateComponents setHour:2];
         [nightStartDateComponents setMinute :30];
-        if(intervalStartDateComponents.hour < 2 || (intervalStartDateComponents.hour ==2 && intervalStartDateComponents.minute <= 30)){ // if before 2:30 am, night is on same day
+        if(intervalStartDateComponents.hour < 7){ // if before 7 am, night is on same day
             [nightStartDateComponents setYear:intervalStartDateComponents.year];
             [nightStartDateComponents setMonth: intervalStartDateComponents.month];
             [nightStartDateComponents setDay: intervalStartDateComponents.day];
@@ -208,13 +243,13 @@
         nightTimeInterval = 60*60*4 + 60*30; //4.5 hours
     }
     //fri,saturday 2:30 am - 10 am
-    else if((intervalStartDateComponents.weekday == 6 && intervalStartDateComponents.hour > 2) || intervalStartDateComponents.weekday == 7 || (intervalStartDateComponents.weekday == 1 && intervalStartDateComponents.hour < 3)){ //fri after 2:30 am, sat, sun before 2:30 am
+    else if((intervalStartDateComponents.weekday == 6 && intervalStartDateComponents.hour >= 7) || intervalStartDateComponents.weekday == 7 || (intervalStartDateComponents.weekday == 1 && intervalStartDateComponents.hour < 10)){ //fri after 7 am, all sat, sun before 10 am
         NSDate *nextDay = [NSDate dateWithTimeInterval:60*60*24 sinceDate:intervalStartDate];
         NSDateComponents *nextDayDateComponents = [calendar components:(NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear) fromDate:nextDay];
         
         [nightStartDateComponents setHour:2];
         [nightStartDateComponents setMinute :30];
-        if(intervalStartDateComponents.hour < 2 || (intervalStartDateComponents.hour ==2 && intervalStartDateComponents.minute <= 30)){ // if before 2:30 am, night is on same day
+        if(intervalStartDateComponents.hour < 10){ // if before 10 am, night is on same day
             [nightStartDateComponents setYear:intervalStartDateComponents.year];
             [nightStartDateComponents setMonth: intervalStartDateComponents.month];
             [nightStartDateComponents setDay: intervalStartDateComponents.day];
@@ -473,7 +508,7 @@
     
     
 }
-
+/*
 -(void)createIntervalDataArraysOld
 {
     
@@ -549,6 +584,7 @@
     self.intervalDataByOverallRow = [intervalDataByOverallRow copy];
     
 }
+ */
 
 -(NSArray *)availableAndAssignedPersonsForOverallInterval:(NSUInteger)index
 {
