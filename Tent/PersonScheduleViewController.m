@@ -349,7 +349,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
         [query getObjectInBackgroundWithId:self.currentPerson.parseObjectID block:^(PFObject *object, NSError *error) {
             if(!object){
                 //Find failed
-                NSLog(@"%@", [error userInfo]);
+                //NSLog(@"%@", [error userInfo]);
             }else{ // Find succeeded
                 object[kPersonPropertyAssignmentsArray] = self.updatedAvailabilitiesArray;
                 [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -401,7 +401,7 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
                         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNameScheduleChanged object:self userInfo:userInfo];
                     }else{
                         
-                        NSLog(@"Save Failed");
+                        //NSLog(@"Save Failed");
                     }
                 }];
                 

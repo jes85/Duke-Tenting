@@ -86,12 +86,12 @@
 // Stats
 
 -(void)calculateNumIntervalsEachPersonIsAvailableAndAssigned;
--(NSMutableArray *)numIntervalsEachPersonIsAvailable;
--(NSMutableArray *)numIntervalsEachPersonIsAssigned;
+@property (nonatomic) NSMutableArray *numIntervalsEachPersonIsAvailable;
+@property (nonatomic) NSMutableArray *numIntervalsEachPersonIsAssigned;
 
 -(void)calculateNumPeopleAvailableAndAssignedInEachInterval;
--(NSMutableArray *)numPeopleAvailableInEachInterval;
--(NSMutableArray *)numPeopleAssignedInEachInterval;
+@property (nonatomic) NSMutableArray *numPeopleAvailableInEachInterval;
+@property (nonatomic) NSMutableArray *numPeopleAssignedInEachInterval;
 
 -(NSUInteger)numPeopleAvailableInIntervalIndex:(NSUInteger)intervalIndex;
 -(NSUInteger)numPeopleAssignedInIntervalIndex:(NSUInteger)intervalIndex;

@@ -110,7 +110,7 @@
     }
     
     //NSLog(@"Day Intervals Assigned: %d \nDay Intervals Available: %d \nNight Intervals Assigned %d \nNight Intervals Available: %d \nTotal Intervals Assigned:%d \nTotal Intervals Available: %d", dayIntervalsAssigned, dayIntervalsAvailable, nightIntervalsAssigned, nightIntervalsAvailable,dayIntervalsAssigned+nightIntervalsAssigned, dayIntervalsAvailable+nightIntervalsAvailable );
-    NSLog(@"Total Intervals Assigned:%d \nTotal Intervals Available: %d", dayIntervalsAssigned+nightIntervalsAssigned, dayIntervalsAvailable+nightIntervalsAvailable );
+    //NSLog(@"Total Intervals Assigned:%d \nTotal Intervals Available: %d", dayIntervalsAssigned+nightIntervalsAssigned, dayIntervalsAvailable+nightIntervalsAvailable );
 
 }
 
