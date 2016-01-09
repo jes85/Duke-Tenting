@@ -21,7 +21,6 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 // Basic Parameters
 @property( nonatomic) NSUInteger numPeople;
 @property (nonatomic) NSUInteger numTotalIntervals;
-@property (nonatomic) NSUInteger requiredPersonsPerInterval;
 @property (nonatomic) NSUInteger normalIntervalLengthInMinutes;
 
 @property (nonatomic) NSMutableArray *intervalDataByOverallRow;
@@ -87,7 +86,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         self.personsArray = [self createAlgorithmPersonsArrayFromArray:schedule.personsArray];
         self.numTotalIntervals = schedule.intervalDataByOverallRow.count;
         self.numPeople = schedule.personsArray.count;
-        self.requiredPersonsPerInterval = ceil(self.numPeople / 3.0);
+        //self.requiredPersonsPerInterval = ceil(self.numPeople / 3.0);
         [self setup];
     }
     return self;
@@ -253,21 +252,47 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     
 }
 
+-(double)totalSlotsRequiredForNightIntervals{
+    double totalSlotsRequired = 0;
+    for(Interval *interval in self.nightIntervalsArray){
+        totalSlotsRequired = totalSlotsRequired + interval.requiredPersons;
+    }
+    
+    return totalSlotsRequired;
+}
+
+-(double)totalSlotsRequiredForDayIntervals{
+    double totalSlotsRequired = 0;
+    for(int i = 0; i<self.arrayOfDayIntervalsArrays.count; i++){
+        NSMutableArray *dayI = self.arrayOfDayIntervalsArrays[i];
+        for(Interval *interval in dayI){
+            totalSlotsRequired = totalSlotsRequired + interval.requiredPersons;
+        }
+
+    }
+    
+    return totalSlotsRequired;
+   
+}
+
 // Make sure it differentiates day and night appropriately
 -(NSMutableArray *)generateIdealSlotsArrayNight:(BOOL)night
 {
     NSUInteger numIntervals;
     NSMutableArray *numIntervalsEachPersonIsAvailable;
+    double totalSlotsRequired;
     if(night){
         numIntervals = self.nightIntervalsArray.count;
         numIntervalsEachPersonIsAvailable = self.numNightIntervalsEachPersonIsAvailable;
+        totalSlotsRequired = [self totalSlotsRequiredForNightIntervals];
     }else{
         numIntervals = self.numDayIntervals;
         numIntervalsEachPersonIsAvailable = self.numDayIntervalsEachPersonIsAvailable;
+        totalSlotsRequired = [self totalSlotsRequiredForDayIntervals];
     }
     //TODO: test this with edge cases
     NSMutableArray *idealSlotsArray = [self initializeIdealSlotsArray];
-    double totalSlotsRequired = self.requiredPersonsPerInterval*numIntervals;
+    //double totalSlotsRequired = self.requiredPersonsPerInterval*numIntervals;
     double idealSlotsPerRemainingPerson = totalSlotsRequired/self.numPeople;
     double numPeopleLeft = self.numPeople;
     double numSlotsLeft = totalSlotsRequired;
@@ -321,16 +346,6 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
         }
     }
     return idealSlotsArray;
-}
-//TODO: implement
--(NSUInteger)totalRequiredPersonsForDayIntervals
-{
-    return 0;
-}
-
--(NSUInteger)totalRequiredPersonsForNightIntervals
-{
-    return 0;
 }
 
 -(void)assignNightIntervals
