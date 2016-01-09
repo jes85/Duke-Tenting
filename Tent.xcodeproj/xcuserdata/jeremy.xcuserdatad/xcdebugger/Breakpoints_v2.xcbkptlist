@@ -698,11 +698,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "474"
-            endingLineNumber = "474"
+            startingLineNumber = "469"
+            endingLineNumber = "469"
             landmarkName = "-assignDayIntervals"
             landmarkType = "5">
          </BreakpointContent>
@@ -842,11 +842,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "618"
-            endingLineNumber = "618"
+            startingLineNumber = "613"
+            endingLineNumber = "613"
             landmarkName = "-swapSingleNightInterval:assignToPerson:takeAwayFromPerson:"
             landmarkType = "5">
          </BreakpointContent>
@@ -922,11 +922,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "647"
-            endingLineNumber = "647"
+            startingLineNumber = "642"
+            endingLineNumber = "642"
             landmarkName = "-swapNightIntervalsUntilEqualityIsSufficient"
             landmarkType = "5">
          </BreakpointContent>
@@ -938,11 +938,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "973"
-            endingLineNumber = "973"
+            startingLineNumber = "968"
+            endingLineNumber = "968"
             landmarkName = "-idealNumNightIntervalsEachPersonIsAssigned"
             landmarkType = "5">
          </BreakpointContent>
@@ -1002,11 +1002,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "650"
-            endingLineNumber = "650"
+            startingLineNumber = "645"
+            endingLineNumber = "645"
             landmarkName = "-swapNightIntervalsUntilEqualityIsSufficient"
             landmarkType = "5">
          </BreakpointContent>
@@ -1018,11 +1018,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "356"
-            endingLineNumber = "356"
+            startingLineNumber = "351"
+            endingLineNumber = "351"
             landmarkName = "-fillRemainingPersonsInIdealSlotsArray:WithValue:night:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1034,11 +1034,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "322"
-            endingLineNumber = "322"
+            startingLineNumber = "317"
+            endingLineNumber = "317"
             landmarkName = "-generateIdealSlotsArrayNight:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1050,11 +1050,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "683"
-            endingLineNumber = "683"
+            startingLineNumber = "678"
+            endingLineNumber = "678"
             landmarkName = "-attemptAllNightSwapsForPerson:consecutiveParameter:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1066,11 +1066,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "670"
-            endingLineNumber = "670"
+            startingLineNumber = "665"
+            endingLineNumber = "665"
             landmarkName = "-swapDayIntervalsUntilEqualityIsSufficient"
             landmarkType = "5">
          </BreakpointContent>
@@ -1082,11 +1082,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "667"
-            endingLineNumber = "667"
+            startingLineNumber = "662"
+            endingLineNumber = "662"
             landmarkName = "-swapDayIntervalsUntilEqualityIsSufficient"
             landmarkType = "5">
          </BreakpointContent>
@@ -1098,11 +1098,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "652"
-            endingLineNumber = "652"
+            startingLineNumber = "647"
+            endingLineNumber = "647"
             landmarkName = "-swapNightIntervalsUntilEqualityIsSufficient"
             landmarkType = "5">
          </BreakpointContent>
@@ -1114,11 +1114,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "651"
-            endingLineNumber = "651"
+            startingLineNumber = "646"
+            endingLineNumber = "646"
             landmarkName = "-swapNightIntervalsUntilEqualityIsSufficient"
             landmarkType = "5">
          </BreakpointContent>
@@ -1130,11 +1130,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "624"
-            endingLineNumber = "624"
+            startingLineNumber = "619"
+            endingLineNumber = "619"
             landmarkName = "-swapSingleNightInterval:assignToPerson:takeAwayFromPerson:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1242,11 +1242,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "467"
-            endingLineNumber = "467"
+            startingLineNumber = "462"
+            endingLineNumber = "462"
             landmarkName = "-assignDayIntervals"
             landmarkType = "5">
          </BreakpointContent>
@@ -1258,11 +1258,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "468"
-            endingLineNumber = "468"
+            startingLineNumber = "463"
+            endingLineNumber = "463"
             landmarkName = "-assignDayIntervals"
             landmarkType = "5">
          </BreakpointContent>
@@ -1274,11 +1274,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "275"
-            endingLineNumber = "275"
+            startingLineNumber = "270"
+            endingLineNumber = "270"
             landmarkName = "-totalSlotsRequiredForNightIntervals"
             landmarkType = "5">
          </BreakpointContent>
@@ -1290,11 +1290,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "288"
-            endingLineNumber = "288"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
             landmarkName = "-totalSlotsRequiredForDayIntervals"
             landmarkType = "5">
          </BreakpointContent>
@@ -1306,11 +1306,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "260"
-            endingLineNumber = "260"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
             landmarkName = "-calculateIdealNumIntervalsEachPersonIsAssigned"
             landmarkType = "5">
          </BreakpointContent>
@@ -1322,11 +1322,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "263"
-            endingLineNumber = "263"
+            startingLineNumber = "258"
+            endingLineNumber = "258"
             landmarkName = "-calculateIdealNumIntervalsEachPersonIsAssigned"
             landmarkType = "5">
          </BreakpointContent>
@@ -1338,11 +1338,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "264"
-            endingLineNumber = "264"
+            startingLineNumber = "259"
+            endingLineNumber = "259"
             landmarkName = "-calculateIdealNumIntervalsEachPersonIsAssigned"
             landmarkType = "5">
          </BreakpointContent>
@@ -1354,11 +1354,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "266"
-            endingLineNumber = "266"
+            startingLineNumber = "261"
+            endingLineNumber = "261"
             landmarkName = "-calculateIdealNumIntervalsEachPersonIsAssigned"
             landmarkType = "5">
          </BreakpointContent>
@@ -1450,11 +1450,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "504"
-            endingLineNumber = "504"
+            startingLineNumber = "499"
+            endingLineNumber = "499"
             landmarkName = "-assignDayIntervals"
             landmarkType = "5">
          </BreakpointContent>
@@ -1466,11 +1466,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "486"
-            endingLineNumber = "486"
+            startingLineNumber = "481"
+            endingLineNumber = "481"
             landmarkName = "-assignDayIntervals"
             landmarkType = "5">
             <Locations>
@@ -1514,11 +1514,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "490"
-            endingLineNumber = "490"
+            startingLineNumber = "485"
+            endingLineNumber = "485"
             landmarkName = "-assignDayIntervals"
             landmarkType = "5">
          </BreakpointContent>
@@ -1530,11 +1530,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "440"
-            endingLineNumber = "440"
+            startingLineNumber = "435"
+            endingLineNumber = "435"
             landmarkName = "-assignNightIntervals"
             landmarkType = "5">
          </BreakpointContent>
@@ -1546,11 +1546,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "442"
-            endingLineNumber = "442"
+            startingLineNumber = "437"
+            endingLineNumber = "437"
             landmarkName = "-assignNightIntervals"
             landmarkType = "5">
          </BreakpointContent>
@@ -1594,71 +1594,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
-            landmarkName = "-generateDayAssignments"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1085"
-            endingLineNumber = "1085"
-            landmarkName = "-tryToSwapSoloInterval:forPerson:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1086"
-            endingLineNumber = "1086"
-            landmarkName = "-tryToSwapSoloInterval:forPerson:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067472.049489"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "252"
-            endingLineNumber = "252"
-            landmarkName = "-generateDayAssignments"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067222.101977"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "246"
@@ -1674,11 +1610,75 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tent/AlgorithmSchedule.m"
-            timestampString = "474067527.577065"
+            timestampString = "474067820.692391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1057"
-            endingLineNumber = "1057"
+            startingLineNumber = "1082"
+            endingLineNumber = "1082"
+            landmarkName = "-tryToSwapSoloInterval:forPerson:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Tent/AlgorithmSchedule.m"
+            timestampString = "474067820.692391"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1083"
+            endingLineNumber = "1083"
+            landmarkName = "-tryToSwapSoloInterval:forPerson:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Tent/AlgorithmSchedule.m"
+            timestampString = "474067820.692391"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "247"
+            endingLineNumber = "247"
+            landmarkName = "-generateDayAssignments"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Tent/AlgorithmSchedule.m"
+            timestampString = "474067820.692391"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "245"
+            endingLineNumber = "245"
+            landmarkName = "-generateDayAssignments"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Tent/AlgorithmSchedule.m"
+            timestampString = "474067820.692391"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1054"
+            endingLineNumber = "1054"
             landmarkName = "-soloCount"
             landmarkType = "5">
          </BreakpointContent>
