@@ -11,9 +11,9 @@
 @interface AlgorithmInterval : NSObject
 
 @property (nonatomic) NSUInteger numPersonsAvailable;
-@property (nonatomic) NSUInteger requiredPersons; //for UNC //make UNCInterval subclass
+@property (nonatomic) NSUInteger requiredPersons; 
 @property (nonatomic) BOOL night;
-@property (nonatomic) NSUInteger overallIndex; //only for Algorithm
+@property (nonatomic) NSUInteger overallIndex;
 
 -(instancetype)initWithInterval:(Interval *)interval overallIndex:(NSUInteger)overallIndex;
 

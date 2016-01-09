@@ -39,6 +39,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 // Swap
 @property (nonatomic) NSUInteger swapCountForCurrentPersonAttempt;
 
+@property (nonatomic) NSUInteger swapSoloCount; //for testing
 
 @end
 
@@ -162,6 +163,15 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return error;
 }
 
+-(void)makeAlgorithmWorkEvenThoughNotAllRequiredPersonsAreAvailable
+{
+    for(AlgorithmInterval *interval in self.intervalDataByOverallRow){
+        if(interval.numPersonsAvailable < interval.requiredPersons){
+            interval.requiredPersons = interval.numPersonsAvailable;
+        }
+    }
+}
+
 
 #pragma mark - Generate Schedule
 -(NSMutableArray *)generateAssignments
@@ -229,12 +239,11 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     
     // Swap
     [self swapDayIntervalsUntilEqualityIsSufficient];
-
-    //TODO: implement swap solos and check day swapping
+    
     
     // Swap solos
-    
-    
+    [self swapSolos];
+                            
     
 }
 
@@ -1006,36 +1015,115 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     }
     return array;
 }
-/*
--(void)calculateAvailIntervalSums
+
+
+-(void)swapSolos
 {
-    for(int c = 0; c<self.numIntervals; c++){
-        int availSums = 0;
-        for(int r = 0; r<self.numPeople; r++){
-            if([self.assignmentsSchedule[r][c] integerValue] == 1 || [self.assignmentsSchedule[r][c] integerValue] == 2){
-                availSums += 1;
+    for(int p = 0; p<self.personsArray.count; p++){
+        AlgorithmPerson *person = self.personsArray[p];
+        [self swapSolosForPerson:person];
+    }
+    
+}
+
+-(void)swapSolosForPerson:(AlgorithmPerson *)person
+{
+    for(int i = 0; i<self.intervalDataByOverallRow.count;i++){
+        AlgorithmInterval *interval = self.intervalDataByOverallRow[i];
+        if([self isSoloInterval:interval forPerson:person]){
+            [self tryToSwapSoloInterval:interval forPerson:person];
+        }
+    }
+}
+
+
+// For testing
+-(NSUInteger)soloCount
+{
+    NSUInteger numSolos = 0;
+    for(int p = 0; p<self.personsArray.count; p++){
+        AlgorithmPerson *person = self.personsArray[p];
+        for(int i = 0; i<self.intervalDataByOverallRow.count;i++){
+            AlgorithmInterval *interval = self.intervalDataByOverallRow[i];
+            if([self isSoloInterval:interval forPerson:person]){
+                //NSLog(@"Person: %d Interval: %d", person.scheduleIndex, interval.overallIndex);
+                numSolos++;
             }
+        }
+    }
+    return numSolos;
+}
+
+-(void)tryToSwapSoloInterval:(AlgorithmInterval *)interval forPerson:(AlgorithmPerson *)person
+{
+    for(int p = 0; p<self.personsArray.count;p++){
+        AlgorithmPerson *otherPerson = self.personsArray[p];
+        if(otherPerson.scheduleIndex == person.scheduleIndex) continue;
+        BOOL currentIntervalAvailableButNotAssigned = [otherPerson isAvailableButNotAssignedInIntervalOverallIndex:interval.overallIndex];
+        BOOL previousIntervalAssigned;
+        BOOL nextIntervalAssigned;
+
+        if(interval.overallIndex == 0){
+            //first interval
+            previousIntervalAssigned = false;
+        }else{
+            previousIntervalAssigned = [otherPerson isAssignedInIntervalOverallIndex:interval.overallIndex - 1];
+        }
+        
+        if(interval.overallIndex == self.intervalDataByOverallRow.count - 1){
+            //last interval
+            nextIntervalAssigned = false;
+        }else{
+            nextIntervalAssigned = [person isAssignedInIntervalOverallIndex:interval.overallIndex + 1];
             
         }
-        self.availIntervalSums[c] = [NSNumber numberWithInteger:availSums];
-        
-    }
 
-}
--(void)calculateAssignIntervalSums
-{
-    for(int c = 0; c<self.numIntervals; c++){
-        int assignSums = 0;
-        for(int r = 0; r<self.numPeople; r++){
-            if([self.assignmentsSchedule[r][c] integerValue] == 2){
-                assignSums += 1;
-            }
+        if(currentIntervalAvailableButNotAssigned && (previousIntervalAssigned || nextIntervalAssigned) ){
+            [self swapSingleDayInterval:interval assignToPerson:otherPerson takeAwayFromPerson:person];
+            self.swapSoloCount++;
+            return;
         }
-        self.assignIntervalSums[c] = [NSNumber numberWithInteger:assignSums];
+        
         
     }
-
 }
- */
 
+
+-(BOOL)isSoloInterval:(AlgorithmInterval *)interval forPerson:(AlgorithmPerson *)person
+{
+    // An interval is a "solo" interval for person A if person A is assigned to that interval but not the previous or next interval.
+    // Night intervals don't count
+    
+    
+    if(!interval.night){
+        if(![person isAssignedInIntervalOverallIndex:interval.overallIndex]){
+            return false;
+        }
+        
+        BOOL previousIntervalUnassigned;
+        BOOL nextIntervalUnassigned;
+        
+        if(interval.overallIndex == 0){
+            //first interval
+            previousIntervalUnassigned = true;
+        }else{
+            previousIntervalUnassigned = ![person isAssignedInIntervalOverallIndex:interval.overallIndex - 1];
+
+        }
+        
+        if(interval.overallIndex == self.intervalDataByOverallRow.count - 1){
+            //last interval
+            nextIntervalUnassigned = true;
+        }else{
+            nextIntervalUnassigned = ![person isAssignedInIntervalOverallIndex:interval.overallIndex + 1];
+
+        }
+        
+        return previousIntervalUnassigned && nextIntervalUnassigned;
+
+        
+    }
+    
+    return false;
+}
 @end

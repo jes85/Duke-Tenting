@@ -27,7 +27,7 @@
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message:@"Only use this to add people who do not have iPhones. Those with iPhones should log in, find your schedule, and enter the group code to join." preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
+    //[self presentViewController:alert animated:YES completion:nil];
                                 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:self.enterNameTextField];
     self.doneButton.enabled = NO;

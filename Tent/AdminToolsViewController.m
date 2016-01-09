@@ -34,7 +34,7 @@
     NSString *message = self.schedule.assignmentsGenerated ? @"Are you sure you want to generate new schedule assignments? The previous assignments will be lost" : @"Are you sure you want to generate assignments?";
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *proceedAction = [UIAlertAction actionWithTitle:@"Proceed" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-        [self generateAssignments];
+        [self checkForErrorAndGenerateAssignments];
     }];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:cancelAction];
@@ -77,22 +77,37 @@
         
 }
 
--(void)generateAssignments
+-(void)checkForErrorAndGenerateAssignments
 {
     //TODO: sort persons by createdAt first just in case
     AlgorithmSchedule *algorithmSchedule = [[AlgorithmSchedule alloc]initWithSchedule:self.schedule]; //might need a copy
+    
     if([algorithmSchedule checkForError]){
         //deal with error
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error!" message:@"At least one time slot has less than the required number of people available. Please fix that and then try again." preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error!" message:@"At least one time slot has less than the required number of people available. Would you like to generate assignments anyway?." preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            // User want to generate assignments anyway
+            [algorithmSchedule makeAlgorithmWorkEvenThoughNotAllRequiredPersonsAreAvailable];
+            [self generateAssignmentsAndUpdateParseUsingAlgorithmSchedule:algorithmSchedule];
+        }]];
+
         [self presentViewController:alert animated:YES completion:nil];
         return;
+    }else{
+        [self generateAssignmentsAndUpdateParseUsingAlgorithmSchedule:algorithmSchedule];
     }
+    
+}
+
+-(void)generateAssignmentsAndUpdateParseUsingAlgorithmSchedule:(AlgorithmSchedule *)algorithmSchedule
+{
     NSMutableArray *assignments = [algorithmSchedule generateAssignments];
     if(assignments.count != self.schedule.personsArray.count) return; //error
     [self updateParseScheduleAfterGeneratingAssignmentsWithArrayOfNewPersonAssignmentsArrays:assignments];
     //NSMutableArray *newPersonsArray = [algorithmSchedule generateAssignments];
     //[self updateParseScheduleAfterGeneratingAssignmentsWithNewPersonsArray:newPersonsArray];
+
 }
 
 -(void)updateParseScheduleAfterGeneratingAssignmentsWithArrayOfNewPersonAssignmentsArrays:(NSMutableArray *)arrayOfNewPersonAssignmentsArrays

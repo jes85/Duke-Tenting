@@ -43,7 +43,7 @@
     }
     
 
-    //[self makeAvailableForAll];
+    [self makeAvailableForAll];
 }
 
 //Testing

@@ -15,5 +15,5 @@
 
 -(NSMutableArray *)generateAssignments;
 -(BOOL)checkForError;
-
+-(void)makeAlgorithmWorkEvenThoughNotAllRequiredPersonsAreAvailable;
 @end
