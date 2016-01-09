@@ -65,8 +65,7 @@
     
     HomeGame *hg = self.schedule.homeGame;
     self.labelOpponent.text = hg.opponentName;
-    self.labelDate.text = [[[Constants formatDate:self.schedule.endDate withStyle:NSDateFormatterShortStyle] stringByAppendingString:@" "] stringByAppendingString:[Constants formatTime:self.schedule.endDate withStyle:NSDateFormatterShortStyle]];
-    
+    self.labelDate.text = [Constants formatDateAndTime:hg.gameTime withDateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
     self.navigationItem.title = self.schedule.groupName;
     
 }

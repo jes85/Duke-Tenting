@@ -348,24 +348,102 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     return idealSlotsArray;
 }
 
+
 -(void)assignNightIntervals
 {
     int assignCountInThisInterval;
-    
+     NSMutableArray *personsQueue = [[NSMutableArray alloc]initWithArray:self.personsArray copyItems:NO];//just different ordered pointer? make sure thats the case
     for(int i = 0; i<self.nightIntervalsArray.count;i++){
         AlgorithmInterval *interval = self.nightIntervalsArray[i];
         assignCountInThisInterval = 0;
-        //for now, just assign intervals to first people available and then swap
-        for(int p = 0; p<self.numPeople;p++){
-            AlgorithmPerson *person = self.personsArray[p];
-            if([person.assignmentsArray[interval.overallIndex] isEqual:@1]){
-                person.assignmentsArray[interval.overallIndex]= @2;
-                person.numNightIntervalsAssigned++;
-                assignCountInThisInterval++;
-            }
-            if(assignCountInThisInterval==interval.requiredPersons) break;
+        
+        
+        
+        //Inefficient but easier to understand
+        for(AlgorithmPerson *p in personsQueue){
+            p.currentOverallIntervalIndexForInitialDayAssignments = interval.overallIndex;
             
         }
+        
+         personsQueue = [[NSMutableArray alloc]initWithArray:[personsQueue sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+             
+             /*
+              sort by how many consecutive previous assigned intervals, with preference given to least consecutive (so you don't have to wait many nights in a row
+              
+              Ascending means object 1 comes first
+              */
+             AlgorithmPerson *person1 = (AlgorithmPerson *)obj1;
+             AlgorithmPerson *person2 = (AlgorithmPerson *)obj2;
+             
+             //If one of them is not available, return the other one
+             if(person1.isAvailableInCurrentOverallInterval && !person2.isAvailableInCurrentOverallInterval){
+                 return (NSComparisonResult)NSOrderedAscending;
+             }
+             if(!person1.isAvailableInCurrentOverallInterval && person2.isAvailableInCurrentOverallInterval){
+                 return (NSComparisonResult)NSOrderedDescending;
+                 
+             }
+             
+             // If a person is available for less than the ideal number, assign interval to that person
+             if(person1.numDayIntervalsAvailableIsLessThanIdeal && !person2.numDayIntervalsAvailableIsLessThanIdeal) {
+                 return (NSComparisonResult)NSOrderedAscending;
+             }else if(!person1.numDayIntervalsAvailableIsLessThanIdeal && person2.numDayIntervalsAvailableIsLessThanIdeal){
+                 return (NSComparisonResult)NSOrderedDescending;
+             }else{
+                 // Both are available for at least ideal number
+                 
+                 
+                 // Sort by 1. consecutive previous intervals assigned
+                 NSInteger difference= person1.consecutivePreviousNightIntervalsAssigned - person2.consecutivePreviousNightIntervalsAssigned;
+                 if(difference > 0){
+                     //person 1 has been assigned more in a row. person2 should be given priority
+                     return (NSComparisonResult)NSOrderedDescending;
+                 }
+                 if(difference < 0){
+                     //person 2 has been assigned more in a row. person1 should be given priority
+                     return (NSComparisonResult)NSOrderedAscending;
+                 }
+                 if(difference == 0){
+                     //same consecutive number. assign by least total been assigned so far
+                     NSInteger numNightIntervalsAssignedDifference = person1.numNightIntervalsAssigned - person2.numNightIntervalsAssigned;
+                     if(numNightIntervalsAssignedDifference > 0){
+                         //person 1 has been assigned more. return person 2
+                         return (NSComparisonResult)NSOrderedDescending;
+                         
+                     }
+                     if(numNightIntervalsAssignedDifference < 0){
+                         //person 2 has been assigned more. return person 1
+                         return (NSComparisonResult)NSOrderedAscending;
+                         
+                     }
+                     //if == 0, doesn't matter for now
+                 }
+             }
+             
+             //generate random number so that ties don't always go to person with lower schedule index
+             int randomNumber = arc4random() % 2;
+             if(randomNumber == 1){
+                 return (NSComparisonResult)NSOrderedAscending;
+             }else{ // == 0
+                 return (NSComparisonResult)NSOrderedDescending;
+
+             }
+             //return (NSComparisonResult)NSOrderedSame;
+         }]];
+        
+        
+        for(int p = 0; p<self.numPeople;p++){
+            AlgorithmPerson *person = personsQueue[p];
+            if(assignCountInThisInterval<interval.requiredPersons && [person.assignmentsArray[interval.overallIndex] isEqual:@1]){
+                person.assignmentsArray[interval.overallIndex] = @2;
+                person.numNightIntervalsAssigned++;
+                person.consecutivePreviousNightIntervalsAssigned +=1;
+                assignCountInThisInterval++;
+            }else{
+                person.consecutivePreviousNightIntervalsAssigned = 0;
+            }
+        }
+
     }
     
     //OR just use persons array and sort by schedule index here (or by createdAt).
@@ -390,6 +468,8 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
                 p.currentOverallIntervalIndexForInitialDayAssignments = interval.overallIndex;
 
             }
+            
+            
             //Change to selector for readability and reuseability
             personsQueue = [[NSMutableArray alloc]initWithArray:[personsQueue sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
                 
@@ -496,7 +576,7 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
                 
             }]];
 
-            //for now, just assign intervals to first people available and then swap
+            //Assign intervals according to priority queue (implemented here as just an array that i sort every time)
             for(int p = 0; p<self.numPeople;p++){
                 AlgorithmPerson *person = personsQueue[p];
                 if(assignCountInThisInterval<interval.requiredPersons && [person.assignmentsArray[interval.overallIndex] isEqual:@1]){

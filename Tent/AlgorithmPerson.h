@@ -21,6 +21,9 @@
 @property (nonatomic) NSUInteger consecutivePreviousDayIntervalsAssigned;
 @property (nonatomic) NSUInteger consecutiveFutureDayIntervalsAvailable;
 
+@property (nonatomic) NSUInteger consecutivePreviousNightIntervalsAssigned;
+
+
 @property (nonatomic) BOOL numNightIntervalsAvailableIsLessThanIdeal;
 @property (nonatomic) BOOL numDayIntervalsAvailableIsLessThanIdeal;
 

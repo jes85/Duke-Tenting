@@ -41,8 +41,22 @@
         //maybe keep track off last offset and scroll to that one instead
         
     }
+    
+
+    //[self makeAvailableForAll];
+}
+
+//Testing
+-(void)makeAvailableForAll
+{
+    for(int i = 0; i<self.updatedAvailabilitiesArray.count;i++){
+        self.updatedAvailabilitiesArray[i] = @1;
+    }
+    [self saveEdits];
 
 }
+
+
 -(BOOL)isMe{
     return [self.currentPerson.user.objectId isEqualToString:[[PFUser currentUser] objectId]];
 }

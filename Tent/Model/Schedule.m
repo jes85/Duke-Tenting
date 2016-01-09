@@ -249,7 +249,7 @@
         
         [nightStartDateComponents setHour:2];
         [nightStartDateComponents setMinute :30];
-        if(intervalStartDateComponents.hour < 10){ // if before 10 am, night is on same day
+        if(intervalStartDateComponents.weekday!=6 && intervalStartDateComponents.hour < 10){ // if before 10 am, night is on same day. unless it's friday 7-10am
             [nightStartDateComponents setYear:intervalStartDateComponents.year];
             [nightStartDateComponents setMonth: intervalStartDateComponents.month];
             [nightStartDateComponents setDay: intervalStartDateComponents.day];
