@@ -25,10 +25,12 @@
 }
 
 // UNC
+/* commented out because it's a parse property now
 -(BOOL)isUNC
 {
     return [@[@"UNC", @"University of North Carolina", @"North Carolina"] containsObject:self.opponentName];
 }
+ */
 
 
 // Don't think I need coding anymore because I'm not saving to User Defaults

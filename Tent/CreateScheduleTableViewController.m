@@ -78,9 +78,9 @@ static NSString *kGroupCodeCellID = @"groupCodeCell"; //the groupCode cell
     NSDate *roundedDate = [NSDate dateWithTimeInterval:secondsToRoundedDate sinceDate:currentDate];
 
     if(self.homeGame.isUNC){
-        NSDate *uncStartDate = [self uncTentingStartDate];
+        NSDate *uncStartDate = self.homeGame.blackTentingStartDate;
         self.minimumStartDate =  ([uncStartDate timeIntervalSinceNow] < 0) ? roundedDate : uncStartDate;
-        self.maximumEndDate = [self uncTentingEndDate];
+        self.maximumEndDate = self.homeGame.uncTentingEndDate;
         self.endDate = [self.maximumEndDate copy];
     }else{
         self.minimumStartDate = roundedDate;
@@ -554,7 +554,8 @@ static NSString *kGroupCodeCellID = @"groupCodeCell"; //the groupCode cell
 
 #pragma mark - UNC Stuff
 
-// Move these to property of UNCHomeGame and store date in local file like i do for regular home game data
+// Moved these to property of UNCHomeGame and store date in local file like i do for regular home game data
+/*
 -(NSDate *)uncTentingStartDate
 {
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -581,6 +582,7 @@ static NSString *kGroupCodeCellID = @"groupCodeCell"; //the groupCode cell
     NSDate *uncTentingEndDate = [calendar dateFromComponents:uncTentingEndDateComponents];
     return uncTentingEndDate;
 }
+ */
 
 #pragma mark - Alert Views
 

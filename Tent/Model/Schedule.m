@@ -297,6 +297,8 @@
 }
 -(NSUInteger)requiredPersonsForUNCInterval:(Interval *)interval
 {
+    // Don't need this anymore because I made it a parse property
+    /*
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *tentingPeriodsStartDateComponents = [[NSDateComponents alloc]init];
     [tentingPeriodsStartDateComponents setYear:2016];
@@ -328,18 +330,18 @@
     [tentingPeriodsStartDateComponents setHour:12];
     
     NSDate *uncTentingEndDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
-    
+    */
     
     // Start Date is earlier than Black Tent Start Date
-    if([interval.startDate timeIntervalSinceDate:blackTentingStartDate] < 0){
+    if([interval.startDate timeIntervalSinceDate:self.homeGame.blackTentingStartDate] < 0){
         return 0; //unc tenting has not started yet
-    }else if([interval.startDate timeIntervalSinceDate:blueTentingStartDate] < 0){
+    }else if([interval.startDate timeIntervalSinceDate:self.homeGame.blueTentingStartDate] < 0){
         //black tenting: start date is equal to or greater than black tent start date and earlier than blue tent start date
         return interval.night ? 10 : 2;
-    }else if([interval.startDate timeIntervalSinceDate:whiteTentingStartDate] < 0){
+    }else if([interval.startDate timeIntervalSinceDate:self.homeGame.whiteTentingStartDate] < 0){
         // blue tenting
         return interval.night ? 6 : 1;
-    }else if([interval.startDate timeIntervalSinceDate:uncTentingEndDate] < 0){
+    }else if([interval.startDate timeIntervalSinceDate:self.homeGame.uncTentingEndDate] < 0){
         // white tenting
         return interval.night ? 2 : 1;
     }else{

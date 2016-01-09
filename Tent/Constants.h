@@ -52,11 +52,15 @@
 #define kHomeGamePropertyConferenceGame                 @"conferenceGame"
 #define kHomeGamePropertyExhibition                     @"exhibition"
 #define kHomeGamePropertyCurrentSeason                  @"currentSeason"
-#define kHomeGamePropertyParseObjectId                  @"objectId"
-//#define kHomeGamePropertyIndex                          @"index"
+#define kHomeGamePropertyIsUNC                          @"isUNC"
+
+#define kUNCPropertyBlackTentingStartDate               @"blackTentingStartDate"
+#define kUNCPropertyBlueTentingStartDate                @"blueTentingStartDate"
+#define kUNCPropertyWhiteTentingStartDate               @"whiteTentingStartDate"
+#define kUNCPropertyUNCTentingEndDate                   @"uncTentingEndDate"
 
 #define kHomeGamesJSONLocalFilePath                      @"/Users/jeremy/Developer/Xcode/Tent/Tent/HomeGames.json"
-
+#define kLocalHomeGamesJSONFileName                     @"HomeGames" // make sure file ends in .json
 
 #define kUserDefaultsHomeGamesData                      @"homeGamesData"
 

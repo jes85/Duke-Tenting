@@ -252,13 +252,9 @@
     NSString *parseObjectID = parseSchedule.objectId;
     
     PFObject *parseHomeGame = parseSchedule[kGroupSchedulePropertyHomeGame];
-    NSString *opponent = parseHomeGame[kHomeGamePropertyOpponent];
-    NSDate * gameTime = parseHomeGame[kHomeGamePropertyGameTime];
-    BOOL isConferenceGame = parseHomeGame[kHomeGamePropertyConferenceGame];
-    BOOL isExhibition = parseHomeGame[kHomeGamePropertyExhibition];
-    BOOL currentSeason = parseHomeGame[kHomeGamePropertyCurrentSeason];
-    HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame currentSeason:currentSeason parseObjectID:parseHomeGame.objectId];
     
+    HomeGame *homeGame = [NewScheduleTableViewController homeGameObjectFromParseHomeGame:parseHomeGame];
+
     PFObject *creator = parseSchedule[kGroupSchedulePropertyCreatedBy];
     
     NSArray *personsInGroup = parseSchedule[kGroupSchedulePropertyPersonsInGroup];

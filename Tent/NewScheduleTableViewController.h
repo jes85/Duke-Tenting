@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "HomeGamesTableViewCell.h"
+#import <Parse/Parse.h>
+#import "HomeGame.h"
 
 @interface NewScheduleTableViewController : UITableViewController <HomeGameTableViewCellDelegate, UIAlertViewDelegate>
 
@@ -19,7 +21,7 @@
 
 -(IBAction)cancelCreateSchedule:(UIStoryboardSegue *)segue;
 +(void)loadHomeGameScheduleDataFromParseWithBlock:(void (^) (NSArray *parseHomeGames, NSArray *updatedHomeGamesArray, NSError *error))completionHandler;
-
++(HomeGame *)homeGameObjectFromParseHomeGame:(PFObject *)parseHomeGame;
 
 
 @property (nonatomic) NSString *test;

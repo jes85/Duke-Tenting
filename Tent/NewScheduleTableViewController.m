@@ -8,12 +8,10 @@
 
 #import "NewScheduleTableViewController.h"
 #import "Schedule.h"
-#import "HomeGame.h"
 #import "HomeGamesTableViewCell.h"
 #import "JoinedHomeGameTableViewCell.h"
 #import "JoinScheduleTableViewController.h"
 #import "CreateScheduleTableViewController.h"
-#import <Parse/Parse.h>
 #import "Constants.h"
 
 #import "MySchedulesTableViewController.h"
@@ -269,7 +267,7 @@
                 NSError *errorConvertingJSONToData;
                 NSData *data = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:&errorConvertingJSONToData];
                 NSURL *documentsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
-                NSURL *url = [documentsDirectory URLByAppendingPathComponent:@"HomeGames"];
+                NSURL *url = [documentsDirectory URLByAppendingPathComponent:kLocalHomeGamesJSONFileName];
                 [data writeToFile:url.path atomically:YES];
                 
                 // Update self.homeGames
@@ -309,12 +307,7 @@
             NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:parseHomeGames.count];
             for (PFObject *parseHomeGame in parseHomeGames) {
                 
-                NSDate *gameTime = parseHomeGame[kHomeGamePropertyGameTime];
-                NSString *opponent = parseHomeGame[kHomeGamePropertyOpponent];
-                BOOL isExhibition = [parseHomeGame[kHomeGamePropertyExhibition] boolValue];
-                BOOL isConferenceGame = [parseHomeGame[kHomeGamePropertyConferenceGame] boolValue];
-                BOOL currentSeason = [parseHomeGame[kHomeGamePropertyCurrentSeason] boolValue];
-                HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame currentSeason:currentSeason parseObjectID:parseHomeGame.objectId];
+                HomeGame *homeGame = [NewScheduleTableViewController homeGameObjectFromParseHomeGame:parseHomeGame];
                 [homeGamesTemp addObject: homeGame];
             }
             
@@ -329,6 +322,30 @@
     }];
 }
 
++(HomeGame *)homeGameObjectFromParseHomeGame:(PFObject *)parseHomeGame
+{
+    NSString *opponent = parseHomeGame[kHomeGamePropertyOpponent];
+    NSDate * gameTime = parseHomeGame[kHomeGamePropertyGameTime];
+    BOOL isConferenceGame = [parseHomeGame[kHomeGamePropertyConferenceGame] boolValue];
+    BOOL isExhibition = [parseHomeGame[kHomeGamePropertyExhibition] boolValue];
+    BOOL currentSeason = [parseHomeGame[kHomeGamePropertyCurrentSeason] boolValue];
+    BOOL isUNC = [parseHomeGame[kHomeGamePropertyIsUNC] boolValue];
+    
+    HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame currentSeason:currentSeason parseObjectID:parseHomeGame.objectId];
+    
+    homeGame.isUNC = isUNC;
+    if(isUNC){
+        homeGame.blackTentingStartDate = parseHomeGame[kUNCPropertyBlackTentingStartDate];
+        homeGame.blueTentingStartDate = parseHomeGame[kUNCPropertyBlueTentingStartDate];
+        homeGame.whiteTentingStartDate = parseHomeGame[kUNCPropertyWhiteTentingStartDate];
+        homeGame.uncTentingEndDate = parseHomeGame[kUNCPropertyUNCTentingEndDate];
+    }
+    
+    return homeGame;
+    
+}
+
+
 /*!
  *  Load Duke Basketball's home game schedule into self.homeGames
  */
@@ -338,11 +355,11 @@
     // Load file from Documents Directory
     NSFileManager *defaultFileManager = [NSFileManager defaultManager];
     NSURL *documentsDirectory = [[defaultFileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
-    NSURL *url = [documentsDirectory URLByAppendingPathComponent:@"HomeGames"];
+    NSURL *url = [documentsDirectory URLByAppendingPathComponent:kLocalHomeGamesJSONFileName];
     
     // If local file doesn't exist in Documents directory (on first download of app), create it from app bundle file
     if(![defaultFileManager fileExistsAtPath:url.path]){
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"HomeGames" ofType:@"json"];
+        NSString *path = [[NSBundle mainBundle] pathForResource:kLocalHomeGamesJSONFileName ofType:@"json"];
         NSData *dataFromBundle = [NSData dataWithContentsOfFile:path];
         [defaultFileManager createFileAtPath:url.path contents:dataFromBundle attributes:nil];
         
@@ -366,21 +383,49 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
 
     for(PFObject *parseHomeGame in parseHomeGames){
-        [results addObject:@{
-                            kHomeGamePropertyConferenceGame: parseHomeGame[kHomeGamePropertyConferenceGame],
-                            kParsePropertyCreatedAt: [dateFormatter stringFromDate:parseHomeGame.createdAt],
-                            kHomeGamePropertyCurrentSeason: parseHomeGame[kHomeGamePropertyCurrentSeason],
-                            kHomeGamePropertyExhibition: parseHomeGame[kHomeGamePropertyExhibition],
-                            kHomeGamePropertyGameTime: @{
-                                @"__type": @"Date",
-                                @"iso": [dateFormatter stringFromDate:parseHomeGame[kHomeGamePropertyGameTime]]
-                            },
-                            kParsePropertyObjectId: parseHomeGame.objectId,
-                            kHomeGamePropertyOpponent: parseHomeGame[kHomeGamePropertyOpponent],
-                            kParsePropertyUpdatedAt: [dateFormatter stringFromDate:parseHomeGame.updatedAt]
-                            }];
+        BOOL isUNC = [parseHomeGame[kHomeGamePropertyIsUNC] boolValue];
+        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc]initWithDictionary:
+            @{
+              kHomeGamePropertyConferenceGame: parseHomeGame[kHomeGamePropertyConferenceGame],
+              kParsePropertyCreatedAt: [dateFormatter stringFromDate:parseHomeGame.createdAt],
+              kHomeGamePropertyCurrentSeason: parseHomeGame[kHomeGamePropertyCurrentSeason],
+              kHomeGamePropertyExhibition: parseHomeGame[kHomeGamePropertyExhibition],
+              kHomeGamePropertyGameTime: [self parseJSONDictionaryForDate:parseHomeGame[kHomeGamePropertyGameTime]],
+              kHomeGamePropertyIsUNC: parseHomeGame[kHomeGamePropertyIsUNC],
+              kParsePropertyObjectId: parseHomeGame.objectId,
+              kHomeGamePropertyOpponent: parseHomeGame[kHomeGamePropertyOpponent],
+              kParsePropertyUpdatedAt: [dateFormatter stringFromDate:parseHomeGame.updatedAt]
+              
+              }];
+        if(isUNC){
+            [dictionary addEntriesFromDictionary:@{
+                                                  kUNCPropertyBlackTentingStartDate: [self parseJSONDictionaryForDate: parseHomeGame[kUNCPropertyBlackTentingStartDate]],
+                                                  kUNCPropertyBlueTentingStartDate: [self parseJSONDictionaryForDate:parseHomeGame[kUNCPropertyBlueTentingStartDate]],
+                                                  kUNCPropertyWhiteTentingStartDate: [self parseJSONDictionaryForDate: parseHomeGame[kUNCPropertyWhiteTentingStartDate]],
+                                                  kUNCPropertyUNCTentingEndDate: [self parseJSONDictionaryForDate:parseHomeGame[kUNCPropertyUNCTentingEndDate]],
+                                                  }];
+        }
+        [results addObject: dictionary];
     }
     return @{@"results":results};
+}
+
+-(NSDictionary *)parseJSONDictionaryForDate:(NSDate *)date{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
+    return @{
+             @"__type": @"Date",
+               @"iso": [dateFormatter stringFromDate:date]
+    };
+}
+-(NSDate *)dateFromParseJSONDictionary:(NSDictionary *)dictionary
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
+    NSString *dateString = dictionary[@"iso"];
+    NSDate *date = [dateFormatter dateFromString:dateString];
+
+    return date;
 }
 
 -(NSArray *)homeGamesArrayFromJSONHomeGamesDictionary:(NSDictionary *)jsonObject
@@ -388,21 +433,19 @@
     NSArray *jsonHomeGames = jsonObject[@"results"];
     
     NSMutableArray *homeGamesTemp = [[NSMutableArray alloc]initWithCapacity:jsonHomeGames.count];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
     
     for(int i = 0; i<jsonHomeGames.count; i++){
         
         NSDictionary *gameInfo = jsonHomeGames[i];
-        NSDictionary *gameTimeObject =gameInfo[kHomeGamePropertyGameTime];
-        NSString *gameTimeString = gameTimeObject[@"iso"];
-        NSDate *gameTime = [dateFormatter dateFromString:gameTimeString];
-        
+
+        NSDate *gameTime = [self dateFromParseJSONDictionary:gameInfo[kHomeGamePropertyGameTime]];
         NSString *opponent = gameInfo[kHomeGamePropertyOpponent];
         BOOL isExhibition = [gameInfo[kHomeGamePropertyExhibition] boolValue];
         BOOL isConferenceGame = [gameInfo[kHomeGamePropertyConferenceGame] boolValue];
         BOOL currentSeason = [gameInfo[kHomeGamePropertyCurrentSeason] boolValue];
-        NSString *parseObjectId = gameInfo[kHomeGamePropertyParseObjectId];
+        NSString *parseObjectId = gameInfo[kParsePropertyObjectId];
+        
+        BOOL isUNC = [gameInfo[kHomeGamePropertyIsUNC] boolValue];
         
         /* doesn't work here because they aren't in sorted order
          if([gameTime timeIntervalSinceNow] < 0){
@@ -411,6 +454,15 @@
          */
         
         HomeGame *homeGame = [[HomeGame alloc]initWithOpponentName:opponent gameTime:gameTime isExhibition:isExhibition isConferenceGame:isConferenceGame currentSeason:currentSeason parseObjectID:parseObjectId];
+        homeGame.isUNC = isUNC;
+        
+        if(isUNC){
+            homeGame.blackTentingStartDate =  [self dateFromParseJSONDictionary:gameInfo[kUNCPropertyBlackTentingStartDate]];
+            homeGame.blueTentingStartDate = [self dateFromParseJSONDictionary:gameInfo[kUNCPropertyBlueTentingStartDate]];
+            homeGame.whiteTentingStartDate = [self dateFromParseJSONDictionary:gameInfo[kUNCPropertyWhiteTentingStartDate]];
+            homeGame.uncTentingEndDate = [self dateFromParseJSONDictionary:gameInfo[kUNCPropertyUNCTentingEndDate]];
+        }
+
         [homeGamesTemp addObject: homeGame];
     }
     

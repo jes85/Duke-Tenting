@@ -38,7 +38,6 @@
 		3F90BC821C3773060091E8DC /* PersonScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F90BC811C3773060091E8DC /* PersonScheduleViewController.m */; };
 		3F90BC851C37BF920091E8DC /* SuperPersonsInIntervalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F90BC841C37BF920091E8DC /* SuperPersonsInIntervalViewController.m */; };
 		3F9198ED1C3929D400FAD489 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F9198EC1C3929D400FAD489 /* EventKit.framework */; };
-		3F9198EF1C3A2ACE00FAD489 /* HomeGames.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F9198EE1C3A2ACE00FAD489 /* HomeGames.json */; };
 		3F9269A71C352E780096F5B7 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F9269A61C352E780096F5B7 /* Launch Screen.storyboard */; };
 		3F94B853199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */; };
 		3F96F6CB1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F96F6CA1BFA1F6F00636737 /* JoinedHomeGameTableViewCell.m */; };
@@ -65,6 +64,7 @@
 		3FC529721C3525C2003F9B9D /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC5296E1C3525C2003F9B9D /* ParseFacebookUtilsV4.framework */; };
 		3FC529731C3525C2003F9B9D /* ParseTwitterUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC5296F1C3525C2003F9B9D /* ParseTwitterUtils.framework */; };
 		3FC529741C3525C2003F9B9D /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC529701C3525C2003F9B9D /* ParseUI.framework */; };
+		3FC6AEBF1C41C3C600F735C5 /* HomeGames.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FC6AEBE1C41C3C600F735C5 /* HomeGames.json */; };
 		3FCB16C419AE5BAF004E1BF3 /* NewScheduleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCB16C319AE5BAF004E1BF3 /* NewScheduleTableViewController.m */; };
 		3FD5CFBE1C2CB79500A28630 /* AdminToolsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD5CFBD1C2CB79500A28630 /* AdminToolsViewController.m */; };
 		3FD6963C1996A7DB00D9C5C4 /* AddPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6963B1996A7DB00D9C5C4 /* AddPersonViewController.m */; };
@@ -145,7 +145,6 @@
 		3F90BC831C37BF920091E8DC /* SuperPersonsInIntervalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperPersonsInIntervalViewController.h; sourceTree = "<group>"; };
 		3F90BC841C37BF920091E8DC /* SuperPersonsInIntervalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuperPersonsInIntervalViewController.m; sourceTree = "<group>"; };
 		3F9198EC1C3929D400FAD489 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
-		3F9198EE1C3A2ACE00FAD489 /* HomeGames.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = HomeGames.json; sourceTree = "<group>"; };
 		3F9269A61C352E780096F5B7 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		3F94B851199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameOfScheduleTableViewCell.h; sourceTree = "<group>"; };
 		3F94B852199AA43D00A2DCF1 /* NameOfScheduleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameOfScheduleTableViewCell.m; sourceTree = "<group>"; };
@@ -184,6 +183,7 @@
 		3FC5296E1C3525C2003F9B9D /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtilsV4.framework; path = Tent/ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
 		3FC5296F1C3525C2003F9B9D /* ParseTwitterUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseTwitterUtils.framework; path = Tent/ParseTwitterUtils.framework; sourceTree = "<group>"; };
 		3FC529701C3525C2003F9B9D /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = Tent/ParseUI.framework; sourceTree = "<group>"; };
+		3FC6AEBE1C41C3C600F735C5 /* HomeGames.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = HomeGames.json; sourceTree = "<group>"; };
 		3FCB16C219AE5BAF004E1BF3 /* NewScheduleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewScheduleTableViewController.h; sourceTree = "<group>"; };
 		3FCB16C319AE5BAF004E1BF3 /* NewScheduleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewScheduleTableViewController.m; sourceTree = "<group>"; };
 		3FD5CFBC1C2CB79500A28630 /* AdminToolsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdminToolsViewController.h; sourceTree = "<group>"; };
@@ -405,7 +405,7 @@
 		3FA6D50E1965E7A50043087B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				3F9198EE1C3A2ACE00FAD489 /* HomeGames.json */,
+				3FC6AEBE1C41C3C600F735C5 /* HomeGames.json */,
 				3F44CE5D19CCE6A500271D3E /* Constants.h */,
 				3F44CE5E19CCE6A500271D3E /* Constants.m */,
 				3FA6D5161965E7A50043087B /* ScheduleAppDelegate.h */,
@@ -582,7 +582,7 @@
 				3FA6D5121965E7A50043087B /* InfoPlist.strings in Resources */,
 				3F3B71B71C3B8FE700669C8B /* Images.xcassets in Resources */,
 				3F9269A71C352E780096F5B7 /* Launch Screen.storyboard in Resources */,
-				3F9198EF1C3A2ACE00FAD489 /* HomeGames.json in Resources */,
+				3FC6AEBF1C41C3C600F735C5 /* HomeGames.json in Resources */,
 				3FA6D51B1965E7A50043087B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
