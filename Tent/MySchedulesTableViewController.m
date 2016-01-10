@@ -578,14 +578,16 @@
         return YES; // Begin login process
     }
     
-    [[[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                message:@"Make sure you fill out all of the information!"
-                               delegate:nil
-                      cancelButtonTitle:@"ok"
-                      otherButtonTitles:nil] show];
+    UIAlertController *alert = [self alertControllerWithOkButtonWithTitle:@"Missing Information" message:@"Make sure you fill out all of the information!"];
+    [self presentViewController:alert animated:YES completion:nil];
     return NO; // Interrupt login process
 }
-
+-(UIAlertController *)alertControllerWithOkButtonWithTitle:(NSString *)title message:(NSString *)message
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    return alert;
+}
 
 // Sent to the delegate when a PFUser is logged in.
 // (customize this later)
@@ -601,11 +603,10 @@
 
 // Sent to the delegate when the log in attempt fails.
 - (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error {
-    [[[UIAlertView alloc] initWithTitle:@"Login unsuccessful"
-                                message:@"Please re-enter your information"
-                               delegate:nil
-                      cancelButtonTitle:@"ok"
-                      otherButtonTitles:nil] show];
+
+    UIAlertController *alert = [self alertControllerWithOkButtonWithTitle:@"Login Unsuccessful" message:@"Please re-enter your information."];
+    [self presentViewController:alert animated:YES completion:nil];
+
     //maybe clear password
 }
 
@@ -633,11 +634,9 @@
     
     // Display an alert if a field wasn't completed
     if (!informationComplete) {
-        [[[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                    message:@"Make sure you fill out all of the information!"
-                                   delegate:nil
-                          cancelButtonTitle:@"ok"
-                          otherButtonTitles:nil] show];
+        UIAlertController *alert = [self alertControllerWithOkButtonWithTitle:@"Missing Information" message:@"Make sure you fill out all of the information!"];
+        [self presentViewController:alert animated:YES completion:nil];
+
     }
     
     return informationComplete;

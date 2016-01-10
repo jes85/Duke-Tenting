@@ -196,6 +196,8 @@
     return YES;
 }
 
+
+
 #pragma mark - Custom buttons
 /*!
  * Called when user taps Join button.

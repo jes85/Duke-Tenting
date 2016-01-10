@@ -17,7 +17,7 @@
     [dateFormatter setDateStyle:style];
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *comps = [calendar components:NSWeekdayCalendarUnit fromDate:date];
+    NSDateComponents *comps = [calendar components:NSCalendarUnitWeekday fromDate:date];
     NSUInteger weekdayNum = [comps weekday];
     NSString *weekday = [[dateFormatter shortWeekdaySymbols][weekdayNum-1] stringByAppendingString:@". "];
     NSString *dateLabelText = [weekday stringByAppendingString:[dateFormatter stringFromDate:date]];
