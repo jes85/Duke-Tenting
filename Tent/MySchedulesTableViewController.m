@@ -28,6 +28,9 @@
 @property (nonatomic) NSUInteger scrollRow;
 
 
+@property (nonatomic) PFLogInViewController *logInViewController;
+@property (nonatomic) PFSignUpViewController *signUpViewController;
+
 
 @end
 
@@ -565,6 +568,8 @@
     // Assign our sign up controller to be displayed from the login controller
     [logInViewController setSignUpController:signUpViewController];
     
+    self.logInViewController = logInViewController;
+    self.signUpViewController = signUpViewController;
     //present the log in view controller
     [self presentViewController:logInViewController animated:YES completion:nil];
     //TODO: xcode complains about this. may need to move login to separate view controller and just present this one on login
@@ -579,7 +584,7 @@
     }
     
     UIAlertController *alert = [self alertControllerWithOkButtonWithTitle:@"Missing Information" message:@"Make sure you fill out all of the information!"];
-    [self presentViewController:alert animated:YES completion:nil];
+    [self.logInViewController presentViewController:alert animated:YES completion:nil];
     return NO; // Interrupt login process
 }
 -(UIAlertController *)alertControllerWithOkButtonWithTitle:(NSString *)title message:(NSString *)message
@@ -605,7 +610,7 @@
 - (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error {
 
     UIAlertController *alert = [self alertControllerWithOkButtonWithTitle:@"Login Unsuccessful" message:@"Please re-enter your information."];
-    [self presentViewController:alert animated:YES completion:nil];
+    [self.logInViewController presentViewController:alert animated:YES completion:nil];
 
     //maybe clear password
 }
@@ -635,7 +640,7 @@
     // Display an alert if a field wasn't completed
     if (!informationComplete) {
         UIAlertController *alert = [self alertControllerWithOkButtonWithTitle:@"Missing Information" message:@"Make sure you fill out all of the information!"];
-        [self presentViewController:alert animated:YES completion:nil];
+        [self.signUpViewController presentViewController:alert animated:YES completion:nil];
 
     }
     
