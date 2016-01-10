@@ -93,9 +93,9 @@
     
     
     if(section == 0)
-        return [NSString stringWithFormat:@"Assigned (%lu/%lu)", (unsigned long)self.interval.assignedPersons.count, self.interval.requiredPersons];
+        return [NSString stringWithFormat:@"Assigned (%lu/%lu)", (unsigned long)self.interval.assignedPersons.count, (unsigned long)self.interval.requiredPersons];
     if(section == 1)
-        return [NSString stringWithFormat:@"Available (%lu/%lu)", (unsigned long)self.interval.availablePersons.count, self.interval.requiredPersons];
+        return [NSString stringWithFormat:@"Available (%lu/%lu)", (unsigned long)self.interval.availablePersons.count, (unsigned long)self.interval.requiredPersons];
     return @"";
 }
 
