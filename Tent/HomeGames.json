@@ -1,0 +1,412 @@
+{ "results": [
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": true,
+        "createdAt": "2015-11-19T02:07:01.196Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2016-02-26T00:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "5VcOIm67KF",
+        "opponent": "Florida State",
+        "updatedAt": "2016-01-09T21:55:24.234Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": false,
+        "createdAt": "2015-11-19T02:07:01.178Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2015-12-30T21:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "8DQ0WH9Zis",
+        "opponent": "Long Beach State",
+        "updatedAt": "2016-01-09T21:55:34.154Z"
+    },
+	{
+        "conferenceGame": false,
+        "createdAt": "2015-11-19T02:07:01.150Z",
+        "currentSeason": true,
+        "exhibition": true,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2015-10-17T23:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "Cf7GBmgDr7",
+        "opponent": "Countdown to Craziness",
+        "updatedAt": "2016-01-09T21:56:04.069Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": false,
+        "createdAt": "2015-11-19T02:07:01.173Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2015-12-16T00:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "DH7OHpqDCP",
+        "opponent": "Georgia Southern",
+        "updatedAt": "2016-01-09T21:55:38.613Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": false,
+        "createdAt": "2015-11-19T02:07:01.168Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2015-12-03T02:15:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "DX21BGBEvx",
+        "opponent": "Indiana",
+        "updatedAt": "2016-01-09T21:55:52.541Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": false,
+        "createdAt": "2015-11-19T02:07:01.170Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2015-12-05T22:15:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "EpQLOx9UnR",
+        "opponent": "Buffalo",
+        "updatedAt": "2016-01-09T21:55:50.945Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": true,
+        "createdAt": "2015-11-19T02:07:01.188Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2016-02-07T00:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "FSspZiFCio",
+        "opponent": "NC State",
+        "updatedAt": "2016-01-09T21:55:28.333Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": false,
+        "createdAt": "2015-11-19T02:07:01.175Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2015-12-29T01:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "O5IgtbRM3l",
+        "opponent": "Elon",
+        "updatedAt": "2016-01-09T21:55:36.200Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": false,
+        "createdAt": "2015-11-19T02:07:01.158Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2015-11-14T00:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "OFPIxcWLwB",
+        "opponent": "Siena",
+        "updatedAt": "2016-01-09T21:55:59.904Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": true,
+        "createdAt": "2015-11-19T02:07:01.185Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2016-01-19T00:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "OyDJ8kXBjC",
+        "opponent": "Syracuse",
+        "updatedAt": "2016-01-09T21:55:29.791Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": true,
+        "createdAt": "2015-11-19T02:07:01.183Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2016-01-16T19:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "QMfX2qKcYy",
+        "opponent": "Notre Dame",
+        "updatedAt": "2016-01-09T21:55:31.242Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": false,
+        "createdAt": "2015-11-19T02:07:01.160Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2015-11-15T01:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "RvdXPGrftK",
+        "opponent": "Bryant",
+        "updatedAt": "2016-01-09T21:55:57.809Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": true,
+        "createdAt": "2015-11-19T02:07:01.190Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2016-02-09T00:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "SBkUGBTwL0",
+        "opponent": "Louisville",
+        "updatedAt": "2016-01-09T21:55:26.941Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": false,
+        "createdAt": "2015-11-19T02:07:01.165Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2015-11-29T17:30:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "WsAfZIOFFW",
+        "opponent": "Utah State",
+        "updatedAt": "2016-01-09T21:55:55.049Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": false,
+        "createdAt": "2015-11-19T02:07:01.155Z",
+        "currentSeason": true,
+        "exhibition": true,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2015-11-05T00:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "X7z4UAm7jw",
+        "opponent": "Livingstone",
+        "updatedAt": "2016-01-09T21:56:01.348Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": true,
+        "createdAt": "2015-11-19T02:07:01.193Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2016-02-14T00:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "ZD9aNYqh38",
+        "opponent": "Virginia",
+        "updatedAt": "2016-01-10T18:43:44.393Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "blackTentingStartDate": {
+            "__type": "Date",
+            "iso": "2016-01-18T04:00:00.000Z"
+        },
+        "blueTentingStartDate": {
+            "__type": "Date",
+            "iso": "2016-02-01T04:00:00.000Z"
+        },
+        "conferenceGame": true,
+        "createdAt": "2015-11-19T02:07:01.201Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2016-03-06T00:00:00.000Z"
+        },
+        "isUNC": true,
+        "objectId": "a26ggmp8KK",
+        "opponent": "North Carolina",
+        "uncTentingEndDate": {
+            "__type": "Date",
+            "iso": "2016-03-02T17:00:00.000Z"
+        },
+        "updatedAt": "2016-01-10T20:56:23.787Z",
+        "whiteTentingStartDate": {
+            "__type": "Date",
+            "iso": "2016-02-18T04:00:00.000Z"
+        }
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": true,
+        "createdAt": "2015-11-19T02:07:01.180Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2016-01-09T17:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "ifQVdUYfcR",
+        "opponent": "Virginia Tech",
+        "updatedAt": "2016-01-09T21:55:33.025Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": false,
+        "createdAt": "2015-11-19T02:07:01.153Z",
+        "currentSeason": true,
+        "exhibition": true,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2015-10-31T00:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "l8EJSa9Xts",
+        "opponent": "Florida Southern",
+        "updatedAt": "2016-01-09T21:56:02.756Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": true,
+        "createdAt": "2015-11-19T02:07:01.199Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2016-03-02T01:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "ph5kT2umyO",
+        "opponent": "Wake Forest",
+        "updatedAt": "2016-01-10T20:52:36.927Z"
+    },
+	{
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        },
+        "conferenceGame": false,
+        "createdAt": "2015-11-19T02:07:01.163Z",
+        "currentSeason": true,
+        "exhibition": false,
+        "gameTime": {
+            "__type": "Date",
+            "iso": "2015-11-26T00:00:00.000Z"
+        },
+        "isUNC": false,
+        "objectId": "t4qjufluw0",
+        "opponent": "Yale",
+        "updatedAt": "2016-01-09T21:55:56.450Z"
+    }
+] }
