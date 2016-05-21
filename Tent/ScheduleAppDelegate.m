@@ -13,11 +13,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Override point for customization after application launch.
+    
     [Parse setApplicationId:@"GaDG8QQCgDrIpEBawX1qtF8Eyv18bvd00Tw5rK4I"
                   clientKey:@"X8Iw87xOJAetK8agrPdMX3frjFa9Z09eFEJm9ytP"];
     
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-    // Override point for customization after application launch.
+    
+    [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"EST"]];
     return YES;
 }
 							

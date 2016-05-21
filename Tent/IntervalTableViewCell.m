@@ -26,11 +26,11 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
-    [super setSelected:selected animated:animated];
+    //TODO: not exactly sure why this works. try to figure out a better way of having background colors permanently change on selection
+    //[super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
 }
-
 
 
 

@@ -8,9 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Interval : NSObject
+@interface Interval : NSObject <NSCopying>
 
 @property (nonatomic) NSMutableArray *availablePersons;
 @property (nonatomic) NSMutableArray *assignedPersons;
+@property (nonatomic) NSDate *startDate;
+@property (nonatomic) NSDate *endDate;
+@property (nonatomic) NSString *timeString;
+@property (nonatomic) NSString *dateTimeString;
+@property (nonatomic) NSUInteger requiredPersons; //for UNC //make UNCInterval subclass
+@property (nonatomic) BOOL night;
+@property (nonatomic) NSUInteger section; //neessary?
 
+-(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate section:(NSUInteger)section availablePersons:(NSMutableArray *)available assignedPersons:(NSMutableArray *)assigned;
 @end

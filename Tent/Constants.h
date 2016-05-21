@@ -10,34 +10,91 @@
 
 @interface Constants : NSObject
 
-#define kPersonClassName    @"Person"
 
-#define kPersonPropertyName                 @"name"
-#define kPersonPropertyIndex                @"index"
-#define kPersonPropertyAvailabilitiesArray  @"availabilitiesArray"
-#define kPersonPropertyAssignmentsArray     @"assignmentsArray"
-#define kPersonPropertyAssociatedSchedule   @"associatedSchedule" //or schedule name?
+// Person ParseObject
+#define kPersonClassName                        @"Person"
 
+#define kPersonPropertyAssignmentsArray                 @"assignmentsArray"
+#define kPersonPropertyAssociatedUser                   @"associatedUser"
+#define kPersonPropertyOfflineName                      @"offlineName"
 
-#define kScheduleClassName  @"Schedule"
+// GroupSchedule ParseObject
+#define kGroupScheduleClassName                 @"GroupSchedule"
 
-#define kSchedulePropertyName                   @"name"
-#define kSchedulePropertyStartDate              @"startDate"
-#define kSchedulePropertyEndDate                @"endDate"
-#define kSchedulePropertyAvailabilitiesSchedule @"availabilitiesSchedule"
-#define kSchedulePropertyAssignmentsSchedule    @"assignmentsSchedule"
-#define kSchedulePropertyNumHourIntervals       @"numHourIntervals"
-#define kSchedulePropertyPrivacy                @"privacy"
-#define kSchedulePropertyPassword               @"password"
-#define kSchedulePropertyHomeGameIndex          @"homeGameIndex"
-#define kSchedulePropertyCreatedBy              @"createdBy" //be careful of strong reference cycle
-#define kSchedulePropertyPersonsList            @"personsList"
+#define kGroupSchedulePropertyGroupName                 @"groupName"
+#define kGroupSchedulePropertyGroupCode                 @"groupCode"
+#define kGroupSchedulePropertyStartDate                 @"startDate"
+#define kGroupSchedulePropertyEndDate                   @"endDate"
+#define kGroupSchedulePropertyHomeGame                  @"homeGame"
+#define kGroupSchedulePropertyPersonsInGroup            @"personsInGroup"
+#define kGroupSchedulePropertyCreatedBy                 @"createdBy" 
+#define kGroupSchedulePropertyAssignmentsGenerated      @"assignmentsGenerated"
+#define kGroupSchedulePropertyNumIntervals              @"numIntervals"
+/* V2
+#define kGroupSchedulePropertyIntervalLengthInMinutes   @"intervalLengthInMinutes"
+#define kGroupSchedulePropertyAdmins                    @"admins"
+#define kGroupSchedulePropertyPrivacy                   @"privacy"
+ */
+
+// User ParseObject
+#define kParsePropertyObjectId                  @"objectId"
+#define kParsePropertyCreatedAt                 @"createdAt"
+#define kParsePropertyUpdatedAt                 @"updatedAt"
+
+#define kUserPropertyGroupSchedules                     @"groupSchedules"
+#define kUserPropertyFullName                           @"additional"
+
+// HomeGame ParseObject
+#define kHomeGameClassName                      @"HomeGame"
+
+#define kHomeGamePropertyOpponent                       @"opponent"
+#define kHomeGamePropertyGameTime                       @"gameTime"
+#define kHomeGamePropertyConferenceGame                 @"conferenceGame"
+#define kHomeGamePropertyExhibition                     @"exhibition"
+#define kHomeGamePropertyCurrentSeason                  @"currentSeason"
+#define kHomeGamePropertyIsUNC                          @"isUNC"
+
+#define kUNCPropertyBlackTentingStartDate               @"blackTentingStartDate"
+#define kUNCPropertyBlueTentingStartDate                @"blueTentingStartDate"
+#define kUNCPropertyWhiteTentingStartDate               @"whiteTentingStartDate"
+#define kUNCPropertyUNCTentingEndDate                   @"uncTentingEndDate"
+
+#define kHomeGamesJSONLocalFilePath                      @"/Users/jeremy/Developer/Xcode/Tent/Tent/HomeGames.json"
+#define kLocalHomeGamesJSONFileName                     @"HomeGames" // make sure file ends in .json
+
+#define kUserDefaultsHomeGamesData                      @"homeGamesData"
 
 #define kPrivacyValuePrivate                    @"private"
 #define kPrivacyValuePublic                     @"public"
 
-#define kUserPropertySchedulesList              @"schedulesList"
+// Container View Controller Children Storyboard Identifiers
+#define kChildViewControllerMe                  @"ChildViewControllerMe"
+#define kChildViewControllerCurrent             @"ChildViewControllerCurrent"
+#define kChildViewControllerOthers              @"ChildViewControllerOthers"
+#define kChildViewControllerTimeSlots           @"ChildViewControllerTimeSlots"
 
-#define kUserPropertyFullName                   @"additional"
+// Notifications to keep schedule object consistent across vcs
+#define kNotificationNameScheduleChanged        @"scheduleChanged"
+#define kUserInfoLocalScheduleKey                       @"schedule"
+#define kUserInfoLocalScheduleChangedPropertiesKey             @"changedProperties"
+#define kUserInfoLocalSchedulePropertyPersonsArray      @"personsArray"
+#define kUserInfoLocalSchedulePropertyGroupName         @"groupName"
+#define kUserInfoLocalSchedulePropertyOther             @"other"
+
++(NSString *)formatDate:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
++(NSString *)formatTime:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
++(NSString *)formatDateAndTime: (NSDate *)date withDateStyle:(NSDateFormatterStyle)dateStyle timeStyle: (NSDateFormatterStyle)timeStyle;
+
+/*
++(NSString *)formatWeekday:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
++(NSString *)formatDateOnly:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
++(NSString *)formatWeekdayDateTime:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
++(NSString *)formatWeekdayDate:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
++(NSString *)formatDateTime:(NSDate *)date withStyle:(NSDateFormatterStyle)style;
+*/
+
+
++(NSUInteger)overallRowForIndexPath:(NSIndexPath *)indexPath tableView:(UITableView *)tableView;
++(NSIndexPath *)indexPathForOverallRow:(NSUInteger)overallRow tableView:(UITableView *)tableView;
 
 @end

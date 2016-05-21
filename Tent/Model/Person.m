@@ -10,58 +10,69 @@
 @interface Person()
 
 @property (nonatomic) NSUInteger numIntervals;
+
 @end
 
 @implementation Person
 
--(NSMutableArray *)availabilitiesArray
+-(NSUInteger)numIntervals
 {
-    if(!_availabilitiesArray) _availabilitiesArray = [[NSMutableArray alloc]init];
-    return _availabilitiesArray;
-}
--(NSMutableArray *)assignmentsArray
-{
-    if(!_assignmentsArray)_assignmentsArray = [[NSMutableArray alloc]init];
-    return _assignmentsArray;
+    return [self.assignmentsArray count];
 }
 
+#pragma mark - Init
 
-
--(instancetype)initWithName: (NSString *)name index:(NSUInteger)index  numIntervals:(NSUInteger)numIntervals scheduleName:(NSString *)scheduleName
+-(instancetype)initWithUser:(PFObject *)user assignmentsArray:(NSMutableArray *)assignments scheduleIndex:(NSUInteger)index parseObjectID:(NSString *)parseObjectID
 {
     self = [super init];
-    if(self){
-       
-        NSMutableArray *availArray = [self createZerosArrayWithNumIntervals:numIntervals];
-        NSMutableArray *assignArray = [self createZerosArrayWithNumIntervals:numIntervals];
+    if(self) {
+        self.user = user;
+        self.assignmentsArray = assignments;
+        self.scheduleIndex = index;
+        self.parseObjectID = parseObjectID;
         
-        self = [self initWithName:name index:index availabilitiesArray:availArray assignmentsArray:assignArray scheduleName:scheduleName];
     }
     return self;
 }
-//do i use this?
--(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray scheduleName:(NSString *)scheduleName
+
+-(instancetype)initWithUser:(PFObject *)user numIntervals: (NSUInteger)numIntervals
 {
     self = [super init];
-    if(self){
-        NSMutableArray *assignArray = [self createZerosArray];
-         self = [self initWithName:name index:index availabilitiesArray:availArray assignmentsArray:assignArray scheduleName:scheduleName];
+    if(self) {
+        self.user = user;
+        [self initializeAssignmentsArrayWithNumIntervals: numIntervals];
     }
     return self;
 }
-//designated initializer
--(instancetype)initWithName: (NSString *)name index:(NSUInteger)index availabilitiesArray:(NSMutableArray *)availArray assignmentsArray:(NSMutableArray *)assignArray scheduleName:(NSString *)scheduleName
+
+-(void)initializeAssignmentsArrayWithNumIntervals:(NSUInteger) numIntervals
 {
-    self = [super init];
-    if(self){
-        self.name = name;
-        self.indexOfPerson = index;
-        self.availabilitiesArray = availArray;
-        self.assignmentsArray = assignArray;
-        self.scheduleName=scheduleName;
+    NSMutableArray *array = [[NSMutableArray alloc]init];
+    for(int i = 0; i<numIntervals;i++){
+        [array addObject:[NSNumber numberWithInteger:0]];
     }
-    return self;
+    self.assignmentsArray = array;
 }
+
+#pragma mark - Resets
+
+-(void)clearAssignments
+{
+    for(int i = 0; i<[self.assignmentsArray count];i++){
+        if([self.assignmentsArray[i] integerValue] == 2){
+            self.assignmentsArray[i] = @1;
+        }
+    }
+}
+
+-(void)clearAvailablities
+{
+    for(int i = 0; i<[self.assignmentsArray count];i++){
+        self.assignmentsArray[i] = @0;
+    }
+}
+
+#pragma mark - Equality
 
 - (BOOL)isEqual:(id)other {
     if (other == self)
@@ -75,33 +86,21 @@
 - (BOOL)isEqualToPerson:(Person *)aPerson {
     if (self == aPerson)
         return YES;
-    if (![(id)[self name] isEqual:[aPerson name]])
+    /*
+    if (![[(id)[self user] objectId] isEqual:[[aPerson user] objectId]])
         return NO;
-    if (!([self indexOfPerson] == [aPerson indexOfPerson]))
-        return NO;
-    if (![(id)[self availabilitiesArray] isEqual:[aPerson availabilitiesArray]])
+    if (!([self scheduleIndex] == [aPerson scheduleIndex]))
         return NO;
     if (![(id)[self assignmentsArray] isEqual:[aPerson assignmentsArray]])
         return NO;
-   // NSLog(@"Test equality");
+     */
+    
+    //TODO: implement and check. make sure it works for offline people
+    if (![(id)[self parseObjectID] isEqual:[aPerson parseObjectID]] | ![(id)[self offlineName] isEqual:[aPerson offlineName]])
+        return NO;
+    // NSLog(@"Test equality");
     return YES;
 }
 
--(NSMutableArray *)createZerosArray
-{
-    NSMutableArray *array = [[NSMutableArray alloc]init];
-    for(int i = 0; i<[self.availabilitiesArray count];i++){
-        [array addObject:@0];
-    }
-    return array;
-}
--(NSMutableArray *)createZerosArrayWithNumIntervals:(NSUInteger)numIntervals
-{
-    NSMutableArray *array = [[NSMutableArray alloc]init];
-    for(int i = 0; i<numIntervals;i++){
-        [array addObject:@0];
-    }
-    return array;
-}
 
 @end

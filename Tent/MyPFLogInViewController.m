@@ -11,6 +11,7 @@
 
 @interface MyPFLogInViewController ()
 @property(nonatomic, strong) UIImageView *fieldsBackground;
+@property(nonatomic, strong) UIView *fieldsBackgroundTest;
 @end
 
 @implementation MyPFLogInViewController
@@ -29,32 +30,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    //[self.logInView setBackgroundColor:[UIColor blueColor]];
-    [self.logInView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"DukeBlueBG"]]];
-    [self.logInView setLogo: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Krzyzewskiville"]]];
     
-    // Add login field background
-    self.fieldsBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginFieldBG.png"]];
-    [self.logInView insertSubview:self.fieldsBackground atIndex:1];
-    // Remove text shadow
-    CALayer *layer = self.logInView.usernameField.layer;
-    layer.shadowOpacity = 0.0;
-    layer = self.logInView.passwordField.layer;
-    layer.shadowOpacity = 0.0;
+    [self.logInView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:(100/255.0f) alpha:1.0f]];
     
-    // Set field text color
-    [self.logInView.usernameField setTextColor:[UIColor colorWithRed:135.0f/255.0f green:118.0f/255.0f blue:92.0f/255.0f alpha:1.0]];
-    [self.logInView.passwordField setTextColor:[UIColor colorWithRed:135.0f/255.0f green:118.0f/255.0f blue:92.0f/255.0f alpha:1.0]];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 300, 100)];
+    label.text = @"DUKE K-VILLE PLANNER";
+    label.textColor = [UIColor whiteColor];
+    
+    [self.logInView setLogo:label];
+    //[self.logInView setLogo: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Krzyzewskiville"]]];
+
+    
 }
 
--(void) viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    [self.logInView.logo setFrame:CGRectMake(66.5f, 70.0f, 187.0f, 78.5f)];
-    [self.logInView.usernameField setFrame:CGRectMake(35.0f, 185.0f, 250.0f, 50.0f)];
-    [self.logInView.passwordField setFrame:CGRectMake(35.0f, 235.0f, 250.0f, 50.0f)];
-    [self.fieldsBackground setFrame:CGRectMake(35.0f, 185.0f, 250.0f, 100.0f)];
-}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -64,6 +52,7 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
+ 
 /*
 #pragma mark - Navigation
 

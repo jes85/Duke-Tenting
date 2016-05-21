@@ -7,44 +7,95 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Parse/Parse.h>
+#import "HomeGame.h"
+
 
 @interface Schedule : NSObject
 
-// init
+// Init
+-(instancetype)initWithGroupName:(NSString *)name groupCode:(NSString *)groupCode startDate:(NSDate *)startDate endDate:(NSDate *)endDate intervalLengthInMinutes: (NSUInteger)intervalLength personsArray:(NSMutableArray *)personsArray homeGame:(HomeGame *)hg createdBy:(PFObject *)createdBy assignmentsGenerated:(BOOL)assignmentsGenerated parseObjectID:(NSString *)parseObjectID;
 
-//designated initializer
--(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex parseObjectID: (NSString *)parseObjectID;
-
-//no parseObject ID (when schedule hasn't been saved yet)
--(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex;
-
-//init for CreateScheduleViewController.m
--(instancetype)initWithName:(NSString *)name startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex;
-
-
--(BOOL)setup;
-
-// Basic Parameters
-@property(nonatomic) NSUInteger numPeople;
-@property(nonatomic) NSUInteger numIntervals;
-@property(nonatomic) NSUInteger numHourIntervals;//convert to numIntervals and add property that specifies interval range (hour)
-@property (nonatomic, ) NSDate *startDate;
+// Basic Info
+@property (nonatomic) NSString *groupName;
+@property (nonatomic) NSString *groupCode;
+@property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *endDate;
-@property (nonatomic) NSString *name; //for parse
-@property (nonatomic) NSMutableArray *intervalArray; //Interval[]
-@property (nonatomic)NSArray *hourIntervalsDisplayArray;
-@property (nonatomic) NSString *privacy;
-@property (nonatomic) NSString *password; //how to encrypt this?
-@property (nonatomic) NSUInteger homeGameIndex;
+@property (nonatomic) NSUInteger intervalLengthInMinutes;
+@property (nonatomic) NSUInteger numIntervals;
+@property (nonatomic) NSUInteger requiredPersonsPerInterval; //for non-UNC schedules
+@property (nonatomic) BOOL assignmentsGenerated;
 @property (nonatomic) NSString *parseObjectID;
-
-// Matrix Schedules (make these private later?)
-    @property (nonatomic) NSMutableArray *availabilitiesSchedule;
-    @property (nonatomic) NSMutableArray *assignmentsSchedule;
-
+//@property (nonatomic) NSUInteger currentUserPersonIndex; //TODO: might want to make this a method instead of a property. not sure if it initializes properly if schedule is initiated without a personsArray
+-(NSUInteger)findCurrentUserPersonIndex;
+@property (nonatomic) BOOL currentUserWasRemoved;
 
 
--(NSMutableArray *)createZeroedIntervalArray;
+// Relationships
+@property (nonatomic) NSMutableArray *personsArray; 
+@property (nonatomic) PFObject *createdBy;
+@property (nonatomic) HomeGame *homeGame;
+
+
+// UI Helper Arrays
+-(void)resetIntervalArray;
+-(void)createIntervalDataArrays; //Add KVO for self.intervalDataArrays to update every time personsArrays are changed
+@property (nonatomic) NSMutableArray *intervalDataByOverallRow; // [Interval, Interval,...]
+@property (nonatomic) NSMutableDictionary *intervalDataBySection; //TODO: see if i need both of these
+
+/*
+ { 
+    sectionIndex: {
+             day: NSDate
+             sectionHeader: NSString
+             intervalStartIndex: NSUInteger
+             intervalEndIndex: NSUInteger 
+    }
+ }
+ 
+ 
+ Notes:
+    if contains intervals 0,1,2,3,4, start = 0, end = 5
+    numIntervalsBeforeDay: startIndex
+    numIntervalsInDay: endIndex - startIndex
+
+ */
+
+
+
+
+
+/* V2
+
+@property (nonatomic) NSString *privacy;
+@property (nonatomic) NSMutableArray *admins;
+
+
+*/
+
+
+
+
+
+
+// Formatting
+-(NSString *)dateStringForSection:(NSUInteger)section;
+-(NSString *)timeStringForIndexPath:(NSIndexPath *)indexPath;
+-(NSString *)dateTimeStringForIndexPath:(NSIndexPath *)indexPath;
+
+// Stats
+
+-(void)calculateNumIntervalsEachPersonIsAvailableAndAssigned;
+@property (nonatomic) NSMutableArray *numIntervalsEachPersonIsAvailable;
+@property (nonatomic) NSMutableArray *numIntervalsEachPersonIsAssigned;
+
+-(void)calculateNumPeopleAvailableAndAssignedInEachInterval;
+@property (nonatomic) NSMutableArray *numPeopleAvailableInEachInterval;
+@property (nonatomic) NSMutableArray *numPeopleAssignedInEachInterval;
+
+-(NSUInteger)numPeopleAvailableInIntervalIndex:(NSUInteger)intervalIndex;
+-(NSUInteger)numPeopleAssignedInIntervalIndex:(NSUInteger)intervalIndex;
+
 
 
 @end

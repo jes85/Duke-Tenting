@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Schedule.h"
 
 @interface IntervalsTableViewController : UITableViewController
-
-@property (nonatomic) NSMutableArray *intervalArray;
-@property (nonatomic)NSArray *hourIntervalsDisplayArray;
+@property (nonatomic) Schedule *schedule;
 
 @end

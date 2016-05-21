@@ -2,13 +2,13 @@
 //  PersonsInIntervalViewController.h
 //  Tent
 //
-//  Created by Shrek on 7/31/14.
-//  Copyright (c) 2014 Jeremy. All rights reserved.
+//  Created by Jeremy on 11/12/15.
+//  Copyright (c) 2015 Jeremy. All rights reserved.
 //
 
-#import "PickPersonTableViewController.h"
+#import "SuperPersonsInIntervalViewController.h"
 
-@interface PersonsInIntervalViewController : PickPersonTableViewController
+@interface PersonsInIntervalViewController : SuperPersonsInIntervalViewController
 
-@property (nonatomic) NSMutableArray *people;
+
 @end

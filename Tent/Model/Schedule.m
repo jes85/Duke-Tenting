@@ -8,85 +8,23 @@
 
 #import "Schedule.h"
 #import "Interval.h"
-static const int kES = 1;
-static const NSUInteger kTotalSwapAttemptsAllowed = 5;
-
+#import "Constants.h"
+#import "Person.h"
 @interface Schedule()
-
-
-
-// Basic parameters
-    @property (nonatomic) NSUInteger requiredPersonsPerInterval;
-
-
-// Ideal Slots
-    @property (nonatomic) NSMutableArray *idealSlotsArray; //double or gfloat array
-
-// Sums Arrays (int[])
-    @property (nonatomic) NSMutableArray *availIntervalSums;
-    @property (nonatomic) NSMutableArray *assignIntervalSums;
-    @property (nonatomic) NSMutableArray *availPeopleSums;
-    @property (nonatomic) NSMutableArray *assignPeopleSums;
-
-// Swap
-@property (nonatomic) NSUInteger swapCountForCurrentPersonAttempt;
-
 
 
 @end
 
 @implementation Schedule
-#warning Internet Required to Generate schedule- Right now, the internet is required to generate schedule because the app does not locally save the availability schedules. This is only an issue if someone wants to do it all on one iPhone. Otherwise, internet is required anyway to sync individual people's schedules
 
--(NSMutableArray *)availIntervalSums
-{
-    if(!_availIntervalSums) _availIntervalSums = [[NSMutableArray alloc]initWithCapacity:self.numIntervals];
-    return _availIntervalSums;
-}
+//TODO: v2: option to generate schedule without internet. Rsight now, the internet is required to generate schedule because the app does not locally save the availability schedules. This is only an issue if someone wants to do it all on one iPhone. Otherwise, internet is required anyway to sync individual people's schedules
 
--(NSMutableArray *)availPeopleSums
-{
-    if(!_availPeopleSums) _availPeopleSums = [[NSMutableArray alloc]initWithCapacity:self.numPeople];
-    return _availPeopleSums;
-}
-
--(NSMutableArray *)assignIntervalSums //ith element is number of people assigned in interval i
-{
-    if(!_assignIntervalSums)_assignIntervalSums = [[NSMutableArray alloc]initWithCapacity:self.numIntervals];
-    return _assignIntervalSums;
-}
--(NSMutableArray *)assignPeopleSums //pth element is number of intervals that person p is assigned
-{
-    if(!_assignPeopleSums)_assignPeopleSums = [[NSMutableArray alloc]initWithCapacity:self.numPeople];
-    return _assignPeopleSums;
-}
-
--(NSMutableArray *)idealSlotsArray
-{
-    if(!_idealSlotsArray){
-        NSMutableArray *array = [[NSMutableArray alloc]initWithCapacity:self.numPeople];
-        for(int i = 0; i<self.numPeople;i++){
-            [array addObject:@0];
-        }
-        _idealSlotsArray = [[NSMutableArray alloc]initWithArray:array];
-
-    }
-    return _idealSlotsArray;
-}
-
--(NSMutableArray *) availabilitiesSchedule
-{
-    if(!_availabilitiesSchedule){
-        _availabilitiesSchedule = [[NSMutableArray alloc]init];
-    }
-    return _availabilitiesSchedule;
-}
--(NSMutableArray *) assignmentsSchedule
-{
-    if(!_assignmentsSchedule) _assignmentsSchedule = [[NSMutableArray alloc]init];
-    return _assignmentsSchedule;
-}
-
+/*
+ just need to do this when initializing each person
+    if person.assignmentsArray
+        person.assignmentsArray = person.assignmentsArray
+    else
+        person.assignmentsArray = createZeroesAssignmentsArray
 -(NSMutableArray *)createZeroesAssignmentsSchedule
 {
     NSMutableArray *assignments = [[NSMutableArray alloc]initWithCapacity:self.numPeople];
@@ -99,443 +37,699 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
     }
     return assignments;
 }
-
--(NSMutableArray *)intervalArray
+ */
+/*
+-(NSMutableArray *)personsArray
 {
-    if(!_intervalArray)_intervalArray = [[NSMutableArray alloc]init];
-    return _intervalArray;
+    if(!_personsArray)_personsArray = [[NSMutableArray alloc]init];
+    return _personsArray;
 }
--(NSArray *)hourIntervalsDisplayArray
-{
-    if(!_hourIntervalsDisplayArray)_hourIntervalsDisplayArray = [[NSArray alloc]init];
-    return _hourIntervalsDisplayArray;
-}
--(NSMutableArray *)createZeroedIntervalArray
-{
-    NSMutableArray *intervalArray = [[NSMutableArray alloc]init];
-    for(int i = 0;i<self.numHourIntervals;i++){
-        Interval *interval = [[Interval alloc]init];
-        [intervalArray addObject:interval];
-    }
-   
-    return intervalArray;
-}
-
--(void)createIntervalDisplayArray
-{
-    NSDate *beginningHourDate = [self.startDate copy];
-    NSDate *endHourDate = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:beginningHourDate];
-    
-    NSMutableArray *array = [[NSMutableArray alloc]init];
-    
-    for(int i = 0; i<self.numHourIntervals;i++){
-        NSString *beginningHourString = [NSDateFormatter localizedStringFromDate:beginningHourDate dateStyle:0 timeStyle:NSDateFormatterShortStyle];
-        NSString *endHourString = [NSDateFormatter localizedStringFromDate:endHourDate dateStyle:0 timeStyle:NSDateFormatterShortStyle];
-        NSString *hourInterval = [NSString stringWithFormat:@"%@ - %@", beginningHourString, endHourString];
-        [array addObject:hourInterval];
-        beginningHourDate = endHourDate;
-        endHourDate = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:beginningHourDate];
-        
-    }
-    
-    self.hourIntervalsDisplayArray = [array copy];
-    
-}
+*/
 
 #pragma mark - init
 
-//Designated initializer (maybe add a numPeople parameter)
--(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex parseObjectID: (NSString *)parseObjectID
+//Designated initializer
+
+-(instancetype)initWithGroupName:(NSString *)name groupCode:(NSString *)groupCode startDate:(NSDate *)startDate endDate:(NSDate *)endDate intervalLengthInMinutes: (NSUInteger)intervalLength personsArray:(NSMutableArray *)personsArray homeGame:(HomeGame *)hg createdBy:(PFObject *)createdBy assignmentsGenerated:(BOOL)assignmentsGenerated parseObjectID:(NSString *)parseObjectID
 {
     self = [super init];
     if(self){
-        self.availabilitiesSchedule = availabilitiesSchedule;
-        self.numPeople = [self.availabilitiesSchedule count];
-        self.numHourIntervals = numHourIntervals; //get rid of one of these
-        self.numIntervals = numHourIntervals;
+        self.groupName = name;
+        self.groupCode = groupCode;
         self.startDate = startDate;
         self.endDate = endDate;
-        
-        self.privacy = privacy;
-        self.password = password;
-        
+        self.intervalLengthInMinutes = intervalLength;
+        self.personsArray = personsArray;
+        self.homeGame = hg;
+        self.createdBy = createdBy;
+        self.assignmentsGenerated = assignmentsGenerated;
         self.parseObjectID = parseObjectID;
+        //self.currentUserPersonIndex = [self findCurrentUserPersonIndex];
+        self.currentUserWasRemoved = false;
+        //[self calculateNumIntervals];
+        [self createIntervalDataArrays];
         
-        
-        if(assignmentsSchedule){
-            self.assignmentsSchedule = assignmentsSchedule;
-        }
-        else{
-            self.assignmentsSchedule = [self createZeroesAssignmentsSchedule];
-        }
-        self.name = name;
-        
-        //intervalArray/hourIntervalDisplayArray
-        [self createIntervalDisplayArray];
-        self.intervalArray = [self createZeroedIntervalArray];
-        
-        //maybe create actual interval array: 2 options
-        //1. make personsArray a property of Schedule (that way we can eliminate the need for a "Person" object in Parse
-        //2. add 2 properties to Interval: arrays of available/assigned person INDICES. then when loading the people, add their names to array of available/assigned person NAMES if their index is in available/assigned person INDICES for that interval
-        //(this one doesn't make much sense to do because it's not more efficient than just creating the array of NAMES for each interval  when querying for Persons
-        
-        
-        
-        
+        //KVO to update interval data arrays every time personsArray is updated
+        /*
+        [self addObserver:self forKeyPath:kUserInfoLocalSchedulePropertyPersonsArray options:NSKeyValueObservingOptionNew context:nil];
+         */
     }
     return self;
 }
--(instancetype)initWithName:(NSString *)name availabilitiesSchedule:(NSMutableArray *)availabilitiesSchedule assignmentsSchedule:(NSMutableArray *)assignmentsSchedule numHourIntervals:(NSUInteger)numHourIntervals startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex:(NSUInteger)homeGameIndex{
-    self = [super init];
-    if(self){
-       
-        
-        //call designated initializer
-        self = [self initWithName:name availabilitiesSchedule:availabilitiesSchedule assignmentsSchedule:assignmentsSchedule numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex parseObjectID:nil];
-        
-        
+/*
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+    if(object == self && [keyPath isEqualToString:@"personsArray"]){
+        [self createIntervalDataArrays];
     }
-    return self;
+    
 }
-
--(instancetype)initWithName:(NSString *)name startDate:(NSDate *)startDate endDate:(NSDate *)endDate privacy:(NSString *)privacy password: (NSString *)password homeGameIndex: (NSUInteger)homeGameIndex
+ */
+-(NSUInteger)findCurrentUserPersonIndex
 {
-    self = [super init];
-    if(self){
-        
-        
-        double time = [endDate timeIntervalSinceDate:startDate];
-        NSUInteger numHourIntervals = (NSUInteger)time/3600;
+    //NSLog(@"%@, %lu", self.groupName, (unsigned long)self.personsArray.count);
+    for(int i = 0; i<self.personsArray.count; i++){
+        Person *person = self.personsArray[i];
+        //NSLog(@"%@", person.user.objectId);
+        //NSLog(@"%@", [[PFUser currentUser] objectId]);
 
-         //call designated initializer
-        self = [self initWithName:name availabilitiesSchedule:[[NSMutableArray alloc]init] assignmentsSchedule:nil numHourIntervals:numHourIntervals startDate:startDate endDate:endDate privacy:privacy password:password homeGameIndex:homeGameIndex parseObjectID:nil];
-        
-        
-        
-        
-       
-        
-    }
-    return self;
-
-}
-
-#pragma mark - Setup methods
-
--(BOOL)setup
-{
-    
-    self.assignmentsSchedule = [self createZeroesAssignmentsSchedule];
-    
-    
-    // PPI
-        self.requiredPersonsPerInterval = ceil(self.numPeople/3.0);
-    
-    
-    // Sums Arrays
-        [self calculateAvailIntervalSums];
-        [self calculateAvailPeopleSums];
-
-    // Check Error
-        if([self checkForError]) return false;
-    
-    // Ideal Slots arrays
-        [self generateIdealSlotsArray];
-
-    // Generate Schedule
-        [self generateSchedule];
-    
-    return true;
-}
-
-
-
--(BOOL)checkForError
-{
-    BOOL error = false;
-    for(int c = 0; c<self.numIntervals;c++){
-        int sum = [self.availIntervalSums[c] intValue];
-        if(sum<self.requiredPersonsPerInterval){
-            NSLog(@"Not enough people in interval %d", c);
-            error = true;
-        }
-        
-    }
-    return error;
-}
--(void)generateIdealSlotsArray
-{
-    double totalSlotsRequired = self.requiredPersonsPerInterval*self.numIntervals;
-    double idealSlotsPerAvailablePerson = totalSlotsRequired/self.numPeople;
-    double numPeopleLeft = self.numPeople;
-    double numSlotsLeft = totalSlotsRequired;
-    BOOL changed = true;
-    while(changed==true){
-        changed = false;
-        for(int p = 0; p<self.numPeople;p++){
-
-            if([self.availPeopleSums[p] intValue] < idealSlotsPerAvailablePerson && [self.idealSlotsArray[p] isEqual:@0] ){
-                
-                self.idealSlotsArray[p]=self.availPeopleSums[p];
-                numPeopleLeft--;
-                numSlotsLeft-=[self.idealSlotsArray[p] intValue];
-                changed = true;
-                
-            }
-            
-        }
-        if(numPeopleLeft>0){
-            idealSlotsPerAvailablePerson = numSlotsLeft/(numPeopleLeft);
+        if(person.user && [person.user.objectId isEqualToString:[[PFUser currentUser] objectId]]){
+            return i;
         }
     }
-    [self calculateUpdatedIdealSlotsPerPerson:idealSlotsPerAvailablePerson];
+    return -1; //helps catch errors: will throw a bug if it returns -1 because it will try to access an array index -1
+    
+}
+/*
+-(void)calculateNumIntervals
+{
+    NSTimeInterval timeInterval = [self.endDate timeIntervalSinceDate:self.startDate];
+    NSUInteger minutes = ceil(timeInterval/60);
+    NSUInteger numIntervals =  minutes / self.intervalLengthInMinutes;
+    self.numIntervals = minutes % self.intervalLengthInMinutes == 0 ? numIntervals : numIntervals + 1;
+}
+ */
+-(NSUInteger)requiredPersonsPerInterval
+{
+    return ceil(self.personsArray.count / 3.0);
+    
+}
+#pragma mark - UI Helpers and Formatting
+
+//{endDate:date, night: bool}
+-(NSDictionary *)intervalEndDateForIntervalStartDate:(NSDate *)intervalStartDate
+{
    
-}
--(void)calculateUpdatedIdealSlotsPerPerson:(double)idealSlotsPerAvailablePerson
-{
-    for(int i = 0; i<self.numPeople;i++) {
-        if([self.idealSlotsArray[i] isEqual:@0]){
-            self.idealSlotsArray[i]=[NSNumber numberWithDouble:idealSlotsPerAvailablePerson];
-        }
+
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *intervalStartDateComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear  ) fromDate:intervalStartDate];
+   
+    
+    // Night Start Date = 11 AM on same day if start date is after 7 am and before 11:59 pm
+    // Night start Date = 11 AM on previous day if start date is after 12:00 am and before 7 am
+    // Night end date is always 8 hours after night start date
+    
+    // This number was 7, but I changed it. So if you start a schedule at 5 am - 7 am it doesn't make the first one a night interval. I can change this number depending on user feedback
+    NSUInteger lastHourToStartNightInterval = 5;
+    
+    NSDateComponents *nightStartDateComponents = [[NSDateComponents alloc]init];
+    [nightStartDateComponents setHour:23];
+    [nightStartDateComponents setMinute :0];
+    
+    if(intervalStartDateComponents.hour < lastHourToStartNightInterval && intervalStartDateComponents.hour >= 0){
+        NSDate *previousDay = [NSDate dateWithTimeInterval:-60*60*24 sinceDate:intervalStartDate];
+        NSDateComponents *previousDayDateComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear  ) fromDate:previousDay];
+        [nightStartDateComponents setYear:previousDayDateComponents.year];
+        [nightStartDateComponents setMonth:previousDayDateComponents.month];
+        [nightStartDateComponents setDay:previousDayDateComponents.day];
+        
+        
+    }else{
+        [nightStartDateComponents setYear:intervalStartDateComponents.year];
+        [nightStartDateComponents setMonth: intervalStartDateComponents.month];
+        [nightStartDateComponents setDay: intervalStartDateComponents.day];
+        
     }
-}
+    
+    
+    NSDate *nightStartDate = [calendar dateFromComponents:nightStartDateComponents];
+    NSDate *nightEndDate = [NSDate dateWithTimeInterval:60*60*8 sinceDate:nightStartDate]; //always 8 hours after nightStartDate
+    
+    NSDate *intervalEndDateIfNormalLengthInterval = [NSDate dateWithTimeInterval:60*self.intervalLengthInMinutes sinceDate:intervalStartDate];
+    // Cases
+    
+    NSDate *intervalEndDate;
+    BOOL night;
+    //Night Interval
+    // 11:00 pm - 7:00 AM
+    if([intervalStartDate timeIntervalSinceDate: nightStartDate] >= 0 && [intervalStartDate timeIntervalSinceDate:nightEndDate] < 0){ //interval start date is during night
+        intervalEndDate = nightEndDate;
+        night = YES;
+    }
+    
+    //Short Interval Before Night Interval
+    else if([nightStartDate timeIntervalSinceDate:intervalEndDateIfNormalLengthInterval] < 0 ){ //night start date is earlier than intervalEndDate if its a normal length interval
+        intervalEndDate = nightStartDate;
+        night = NO;
+    }
+    
+    //Normal Interval
+    else{
+        intervalEndDate = intervalEndDateIfNormalLengthInterval;
+        night = NO;
+        
+    }
+    intervalEndDate = [intervalEndDate timeIntervalSinceDate:self.endDate] < 0 ? intervalEndDate : self.endDate;
+    return @{@"endDate":intervalEndDate, @"night":[NSNumber numberWithBool:night]};
 
-#pragma mark - Generate Schedule
--(void)generateSchedule
+}
+//{endDate:date, night: bool}
+-(NSDictionary *)intervalEndDateForIntervalStartDateUNC:(NSDate *)intervalStartDate
 {
     
-    // Initial Assignments
-        [self assignIntervals];
     
-    // Calculate Assignment Sums
-        [self calculateAssignPeopleSums];
-        [self calculateAssignIntervalSums];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
     
-    // Swap
-    [self swapIntervalsUntilEqualityIsSufficient];
+    NSDateComponents *intervalStartDateComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear | NSCalendarUnitWeekday ) fromDate:intervalStartDate];
     
+    NSDateComponents *nightStartDateComponents = [[NSDateComponents alloc]init];
+    NSDate *nightStartDate;
+    NSTimeInterval nightTimeInterval;
     
     
-    // Re-calculate Assignment Sums
-    [self calculateAssignPeopleSums];
-    [self calculateAssignIntervalSums];
+
+    //sunday, mon, tues 11 pm - 7 am
+    if((intervalStartDateComponents.weekday == 1 && intervalStartDateComponents.hour >= 10) || intervalStartDateComponents.weekday == 2 || intervalStartDateComponents.weekday == 3){ //sunday after 10 am, all monday, all tuesday
+        [nightStartDateComponents setHour:23];
+        [nightStartDateComponents setMinute :0];
+        
+        // If start date is between 12 and 7, night start is on previous day
+        if(intervalStartDateComponents.hour < 7 && intervalStartDateComponents.hour >= 0){
+            NSDate *previousDay = [NSDate dateWithTimeInterval:-60*60*24 sinceDate:intervalStartDate];
+            NSDateComponents *previousDayDateComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear  ) fromDate:previousDay];
+            [nightStartDateComponents setYear:previousDayDateComponents.year];
+            [nightStartDateComponents setMonth:previousDayDateComponents.month];
+            [nightStartDateComponents setDay:previousDayDateComponents.day];
+            
+            
+        }else{
+            [nightStartDateComponents setYear:intervalStartDateComponents.year];
+            [nightStartDateComponents setMonth: intervalStartDateComponents.month];
+            [nightStartDateComponents setDay: intervalStartDateComponents.day];
+            
+        }
+
+        nightTimeInterval = 60*60*8; //8 hours
+
+        
+
+    }
+    //wed, thurs 2:30 am - 7 am
+    else if( intervalStartDateComponents.weekday == 4 || intervalStartDateComponents.weekday == 5 || (intervalStartDateComponents.weekday == 6 && intervalStartDateComponents.hour < 7) ){ //all wed, all thurs, fri before 7 am
+        NSDate *nextDay = [NSDate dateWithTimeInterval:60*60*24 sinceDate:intervalStartDate];
+        NSDateComponents *nextDayDateComponents = [calendar components:(NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear) fromDate:nextDay];
+
+        [nightStartDateComponents setHour:2];
+        [nightStartDateComponents setMinute :30];
+        if(intervalStartDateComponents.hour < 7){ // if before 7 am, night is on same day
+            [nightStartDateComponents setYear:intervalStartDateComponents.year];
+            [nightStartDateComponents setMonth: intervalStartDateComponents.month];
+            [nightStartDateComponents setDay: intervalStartDateComponents.day];
+        }else{
+            [nightStartDateComponents setYear:nextDayDateComponents.year];
+            [nightStartDateComponents setMonth: nextDayDateComponents.month];
+            [nightStartDateComponents setDay: nextDayDateComponents.day];
+        }
+        nightTimeInterval = 60*60*4 + 60*30; //4.5 hours
+    }
+    //fri,saturday 2:30 am - 10 am
+    else if((intervalStartDateComponents.weekday == 6 && intervalStartDateComponents.hour >= 7) || intervalStartDateComponents.weekday == 7 || (intervalStartDateComponents.weekday == 1 && intervalStartDateComponents.hour < 10)){ //fri after 7 am, all sat, sun before 10 am
+        NSDate *nextDay = [NSDate dateWithTimeInterval:60*60*24 sinceDate:intervalStartDate];
+        NSDateComponents *nextDayDateComponents = [calendar components:(NSCalendarUnitMonth  | NSCalendarUnitDay | NSCalendarUnitYear) fromDate:nextDay];
+        
+        [nightStartDateComponents setHour:2];
+        [nightStartDateComponents setMinute :30];
+        if(intervalStartDateComponents.weekday!=6 && intervalStartDateComponents.hour < 10){ // if before 10 am, night is on same day. unless it's friday 7-10am
+            [nightStartDateComponents setYear:intervalStartDateComponents.year];
+            [nightStartDateComponents setMonth: intervalStartDateComponents.month];
+            [nightStartDateComponents setDay: intervalStartDateComponents.day];
+        }else{
+            [nightStartDateComponents setYear:nextDayDateComponents.year];
+            [nightStartDateComponents setMonth: nextDayDateComponents.month];
+            [nightStartDateComponents setDay: nextDayDateComponents.day];
+        }
+
+        nightTimeInterval = 60*60*7 + 60*30; //7.5 hours
+
+    }
+    nightStartDate =[calendar dateFromComponents:nightStartDateComponents];
     
-    //[self swapSolos];
+    NSDate *nightEndDate = [NSDate dateWithTimeInterval:nightTimeInterval sinceDate:nightStartDate];
+
+    NSDate *intervalEndDateIfNormalLengthInterval = [NSDate dateWithTimeInterval:60*self.intervalLengthInMinutes sinceDate:intervalStartDate];
+    // Cases
+    
+    NSDate *intervalEndDate;
+    BOOL night;
+    //Night Interval
+    // 11:00 pm - 7:00 AM or 2:30 AM - 7 AM or 2:30 AM - 10 AM
+    if([intervalStartDate timeIntervalSinceDate: nightStartDate] >= 0 && [intervalStartDate timeIntervalSinceDate:nightEndDate] < 0){
+        
+        intervalEndDate = nightEndDate;
+        night = YES;
+    }
+    
+    //Short Interval Before Night Interval
+    else if([nightStartDate timeIntervalSinceDate:intervalEndDateIfNormalLengthInterval] < 0 ){
+        intervalEndDate = nightStartDate;
+        night = NO;
+    }
+    
+    //Normal Interval
+    else{
+        intervalEndDate = intervalEndDateIfNormalLengthInterval;
+        night = NO;
+        
+    }
+    intervalEndDate = [intervalEndDate timeIntervalSinceDate:self.endDate] < 0 ? intervalEndDate : self.endDate;
+    return @{@"endDate":intervalEndDate, @"night":[NSNumber numberWithBool:night]};
     
 }
-
--(void)assignIntervals
+-(NSUInteger)requiredPersonsForUNCInterval:(Interval *)interval
 {
-    int assignCountInThisInterval;
-    //sort availPeopleSums
+    // Don't need this anymore because I made it a parse property
+    /*
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *tentingPeriodsStartDateComponents = [[NSDateComponents alloc]init];
+    [tentingPeriodsStartDateComponents setYear:2016];
+    
+    //black tenting
+    [tentingPeriodsStartDateComponents setMonth:1];
+    [tentingPeriodsStartDateComponents setDay:17];
+    [tentingPeriodsStartDateComponents setHour:23];
+    
+    NSDate *blackTentingStartDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
+    
+    
+    
+    //buetenting
+    [tentingPeriodsStartDateComponents setMonth:1];
+    [tentingPeriodsStartDateComponents setDay:31];
+    [tentingPeriodsStartDateComponents setHour:23];
+    
+    NSDate *blueTentingStartDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
+    //black tenting
+    [tentingPeriodsStartDateComponents setMonth:2];
+    [tentingPeriodsStartDateComponents setDay:17];
+    [tentingPeriodsStartDateComponents setHour:23];
+    
+    NSDate *whiteTentingStartDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
+    
+    [tentingPeriodsStartDateComponents setMonth:3];
+    [tentingPeriodsStartDateComponents setDay:2];
+    [tentingPeriodsStartDateComponents setHour:12];
+    
+    NSDate *uncTentingEndDate = [calendar dateFromComponents:tentingPeriodsStartDateComponents];
+    */
+    
+    // Start Date is earlier than Black Tent Start Date
+    if([interval.startDate timeIntervalSinceDate:self.homeGame.blackTentingStartDate] < 0){
+        return 0; //unc tenting has not started yet
+    }else if([interval.startDate timeIntervalSinceDate:self.homeGame.blueTentingStartDate] < 0){
+        //black tenting: start date is equal to or greater than black tent start date and earlier than blue tent start date
+        return interval.night ? 10 : 2;
+    }else if([interval.startDate timeIntervalSinceDate:self.homeGame.whiteTentingStartDate] < 0){
+        // blue tenting
+        return interval.night ? 6 : 1;
+    }else if([interval.startDate timeIntervalSinceDate:self.homeGame.uncTentingEndDate] < 0){
+        // white tenting
+        return interval.night ? 2 : 1;
+    }else{
+        //p checks or tenting over
+        return 0;
+    }
+
+}
+-(void)createIntervalDataArraysUNC
+{
+    
+    
+    self.intervalDataByOverallRow = [[NSMutableArray alloc]init];
+    self.intervalDataBySection = [[NSMutableDictionary alloc]init];
+    
+    NSDate *currentIntervalStartDate = [self.startDate copy];
+    
+    //Initialize first section
+    NSString *sectionHeader = [Constants formatDate:currentIntervalStartDate withStyle:NSDateFormatterShortStyle];
+    NSDate *sectionDate = [currentIntervalStartDate copy];
+    NSUInteger sectionNumber = 0;
+    NSUInteger intervalStartIndex = 0;
+    
+    //Initialize first interval
+    NSArray *array = [self availableAndAssignedPersonsForOverallInterval:0];
+    NSMutableArray *availablePersons = array[0];
+    NSMutableArray *assignedPersons = array[1];
+    NSDictionary *endDateAndNight = [self intervalEndDateForIntervalStartDateUNC:currentIntervalStartDate]; //unc
+    NSDate *currentIntervalEndDate = endDateAndNight[@"endDate"];
+    BOOL night = [endDateAndNight[@"night"] boolValue];
+    Interval *currentInterval = [[Interval alloc]initWithStartDate:currentIntervalStartDate endDate:currentIntervalEndDate section:0 availablePersons:availablePersons assignedPersons:assignedPersons];
+    currentInterval.night = night;
+    currentInterval.requiredPersons = [self requiredPersonsForUNCInterval:currentInterval];//unc
+    [self.intervalDataByOverallRow addObject:currentInterval];
+    int numIntervals = 1; //save as interval index
+    
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *previousIntervalStartDate = currentIntervalStartDate;
+    NSDateComponents *dateComponentsPrevious;
+    NSDateComponents *dateComponentsCurrent;
+    while ([currentIntervalEndDate timeIntervalSinceDate:self.endDate] < 0) {
+        // Check if Next Section
+        dateComponentsPrevious = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:previousIntervalStartDate];
+        dateComponentsCurrent = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:currentIntervalStartDate];
+        
+        if(dateComponentsPrevious.day != dateComponentsCurrent.day) { // New day = new section
+            
+            //if([currentIntervalStartDate )//if(night){
+            //new section
+            //Add current section data to dict and initialize new section
+            NSMutableDictionary *sectionData = [self sectionDictForDay:sectionDate sectionHeader:sectionHeader intervalStartIndex:intervalStartIndex intervalEndIndex:numIntervals - 1];
+            [self.intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]]; //why not just use an array where sectioNumber is the index?
+            
+            //Initialize next section
+            sectionHeader = [Constants formatDate:currentIntervalStartDate withStyle:NSDateFormatterShortStyle];
+            sectionDate = [currentIntervalStartDate copy];
+            intervalStartIndex = numIntervals - 1;
+            sectionNumber++;
+            
+        }
+        
+        // Create Next Interval
+        NSArray *array = [self availableAndAssignedPersonsForOverallInterval:numIntervals];
+        NSMutableArray *availablePersons = array[0];
+        NSMutableArray *assignedPersons = array[1];
+        previousIntervalStartDate = currentIntervalStartDate;
+        currentIntervalStartDate = currentIntervalEndDate;
+        endDateAndNight = [self intervalEndDateForIntervalStartDateUNC:currentIntervalStartDate];//unc
+        currentIntervalEndDate = endDateAndNight[@"endDate"];
+        night = [endDateAndNight[@"night"] boolValue];
+        Interval *currentInterval = [[Interval alloc]initWithStartDate:currentIntervalStartDate endDate:currentIntervalEndDate section:0 availablePersons:availablePersons assignedPersons:assignedPersons];
+        currentInterval.night = night;
+        currentInterval.requiredPersons = [self requiredPersonsForUNCInterval:currentInterval]; //unc
+        [self.intervalDataByOverallRow addObject:currentInterval];
+        numIntervals++;
+    }
+    //Add last section data to dict
+    NSMutableDictionary *sectionData = [self sectionDictForDay:sectionDate sectionHeader:sectionHeader intervalStartIndex:intervalStartIndex intervalEndIndex:numIntervals];
+    [self.intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]]; //why not just use an array where sectioNumber is the index?
+    
+    self.numIntervals = numIntervals;
+
+    
+
+}
+
+-(void)createIntervalDataArrays
+{
+    if(self.homeGame.isUNC){
+        [self createIntervalDataArraysUNC];
+        return;
+    }
+    
+    self.intervalDataByOverallRow = [[NSMutableArray alloc]init];
+    self.intervalDataBySection = [[NSMutableDictionary alloc]init];
+
+    NSDate *currentIntervalStartDate = [self.startDate copy];
+
+    //Initialize first section
+    NSString *sectionHeader = [Constants formatDate:currentIntervalStartDate withStyle:NSDateFormatterShortStyle];
+    NSDate *sectionDate = [currentIntervalStartDate copy];
+    NSUInteger sectionNumber = 0;
+    NSUInteger intervalStartIndex = 0;
+    
+    //Initialize first interval
+    NSArray *array = [self availableAndAssignedPersonsForOverallInterval:0];
+    NSMutableArray *availablePersons = array[0];
+    NSMutableArray *assignedPersons = array[1];
+    NSDictionary *endDateAndNight = [self intervalEndDateForIntervalStartDate:currentIntervalStartDate];
+    NSDate *currentIntervalEndDate = endDateAndNight[@"endDate"];
+    BOOL night = [endDateAndNight[@"night"] boolValue];
+    Interval *currentInterval = [[Interval alloc]initWithStartDate:currentIntervalStartDate endDate:currentIntervalEndDate section:0 availablePersons:availablePersons assignedPersons:assignedPersons];
+    currentInterval.night = night;
+    currentInterval.requiredPersons = self.requiredPersonsPerInterval;
+    [self.intervalDataByOverallRow addObject:currentInterval];
+    int numIntervals = 1; //save as interval index
+    
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *previousIntervalStartDate = currentIntervalStartDate;
+    NSDateComponents *dateComponentsPrevious;
+    NSDateComponents *dateComponentsCurrent;
+    while ([currentIntervalEndDate timeIntervalSinceDate:self.endDate] < 0) {
+        // Check if Next Section
+        dateComponentsPrevious = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:previousIntervalStartDate];
+        dateComponentsCurrent = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:currentIntervalStartDate];
+        
+        if(dateComponentsPrevious.day != dateComponentsCurrent.day) { // New day = new section
+
+        //if([currentIntervalStartDate )//if(night){
+            //new section
+            //Add current section data to dict and initialize new section
+            NSMutableDictionary *sectionData = [self sectionDictForDay:sectionDate sectionHeader:sectionHeader intervalStartIndex:intervalStartIndex intervalEndIndex:numIntervals - 1];
+            [self.intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]]; //why not just use an array where sectioNumber is the index?
+            
+            //Initialize next section
+            sectionHeader = [Constants formatDate:currentIntervalStartDate withStyle:NSDateFormatterShortStyle];
+            sectionDate = [currentIntervalStartDate copy];
+            intervalStartIndex = numIntervals - 1;
+            sectionNumber++;
+
+        }
+        
+        // Create Next Interval
+        NSArray *array = [self availableAndAssignedPersonsForOverallInterval:numIntervals];
+        NSMutableArray *availablePersons = array[0];
+        NSMutableArray *assignedPersons = array[1];
+        previousIntervalStartDate = currentIntervalStartDate;
+        currentIntervalStartDate = currentIntervalEndDate;
+        endDateAndNight = [self intervalEndDateForIntervalStartDate:currentIntervalStartDate];
+        currentIntervalEndDate = endDateAndNight[@"endDate"];
+        night = [endDateAndNight[@"night"] boolValue];
+        Interval *currentInterval = [[Interval alloc]initWithStartDate:currentIntervalStartDate endDate:currentIntervalEndDate section:0 availablePersons:availablePersons assignedPersons:assignedPersons];
+        currentInterval.night = night;
+        currentInterval.requiredPersons = self.requiredPersonsPerInterval;
+        [self.intervalDataByOverallRow addObject:currentInterval];
+        numIntervals++;
+    }
+    //Add last section data to dict
+    NSMutableDictionary *sectionData = [self sectionDictForDay:sectionDate sectionHeader:sectionHeader intervalStartIndex:intervalStartIndex intervalEndIndex:numIntervals];
+    [self.intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]]; //why not just use an array where sectioNumber is the index?
+
+    self.numIntervals = numIntervals;
+    
+    
+    
+}
+/*
+-(void)createIntervalDataArraysOld
+{
+    
+    NSMutableArray *intervalDataByOverallRow = [[NSMutableArray alloc]init];
+    NSMutableDictionary *intervalDataBySection = [[NSMutableDictionary alloc]init];
+    
+    NSMutableArray *sectionIntervals = [[NSMutableArray alloc]init];
+    
+    NSDate *currentStartInterval = [self.startDate copy];
+    NSDate *previousStartInterval = currentStartInterval;
+    NSDate *currentEndInterval = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:currentStartInterval];
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *dateComponentsCurrent;
+    NSDateComponents *dateComponentsPrevious;
+    
+    NSString *sectionHeader = [Constants formatDate:currentStartInterval withStyle:NSDateFormatterShortStyle];
+    NSDate *sectionDate = [currentStartInterval copy];
+    NSUInteger sectionNumber = 0;
+    NSUInteger intervalStartIndex = 0;
+    
     for(int i = 0; i<self.numIntervals;i++){
-        assignCountInThisInterval = 0;
-        //for now, just assign intervals to first people available and then swap
-        for(int p = 0; p<self.numPeople;p++){
-            if([self.availabilitiesSchedule[p][i] isEqual:@1]){
-                self.assignmentsSchedule[p][i]=@1;
-                assignCountInThisInterval++;
-            }
-            if(assignCountInThisInterval==self.requiredPersonsPerInterval) break;
+        dateComponentsPrevious = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:previousStartInterval];
+        dateComponentsCurrent = [calendar components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:currentStartInterval];
+        
+        if(dateComponentsPrevious.day != dateComponentsCurrent.day) { // New day = new section
+            
+            //Add current section data to dict and initialize new section
+            NSMutableDictionary *sectionData = [self sectionDictForDay:sectionDate sectionHeader:sectionHeader intervalStartIndex:intervalStartIndex intervalEndIndex:i];
+            [intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]];
+            
+            //Initialize next section
+            sectionHeader = [Constants formatDate:currentStartInterval withStyle:NSDateFormatterShortStyle];
+            sectionDate = [currentStartInterval copy];
+            sectionIntervals = [[NSMutableArray alloc]init];
+            intervalStartIndex = i;
+            sectionNumber++;
             
         }
-    }
-}
-
--(void)swapSingleInterval:(NSUInteger)i assignToPerson:(NSUInteger)personGainingInterval takeAwayFromPerson:(NSUInteger)personLosingInterval
-{
-    self.assignmentsSchedule[personGainingInterval][i]=@1;
-    self.assignmentsSchedule[personLosingInterval][i]=@0;
-    
-    self.assignPeopleSums[personGainingInterval] = [NSNumber numberWithInteger:[self.assignPeopleSums[personGainingInterval] integerValue]+1];
-    self.assignPeopleSums[personLosingInterval] = [NSNumber numberWithInteger:[self.assignPeopleSums[personLosingInterval] integerValue]-1];
-    
-    self.swapCountForCurrentPersonAttempt++;
-}
--(void)swapIntervalsUntilEqualityIsSufficient
-{
-    int swapAttemptsCount = 0; //# times looped through everthing and swapped when possible
-    while(swapAttemptsCount<kTotalSwapAttemptsAllowed && ([self maximumValueInArray:self.assignPeopleSums] - [self minimumValueInArray:self.assignPeopleSums]) > ([self maximumValueInArray:self.idealSlotsArray] - [self minimumValueInArray:self.idealSlotsArray])){
-        for(int p = 0; p<self.numPeople;p++){
-            self.swapCountForCurrentPersonAttempt = 1; //maybe change this to a boolean (swapped at least o once or no swap)
-            while(self.swapCountForCurrentPersonAttempt > 0  && fabsf([self.idealSlotsArray[p] floatValue] - [self.assignPeopleSums[p] floatValue]) > kES){
-                self.swapCountForCurrentPersonAttempt = 0;
-                
-                [self attemptAllSwapsForPersonAtIndex:p];
-            }
+        
+        NSArray *array = [self availableAndAssignedPersonsForOverallInterval:i];
+        NSMutableArray *availablePersons = array[0];
+        NSMutableArray *assignedPersons = array[1];
+        Interval *interval = [[Interval alloc]initWithStartDate:currentStartInterval endDate:currentEndInterval section:sectionNumber availablePersons:availablePersons assignedPersons:assignedPersons];
+        interval.requiredPersons = self.requiredPersonsPerInterval;
+        [intervalDataByOverallRow addObject:interval];
+        [sectionIntervals addObject:interval];
+        
+        previousStartInterval = currentStartInterval;
+        currentStartInterval = currentEndInterval;
+        currentEndInterval = [[NSDate alloc]initWithTimeInterval:3600 sinceDate:currentStartInterval];
+        NSTimeInterval timeUntilEnd = [self.endDate timeIntervalSinceDate:currentEndInterval];
+        
+        
+        if(timeUntilEnd <= 0 ){
+            NSArray *array = [self availableAndAssignedPersonsForOverallInterval:i];
+            NSMutableArray *availablePersons = array[0];
+            NSMutableArray *assignedPersons = array[1];
+            Interval *interval = [[Interval alloc]initWithStartDate:currentStartInterval endDate:self.endDate section:sectionNumber availablePersons:availablePersons assignedPersons:assignedPersons];
+            interval.requiredPersons = self.requiredPersonsPerInterval;
+            [intervalDataByOverallRow addObject:interval];
+            [sectionIntervals addObject:interval];
+            
+            NSMutableDictionary *sectionData = [self sectionDictForDay:sectionDate sectionHeader:sectionHeader intervalStartIndex:intervalStartIndex intervalEndIndex:i+1];
+            
+            [intervalDataBySection setObject:sectionData forKey:[NSNumber numberWithInteger:sectionNumber]];
             
         }
-        swapAttemptsCount++;
+        
     }
+    
+    self.intervalDataBySection = [intervalDataBySection copy];
+    self.intervalDataByOverallRow = [intervalDataByOverallRow copy];
+    
+}
+ */
+
+-(NSArray *)availableAndAssignedPersonsForOverallInterval:(NSUInteger)index
+{
+    NSMutableArray *availablePersons = [[NSMutableArray alloc]init];
+    NSMutableArray *assignedPersons = [[NSMutableArray alloc]init];
+
+    for(int i = 0; i<self.personsArray.count;i++){
+        Person *person = (Person *)self.personsArray[i];
+        NSUInteger availablity = [person.assignmentsArray[index] integerValue];
+        if(availablity > 0){
+            if(availablity == 2){
+                [assignedPersons addObject:person];
+            }
+            [availablePersons addObject:person];
+        }
+    }
+    return @[availablePersons, assignedPersons];
+}
+-(NSMutableDictionary *)sectionDictForDay:(NSDate *)day sectionHeader:(NSString *)sectionHeader intervalStartIndex:(NSUInteger) start intervalEndIndex: (NSUInteger) end
+{
+    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc]init];
+    sectionData[@"day"] = day;
+    sectionData[@"sectionHeader"] = sectionHeader;
+    sectionData[@"intervalStartIndex"] = [NSNumber numberWithInteger:start];
+    sectionData[@"intervalEndIndex"] = [NSNumber numberWithInteger:end];
+    
+    return sectionData;
+    
 }
 
--(void)attemptAllSwapsForPersonAtIndex:(NSUInteger)person1
+-(void)resetIntervalArray
 {
-    for(int person2=0;person2<self.numPeople;person2++){
-        if([self.assignPeopleSums[person1] integerValue]<[self.idealSlotsArray[person1]floatValue] && [self.assignPeopleSums[person2] integerValue] >[self.idealSlotsArray[person2] floatValue]){
-            [self swapFromBeginningIfPossibleAssignIntervalTo:person1 takeAwayFrom:person2];
-            [self swapFromEndIfPossibleAssignIntervalTo:person1 takeAwayFrom:person2];
-        }
-        else if([self.assignPeopleSums[person1] integerValue]>[self.idealSlotsArray[person1]floatValue] && [self.assignPeopleSums[person2] integerValue] <[self.idealSlotsArray[person2] floatValue]){
-            [self swapFromBeginningIfPossibleAssignIntervalTo:person2 takeAwayFrom:person1];
-            [self swapFromEndIfPossibleAssignIntervalTo:person2 takeAwayFrom:person1];
-        }
+    for(int i = 0;i<self.intervalDataByOverallRow.count;i++){
+        Interval *interval = (Interval *)self.intervalDataByOverallRow[i];
+        interval.assignedPersons = [[NSMutableArray alloc]init];
+        interval.availablePersons = [[NSMutableArray alloc]init];
     }
+    
 }
 
--(void)swapFromBeginningIfPossibleAssignIntervalTo:(NSUInteger)personGainingInterval takeAwayFrom:(NSUInteger)personLosingInterval
+-(NSString *)dateStringForSection:(NSUInteger)section
 {
-    for(int i = 0;i<self.numIntervals-1;i++){
-        //changed condition to be less than ceil/floor int value of ideal slots array
-        if(([self.assignPeopleSums[personGainingInterval] integerValue]>=ceil([self.idealSlotsArray[personGainingInterval] floatValue])) || ([self.assignPeopleSums[personLosingInterval] integerValue] <= ceil([self.idealSlotsArray[personLosingInterval] floatValue]))){
-            return;
-        }
-        
-        
-        //if person1 is free but not assigned to this interval && person2 is assigned to this interval
-        if([self.availabilitiesSchedule[personGainingInterval][i] integerValue]==1 && [self.assignmentsSchedule[personGainingInterval][i] integerValue]==0 && [self.assignmentsSchedule[personLosingInterval][i] integerValue] ==1){
+    NSMutableDictionary *sectionData = [self.intervalDataBySection objectForKey:[NSNumber numberWithInteger:section]];
+
+    NSString *dateString = [Constants formatDate:sectionData[@"day"] withStyle:NSDateFormatterShortStyle];
+    return dateString;
+}
+
+-(NSString *)timeStringForIndexPath:(NSIndexPath *)indexPath
+{
+    NSMutableDictionary *sectionData = [self.intervalDataBySection objectForKey:[NSNumber numberWithInteger:indexPath.section]];
+    
+    NSUInteger startIndex = [sectionData[@"intervalStartIndex"] integerValue];
+    
+    NSUInteger index = startIndex + indexPath.row;
+    Interval *interval = self.intervalDataByOverallRow[index];
+
+    return interval.timeString;
+}
+
+-(NSString *)dateTimeStringForIndexPath:(NSIndexPath *)indexPath
+{
+    return [[[self dateStringForSection:indexPath.section] stringByAppendingString:@" "] stringByAppendingString:[self timeStringForIndexPath:indexPath]];
+}
+
+-(NSString *)dateTimeStringForOverallRow:(NSIndexPath *)indexPath
+{
+    Interval *interval = self.intervalDataByOverallRow[indexPath.row];
+    
+    return [[[self dateStringForSection:interval.section] stringByAppendingString:@" "] stringByAppendingString:interval.timeString];
+}
+
+#pragma mark - Stats
+-(NSUInteger)numPeople
+{
+    return self.personsArray.count;
+}
+-(void)calculateNumIntervalsEachPersonIsAvailableAndAssigned
+{
+    for(int r = 0;r<[self numPeople];r++){
+        int assignSums = 0;
+        int availSums = 0;
+        Person *person = self.personsArray[r];
+        for(int c = 0; c<self.numIntervals;c++){
             
-            //if person2 is not assigned to the previous interval or it's the first interval
-            if(i == 0 || [self.assignmentsSchedule[personLosingInterval][i-1] integerValue] ==0){
-                
-                //switch intervals
-                [self swapSingleInterval:i assignToPerson:personGainingInterval takeAwayFromPerson:personLosingInterval];
+            if([person.assignmentsArray[c] integerValue]== 2){
+                assignSums += 1;
+                availSums += 1;
+           }else if ([person.assignmentsArray[c] integerValue]== 1){
+                availSums += 1;
             }
         }
+        self.numIntervalsEachPersonIsAvailable[r] = [NSNumber numberWithInteger:availSums];
+        self.numIntervalsEachPersonIsAssigned[r] = [NSNumber numberWithInteger:assignSums];
         
-        
     }
-    
-}
--(void)swapFromEndIfPossibleAssignIntervalTo:(NSUInteger)personGainingInterval takeAwayFrom:(NSUInteger)personLosingInterval
-{
-    //change to allow ends to be swapped
-    for(NSUInteger i = self.numIntervals-1; i>0;i--){
-        if([self.assignPeopleSums[personGainingInterval] integerValue] >= ceil([self.idealSlotsArray[personGainingInterval ] floatValue]) || [self.assignPeopleSums[personLosingInterval] integerValue] <= ceil([self.idealSlotsArray[personLosingInterval] floatValue])){
-            return;
-        }
-        
-        //if person1 is free but not assigned to this interval && person2 is assigned to this interval
-        if([self.availabilitiesSchedule[personGainingInterval][i] integerValue]==1 && [self.assignmentsSchedule[personGainingInterval][i] integerValue]==0 && [self.assignmentsSchedule[personLosingInterval][i] integerValue] ==1){
-            
-            //if person2 is not assigned to the previous (chronologically, next) interval or it's the last interval
-            if((i == self.numIntervals-1) || [self.assignmentsSchedule[personLosingInterval][i+1] integerValue] ==0){
-                
-                //switch intervals
-                [self swapSingleInterval:i assignToPerson:personGainingInterval takeAwayFromPerson:personLosingInterval];
-            }
-        }
-    }
-    
 }
 
-
-#pragma mark - Array Stuff
--(float)maximumValueInArray:(NSArray *)array
+-(void)calculateNumPeopleAvailableAndAssignedInEachInterval
 {
-    float maxValue = [array[0] floatValue];
-    for(int i = 0; i<[array count]; i++){
-        float currentValue = [array[i] floatValue];
-        if(currentValue > maxValue) maxValue = currentValue;
-    }
-    
-    return maxValue;
-}
-
--(float)minimumValueInArray:(NSArray *)array
-{
-    float minValue = [array[0] floatValue];
-    for(int i = 0; i<[array count]; i++){
-        float currentValue = [array[i] floatValue];
-        if(currentValue <minValue) minValue = currentValue;
-    }
-    return minValue;
-}
-
--(void)printAssignmentScheduleIntervalView
-{
-    NSMutableArray *assignmentScheduleIntervalView = [[NSMutableArray alloc]initWithCapacity:self.numIntervals];
-    for(int i = 0; i<self.numIntervals;i++){
-        NSMutableArray *peopleAssignedToThisInterval = [[NSMutableArray alloc]initWithCapacity:self.numPeople];
-        [assignmentScheduleIntervalView addObject:peopleAssignedToThisInterval];
-    }
-    
-    
-    for(int p = 0; p<self.numPeople; p++){
-        for(int i = 0; i<self.numIntervals;i++){
-            assignmentScheduleIntervalView[i][p] = self.assignmentsSchedule[p][i];
-        }
-    }
-    
-    NSLog(@"AssignmentsScheduleIntervalView: %@", assignmentScheduleIntervalView);
-}
-
-
-
-
-#pragma mark - Sums
-
--(void) calculateAvailPeopleSums
-{
-    
-    for(int r = 0;r<self.numPeople;r++){
-        NSUInteger sum = [self sumColumnsForRow:r ofSchedule:self.availabilitiesSchedule];
-        self.availPeopleSums[r] = [NSNumber numberWithInteger:sum];
-    }
-    
-}
--(void) calculateAssignPeopleSums
-{
-    
-    for(int r = 0;r<self.numPeople;r++){
-        NSUInteger sum = [self sumColumnsForRow:r ofSchedule:self.assignmentsSchedule];
-        self.assignPeopleSums[r] = [NSNumber numberWithInteger:sum];
-    }
-    
-}
-
--(NSUInteger) sumColumnsForRow:(int)r ofSchedule:(NSMutableArray *)schedule
-{
-    int sum=0;
-    NSMutableArray* personArray = [schedule objectAtIndex:r];
     for(int c = 0; c<self.numIntervals;c++){
-        sum+=[[personArray objectAtIndex:c]intValue];
+        int assignSums = 0;
+        int availSums = 0;
+        for(int r = 0;r<[self numPeople];r++){
+            Person *person = self.personsArray[r];
+            if([person.assignmentsArray[c] integerValue]== 2){
+                assignSums += 1;
+                availSums += 1;
+            }else if ([person.assignmentsArray[c] integerValue]== 1){
+                availSums += 1;
+            }
+        }
+        self.numPeopleAvailableInEachInterval[c] = [NSNumber numberWithInteger:availSums];
+        self.numPeopleAssignedInEachInterval[c] = [NSNumber numberWithInteger:assignSums];
+        
     }
-    return sum;
-    
 }
--(void) calculateAvailIntervalSums
+
+//interval index is overall index
+-(NSUInteger)numPeopleAssignedInIntervalIndex:(NSUInteger)intervalIndex
 {
-    
-    
-    for(int c = 0; c<self.numIntervals;c++){
-        NSUInteger sum = [self sumRowsForColumn:c ofSchedule:self.availabilitiesSchedule];
-        self.availIntervalSums[c] = [NSNumber numberWithInteger:sum];
+    NSUInteger numPeopleAssigned = 0;
+    for(int i = 0; i < self.numPeople; i++){
+        Person *person = self.personsArray[i];
+        if([person.assignmentsArray[intervalIndex] integerValue] == 2){
+            numPeopleAssigned++;
+        }
     }
     
-    
+    return numPeopleAssigned;
 }
--(void) calculateAssignIntervalSums
+-(NSUInteger)numPeopleAvailableInIntervalIndex:(NSUInteger)intervalIndex
 {
-    
-    
-    for(int c = 0; c<self.numIntervals;c++){
-        NSUInteger sum = [self sumRowsForColumn:c ofSchedule:self.assignmentsSchedule];
-        self.assignIntervalSums[c] = [NSNumber numberWithInteger:sum];
+    NSUInteger numPeopleAvailable = 0;
+    for(int i = 0; i < self.numPeople; i++){
+        Person *person = self.personsArray[i];
+        NSUInteger status =[person.assignmentsArray[intervalIndex] integerValue];
+        if(status == 1 | status == 2){
+            numPeopleAvailable++;
+        }
     }
     
-    
-}
--(int) sumRowsForColumn:(int)c ofSchedule:(NSMutableArray *)schedule
-{
-    
-    int sum=0;
-    for(int r = 0; r<self.numPeople;r++){
-        NSMutableArray* personArray = [schedule objectAtIndex:r];
-        sum+=[[personArray objectAtIndex:c]intValue];
-    }
-    return sum;
-    
+    return numPeopleAvailable;
 }
 
 #pragma mark - Equality
@@ -550,18 +744,16 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
 - (BOOL)isEqualToSchedule:(Schedule *)aSchedule {
     if (self == aSchedule)
         return YES;
-    if (![(id)[self name] isEqual:[aSchedule name]])
+    if (![(id)[self groupName] isEqual:[aSchedule groupName]])
         return NO;
     if (!([self startDate] == [aSchedule startDate]))
         return NO;
     if (![(id)[self endDate] isEqual:[aSchedule endDate]])
         return NO;
-    //add more
+    //TODO: add more
     // NSLog(@"Test equality");
     return YES;
 }
-
-
 
 
 @end

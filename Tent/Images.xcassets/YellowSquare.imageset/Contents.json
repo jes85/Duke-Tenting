@@ -3,12 +3,16 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "square-256.png"
+      "filename" : "YellowRectangle.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "square-256-1.png"
+      "filename" : "YellowRectangle-1.png"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

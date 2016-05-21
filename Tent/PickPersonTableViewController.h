@@ -12,7 +12,6 @@
 
 @interface PickPersonTableViewController : UITableViewController
 
-@property (nonatomic) NSMutableArray *personsArray; //change to personsArray
 @property (nonatomic) NSString *addPersonName;
 @property (nonatomic) Schedule *schedule;
 
@@ -21,4 +20,7 @@
 -(IBAction)cancelAddPerson:(UIStoryboardSegue *)segue;
 
 -(IBAction)editAvailabilitiesReturn:(UIStoryboardSegue *)segue;
+
+
++(void)deletePersons:(NSArray *)persons fromParseSchedule:(NSString *)scheduleId completion:(void(^)(void))callback;
 @end
