@@ -15,8 +15,15 @@
 {
     // Override point for customization after application launch.
     
-    [Parse setApplicationId:@"GaDG8QQCgDrIpEBawX1qtF8Eyv18bvd00Tw5rK4I"
-                  clientKey:@"X8Iw87xOJAetK8agrPdMX3frjFa9Z09eFEJm9ytP"];
+    //[Parse setApplicationId:@"GaDG8QQCgDrIpEBawX1qtF8Eyv18bvd00Tw5rK4I"
+         //         clientKey:@"X8Iw87xOJAetK8agrPdMX3frjFa9Z09eFEJm9ytP"];
+    
+    [Parse initializeWithConfiguration:[ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration>  _Nonnull configuration) {
+        configuration.applicationId = @"GaDG8QQCgDrIpEBawX1qtF8Eyv18bvd00Tw5rK4I";
+        configuration.clientKey = @"X8Iw87xOJAetK8agrPdMX3frjFa9Z09eFEJm9ytP";
+        configuration.server = @"https://duketenting.herokuapp.com/parse";
+    }]];
+    
     
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     

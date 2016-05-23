@@ -16,6 +16,12 @@
 		3F0294661982C01A0016845A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294651982C01A0016845A /* StoreKit.framework */; };
 		3F0294681982C0200016845A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F0294671982C0200016845A /* SystemConfiguration.framework */; };
 		3F1107E419903FDB0063ED9B /* Interval.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1107E319903FDB0063ED9B /* Interval.m */; };
+		3F2AA9A01CF2CBC100DD3298 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2AA99A1CF2CBC100DD3298 /* Bolts.framework */; };
+		3F2AA9A11CF2CBC100DD3298 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2AA99B1CF2CBC100DD3298 /* Parse.framework */; };
+		3F2AA9A21CF2CBC100DD3298 /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2AA99C1CF2CBC100DD3298 /* ParseFacebookUtils.framework */; };
+		3F2AA9A31CF2CBC100DD3298 /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2AA99D1CF2CBC100DD3298 /* ParseFacebookUtilsV4.framework */; };
+		3F2AA9A41CF2CBC100DD3298 /* ParseTwitterUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2AA99E1CF2CBC100DD3298 /* ParseTwitterUtils.framework */; };
+		3F2AA9A51CF2CBC100DD3298 /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2AA99F1CF2CBC100DD3298 /* ParseUI.framework */; };
 		3F3B71B71C3B8FE700669C8B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F3B71B61C3B8FE700669C8B /* Images.xcassets */; };
 		3F4796261CF01C07009ABC3F /* HomeGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4796251CF01C07009ABC3F /* HomeGame.m */; };
 		3F4796291CF01C50009ABC3F /* AlgorithmSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4796281CF01C50009ABC3F /* AlgorithmSchedule.m */; };
@@ -69,14 +75,8 @@
 		3FA6D5331965E7A50043087B /* TentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA6D5321965E7A50043087B /* TentTests.m */; };
 		3FC432B319A0565100B560F1 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC432B219A0565100B560F1 /* Social.framework */; };
 		3FC432B519A056DD00B560F1 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC432B419A056DD00B560F1 /* Accounts.framework */; };
-		3FC5296C1C35256C003F9B9D /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC5296B1C35256C003F9B9D /* Bolts.framework */; };
-		3FC529711C3525C2003F9B9D /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC5296D1C3525C2003F9B9D /* ParseFacebookUtils.framework */; };
-		3FC529721C3525C2003F9B9D /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC5296E1C3525C2003F9B9D /* ParseFacebookUtilsV4.framework */; };
-		3FC529731C3525C2003F9B9D /* ParseTwitterUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC5296F1C3525C2003F9B9D /* ParseTwitterUtils.framework */; };
-		3FC529741C3525C2003F9B9D /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC529701C3525C2003F9B9D /* ParseUI.framework */; };
 		3FDE35631980A5DA00CE47D8 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE35621980A5DA00CE47D8 /* Person.m */; };
 		3FDE35661980A6DA00CE47D8 /* Schedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE35651980A6DA00CE47D8 /* Schedule.m */; };
-		3FF70F911C3522300042C7D6 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF70F901C3522300042C7D6 /* Parse.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +100,12 @@
 		3F0294671982C0200016845A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3F1107E219903FDB0063ED9B /* Interval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Interval.h; path = Model/Interval.h; sourceTree = "<group>"; };
 		3F1107E319903FDB0063ED9B /* Interval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Interval.m; path = Model/Interval.m; sourceTree = "<group>"; };
+		3F2AA99A1CF2CBC100DD3298 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Tent/ParseSDK/Bolts.framework; sourceTree = "<group>"; };
+		3F2AA99B1CF2CBC100DD3298 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = Tent/ParseSDK/Parse.framework; sourceTree = "<group>"; };
+		3F2AA99C1CF2CBC100DD3298 /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtils.framework; path = Tent/ParseSDK/ParseFacebookUtils.framework; sourceTree = "<group>"; };
+		3F2AA99D1CF2CBC100DD3298 /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtilsV4.framework; path = Tent/ParseSDK/ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
+		3F2AA99E1CF2CBC100DD3298 /* ParseTwitterUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseTwitterUtils.framework; path = Tent/ParseSDK/ParseTwitterUtils.framework; sourceTree = "<group>"; };
+		3F2AA99F1CF2CBC100DD3298 /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = Tent/ParseSDK/ParseUI.framework; sourceTree = "<group>"; };
 		3F3B71B61C3B8FE700669C8B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3F4796241CF01C07009ABC3F /* HomeGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeGame.h; path = Model/HomeGame.h; sourceTree = "<group>"; };
 		3F4796251CF01C07009ABC3F /* HomeGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeGame.m; path = Model/HomeGame.m; sourceTree = "<group>"; };
@@ -192,16 +198,10 @@
 		3FA6D5321965E7A50043087B /* TentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TentTests.m; sourceTree = "<group>"; };
 		3FC432B219A0565100B560F1 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		3FC432B419A056DD00B560F1 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
-		3FC5296B1C35256C003F9B9D /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Tent/Bolts.framework; sourceTree = "<group>"; };
-		3FC5296D1C3525C2003F9B9D /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtils.framework; path = Tent/ParseFacebookUtils.framework; sourceTree = "<group>"; };
-		3FC5296E1C3525C2003F9B9D /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtilsV4.framework; path = Tent/ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
-		3FC5296F1C3525C2003F9B9D /* ParseTwitterUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseTwitterUtils.framework; path = Tent/ParseTwitterUtils.framework; sourceTree = "<group>"; };
-		3FC529701C3525C2003F9B9D /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = Tent/ParseUI.framework; sourceTree = "<group>"; };
 		3FDE35611980A5DA00CE47D8 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Person.h; path = Model/Person.h; sourceTree = "<group>"; };
 		3FDE35621980A5DA00CE47D8 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Person.m; path = Model/Person.m; sourceTree = "<group>"; };
 		3FDE35641980A6DA00CE47D8 /* Schedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Schedule.h; path = Model/Schedule.h; sourceTree = "<group>"; };
 		3FDE35651980A6DA00CE47D8 /* Schedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Schedule.m; path = Model/Schedule.m; sourceTree = "<group>"; };
-		3FF70F901C3522300042C7D6 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = Tent/Parse.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,25 +209,25 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F2AA9A01CF2CBC100DD3298 /* Bolts.framework in Frameworks */,
+				3F2AA9A11CF2CBC100DD3298 /* Parse.framework in Frameworks */,
+				3F2AA9A41CF2CBC100DD3298 /* ParseTwitterUtils.framework in Frameworks */,
+				3F2AA9A21CF2CBC100DD3298 /* ParseFacebookUtils.framework in Frameworks */,
+				3F2AA9A31CF2CBC100DD3298 /* ParseFacebookUtilsV4.framework in Frameworks */,
+				3F2AA9A51CF2CBC100DD3298 /* ParseUI.framework in Frameworks */,
 				3F9198ED1C3929D400FAD489 /* EventKit.framework in Frameworks */,
 				3F5AAA4B1C35279700531F09 /* libsqlite3.tbd in Frameworks */,
-				3FC5296C1C35256C003F9B9D /* Bolts.framework in Frameworks */,
 				3FC432B519A056DD00B560F1 /* Accounts.framework in Frameworks */,
 				3FC432B319A0565100B560F1 /* Social.framework in Frameworks */,
 				3F0294681982C0200016845A /* SystemConfiguration.framework in Frameworks */,
-				3FC529731C3525C2003F9B9D /* ParseTwitterUtils.framework in Frameworks */,
 				3F0294661982C01A0016845A /* StoreKit.framework in Frameworks */,
 				3F0294641982C0120016845A /* Security.framework in Frameworks */,
 				3F0294621982C0080016845A /* QuartzCore.framework in Frameworks */,
 				3F0294601982C0010016845A /* MobileCoreServices.framework in Frameworks */,
-				3FC529741C3525C2003F9B9D /* ParseUI.framework in Frameworks */,
 				3F02945C1982BFDF0016845A /* CoreLocation.framework in Frameworks */,
 				3FA6D50A1965E7A50043087B /* CoreGraphics.framework in Frameworks */,
-				3FF70F911C3522300042C7D6 /* Parse.framework in Frameworks */,
 				3F02945A1982BFD20016845A /* CFNetwork.framework in Frameworks */,
 				3F0294581982BFCD0016845A /* AudioToolbox.framework in Frameworks */,
-				3FC529721C3525C2003F9B9D /* ParseFacebookUtilsV4.framework in Frameworks */,
-				3FC529711C3525C2003F9B9D /* ParseFacebookUtils.framework in Frameworks */,
 				3FA6D50C1965E7A50043087B /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,15 +332,15 @@
 		3FA6D5061965E7A50043087B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3F2AA99A1CF2CBC100DD3298 /* Bolts.framework */,
+				3F2AA99B1CF2CBC100DD3298 /* Parse.framework */,
+				3F2AA99C1CF2CBC100DD3298 /* ParseFacebookUtils.framework */,
+				3F2AA99D1CF2CBC100DD3298 /* ParseFacebookUtilsV4.framework */,
+				3F2AA99E1CF2CBC100DD3298 /* ParseTwitterUtils.framework */,
+				3F2AA99F1CF2CBC100DD3298 /* ParseUI.framework */,
 				3F9198EC1C3929D400FAD489 /* EventKit.framework */,
 				3F5AAA4A1C35279700531F09 /* libsqlite3.tbd */,
-				3FC5296B1C35256C003F9B9D /* Bolts.framework */,
-				3FF70F901C3522300042C7D6 /* Parse.framework */,
 				3FC432B419A056DD00B560F1 /* Accounts.framework */,
-				3FC5296D1C3525C2003F9B9D /* ParseFacebookUtils.framework */,
-				3FC5296E1C3525C2003F9B9D /* ParseFacebookUtilsV4.framework */,
-				3FC5296F1C3525C2003F9B9D /* ParseTwitterUtils.framework */,
-				3FC529701C3525C2003F9B9D /* ParseUI.framework */,
 				3FC432B219A0565100B560F1 /* Social.framework */,
 				3F0294671982C0200016845A /* SystemConfiguration.framework */,
 				3F0294651982C01A0016845A /* StoreKit.framework */,
@@ -749,6 +749,7 @@
 					"/Users/jeremy/Developer/Xcode/AnyWall-master",
 					"$(PROJECT_DIR)/Tent",
 					"$(PROJECT_DIR)/Tent/Frameworks",
+					"$(PROJECT_DIR)/Tent/ParseSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tent/Tent-Prefix.pch";
@@ -777,6 +778,7 @@
 					"/Users/jeremy/Developer/Xcode/AnyWall-master",
 					"$(PROJECT_DIR)/Tent",
 					"$(PROJECT_DIR)/Tent/Frameworks",
+					"$(PROJECT_DIR)/Tent/ParseSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tent/Tent-Prefix.pch";
