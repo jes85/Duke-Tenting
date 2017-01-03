@@ -38,6 +38,9 @@
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = back;
     
+    [self checkParseForUpdatedHomeGamesData];
+
+    
        
 }
 
@@ -413,16 +416,26 @@
 -(NSDictionary *)parseJSONDictionaryForDate:(NSDate *)date{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
+    
+    // no need for backward compatibility because this is always called after a relaod from the server, which is in the V2 format
     return @{
-             @"__type": @"Date",
-               @"iso": [dateFormatter stringFromDate:date]
+        @"$date": [dateFormatter stringFromDate:date]
     };
 }
 -(NSDate *)dateFromParseJSONDictionary:(NSDictionary *)dictionary
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
-    NSString *dateString = dictionary[@"iso"];
+    NSString *dateString = @"";
+
+    // dumb backward compatibility with V1 Parse hosting vs V2 mlab hosting
+    if(dictionary[@"$date"]) {
+        dateString = dictionary[@"$date"];
+    
+    } else if(dictionary[@"iso"]) {
+        dateString = dictionary[@"iso"];
+    }
+    
     NSDate *date = [dateFormatter dateFromString:dateString];
 
     return date;
