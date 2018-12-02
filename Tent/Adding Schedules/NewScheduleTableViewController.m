@@ -49,7 +49,7 @@
     [super viewWillAppear:animated];
     
     //[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollRow inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    [self scrollToCurrentInterval];
+    //[self scrollToCurrentInterval];
     
 }
 
@@ -264,7 +264,6 @@
             
             // If Home Schedule has changed, update it on local
             if(![self.homeGames isEqual:updatedHomeGamesArray]){ //maybe only check parseIds and updatedAt
-                
                 // Update file
                 NSDictionary *jsonObject = [self jsonHomeGamesDictionaryFromArrayOfParseHomeGames:parseHomeGames];
                 NSError *errorConvertingJSONToData;
@@ -289,8 +288,6 @@
                  */
 
             }
-            
-
         }
     }];
 }
