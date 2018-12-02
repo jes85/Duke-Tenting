@@ -21,4 +21,6 @@
 @property (nonatomic) NSUInteger section; //neessary?
 
 -(instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate section:(NSUInteger)section availablePersons:(NSMutableArray *)available assignedPersons:(NSMutableArray *)assigned;
+
+-(BOOL)containsDate:(NSDate *)date;
 @end

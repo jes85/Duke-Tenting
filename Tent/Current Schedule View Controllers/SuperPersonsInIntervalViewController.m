@@ -35,11 +35,14 @@
 /*
  only valid if schedule has started and is not over. returns -1 for invalid
  */
+//TODO: unit test
 +(NSInteger)findCurrentTimeIntervalIndexForSchedule:(Schedule *)schedule
 {
     if([schedule.startDate timeIntervalSinceNow] > 0 | [schedule.endDate timeIntervalSinceNow] < 0){
         return -1; //method not valid if schedule hasn't started yet or is over
     }
+    
+    /*
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *datedifferenceComponents = [calendar components:NSCalendarUnitHour|NSCalendarUnitMinute fromDate:schedule.startDate toDate:[NSDate date] options:0];
     
@@ -53,8 +56,34 @@
     }
     
     return index;
+    */
+    return [SuperPersonsInIntervalViewController getNumTimeIntervalsFromDate:schedule.startDate toDate:[NSDate date] inSchedule:schedule];
     
+}
+
+//TODO: unit test
++(NSInteger)getNumTimeIntervalsFromDate:(NSDate *)date1 toDate: (NSDate *)date2 inSchedule: (Schedule *)schedule
+{
+    NSArray *intervals = schedule.intervalDataByOverallRow;
+    int date1IntervalIndex = -1;
+    int date2IntervalIndex = -1;
+    for(int i = 0; i<intervals.count; i++){
+        Interval *currentInterval = intervals[i];
+        if([currentInterval containsDate:date1]){
+            date1IntervalIndex = i;
+        }
+        if([currentInterval containsDate:date2]){
+            date2IntervalIndex = i;
+        }
+    }
     
+    int numTimeIntervals = date2IntervalIndex - date1IntervalIndex;
+    
+    if(date1IntervalIndex == -1 || date2IntervalIndex == -1 || numTimeIntervals < 0) {
+        return -1;
+    }else {
+        return numTimeIntervals;
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

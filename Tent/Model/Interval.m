@@ -59,6 +59,14 @@
     self.dateTimeString = [[dateString stringByAppendingString:@" "]stringByAppendingString:timeString];
 }
 
+
+//TODO: unit test
+-(BOOL)containsDate:(NSDate *)date
+{
+    return ([date timeIntervalSinceDate:self.startDate] >= 0 && [date timeIntervalSinceDate:self.endDate] <= 0);
+}
+
+
 -(id)copyWithZone:(NSZone *)zone
 {
     Interval *copy  = [[self class]allocWithZone:zone];

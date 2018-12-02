@@ -515,15 +515,16 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
                     return (NSComparisonResult)NSOrderedDescending;
                 }else{
                     // Both are available for at least ideal number
-                    
+                    int maxConsecIntervals = MIN(6, MAX(person1.idealNumDayIntervalsAssigned, person2.idealNumDayIntervalsAssigned));
                     
                     // Sort by 1. consecutive previous intervals assigned
                     if(person1.consecutivePreviousDayIntervalsAssigned != person2.consecutivePreviousDayIntervalsAssigned){
                         // If one of them has a streak of more than 6, return other one
-                        if(person1.consecutivePreviousDayIntervalsAssigned >=6){
+                        // Updated: change 6 to be a function of total time and # people. i.e 50% of ideal slots
+                        if(person1.consecutivePreviousDayIntervalsAssigned >= maxConsecIntervals){
                             return (NSComparisonResult)NSOrderedDescending;
                         }
-                        if(person2.consecutivePreviousDayIntervalsAssigned >=6){
+                        if(person2.consecutivePreviousDayIntervalsAssigned >= maxConsecIntervals){
                             return (NSComparisonResult)NSOrderedAscending;
                         }
                         
@@ -548,12 +549,12 @@ static const NSUInteger kTotalSwapAttemptsAllowed = 5;
                         
                         //TODO: consecutive future intervals is not currently implemented
                         //Sort By 3. Most consecutive future intervals available (up to 6)
-                        if(person1.consecutiveFutureDayIntervalsAvailable > person2.consecutiveFutureDayIntervalsAvailable && person2.consecutiveFutureDayIntervalsAvailable < 6){
+                        if(person1.consecutiveFutureDayIntervalsAvailable > person2.consecutiveFutureDayIntervalsAvailable && person2.consecutiveFutureDayIntervalsAvailable < maxConsecIntervals){
                             
                             return (NSComparisonResult)NSOrderedAscending;
 
                         }
-                        else if(person1.consecutiveFutureDayIntervalsAvailable < person2.consecutiveFutureDayIntervalsAvailable && person1.consecutiveFutureDayIntervalsAvailable < 6){
+                        else if(person1.consecutiveFutureDayIntervalsAvailable < person2.consecutiveFutureDayIntervalsAvailable && person1.consecutiveFutureDayIntervalsAvailable < maxConsecIntervals){
                             
                             return (NSComparisonResult)NSOrderedDescending;
 

@@ -18,7 +18,8 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self updatePersonsArraysForCurrentTimeInterval];
+    //[self updatePersonsArraysForCurrentTimeInterval]; // Bug is here. TODO fix bug
+    self.dateTimeLabel.text = @"This feature is under construction";
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
